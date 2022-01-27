@@ -8,16 +8,37 @@
 package routers
 
 import (
+	"net/http"
+	"time"
+	
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gnanakeethan/kidney-registry/controllers"
-	"github.com/gnanakeethan/kidney-registry/graph"
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/graph/resolvers"
+	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/gorilla/websocket"
 	
 	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{
+		Users:     []*models.User{},
+		Observers: map[string]chan []*models.User{},
+	}}))
+	srv.AddTransport(transport.POST{})
+	srv.AddTransport(transport.Websocket{
+		KeepAlivePingInterval: 10 * time.Second,
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				return true
+			},
+		},
+	})
+	srv.Use(extension.Introspection{})
 	ns := beego.NewNamespace("/v1",
 		
 		beego.NSNamespace("/person_allergy",
@@ -133,7 +154,7 @@ func init() {
 				&controllers.InvestigationsController{},
 			),
 		),
-		beego.NSHandler("/graphql", handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))),
+		beego.NSHandler("/graphql", srv),
 		beego.NSHandler("/graphql/playground", playground.Handler("GraphQL playground", "/query")),
 	)
 	beego.AddNamespace(ns)

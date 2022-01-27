@@ -10,3 +10,7 @@ type Mutation {
 type Query {
     sample(id: ID!): Error
 }
+
+type Subscription {
+    users: [User!]
+}
