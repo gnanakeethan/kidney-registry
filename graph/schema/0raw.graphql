@@ -1,0 +1,11 @@
+type Sample {
+    id: ID!
+}
+
+type Mutation {
+    sample(id: ID!): Sample
+}
+
+type Query {
+    sample(id: ID!): Sample
+}

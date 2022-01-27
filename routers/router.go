@@ -8,7 +8,11 @@
 package routers
 
 import (
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gnanakeethan/kidney-registry/controllers"
+	"github.com/gnanakeethan/kidney-registry/graph"
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	
 	beego "github.com/beego/beego/v2/server/web"
 )
@@ -129,6 +133,8 @@ func init() {
 				&controllers.InvestigationsController{},
 			),
 		),
+		beego.NSHandler("/graphql", handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))),
+		beego.NSHandler("/graphql/playground", playground.Handler("GraphQL playground", "/query")),
 	)
 	beego.AddNamespace(ns)
 }
