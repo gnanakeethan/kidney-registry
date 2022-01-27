@@ -1,0 +1,4 @@
+.svelte-kit/**
+src/assets/**
+build/**
+node_modules/**

@@ -1,0 +1,38 @@
+import Component from 'svelte/types/compiler/compile/Component';
+import { Writable, writable } from 'svelte/store';
+
+export interface MenuState {
+	menuItems: MenuItem[];
+	active: number;
+	activeUrl: string;
+}
+
+export interface MenuItem {
+	name: string;
+	icon: Component;
+	url: string;
+	active: boolean;
+}
+
+
+export const menuState: Writable<MenuState> = writable({
+	menuItems: [
+		{
+			name: 'Dashboard',
+			icon: null,
+			url : '/app/publisher/dashboard'
+		},
+	],
+	active   : 0
+} as MenuState);
+
+export const bottomMenuState: Writable<MenuState> = writable({
+	menuItems: [
+		{
+			name: 'Account Settings',
+			icon: null,
+			url : '/account-settings'
+		}
+	],
+	active   : 0
+} as MenuState);
