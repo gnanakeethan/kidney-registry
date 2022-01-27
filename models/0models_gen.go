@@ -2,13 +2,14 @@
 
 package models
 
+type Error struct {
+	String string `json:"string"`
+	Status int    `json:"status"`
+}
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
-}
-
-type Sample struct {
-	ID string `json:"id"`
 }
 
 type Todo struct {

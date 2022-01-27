@@ -20,7 +20,7 @@ model:
 # Where should the resolver implementations go?
 resolver:
   layout: follow-schema
-  dir: resolvers
+  dir: graph/resolvers
   package: resolvers
 
 # Optional: turn on use `gqlgen:"fieldName"` tags in your models

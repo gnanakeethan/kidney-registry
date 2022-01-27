@@ -11,11 +11,11 @@ import (
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *mutationResolver) Sample(ctx context.Context, id string) (*models.Sample, error) {
+func (r *mutationResolver) Sample(ctx context.Context, id string) (*models.Error, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Sample(ctx context.Context, id string) (*models.Sample, error) {
+func (r *queryResolver) Sample(ctx context.Context, id string) (*models.Error, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

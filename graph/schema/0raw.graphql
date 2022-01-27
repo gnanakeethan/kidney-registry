@@ -1,11 +1,12 @@
-type Sample {
-    id: ID!
+type Error {
+    string: String!
+    status: Int!
 }
 
 type Mutation {
-    sample(id: ID!): Sample
+    sample(id: ID!): Error
 }
 
 type Query {
-    sample(id: ID!): Sample
+    sample(id: ID!): Error
 }
