@@ -1,5 +1,4 @@
-
-module bitbackend
+module github.com/gnanakeethan/bitbackend
 
 go 1.17
 
