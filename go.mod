@@ -1,4 +1,4 @@
-module github.com/gnanakeethan/bitbackend
+module github.com/gnanakeethan/kidney-registry
 
 go 1.17
 
