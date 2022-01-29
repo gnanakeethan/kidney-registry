@@ -6,6 +6,7 @@ require github.com/beego/beego/v2 v2.0.1
 
 require (
 	github.com/99designs/gqlgen v0.16.0
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.2
 	github.com/lib/pq v1.0.0
 	github.com/vektah/gqlparser/v2 v2.3.1

@@ -26,8 +26,8 @@ import (
 
 func init() {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{
-		Users:     []*models.User{},
-		Observers: map[string]chan []*models.User{},
+		UsersF:    []*models.User{},
+		Observers: map[string]chan *models.User{},
 	}}))
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.Websocket{
@@ -40,19 +40,16 @@ func init() {
 	})
 	srv.Use(extension.Introspection{})
 	ns := beego.NewNamespace("/v1",
-		
 		beego.NSNamespace("/person_allergy",
 			beego.NSInclude(
 				&controllers.PersonAllergyController{},
 			),
 		),
-		
 		beego.NSNamespace("/persons",
 			beego.NSInclude(
 				&controllers.PersonsController{},
 			),
 		),
-		
 		beego.NSNamespace("/person_organ_donation_complications",
 			beego.NSInclude(
 				&controllers.PersonOrganDonationComplicationsController{},
@@ -155,7 +152,7 @@ func init() {
 			),
 		),
 		beego.NSHandler("/graphql", srv),
-		beego.NSHandler("/graphql/playground", playground.Handler("GraphQL playground", "/query")),
+		beego.NSHandler("/graphql/playground", playground.Handler("GraphQL playground", "/v1/graphql/")),
 	)
 	beego.AddNamespace(ns)
 }
