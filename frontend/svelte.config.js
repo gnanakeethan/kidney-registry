@@ -25,18 +25,17 @@ const config = {
 			routes: 'src/routes',
 			template: 'src/app.html'
 		},
-		ssr: false,
+		// ssr: false,
 		prerender: {
 			enabled: false
 		},
 		floc: false,
-		target: '#svelte',
 		vite: {
 			plugins: [
 				Icons({
 					compiler: 'svelte',
 					customCollections: {
-						'sustain': FileSystemIconLoader('src/assets/icons')
+						sustain: FileSystemIconLoader('src/assets/icons')
 					}
 				})
 			],
