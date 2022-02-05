@@ -13,11 +13,11 @@
 	}
 
 	let props = {
-		activeUrl: location.pathname,
+		activeUrl: '/',
 		routes: []
 	};
 	let bottomProps = {
-		activeUrl: location.pathname,
+		activeUrl: '/',
 		routes: []
 	};
 
