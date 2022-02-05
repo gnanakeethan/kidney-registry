@@ -3,3 +3,4 @@ kidney-registry
 swagger/
 routers/comments*
 data/*
+.idea/sonarlint
