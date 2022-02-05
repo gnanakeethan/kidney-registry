@@ -2,18 +2,5 @@
   "useTabs": true,
   "singleQuote": true,
   "trailingComma": "none",
-  "printWidth": 100,
-  "overrides": [
-    {
-      "files": "*.svelte",
-      "options": {
-        "svelteBracketNewLine": false,
-        "svelteAllowShorthand": false,
-        "svelteSortOrder": "options-scripts-styles-markup",
-        "plugins": [
-          "prettier-plugin-svelte"
-        ]
-      }
-    }
-  ]
+  "printWidth": 100
 }
