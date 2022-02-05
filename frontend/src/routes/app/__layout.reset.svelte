@@ -5,7 +5,6 @@
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 	import { NotificationsStatus } from '../../lib/state/notifications';
 	import Sidebar from '../../lib/components/sidebar/Sidebar.svelte';
-	import MessageIcon from '~icons/ant-design/message-outlined';
 	import NotificationIcon from '~icons/carbon/notification';
 
 	if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
@@ -14,7 +13,7 @@
 
 	let props = {
 		activeUrl: '/',
-		routes: []
+		routes: [{ name: 'Dashboard', route: '/app/', icon: NotificationIcon }]
 	};
 	let bottomProps = {
 		activeUrl: '/',
@@ -47,29 +46,29 @@
 			type="text"
 		/>
 	</div>
-	<div
-		class="mx-1.5 inline-flex items-center rounded p-3 {$NotificationsStatus.messagesActive
-			? 'bg-gray-200'
-			: ''}"
-	>
-		<a class="relative inline-block" href="/app/messaging">
-			<MessageIcon
-				class="fill-current text-xl subpixel-antialiased {$NotificationsStatus.messages > 0
-					? 'text-gray-900'
-					: 'text-gray-500'}"
-			/>
-			{#if $NotificationsStatus.messages > 0}
-				<div
-					class="absolute top-0.5 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white"
-					style="font-size: 8px"
-				>
-					{$NotificationsStatus.messages > 99
-						? 99
-						: $NotificationsStatus.messages}{$NotificationsStatus.messages > 99 ? '+' : ''}
-				</div>
-			{/if}
-		</a>
-	</div>
+	<!--	<div-->
+	<!--		class="mx-1.5 inline-flex items-center rounded p-3 {$NotificationsStatus.messagesActive-->
+	<!--			? 'bg-gray-200'-->
+	<!--			: ''}"-->
+	<!--	>-->
+	<!--		<a class="relative inline-block" href="/app/messaging">-->
+	<!--			<MessageIcon-->
+	<!--				class="fill-current text-xl subpixel-antialiased {$NotificationsStatus.messages > 0-->
+	<!--					? 'text-gray-900'-->
+	<!--					: 'text-gray-500'}"-->
+	<!--			/>-->
+	<!--			{#if $NotificationsStatus.messages > 0}-->
+	<!--				<div-->
+	<!--					class="absolute top-0.5 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white"-->
+	<!--					style="font-size: 8px"-->
+	<!--				>-->
+	<!--					{$NotificationsStatus.messages > 99-->
+	<!--						? 99-->
+	<!--						: $NotificationsStatus.messages}{$NotificationsStatus.messages > 99 ? '+' : ''}-->
+	<!--				</div>-->
+	<!--			{/if}-->
+	<!--		</a>-->
+	<!--	</div>-->
 	<div
 		class="mx-1.5 inline-flex items-center rounded p-3 {$NotificationsStatus.notificationsActive
 			? 'bg-gray-200'
