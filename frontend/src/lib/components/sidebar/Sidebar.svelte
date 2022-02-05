@@ -1,9 +1,6 @@
 <script>
 	import { beforeUpdate } from 'svelte';
-	import {
-		activeUrl as storeActiveUrl,
-		onLinkClick as storeOnLinkClick
-	} from './SidebarStore';
+	import { activeUrl as storeActiveUrl, onLinkClick as storeOnLinkClick } from './SidebarStore';
 	import NavigationLinkGroup from './NavigationLinkGroup.svelte';
 
 	export let activeUrl = null;
@@ -17,21 +14,23 @@
 		storeActiveUrl.set(activeUrl);
 	});
 
-
 	const toggleOpen = () => (open = !open);
 </script>
-<nav id='svelte-sidebar' class:open>
-	<slot name='header' />
-	<button class='sidebar-toggle'
-	        class:open
-	        on:click={toggleOpen}
-	        aria-expanded={open}
-	        aria-controls='svelte-sidebar'
-	        title='Toggle the navigation sidebar'
-	        aria-label='Toggle the navigation sidebar'>
-	</button>
+
+<nav class:open id="svelte-sidebar">
+	<slot name="header" />
+	<!--	<button-->
+	<!--		aria-controls="svelte-sidebar"-->
+	<!--		aria-expanded={open}-->
+	<!--		aria-label="Toggle the navigation sidebar"-->
+	<!--		class="sidebar-toggle"-->
+	<!--		class:open-->
+	<!--		on:click={toggleOpen}-->
+	<!--		title="Toggle the navigation sidebar"-->
+	<!--		>- -->
+	<!--	</button>-->
 	{#if open}
 		<NavigationLinkGroup {routes} />
-		<slot name='footer' />
+		<slot name="footer" />
 	{/if}
 </nav>

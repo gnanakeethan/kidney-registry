@@ -15,7 +15,7 @@
 	 */
 	$: active = $activeUrl === route;
 
-	function onClick(event,route){
+	function onClick(event, route) {
 		$activeUrl = route;
 		if (disabled) {
 			event.preventDefault();
@@ -26,8 +26,7 @@
 		return event;
 	}
 
-	const scrollIntoView = () =>
-		link && link.scrollIntoView({ block: 'end', behavior: 'smooth' });
+	const scrollIntoView = () => link && link.scrollIntoView({ block: 'end', behavior: 'smooth' });
 
 	const dispatch = createEventDispatcher();
 
@@ -52,16 +51,18 @@
 	});
 </script>
 
-<a class='flex flex-row items-center fill-current pl-4 py-2 my-2 mx-2 rounded'
-   class:bg-dark-green={active}
-   class:text-white={active}
-   on:click={onClick(event,route)}
-   href={route}
-   {active}
-   {disabled}
-   class:activeGroup
-   bind:this={link}
-   tabindex='0'>
-	<svelte:component this={icon} class='mr-4' />
+<a
+	{active}
+	bind:this={link}
+	class="my-1 mx-2 flex flex-row items-center rounded fill-current"
+	class:activeGroup
+	class:bg-dark-green={active}
+	class:text-white={active}
+	{disabled}
+	href={route}
+	on:click={onClick(event, route)}
+	tabindex="0"
+>
+	<svelte:component this={icon} class="mr-4" />
 	{name}
 </a>

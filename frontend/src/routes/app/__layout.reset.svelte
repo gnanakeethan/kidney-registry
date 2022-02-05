@@ -6,6 +6,8 @@
 	import { NotificationsStatus } from '../../lib/state/notifications';
 	import Sidebar from '../../lib/components/sidebar/Sidebar.svelte';
 	import NotificationIcon from '~icons/carbon/notification';
+	import KidneyOutline from '~icons/whh/kidney';
+	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 
 	if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
 		makeServer(); // For people following the tutorial
@@ -13,7 +15,12 @@
 
 	let props = {
 		activeUrl: '/',
-		routes: [{ name: 'Dashboard', route: '/app/', icon: NotificationIcon }]
+		routes: [
+			{ name: 'Dashboard', route: '/app/', icon: DashboardIcon },
+			{ name: 'Dashboard oasidskjf', route: '/app/', icon: NotificationIcon },
+			{ name: 'Dashboard', route: '/app/', icon: NotificationIcon },
+			{ name: 'Dashboard', route: '/app/', icon: NotificationIcon }
+		]
 	};
 	let bottomProps = {
 		activeUrl: '/',
@@ -32,14 +39,15 @@
 	userType.subscribe((userType) => {});
 </script>
 
-<div class="sticky top-0 z-10 flex h-20 flex-row items-center border-b bg-white text-gray-500">
-	<a class="px-10" href="/app">
-		<div class="font-raleway text-4xl font-extrabold tracking-wide">KiyReg</div>
+<div class="sticky top-0 z-10 flex h-12 flex-row items-center border-b bg-gray-200 text-gray-500">
+	<a class="flex flex-row px-10 text-gray-500" href="/app">
+		<KidneyOutline class="rotate-180 fill-current text-2xl" />
+		<div class="font-raleway text-2xl font-extrabold tracking-wide">Registry</div>
 	</a>
-	<div class="? flex-grow" />
+	<div class=" flex-grow"><span /></div>
 	<div class="relative mx-4 flex flex-row items-center rounded-md shadow-sm">
 		<input
-			class="bg-light-gray block h-11 flex-grow rounded-md border-gray-300 pl-7 pr-12 focus:border-none focus:ring-0 sm:text-sm"
+			class="bg-light-gray block h-8 flex-grow rounded-md border-gray-300 pl-4 pr-12 font-sans focus:border-none focus:ring-0 sm:text-sm"
 			id="price"
 			name="price"
 			placeholder="Search"
@@ -70,7 +78,7 @@
 	<!--		</a>-->
 	<!--	</div>-->
 	<div
-		class="mx-1.5 inline-flex items-center rounded p-3 {$NotificationsStatus.notificationsActive
+		class="mx-1.5 inline-flex items-center rounded p-2 {$NotificationsStatus.notificationsActive
 			? 'bg-gray-200'
 			: ''}"
 	>
@@ -100,25 +108,18 @@
 		<a href="/app/{$userType}/profile">
 			<img
 				alt="descriptive"
-				class="hidden h-full w-12 rounded-full md:block"
+				class="hidden h-full w-8 rounded-full md:block"
 				src="https://picsum.photos/seed/profile/90/90"
 			/>
 		</a>
 	</div>
 </div>
-<div class="flex w-full flex-row">
-	<div
-		class="font-karla relative flex min-w-[250px] flex-col justify-between px-4"
-		style="height:calc(100vh - 5rem)"
-	>
-		<div>
-			<Sidebar {...props} />
-		</div>
-		<div>
-			<Sidebar {...bottomProps} />
-		</div>
+<div class="flex w-full flex-row bg-gray-100">
+	<div class="relative mt-4 flex flex-col justify-between  px-4" style="height:calc(100vh - 5rem)">
+		<Sidebar {...props} />
+		<Sidebar {...bottomProps} />
 	</div>
-	<div class="bg-white-gray w-full flex-grow overflow-scroll border-l">
+	<div class="flex-grow overflow-scroll border-l bg-white p-4">
 		<slot />
 	</div>
 </div>
