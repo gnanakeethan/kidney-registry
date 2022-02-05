@@ -54,7 +54,7 @@
 <a
 	{active}
 	bind:this={link}
-	class="my-1 mx-2 flex flex-row items-center rounded fill-current"
+	class="mx-2 my-3 flex flex-row items-center rounded fill-current"
 	class:activeGroup
 	class:bg-dark-green={active}
 	class:text-white={active}
