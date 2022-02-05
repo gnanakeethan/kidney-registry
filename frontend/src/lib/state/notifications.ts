@@ -8,8 +8,8 @@ export interface Notifications {
 }
 
 export const NotificationsStatus: Writable<Notifications> = writable({
-	notificationCounter: 2,
-	messagesActive     : true,
 	notificationsActive: true,
-	messages           : 1
+	notificationCounter: 2,
+	messages: 2,
+	messagesActive: true
 } as Notifications);

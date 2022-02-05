@@ -9,6 +9,8 @@ module.exports = {
             fontFamily: {
                 'serif': ['Playfair Display', 'ui-serif', 'Georgia', 'Cambria', "Times New Roman", 'Times', 'serif'],
                 'sans': ['Open Sans', 'ui-sans', 'Arial', 'Helvetica', 'sans-serif'],
+                'nunito': ['Nunito', 'ui-sans', 'Arial', 'Helvetica', 'sans-serif'],
+                'raleway': ['Raleway', 'ui-sans', 'Arial', 'Helvetica', 'sans-serif'],
             },
             fontSize: {
                 'xxs': '.50rem',
