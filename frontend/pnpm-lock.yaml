@@ -30,6 +30,7 @@ specifiers:
   postcss-load-config: ^3.1.1
   prettier: ~2.5.1
   prettier-plugin-svelte: ^2.6.0
+  prettier-plugin-tailwindcss: ^0.1.5
   rollup: ^2.66.1
   sass: ^1.49.0
   svelte: ^3.46.3
@@ -60,7 +61,7 @@ devDependencies:
   '@rollup/plugin-typescript': 8.3.0_a652e97aea7ea04fb4c9edbfa5b475e6
   '@sveltejs/adapter-node': 1.0.0-next.67
   '@sveltejs/adapter-static': 1.0.0-next.26
-  '@sveltejs/kit': 1.0.0-next.245_sass@1.49.0+svelte@3.46.3
+  '@sveltejs/kit': 1.0.0-next.260_sass@1.49.0+svelte@3.46.3
   '@tailwindcss/forms': 0.4.0_tailwindcss@3.0.17
   '@tailwindcss/typography': 0.5.0_tailwindcss@3.0.17
   '@tsconfig/svelte': 2.0.1
@@ -83,6 +84,7 @@ devDependencies:
   postcss-load-config: 3.1.1
   prettier: 2.5.1
   prettier-plugin-svelte: 2.6.0_prettier@2.5.1+svelte@3.46.3
+  prettier-plugin-tailwindcss: 0.1.5_prettier@2.5.1
   rollup: 2.66.1
   sass: 1.49.0
   svelte: 3.46.3
@@ -305,8 +307,8 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.245_sass@1.49.0+svelte@3.46.3:
-    resolution: {integrity: sha512-tvgzGA0nLsYNoCHfC0SCRbWWdLY4xP6Uyv3oy+J+5VOUOhzOjh3xiP6LKvF4PLf0t3lJXybcVWzi8vqU3kfjug==}
+  /@sveltejs/kit/1.0.0-next.260_sass@1.49.0+svelte@3.46.3:
+    resolution: {integrity: sha512-0EEkGD0BpZdgRm9UoOnldS8iDFFhT2ixN3oQ/9DblGKNo7cz/FEQmKoYYIOOVYI3XyurwccWORPEpTTA4l9Oew==}
     engines: {node: '>=14.13'}
     hasBin: true
     peerDependencies:
@@ -2521,6 +2523,15 @@ packages:
     dependencies:
       prettier: 2.5.1
       svelte: 3.46.3
+    dev: true
+
+  /prettier-plugin-tailwindcss/0.1.5_prettier@2.5.1:
+    resolution: {integrity: sha512-e+jTxwiHL4I3Ot8OjV1LAiiaAx0Zgy71xTL7xNmJtNmhpja7GKzFSAoulqBDS1D57B7lbZDCvDEKIWIQSBUmBQ==}
+    engines: {node: '>=12.17.0'}
+    peerDependencies:
+      prettier: '>=2.2.0'
+    dependencies:
+      prettier: 2.5.1
     dev: true
 
   /prettier/2.5.1:
