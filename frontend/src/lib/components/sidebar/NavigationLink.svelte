@@ -54,9 +54,10 @@
 <a
 	{active}
 	bind:this={link}
-	class="flex flex-row items-center bg-white fill-current px-4 py-4"
+	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current px-4 py-2 first:border-t"
 	class:activeGroup
-	class:bg-dark-green={active}
+	class:bg-neutral-500={active}
+	class:font-bold={active}
 	class:text-white={active}
 	{disabled}
 	href={route}

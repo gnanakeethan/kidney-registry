@@ -7,7 +7,7 @@
 	$: $NotificationsStatus.messagesActive = $NotificationsStatus.messages > 0;
 </script>
 
-<div class="col-span-6 row-span-2 rounded">
+<div class="col-span-6 row-span-2 m-4 rounded">
 	Messages : <input
 		bind:value={$NotificationsStatus.messages}
 		max="100"

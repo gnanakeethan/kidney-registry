@@ -91,8 +91,8 @@
 	in:scale={{ duration: 250 }}
 >
 	{#each routes as route (route.route)}
-		<div class:group={route.childRoutes}>
-			{#if route.childRoutes}
+		{#if route.childRoutes}
+			<div class:group={route.childRoutes}>
 				<!--
                     If the child route has children in return,
                     render a nested `NavigationLinkGroup`.
@@ -106,13 +106,13 @@
 					disabled={route.disabled}
 					on:active={handleActiveChange}
 				/>
-			{:else}
-				<NavigationLink
-					{...route}
-					activeGroup={activeSubRoute === route.route}
-					on:active={handleActiveChange}
-				/>
-			{/if}
-		</div>
+			</div>
+		{:else}
+			<NavigationLink
+				{...route}
+				activeGroup={activeSubRoute === route.route}
+				on:active={handleActiveChange}
+			/>
+		{/if}
 	{/each}
 </div>

@@ -6,26 +6,32 @@
 	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
 	import DonorIcon from '~icons/bi/person';
+	import UserIcon from '~icons/bi/person';
 	import NotificationIcon from '~icons/carbon/notification';
 	import SettingsIcon from '~icons/carbon/settings';
 	import DoctorIcon from '~icons/healthicons/doctor-outline';
 	import PreferencesIcon from '~icons/healthicons/ui-preferences-outline';
+	import RecurringIcon from '~icons/ic/round-event-repeat';
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import KidneyOutline from '~icons/whh/kidney';
 	import '../../assets/styles/app.scss';
-	import makeServer from '../../mirage/mirage';
-
-	if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
-		makeServer(); // For people following the tutorial
-	}
+	// import makeServer from '../../mirage/mirage';
+	//
+	// if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
+	// 	makeServer(); // For people following the tutorial
+	// }
 
 	let props = {
 		activeUrl: '/',
 		routes: [
-			{ name: 'Dashboard', route: '/app/', icon: DashboardIcon },
+			{ name: 'Dashboard', route: '/app', icon: DashboardIcon },
+			{ name: 'Follow Ups', route: '/app/h', icon: RecurringIcon },
+			{ name: 'Investigations', route: '/app/y', icon: RecurringIcon },
 			{ name: 'Recipients', route: '/app/s', icon: PatientIcon },
 			{ name: 'Donors', route: '/app/f', icon: DonorIcon },
-			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon }
+			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon },
+			{ name: 'Users', route: '/app/x', icon: UserIcon }
+			// { name: '', route: '/app/i', icon: DoctorIcon }
 		]
 	};
 	let bottomProps = {
@@ -38,6 +44,8 @@
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
 		console.log(loadInput);
+		props.activeUrl = loadInput.url.pathname;
+		bottomProps.activeUrl = loadInput.url.pathname;
 		return await authGuard(loadInput);
 	}
 </script>
@@ -49,11 +57,11 @@
 </script>
 
 <div
-	class="sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100  text-xs  text-gray-500"
+	class="sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-xs text-gray-500"
 >
-	<a class="flex flex-row py-2 pl-4 text-gray-500" href="/app">
+	<a class="flex flex-row items-center py-2 pl-4 text-gray-500" href="/app">
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
-		<div class="ml-2 font-raleway text-2xl font-extrabold tracking-wide">Registry</div>
+		<div class="font-raleway text-2xl font-extrabold">Registry</div>
 	</a>
 	<div class=" flex-grow"><span>&nbsp;</span></div>
 	<div class="relative mx-4 flex flex-row items-center">
@@ -126,14 +134,16 @@
 	</div>
 </div>
 <div
-	class="flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-200 text-xs"
+	class="flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50 text-xs"
 	style="height:calc(100vh - 3.25rem)"
 >
 	<div class="relative flex flex-col justify-between">
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
 	</div>
-	<div class="flex-grow overflow-scroll border-l border-stone-200 bg-white p-4">
+	<div
+		class="flex-grow overflow-scroll border-l border-t border-dashed border-neutral-500 bg-white"
+	>
 		<slot />
 	</div>
 </div>
