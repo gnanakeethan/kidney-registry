@@ -1,5 +1,5 @@
-<thead class='rounded  bg-light-green text-white text-xs  border-dark-green border'>
-<tr class=''>
-    <slot></slot>
-</tr>
+<thead class="bg-light-green  border-dark-green rounded border  text-xs text-white">
+	<tr class="">
+		<slot />
+	</tr>
 </thead>

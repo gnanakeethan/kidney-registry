@@ -1,117 +1,118 @@
 <script>
-    import {createEventDispatcher, onDestroy} from 'svelte'
-    import {scale} from 'svelte/transition'
-    import {activeUrl} from './SidebarStore'
-    import NavigationLink from './NavigationLink.svelte'
+	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { scale } from 'svelte/transition';
+	import { activeUrl } from './SidebarStore';
+	import NavigationLink from './NavigationLink.svelte';
 
-    export let routes = []
-    export let name = null
-    export let route = null
-    export let disabled = false
+	export let routes = [];
+	export let name = null;
+	export let route = null;
+	export let disabled = false;
 
-    let groupOpen = true
-    let activeSubRoute = null
+	let groupOpen = true;
+	let activeSubRoute = null;
 
-    const dispatch = createEventDispatcher()
+	const dispatch = createEventDispatcher();
 
-    const toggleGroup = () => (groupOpen = !groupOpen)
+	const toggleGroup = () => (groupOpen = !groupOpen);
 
-    /*
-     * A child route of this `NavigationLinkGroup` is active,
-     * which it signalled by dispatching the `active` event.
-     * As the current `NavigationLinkGroup` is part of the active navigation
-     * tree, it's supposed to be opened.
-     * As the navigation tree can have deep nestings, this
-     * `NavigationLinkGroup` in turn signals to its parent,
-     * that it is part of the active tree.
-     */
-    const handleActiveChange = (event) => {
-        // Open current group, as it's part of the active tree.
-        groupOpen = true
-        /*
-         * Allow child `NavigationLink`s to know that they are part
-         * of the same group as the active `NavigationLink`.
-         */
-        activeSubRoute = event.detail.activeSubRoute
-        /*
-         * Escalate the `active` event to the parent to inform it
-         * that it is part of the active tree.
-         */
-        dispatch(event.type, {activeSubRoute: route})
-    }
+	/*
+	 * A child route of this `NavigationLinkGroup` is active,
+	 * which it signalled by dispatching the `active` event.
+	 * As the current `NavigationLinkGroup` is part of the active navigation
+	 * tree, it's supposed to be opened.
+	 * As the navigation tree can have deep nestings, this
+	 * `NavigationLinkGroup` in turn signals to its parent,
+	 * that it is part of the active tree.
+	 */
+	const handleActiveChange = (event) => {
+		// Open current group, as it's part of the active tree.
+		groupOpen = true;
+		/*
+		 * Allow child `NavigationLink`s to know that they are part
+		 * of the same group as the active `NavigationLink`.
+		 */
+		activeSubRoute = event.detail.activeSubRoute;
+		/*
+		 * Escalate the `active` event to the parent to inform it
+		 * that it is part of the active tree.
+		 */
+		dispatch(event.type, { activeSubRoute: route });
+	};
 
-    /*
-     * Whenever the active URL changes in the store, the active subroutes
-     * will change too, which is why the existing active subroute is reset.
-     * The new active subroute is determined in `handleActiveChange`.
-     */
-    const unsubscribe = activeUrl.subscribe((value) => {
-        activeSubRoute = null
-    })
+	/*
+	 * Whenever the active URL changes in the store, the active subroutes
+	 * will change too, which is why the existing active subroute is reset.
+	 * The new active subroute is determined in `handleActiveChange`.
+	 */
+	const unsubscribe = activeUrl.subscribe((value) => {
+		activeSubRoute = null;
+	});
 
-    // The active unsubscribe is required due the usage of a callback function.
-    onDestroy(unsubscribe)
+	// The active unsubscribe is required due the usage of a callback function.
+	onDestroy(unsubscribe);
 </script>
 
-<div class='flex flex-row'>
-    <!-- A groups heading is differentiated by having a name and a route -->
-    {#if name && route}
-        <!--
+<div class="flex flex-row">
+	<!-- A groups heading is differentiated by having a name and a route -->
+	{#if name && route}
+		<!--
             If a group's root route is part of the active tree,
             the root link considers itself to be "active".
         -->
-        <NavigationLink
-                {name}
-                {route}
-                {disabled}
-                activeGroup={Boolean(activeSubRoute)}
-                on:active={handleActiveChange}/>
-        <!--
+		<NavigationLink
+			{name}
+			{route}
+			{disabled}
+			activeGroup={Boolean(activeSubRoute)}
+			on:active={handleActiveChange}
+		/>
+		<!--
             Don't allow disabled groups to be opened:
             Child routes are considered disabled when their parent is.
         -->
-        {#if !disabled}
-            <button
-                    class="group-toggle"
-                    class:open={groupOpen}
-                    on:click={toggleGroup}
-                    aria-expanded={groupOpen}
-                    aria-controls={`${route}-group`}
-                    aria-label="Toggle the visibility of child navigation links"
-                    title="Toggle the visibility of child navigation links">
-            </button>
-        {/if}
-    {/if}
-
+		{#if !disabled}
+			<button
+				class="group-toggle"
+				class:open={groupOpen}
+				on:click={toggleGroup}
+				aria-expanded={groupOpen}
+				aria-controls={`${route}-group`}
+				aria-label="Toggle the visibility of child navigation links"
+				title="Toggle the visibility of child navigation links"
+			/>
+		{/if}
+	{/if}
 </div>
 <!-- Child routes of the group -->
 <div
-        hidden={!groupOpen || disabled}
-        id={`${route ? route : 'root'}-group`}
-        in:scale={{ duration: 250 }}>
-    {#each routes as route (route.route)}
-        <div class:group={route.childRoutes}>
-            {#if route.childRoutes}
-                <!--
+	hidden={!groupOpen || disabled}
+	id={`${route ? route : 'root'}-group`}
+	in:scale={{ duration: 250 }}
+>
+	{#each routes as route (route.route)}
+		<div class:group={route.childRoutes}>
+			{#if route.childRoutes}
+				<!--
                     If the child route has children in return,
                     render a nested `NavigationLinkGroup`.
                     It's crucial that `NavigationLinkGroup`s
                     pass on the active change event to their parent.
                 -->
-                <svelte:self
-                        routes={route.childRoutes}
-                        name={route.name}
-                        route={route.route}
-                        disabled={route.disabled}
-                        on:active={handleActiveChange}
-                />
-            {:else}
-                <NavigationLink
-                        {...route}
-                        activeGroup={activeSubRoute === route.route}
-                        on:active={handleActiveChange}
-                />
-            {/if}
-        </div>
-    {/each}
+				<svelte:self
+					routes={route.childRoutes}
+					name={route.name}
+					route={route.route}
+					disabled={route.disabled}
+					on:active={handleActiveChange}
+				/>
+			{:else}
+				<NavigationLink
+					{...route}
+					activeGroup={activeSubRoute === route.route}
+					on:active={handleActiveChange}
+				/>
+			{/if}
+		</div>
+	{/each}
 </div>
