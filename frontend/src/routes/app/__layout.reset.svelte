@@ -3,7 +3,12 @@
 	import { authGuard } from '$lib/guards/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import PatientIcon from '~icons/bi/person';
+	import DonorIcon from '~icons/bi/person';
 	import NotificationIcon from '~icons/carbon/notification';
+	import SettingsIcon from '~icons/carbon/settings';
+	import DoctorIcon from '~icons/healthicons/doctor-outline';
+	import PreferencesIcon from '~icons/healthicons/ui-preferences-outline';
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import KidneyOutline from '~icons/whh/kidney';
 	import '../../assets/styles/app.scss';
@@ -17,14 +22,17 @@
 		activeUrl: '/',
 		routes: [
 			{ name: 'Dashboard', route: '/app/', icon: DashboardIcon },
-			{ name: 'Dashboard', route: '/app/', icon: NotificationIcon },
-			{ name: 'Dashboard', route: '/app/', icon: NotificationIcon },
-			{ name: 'Dashboard', route: '/app/', icon: NotificationIcon }
+			{ name: 'Recipients', route: '/app/', icon: PatientIcon },
+			{ name: 'Donors', route: '/app/', icon: DonorIcon },
+			{ name: 'Doctors', route: '/app/', icon: DoctorIcon }
 		]
 	};
 	let bottomProps = {
 		activeUrl: '/',
-		routes: []
+		routes: [
+			{ name: 'System Settings', route: '/app/settings', icon: SettingsIcon },
+			{ name: 'Preferences', route: '/app/settings', icon: PreferencesIcon }
+		]
 	};
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
@@ -39,10 +47,10 @@
 	// userType.subscribe((userType) => {});
 </script>
 
-<div class="sticky top-0 z-10 flex h-12 flex-row items-center border-b bg-gray-200 text-gray-500">
-	<a class="flex flex-row px-10 text-gray-500" href="/app">
+<div class="sticky top-0 z-10 flex h-[4rem] flex-row items-center bg-zinc-100  text-gray-500">
+	<a class="flex flex-row py-2 pl-4 text-gray-500" href="/app">
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
-		<div class="font-raleway text-2xl font-extrabold tracking-wide">Registry</div>
+		<div class="ml-2 font-raleway text-2xl font-extrabold tracking-wide">Registry</div>
 	</a>
 	<div class=" flex-grow"><span>&nbsp;</span></div>
 	<div class="relative mx-4 flex flex-row items-center rounded-md shadow-sm">
@@ -114,12 +122,15 @@
 		</a>
 	</div>
 </div>
-<div class="flex w-full flex-row bg-gray-100">
-	<div class="relative mt-4 flex flex-col justify-between  px-4" style="height:calc(100vh - 5rem)">
+<div
+	class="flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-200"
+	style="height:calc(100vh - 4rem)"
+>
+	<div class="relative flex flex-col justify-between">
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
 	</div>
-	<div class="flex-grow overflow-scroll border-l bg-white p-4">
+	<div class="flex-grow overflow-scroll border-l border-stone-200 bg-white p-4">
 		<slot />
 	</div>
 </div>

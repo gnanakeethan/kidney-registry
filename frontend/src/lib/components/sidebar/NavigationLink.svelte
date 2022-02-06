@@ -54,7 +54,7 @@
 <a
 	{active}
 	bind:this={link}
-	class="mx-2 my-3 flex flex-row items-center rounded fill-current"
+	class="flex flex-row items-center bg-white fill-current px-4 py-4"
 	class:activeGroup
 	class:bg-dark-green={active}
 	class:text-white={active}
@@ -63,6 +63,6 @@
 	on:click={onClick(event, route)}
 	tabindex="0"
 >
-	<svelte:component this={icon} class="mr-4" />
+	<svelte:component this={icon} class="mr-1" />
 	{name}
 </a>
