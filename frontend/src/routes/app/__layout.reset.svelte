@@ -2,13 +2,17 @@
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
+	import { minimized as minimized } from '$lib/state/SidebarStore';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+
 	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
 	import DonorIcon from '~icons/bi/person';
 	import UserIcon from '~icons/bi/person';
 	import NotificationIcon from '~icons/carbon/notification';
+	import SearchIcon from '~icons/carbon/search-locate';
 	import SettingsIcon from '~icons/carbon/settings';
+	import CollapsibleIcon from '~icons/clarity/collapse-line';
 	import DoctorIcon from '~icons/healthicons/doctor-outline';
 	import PreferencesIcon from '~icons/healthicons/ui-preferences-outline';
 	import RecurringIcon from '~icons/ic/round-event-repeat';
@@ -26,7 +30,7 @@
 		routes: [
 			{ name: 'Dashboard', route: '/app', icon: DashboardIcon },
 			{ name: 'Follow Ups', route: '/app/h', icon: RecurringIcon },
-			{ name: 'Investigations', route: '/app/y', icon: RecurringIcon },
+			{ name: 'Investigations', route: '/app/y', icon: SearchIcon },
 			{ name: 'Recipients', route: '/app/s', icon: PatientIcon },
 			{ name: 'Donors', route: '/app/f', icon: DonorIcon },
 			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon },
@@ -59,7 +63,7 @@
 <div
 	class="sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-xs text-gray-500"
 >
-	<a class="flex flex-row items-center py-2 pl-4 text-gray-500" href="/app">
+	<a class="flex flex-row items-center py-2 pl-4 text-neutral-600" href="/app">
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
 		<div class="font-raleway text-2xl font-extrabold">Registry</div>
 	</a>
@@ -140,6 +144,22 @@
 	<div class="relative flex flex-col justify-between">
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
+		<div
+			class="absolute bottom-40 -right-4"
+			on:click={() => {
+				minimized.set(!$minimized);
+			}}
+		>
+			<div
+				class="flex h-8 w-8 flex-col items-center justify-around rounded-full border border-stone-400 bg-stone-100"
+			>
+				{#if $minimized}
+					<CollapsibleIcon class="fixed rotate-90 text-lg" />
+				{:else}
+					<CollapsibleIcon class="fixed -rotate-90 text-lg" />
+				{/if}
+			</div>
+		</div>
 	</div>
 	<div
 		class="flex-grow overflow-scroll border-l border-t border-dashed border-neutral-500 bg-white"

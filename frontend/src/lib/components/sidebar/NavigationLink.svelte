@@ -1,6 +1,6 @@
 <script>
 	import { afterUpdate, createEventDispatcher } from 'svelte';
-	import { activeUrl, onLinkClick } from './SidebarStore';
+	import { activeUrl, minimized, onLinkClick } from '$lib/state/SidebarStore';
 
 	export let name;
 	export let icon;
@@ -54,10 +54,13 @@
 <a
 	{active}
 	bind:this={link}
-	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current px-4 py-2 first:border-t"
+	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2 first:border-t"
 	class:activeGroup
 	class:bg-neutral-500={active}
+	class:border-white={active}
 	class:font-bold={active}
+	class:px-2={$minimized}
+	class:px-4={!$minimized}
 	class:text-white={active}
 	{disabled}
 	href={route}
@@ -65,5 +68,7 @@
 	tabindex="0"
 >
 	<svelte:component this={icon} class="mr-1" />
-	{name}
+	<div class="transition-all duration-300 ease-in-out" class:hidden={$minimized}>
+		{name}
+	</div>
 </a>

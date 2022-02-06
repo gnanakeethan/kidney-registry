@@ -1,6 +1,9 @@
 <script>
 	import { beforeUpdate } from 'svelte';
-	import { activeUrl as storeActiveUrl, onLinkClick as storeOnLinkClick } from './SidebarStore';
+	import {
+		activeUrl as storeActiveUrl,
+		onLinkClick as storeOnLinkClick
+	} from '$lib/state/SidebarStore';
 	import NavigationLinkGroup from './NavigationLinkGroup.svelte';
 
 	export let activeUrl = null;

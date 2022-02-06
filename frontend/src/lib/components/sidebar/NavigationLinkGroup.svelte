@@ -1,7 +1,7 @@
 <script>
 	import { createEventDispatcher, onDestroy } from 'svelte';
 	import { scale } from 'svelte/transition';
-	import { activeUrl } from './SidebarStore';
+	import { activeUrl } from '$lib/state/SidebarStore';
 	import NavigationLink from './NavigationLink.svelte';
 
 	export let routes = [];
