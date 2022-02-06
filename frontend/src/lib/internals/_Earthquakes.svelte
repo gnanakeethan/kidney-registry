@@ -2,8 +2,6 @@
     import {getContext, onDestroy} from 'svelte'
     import {contextKey} from '@beyonk/svelte-mapbox'
 
-    import MiniScroller from './_MiniScroller.svelte'
-
     const {getMap, getMapbox} = getContext(contextKey)
     const map = getMap()
     const mapbox = getMapbox()
@@ -190,34 +188,34 @@
     function swapSource() {
         let sourceQuakes = map.getSource('points');
         sourceQuakes.setData({
-                'type': 'FeatureCollection',
-                'features': [
-                    {
+            'type': 'FeatureCollection',
+            'features': [
+                {
 // feature for Mapbox DC
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [
-                                -54.03238901390978, 38.913188059745586
-                            ]
-                        },
-                        'properties': {
-                            'title': 'Mapbox DC'
-                        }
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [
+                            -54.03238901390978, 38.913188059745586
+                        ]
                     },
-                    {
-// feature for Mapbox SF
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-54.414, 37.776]
-                        },
-                        'properties': {
-                            'title': 'Mapbox SF'
-                        }
+                    'properties': {
+                        'title': 'Mapbox DC'
                     }
-                ]
-            });
+                },
+                {
+// feature for Mapbox SF
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-54.414, 37.776]
+                    },
+                    'properties': {
+                        'title': 'Mapbox SF'
+                    }
+                }
+            ]
+        });
     }
 
     onDestroy(() => {

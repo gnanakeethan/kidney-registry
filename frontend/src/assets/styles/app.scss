@@ -9,10 +9,12 @@
 .has-tooltip:hover .tooltip {
   @apply visible z-50;
 }
-.\?{
+
+.\? {
   border: 2px dashed red;
   animation: blinking 700ms infinite;
 }
+
 @keyframes blinking {
   50% {
     border-color: #fff;

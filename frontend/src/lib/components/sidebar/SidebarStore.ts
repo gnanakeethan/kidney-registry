@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import {writable} from 'svelte/store'
 
 /*
  * The store allows to avoid passing `activeUrl` and `onLinkClick`

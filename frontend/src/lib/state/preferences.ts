@@ -1,9 +1,9 @@
-import { writable } from 'svelte-local-storage-store';
+import {writable} from 'svelte-local-storage-store';
 
 export interface Preferences {
-	theme: string;
+    theme: string;
 }
 
 export const preferences = writable('preferences', {
-	theme: 'dark'
+    theme: 'dark'
 } as Preferences);
