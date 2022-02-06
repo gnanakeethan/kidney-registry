@@ -47,6 +47,7 @@
     "sass": "^1.49.7",
     "svelte": "^3.46.4",
     "svelte-check": "^2.4.2",
+    "svelte-data-grid": "https://github.com/fuzzthink/svelte-data-grid/tarball/v1.0.3",
     "svelte-forms-lib": "^2.0.1",
     "svelte-fsm": "^1.1.2",
     "svelte-inline-svg": "^1.0.8",

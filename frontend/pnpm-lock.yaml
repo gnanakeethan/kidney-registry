@@ -35,13 +35,13 @@ specifiers:
   sass: ^1.49.7
   svelte: ^3.46.4
   svelte-check: ^2.4.2
+  svelte-data-grid: https://github.com/fuzzthink/svelte-data-grid/tarball/v1.0.3
   svelte-forms-lib: ^2.0.1
   svelte-fsm: ^1.1.2
   svelte-inline-svg: ^1.0.8
   svelte-local-storage-store: ^0.2.6
   svelte-preprocess: ^4.10.2
   svelte-select: ^4.4.7
-  svelte-windicss-preprocess: ^4.2.5
   tailwindcss: ^3.0.18
   tslib: ^2.3.1
   typescript: ^4.5.5
@@ -85,13 +85,13 @@ devDependencies:
   sass: 1.49.7
   svelte: 3.46.4
   svelte-check: 2.4.2_76cf0a5ca45cd3a1c1519d4e0bc23f9b
+  svelte-data-grid: '@github.com/fuzzthink/svelte-data-grid/tarball/v1.0.3'
   svelte-forms-lib: 2.0.1
   svelte-fsm: 1.1.2
   svelte-inline-svg: 1.0.8
   svelte-local-storage-store: 0.2.6_svelte@3.46.4
   svelte-preprocess: 4.10.2_b22246ebb4c997fbe842f8b2e5cc854f
   svelte-select: 4.4.7
-  svelte-windicss-preprocess: 4.2.5
   tailwindcss: 3.0.18_833e1018ad0d7954aa80c53675939269
   tslib: 2.3.1
   typescript: 4.5.5
@@ -187,10 +187,6 @@ packages:
 
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
-    dev: true
-
-  /@iconify/json/1.1.432:
-    resolution: {integrity: sha512-ZcQKCnJXmeKDKxSu4vOFCYkCv8sjX1OASTMQpzqVzt3ivBBDudAYyXJlO4hgk0X4B2R0IMHRNvRgCAYkKDa2eQ==}
     dev: true
 
   /@iconify/json/2.0.33:
@@ -960,6 +956,10 @@ packages:
     resolution: {integrity: sha512-Y9DrFYjjfwK09Fc8/05DhpWgwqhqRuhuH4gMdQxCeZ9dLJ82y5xb6kvwLuK1cWLfCckDOWk3reEKXsciaMHyAw==}
     dev: true
 
+  /debounce/1.2.1:
+    resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
+    dev: true
+
   /debug/4.3.3:
     resolution: {integrity: sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==}
     engines: {node: '>=6.0'}
@@ -972,6 +972,10 @@ packages:
       ms: 2.1.2
     dev: true
 
+  /deep-diff/1.0.2:
+    resolution: {integrity: sha512-aWS3UIVH+NPGCD1kki+DCU9Dua032iSsO43LqQpcs4R3+dVv7tX0qBGjiVHJHjplsoUM2XRO/KB92glqc68awg==}
+    dev: true
+
   /deep-is/0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
     dev: true
@@ -980,13 +984,13 @@ packages:
     resolution: {integrity: sha1-yY2bzvdWdBiOEQlpFRGZ45sfppM=}
     dev: true
 
-  /defu/5.0.1:
-    resolution: {integrity: sha512-EPS1carKg+dkEVy3qNTqIdp2qV7mUP08nIsupfwQpz++slCVRw7qbQyWvSTig+kFPwz2XXp5/kIIkH+CwrJKkQ==}
-    dev: true
-
   /dequal/2.0.2:
     resolution: {integrity: sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==}
     engines: {node: '>=6'}
+    dev: true
+
+  /detect-browser/5.3.0:
+    resolution: {integrity: sha512-53rsFbGdwMwlF7qvCt0ypLM5V5/Mbl0szB7GPN8y9NCcbknYOeVVXdrXEq+90IwAfrrzt6Hd+u2E2ntakICU8w==}
     dev: true
 
   /detect-indent/6.1.0:
@@ -1432,17 +1436,6 @@ packages:
       micromatch: 4.0.4
     dev: true
 
-  /fast-glob/3.2.7:
-    resolution: {integrity: sha512-rYGMRwip6lUMvYD3BTScMwT1HtAs2d71SMv66Vrxs0IekGZEjhM0pcMfjQPnknBt2zeCwQMEupiN02ZP4DiT1Q==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.8
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.4
-    dev: true
-
   /fast-json-stable-stringify/2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
     dev: true
@@ -1724,11 +1717,6 @@ packages:
 
   /isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
-    dev: true
-
-  /jiti/1.12.15:
-    resolution: {integrity: sha512-/+K89y6KJA2nISbWrlc/773XdpDgSQq/LdQ+ZZyw2jRxUNyquPtbsDCCCMRzzNORUgroUGc4nAXxJEnQvpViCA==}
-    hasBin: true
     dev: true
 
   /js-tokens/4.0.0:
@@ -2897,16 +2885,6 @@ packages:
     resolution: {integrity: sha512-fIf9Z8rPI6F8naHZ9wjXT0Pv5gLyhdHAFkHFJnCfVVfELE8e82uOoF0xEVQP6Kir+b4Q5yOvNAzZ61WbSU6A0A==}
     dev: true
 
-  /svelte-windicss-preprocess/4.2.5:
-    resolution: {integrity: sha512-QTZ0jwIeuBeomazj3SNzZzncOFuSyngpTwnT5lZ0XgP4o2EEu+nF67QgaQHqy9P6wfRuT8l2SycD/ZkGEaD2VA==}
-    dependencies:
-      '@iconify/json': 1.1.432
-      fast-glob: 3.2.7
-      unconfig: 0.2.2
-      windicss: 3.2.1
-      windicss-runtime-dom: 3.0.0
-    dev: true
-
   /svelte/3.46.4:
     resolution: {integrity: sha512-qKJzw6DpA33CIa+C/rGp4AUdSfii0DOTCzj/2YpSKKayw5WGSS624Et9L1nU1k2OVRS9vaENQXp2CVZNU+xvIg==}
     engines: {node: '>= 8'}
@@ -3024,14 +3002,6 @@ packages:
     resolution: {integrity: sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
-
-  /unconfig/0.2.2:
-    resolution: {integrity: sha512-JN1MeYJ/POnjBj7NgOJJxPp6+NcD6Nd0hEuK0D89kjm9GvQQUq8HeE2Eb7PZgtu+64mWkDiqeJn1IZoLH7htPg==}
-    dependencies:
-      '@antfu/utils': 0.3.0
-      defu: 5.0.1
-      jiti: 1.12.15
     dev: true
 
   /unplugin-icons/0.13.0_rollup@2.67.0:
@@ -3168,16 +3138,6 @@ packages:
       isexe: 2.0.0
     dev: true
 
-  /windicss-runtime-dom/3.0.0:
-    resolution: {integrity: sha512-a12Uhu71yT1U8w0PzJ3amF9xmC8b1rWFLgXEfI/UyuwUi6D1vUACOO6vb0iY4T4OtP/bJAjQMM7lv3hMWSwLuQ==}
-    dev: true
-
-  /windicss/3.2.1:
-    resolution: {integrity: sha512-LusrIrryBFHAPQ/OOTbS4EWWuzI6eGeJglI9nQ3kDBr1cqH69NWt8Z8q59f9kTkgptXroejmWfksWwqgHs8EVw==}
-    engines: {node: '>= 12'}
-    hasBin: true
-    dev: true
-
   /wonka/4.0.15:
     resolution: {integrity: sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==}
     dev: true
@@ -3221,4 +3181,14 @@ packages:
       nanoclone: 0.2.1
       property-expr: 2.0.5
       toposort: 2.0.2
+    dev: true
+
+  '@github.com/fuzzthink/svelte-data-grid/tarball/v1.0.3':
+    resolution: {tarball: https://github.com/fuzzthink/svelte-data-grid/tarball/v1.0.3}
+    name: svelte-data-grid
+    version: 3.0.1
+    dependencies:
+      debounce: 1.2.1
+      deep-diff: 1.0.2
+      detect-browser: 5.3.0
     dev: true
