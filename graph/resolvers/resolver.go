@@ -4,7 +4,7 @@ package resolvers
 import (
 	"math/rand"
 	"sync"
-	
+
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 

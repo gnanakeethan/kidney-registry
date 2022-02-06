@@ -53,7 +53,7 @@ func GetAllComorbidities(query map[string]string, fields []string, sortby []stri
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
 		if strings.Contains(k, "isnull") {
-			qs = qs.Filter(k, (v == "true" || v == "1"))
+			qs = qs.Filter(k, v == "true" || v == "1")
 		} else {
 			qs = qs.Filter(k, v)
 		}

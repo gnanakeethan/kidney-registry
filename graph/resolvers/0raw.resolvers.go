@@ -7,9 +7,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/google/uuid"
 )
 
 func (r *mutationResolver) Sample(ctx context.Context, id string) (*models.Error, error) {

@@ -3,10 +3,11 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gnanakeethan/kidney-registry/models"
 	"strconv"
 	"strings"
-	
+
+	"github.com/gnanakeethan/kidney-registry/models"
+
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -84,7 +85,7 @@ func (c *PersonFollowUpsInvestigationsController) GetAll() {
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
-	
+
 	// fields: col1,col2,entity.col3
 	if v := c.GetString("fields"); v != "" {
 		fields = strings.Split(v, ",")
@@ -118,7 +119,7 @@ func (c *PersonFollowUpsInvestigationsController) GetAll() {
 			query[k] = v
 		}
 	}
-	
+
 	l, err := models.GetAllPersonFollowUpsInvestigations(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
