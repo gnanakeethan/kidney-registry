@@ -6,6 +6,7 @@
 	export let icon;
 	export let route;
 	export let disabled = false;
+	export let minimizedActive = false;
 	export let activeGroup = false; // Whether the link is part of an active `NavigationLinkGroup`.
 
 	let link;
@@ -14,6 +15,13 @@
 	 * with `activeRoute` from `SidebarStore`.
 	 */
 	$: active = $activeUrl === route;
+	$: $minimized === true
+		? setTimeout(() => {
+				minimizedActive = true;
+		  }, 100)
+		: setTimeout(() => {
+				minimizedActive = false;
+		  }, 100);
 
 	function onClick(event, route) {
 		$activeUrl = route;
@@ -54,7 +62,7 @@
 <a
 	{active}
 	bind:this={link}
-	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2 first:border-t"
+	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2 transition-all duration-300 ease-in-out first:border-t"
 	class:activeGroup
 	class:bg-neutral-500={active}
 	class:border-white={active}
@@ -68,7 +76,7 @@
 	tabindex="0"
 >
 	<svelte:component this={icon} class="mr-1" />
-	<div class="transition-all duration-300 ease-in-out" class:hidden={$minimized}>
+	<div class="" class:hidden={minimizedActive} class:opacity-0={$minimized}>
 		{name}
 	</div>
 </a>
