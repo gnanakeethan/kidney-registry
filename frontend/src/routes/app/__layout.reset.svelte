@@ -3,6 +3,7 @@
 	import { authGuard } from '$lib/guards/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
 	import DonorIcon from '~icons/bi/person';
 	import NotificationIcon from '~icons/carbon/notification';
@@ -22,16 +23,16 @@
 		activeUrl: '/',
 		routes: [
 			{ name: 'Dashboard', route: '/app/', icon: DashboardIcon },
-			{ name: 'Recipients', route: '/app/', icon: PatientIcon },
-			{ name: 'Donors', route: '/app/', icon: DonorIcon },
-			{ name: 'Doctors', route: '/app/', icon: DoctorIcon }
+			{ name: 'Recipients', route: '/app/s', icon: PatientIcon },
+			{ name: 'Donors', route: '/app/f', icon: DonorIcon },
+			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon }
 		]
 	};
 	let bottomProps = {
 		activeUrl: '/',
 		routes: [
 			{ name: 'System Settings', route: '/app/settings', icon: SettingsIcon },
-			{ name: 'Preferences', route: '/app/settings', icon: PreferencesIcon }
+			{ name: 'Preferences', route: '/app/preferences', icon: PreferencesIcon }
 		]
 	};
 
@@ -47,47 +48,49 @@
 	// userType.subscribe((userType) => {});
 </script>
 
-<div class="sticky top-0 z-10 flex h-[4rem] flex-row items-center bg-zinc-100  text-gray-500">
+<div
+	class="sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100  text-xs  text-gray-500"
+>
 	<a class="flex flex-row py-2 pl-4 text-gray-500" href="/app">
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
 		<div class="ml-2 font-raleway text-2xl font-extrabold tracking-wide">Registry</div>
 	</a>
 	<div class=" flex-grow"><span>&nbsp;</span></div>
-	<div class="relative mx-4 flex flex-row items-center rounded-md shadow-sm">
+	<div class="relative mx-4 flex flex-row items-center">
 		<input
-			class="bg-light-gray block h-8 flex-grow rounded-md border-gray-300 pl-4 pr-12 font-sans focus:border-none focus:ring-0 sm:text-sm"
+			class="bg-light-gray block h-8 flex-grow border-gray-300 pl-4 pr-12 font-sans text-xs text-sm focus:border-none focus:ring-0"
 			id="price"
 			name="price"
 			placeholder="Search"
 			type="text"
 		/>
 	</div>
-	<!--	<div-->
-	<!--		class="mx-1.5 inline-flex items-center rounded p-3 {$NotificationsStatus.messagesActive-->
-	<!--			? 'bg-gray-200'-->
-	<!--			: ''}"-->
-	<!--	>-->
-	<!--		<a class="relative inline-block" href="/app/messaging">-->
-	<!--			<MessageIcon-->
-	<!--				class="fill-current text-xl subpixel-antialiased {$NotificationsStatus.messages > 0-->
-	<!--					? 'text-gray-900'-->
-	<!--					: 'text-gray-500'}"-->
-	<!--			/>-->
-	<!--			{#if $NotificationsStatus.messages > 0}-->
-	<!--				<div-->
-	<!--					class="absolute top-0.5 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white"-->
-	<!--					style="font-size: 8px"-->
-	<!--				>-->
-	<!--					{$NotificationsStatus.messages > 99-->
-	<!--						? 99-->
-	<!--						: $NotificationsStatus.messages}{$NotificationsStatus.messages > 99 ? '+' : ''}-->
-	<!--				</div>-->
-	<!--			{/if}-->
-	<!--		</a>-->
-	<!--	</div>-->
+	<div
+		class="mx-1.5 inline-flex items-center rounded p-2 {$NotificationsStatus.messagesActive
+			? 'bg-zinc-300'
+			: ''}"
+	>
+		<a class="relative inline-block" href="/app/messaging">
+			<MessageIcon
+				class="fill-current text-xl subpixel-antialiased {$NotificationsStatus.messages > 0
+					? 'text-gray-900'
+					: 'text-gray-500'}"
+			/>
+			{#if $NotificationsStatus.messages > 0}
+				<div
+					class="absolute top-0.5 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white"
+					style="font-size: 8px"
+				>
+					{$NotificationsStatus.messages > 99
+						? 99
+						: $NotificationsStatus.messages}{$NotificationsStatus.messages > 99 ? '+' : ''}
+				</div>
+			{/if}
+		</a>
+	</div>
 	<div
 		class="mx-1.5 inline-flex items-center rounded p-2 {$NotificationsStatus.notificationsActive
-			? 'bg-gray-200'
+			? 'bg-zinc-300'
 			: ''}"
 	>
 		<div class="relative inline-block">
@@ -123,8 +126,8 @@
 	</div>
 </div>
 <div
-	class="flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-200"
-	style="height:calc(100vh - 4rem)"
+	class="flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-200 text-xs"
+	style="height:calc(100vh - 3.25rem)"
 >
 	<div class="relative flex flex-col justify-between">
 		<Sidebar {...props} />
