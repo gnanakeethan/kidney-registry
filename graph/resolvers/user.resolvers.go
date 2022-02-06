@@ -10,10 +10,10 @@ import (
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input models.NewTodo) (*models.Todo, error) {
+func (r *mutationResolver) LoginUser(ctx context.Context, input models.UserLogin) (*models.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*models.Todo, error) {
+func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }

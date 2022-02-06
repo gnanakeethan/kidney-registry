@@ -1,9 +1,3 @@
-type Todo {
-    id: ID!
-    text: String!
-    done: Boolean!
-    user: User!
-}
 type User {
     id: ID!
     name: String!
@@ -20,14 +14,10 @@ type UserAuthenticated {
 }
 
 extend type Query {
-    todos: [Todo!]!
+    users: [User!]!
 }
 
-input NewTodo {
-    text: String!
-    userId: String!
-}
 
 extend type Mutation {
-    createTodo(input: NewTodo!): Todo!
+    loginUser(input: UserLogin!): User!
 }

@@ -6,7 +6,7 @@ package resolvers
 import (
 	"context"
 	"fmt"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 	"github.com/google/uuid"
@@ -42,9 +42,9 @@ func (r *subscriptionResolver) Users(ctx context.Context) (<-chan *models.User, 
 	// When a new subscription is created by the client, this resolver will fire first.
 	id := randString(8)
 	msgs := make(chan *models.User, 1)
-	
+
 	ctx.Value("user")
-	
+
 	// Start a goroutine to allow for cleaning up subscriptions that are disconnected.
 	// This go routine will only get past Done() when a client terminates the subscription. This allows us
 	// to only then remove the reference from the list of ChatObservers since it is no longer needed.
