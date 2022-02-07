@@ -151,14 +151,14 @@
 			}}
 		>
 			<div
-				class="fixed flex w-8 flex-col items-center justify-between rounded-full border border-stone-400 bg-white"
-				class:bg-stone-400={$minimized}
+				class="fixed flex h-8 w-8 flex-row items-center justify-around rounded-full border border-dashed border-neutral-500 bg-white"
+				class:bg-neutral-500={$minimized}
 				class:text-white={$minimized}
 			>
 				{#if $minimized}
-					<CollapsibleIcon class="rotate-90 text-2xl" />
+					<CollapsibleIcon class="rotate-90 text-xl" />
 				{:else}
-					<CollapsibleIcon class="-rotate-90 text-2xl" />
+					<CollapsibleIcon class="-rotate-90 text-xl" />
 				{/if}
 			</div>
 		</div>

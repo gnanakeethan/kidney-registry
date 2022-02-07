@@ -1,3 +1,4 @@
+import { localStorage, persist } from '@macfja/svelte-persistent-store';
 import { writable } from 'svelte/store';
 
 /*
@@ -9,4 +10,4 @@ export const activeUrl = writable(null);
 
 export const onLinkClick = writable(null);
 
-export const minimized = writable(false);
+export const minimized = persist(writable(false), localStorage(), 'sidebarState');
