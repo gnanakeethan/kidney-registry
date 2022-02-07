@@ -139,9 +139,9 @@
 </div>
 <div
 	class="text-system flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50"
-	style="height:calc(100vh - 3.25rem)"
+	style="height:calc(100vh - 3.25rem);min-height:fit-content"
 >
-	<div class="relative flex flex-col justify-between">
+	<div class="relative flex flex-col justify-between overflow-scroll">
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
 		<div

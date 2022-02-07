@@ -7,15 +7,6 @@
 	});
 </script>
 
-<div class="?">
-	<div>
-		<div class="grid h-5 w-1/6 grid-cols-4 p-4">
-			<div class="font-serif">Testing</div>
-			<div>Testing</div>
-			<div class="font-sans">Testing</div>
-			<div class="font-serif">Testing</div>
-			<div>Testing</div>
-			<div class="font-serif">Testing</div>
-		</div>
-	</div>
+<div class="">
+	<a href="/app">App Page</a>
 </div>
