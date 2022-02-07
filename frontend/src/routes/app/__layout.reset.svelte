@@ -1,57 +1,57 @@
 <script context="module" lang="ts">
-	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
-	import { authGuard } from '$lib/guards/auth';
-	import { NotificationsStatus } from '$lib/state/notifications';
-	import { minimized as minimized } from '$lib/state/SidebarStore';
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+    import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
+    import {authGuard} from '$lib/guards/auth';
+    import {NotificationsStatus} from '$lib/state/notifications';
+    import {minimized as minimized} from '$lib/state/SidebarStore';
+    import type {LoadInput, LoadOutput} from '@sveltejs/kit/types';
 
-	import MessageIcon from '~icons/ant-design/message-outlined';
-	import PatientIcon from '~icons/bi/person';
-	import DonorIcon from '~icons/bi/person';
-	import UserIcon from '~icons/bi/person';
-	import NotificationIcon from '~icons/carbon/notification';
-	import SearchIcon from '~icons/carbon/search-locate';
-	import SettingsIcon from '~icons/carbon/settings';
-	import CollapsibleIcon from '~icons/clarity/collapse-line';
-	import DoctorIcon from '~icons/healthicons/doctor-outline';
-	import PreferencesIcon from '~icons/healthicons/ui-preferences-outline';
-	import RecurringIcon from '~icons/ic/round-event-repeat';
-	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
-	import KidneyOutline from '~icons/whh/kidney';
-	import '../../assets/styles/app.scss';
-	// import makeServer from '../../mirage/mirage';
-	//
-	// if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
-	// 	makeServer(); // For people following the tutorial
-	// }
+    import MessageIcon from '~icons/ant-design/message-outlined';
+    import PatientIcon from '~icons/bi/person';
+    import DonorIcon from '~icons/bi/person';
+    import UserIcon from '~icons/bi/person';
+    import NotificationIcon from '~icons/carbon/notification';
+    import SearchIcon from '~icons/carbon/search-locate';
+    import SettingsIcon from '~icons/carbon/settings';
+    import CollapsibleIcon from '~icons/clarity/collapse-line';
+    import DoctorIcon from '~icons/healthicons/doctor-outline';
+    import PreferencesIcon from '~icons/healthicons/ui-preferences-outline';
+    import RecurringIcon from '~icons/ic/round-event-repeat';
+    import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
+    import KidneyOutline from '~icons/whh/kidney';
+    import '../../assets/styles/app.scss';
+    // import makeServer from '../../mirage/mirage';
+    //
+    // if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
+    // 	makeServer(); // For people following the tutorial
+    // }
 
-	let props = {
-		activeUrl: '/',
-		routes: [
-			{ name: 'Dashboard', route: '/app', icon: DashboardIcon },
-			{ name: 'Follow Ups', route: '/app/h', icon: RecurringIcon },
-			{ name: 'Investigations', route: '/app/y', icon: SearchIcon },
-			{ name: 'Recipients', route: '/app/s', icon: PatientIcon },
-			{ name: 'Donors', route: '/app/f', icon: DonorIcon },
-			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon },
-			{ name: 'Users', route: '/app/x', icon: UserIcon }
-			// { name: '', route: '/app/i', icon: DoctorIcon }
-		]
-	};
-	let bottomProps = {
-		activeUrl: '/',
-		routes: [
-			{ name: 'System Settings', route: '/app/settings', icon: SettingsIcon },
-			{ name: 'Preferences', route: '/app/preferences', icon: PreferencesIcon }
-		]
-	};
+    let props = {
+        activeUrl: '/',
+        routes: [
+            {name: 'Dashboard', route: '/app', icon: DashboardIcon},
+            {name: 'Follow Ups', route: '/app/h', icon: RecurringIcon},
+            {name: 'Investigations', route: '/app/y', icon: SearchIcon},
+            {name: 'Recipients', route: '/app/s', icon: PatientIcon},
+            {name: 'Donors', route: '/app/f', icon: DonorIcon},
+            {name: 'Doctors', route: '/app/g', icon: DoctorIcon}.
+            {name: 'Users', route: '/app/x', icon: UserIcon},
+            // { name: '', route: '/app/i', icon: DoctorIcon }
+        ]
+    };
+    let bottomProps = {
+        activeUrl: '/',
+        routes: [
+            {name: 'System Settings', route: '/app/settings', icon: SettingsIcon},
+            {name: 'Preferences', route: '/app/preferences', icon: PreferencesIcon}
+        ]
+    };
 
-	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
-		console.log(loadInput);
-		props.activeUrl = loadInput.url.pathname;
-		bottomProps.activeUrl = loadInput.url.pathname;
-		return await authGuard(loadInput);
-	}
+    export async function load(loadInput: LoadInput): Promise<LoadOutput> {
+        console.log(loadInput);
+        props.activeUrl = loadInput.url.pathname;
+        bottomProps.activeUrl = loadInput.url.pathname;
+        return await authGuard(loadInput);
+    }
 </script>
 
 <script>
