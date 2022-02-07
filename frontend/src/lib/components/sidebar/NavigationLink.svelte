@@ -68,7 +68,7 @@
 	class:border-white={active}
 	class:font-bold={active}
 	class:px-2={$minimized}
-	class:px-4={!$minimized}
+	class:px-3={!$minimized}
 	class:text-white={active}
 	{disabled}
 	href={route}

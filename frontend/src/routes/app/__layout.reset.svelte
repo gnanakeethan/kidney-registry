@@ -145,18 +145,20 @@
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
 		<div
-			class="absolute bottom-40 -right-4"
+			class="absolute bottom-32 right-4"
 			on:click={() => {
 				minimized.set(!$minimized);
 			}}
 		>
 			<div
-				class="flex h-8 w-8 flex-col items-center justify-around rounded-full border border-stone-400 bg-stone-100"
+				class="fixed flex w-8 flex-col items-center justify-between rounded-full border border-stone-400 bg-white"
+				class:bg-stone-400={$minimized}
+				class:text-white={$minimized}
 			>
 				{#if $minimized}
-					<CollapsibleIcon class="fixed rotate-90 text-lg" />
+					<CollapsibleIcon class="rotate-90 text-2xl" />
 				{:else}
-					<CollapsibleIcon class="fixed -rotate-90 text-lg" />
+					<CollapsibleIcon class="-rotate-90 text-2xl" />
 				{/if}
 			</div>
 		</div>
