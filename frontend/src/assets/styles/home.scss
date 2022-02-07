@@ -2,3 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 //@tailwind screens;
+
+
+.\? {
+  border: 2px dashed red;
+  animation: blinking 600ms infinite;
+}
+
+@keyframes blinking {
+  50% {
+    border-color: #fff;
+  }
+}
