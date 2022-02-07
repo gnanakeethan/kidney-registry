@@ -61,7 +61,7 @@
 </script>
 
 <div
-	class="sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-xs text-gray-500"
+	class="text-system sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-gray-500"
 >
 	<a class="flex flex-row items-center py-2 pl-4 text-neutral-600" href="/app">
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
@@ -138,7 +138,7 @@
 	</div>
 </div>
 <div
-	class="flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50 text-xs"
+	class="text-system flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50"
 	style="height:calc(100vh - 3.25rem)"
 >
 	<div class="relative flex flex-col justify-between">
