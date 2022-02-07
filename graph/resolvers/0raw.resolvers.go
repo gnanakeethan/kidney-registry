@@ -7,16 +7,45 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/google/uuid"
-
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/google/uuid"
 )
 
-func (r *mutationResolver) Sample(ctx context.Context, id string) (*models.Error, error) {
+func (r *mutationResolver) Error(ctx context.Context) (*models.Error, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) Error(ctx context.Context) (*models.Error, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *subscriptionResolver) Error(ctx context.Context) (<-chan *models.Error, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// Mutation returns generated.MutationResolver implementation.
+func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+
+// Query returns generated.QueryResolver implementation.
+func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+
+// Subscription returns generated.SubscriptionResolver implementation.
+func (r *Resolver) Subscription() generated.SubscriptionResolver { return &subscriptionResolver{r} }
+
+type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *mutationResolver) Sample(ctx context.Context, id string) (*models.Error, error) {
+	panic(fmt.Errorf("not implemented"))
+}
 func (r *mutationResolver) CreateUser(ctx context.Context, id *string) (*models.User, error) {
 	// Construct the newly sent message and append it to the existing messages
 	msg := models.User{
@@ -33,11 +62,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, id *string) (*models.
 	r.mu.Unlock()
 	return &msg, nil
 }
-
 func (r *queryResolver) Sample(ctx context.Context, id string) (*models.Error, error) {
 	panic(fmt.Errorf("not implemented"))
 }
-
 func (r *subscriptionResolver) Users(ctx context.Context) (<-chan *models.User, error) {
 	// Create an ID and channel for each active subscription. We will push changes into this channel.
 	// When a new subscription is created by the client, this resolver will fire first.
@@ -65,16 +92,3 @@ func (r *subscriptionResolver) Users(ctx context.Context) (<-chan *models.User, 
 	// r.Observers[id] <- r.UsersF
 	return msgs, nil
 }
-
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
-
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
-
-// Subscription returns generated.SubscriptionResolver implementation.
-func (r *Resolver) Subscription() generated.SubscriptionResolver { return &subscriptionResolver{r} }
-
-type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
-type subscriptionResolver struct{ *Resolver }

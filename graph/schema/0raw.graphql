@@ -4,14 +4,13 @@ type Error {
 }
 
 type Mutation {
-    sample(id: ID!): Error
-    createUser(id: ID): User
+    error: Error
 }
 
 type Query {
-    sample(id: ID!): Error
+    error: Error
 }
 
 type Subscription {
-    users: User!
+    error: Error!
 }
