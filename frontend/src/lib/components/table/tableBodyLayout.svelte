@@ -23,10 +23,10 @@
 					Lorem ipsum dolor sit amet, consetetur
 				</div>
 			</td>
-			<td class="whitespace-nowrap px-6 py-4 text-xs"> Vertical Banner </td>
-			<td class="whitespace-nowrap px-6 py-4 text-xs"> 120 x 240 px </td>
-			<td class="whitespace-nowrap px-6 py-4 text-xs"> 21/12/21 </td>
-			<td class="whitespace-nowrap px-6 py-4 text-right text-xs"> ... </td>
+			<td class="whitespace-nowrap px-6 py-4 text-xs"> Vertical Banner</td>
+			<td class="whitespace-nowrap px-6 py-4 text-xs"> 120 x 240 px</td>
+			<td class="whitespace-nowrap px-6 py-4 text-xs"> 21/12/21</td>
+			<td class="whitespace-nowrap px-6 py-4 text-right text-xs"> ...</td>
 		</tr>
 	{/each}
 </tbody>

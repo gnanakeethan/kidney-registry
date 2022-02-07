@@ -9,3 +9,5 @@
 .prettierrc,2/0/20137a9e94744624390b6748bc96df5ca1579b71
 G
 src/routes/index.svelte,5/1/51bcc514dca4100151288caa29d812033b5c875a
+T
+$src/routes/app/__layout.reset.svelte,f/5/f5f0fa429b413075458902d94a24a0fb5d16281a
