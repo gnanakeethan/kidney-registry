@@ -1,5 +1,5 @@
-import { DataSource } from 'lib/api/datasource';
-import { QueryRepository } from 'lib/api/repository';
+import { DataSource } from 'lib/interfaces/datasource';
+import { QueryRepository } from 'lib/interfaces/repository';
 
 export class DataSourceConnector<T> implements DataSource<T> {
 	currentPage: number;
