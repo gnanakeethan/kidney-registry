@@ -2,11 +2,11 @@ import { DataSource } from 'lib/interfaces/datasource';
 import { QueryRepository } from 'lib/interfaces/repository';
 
 export class DataSourceConnector<T> implements DataSource<T> {
-	currentPage: number;
-	nextPage: number;
-	perPage: number;
+	currentPage = 1;
+	nextPage = 2;
+	perPage = 15;
 	prevPage: number;
-	totalPages: number;
+	totalPages = 2;
 	currentRows: T[] = [];
 	query: string;
 

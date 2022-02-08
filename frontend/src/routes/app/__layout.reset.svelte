@@ -5,7 +5,6 @@
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import { minimized as minimized } from '$lib/state/SidebarStore';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
-	import { createClient } from '@urql/svelte';
 	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
 	import DonorIcon from '~icons/bi/person';
@@ -25,20 +24,6 @@
 	// if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
 	// 	makeServer(); // For people following the tutorial
 	// }
-
-	let auth: AuthState = { loggedIn: false, token: '', loginAs: null };
-	authState.subscribe((authStateS) => (auth = authStateS));
-	createClient({
-		url: import.meta.env.BASE_URL,
-		fetchOptions: () => {
-			if (auth.token.length > 0) {
-				return {
-					headers: { authorization: auth.token.length > 0 ? `Bearer ${auth.token}` : '' }
-				};
-			}
-			return {};
-		}
-	});
 
 	let props = {
 		activeUrl: '/',
@@ -69,9 +54,25 @@
 	}
 </script>
 
-<script>
+<script lang="ts">
 	import { userType } from '$lib/state/auth';
+	import { initClient } from '@urql/svelte';
+	import { ENV } from '$lib/environment/environment';
 
+	let auth: AuthState = { loggedIn: false, token: '', loginAs: null };
+	authState.subscribe((authStateS: AuthState) => (auth = authStateS));
+	initClient({
+		url: ENV.basePath,
+		fetchOptions: () => {
+			console.log(auth);
+			if (auth.token.length > 0) {
+				return {
+					headers: { authorization: auth.token.length > 0 ? `Bearer ${auth.token}` : '' }
+				};
+			}
+			return {};
+		}
+	});
 	// userType.subscribe((userType) => {});
 </script>
 

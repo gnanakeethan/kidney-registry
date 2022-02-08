@@ -1,9 +1,7 @@
-export interface QueryRepository<T> {
-	getItems(query: string, page: number, perPage: number): T[];
-}
+import { Client } from 'urql';
 
-export class GraphQLQueryRepository<T> implements QueryRepository<T> {
-	getItems(query: string, page: number, perPage: number): T[] {
-		return [];
-	}
+export interface QueryRepository<T> {
+	client: Client;
+
+	getItems(query: string, page: number, perPage: number): T[];
 }

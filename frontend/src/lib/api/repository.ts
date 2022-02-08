@@ -3,10 +3,11 @@ import { QueryRepository } from 'lib/interfaces/repository';
 import { Client } from 'urql';
 
 export class GraphQLQueryRepository<T> implements QueryRepository<T> {
-	private client: Client;
+	client: Client;
 
 	constructor() {
 		this.client = getClient();
+		console.log(this.client);
 	}
 
 	getItems(query: string, page: number, perPage: number): T[] {
