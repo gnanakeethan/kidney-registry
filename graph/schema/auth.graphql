@@ -1,10 +1,11 @@
 input UserLogin {
-    username: String
-    password: String
+    username: String!
+    password: String!
 }
 
 type UserToken {
-    token: String
+    token: String!
+    user: User
 }
 
 extend type Mutation {
