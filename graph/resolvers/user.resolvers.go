@@ -10,7 +10,7 @@ import (
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
+func (r *queryResolver) Users(ctx context.Context, filter *models.UserListFilter) (*models.UserList, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

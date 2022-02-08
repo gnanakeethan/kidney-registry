@@ -2,7 +2,16 @@ type User {
     id: ID!
     name: String!
 }
+type UserList {
+    users: [User!]!
+    pagination: Pagination
+}
+
+input UserListFilter {
+    id : ID
+    name: String
+}
 
 extend type Query {
-    users: [User!]!
+    users(filter: UserListFilter): UserList
 }

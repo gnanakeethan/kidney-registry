@@ -3,6 +3,14 @@ type Error {
     status: Int!
 }
 
+type Pagination {
+    currentPage: Int
+    prevPage: Int
+    nextPage: Int
+    totalItems: Int
+    itemsPerPage: Int
+}
+
 type Mutation {
     error: Error
 }

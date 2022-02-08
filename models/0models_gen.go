@@ -7,9 +7,27 @@ type Error struct {
 	Status int    `json:"status"`
 }
 
+type Pagination struct {
+	CurrentPage  *int `json:"currentPage"`
+	PrevPage     *int `json:"prevPage"`
+	NextPage     *int `json:"nextPage"`
+	TotalItems   *int `json:"totalItems"`
+	ItemsPerPage *int `json:"itemsPerPage"`
+}
+
 type User struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type UserList struct {
+	Users      []*User     `json:"users"`
+	Pagination *Pagination `json:"pagination"`
+}
+
+type UserListFilter struct {
+	ID   *string `json:"id"`
+	Name *string `json:"name"`
 }
 
 type UserLogin struct {
