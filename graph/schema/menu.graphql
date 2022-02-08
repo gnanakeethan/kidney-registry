@@ -1,10 +1,10 @@
-type Menus {
+type DashboardMenus {
     sidebarTop: Menu
     sidebarBottom: Menu
 }
 
 type Menu {
-    items: MenuItem[]
+    items: [MenuItem]
 }
 
 type MenuItem {
