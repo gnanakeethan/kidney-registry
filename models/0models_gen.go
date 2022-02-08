@@ -12,12 +12,11 @@ type User struct {
 	Name string `json:"name"`
 }
 
-type UserAuthenticated struct {
-	Token string `json:"token"`
-	User  *User  `json:"user"`
+type UserLogin struct {
+	Username *string `json:"username"`
+	Password *string `json:"password"`
 }
 
-type UserLogin struct {
-	Username string  `json:"username"`
-	Password *string `json:"password"`
+type UserToken struct {
+	Token *string `json:"token"`
 }

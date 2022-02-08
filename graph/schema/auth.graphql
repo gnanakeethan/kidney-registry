@@ -1,0 +1,12 @@
+input UserLogin {
+    username: String
+    password: String
+}
+
+type UserToken {
+    token: String
+}
+
+extend type Mutation {
+    userLogin(userLogin: UserLogin): UserToken
+}

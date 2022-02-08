@@ -3,21 +3,6 @@ type User {
     name: String!
 }
 
-input UserLogin {
-    username: String!
-    password: String
-}
-
-type UserAuthenticated {
-    token: String!
-    user: User!
-}
-
 extend type Query {
     users: [User!]!
-}
-
-
-extend type Mutation {
-    loginUser(input: UserLogin!): User!
 }
