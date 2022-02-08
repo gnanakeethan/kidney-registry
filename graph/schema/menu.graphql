@@ -1,0 +1,14 @@
+type Menus {
+    sidebarTop: Menu
+    sidebarBottom: Menu
+}
+
+type Menu {
+    items: MenuItem[]
+}
+
+type MenuItem {
+    name: String
+    icon: String
+    route: String
+}

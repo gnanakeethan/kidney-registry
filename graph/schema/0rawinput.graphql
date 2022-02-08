@@ -1,0 +1,20 @@
+input StringFilter {
+    eq: Boolean
+    contains: Boolean
+    beginsWith: Boolean
+    endsWith: Boolean
+    and: StringFilter
+    or: StringFilter
+}
+
+input IntFilter {
+    eq: Boolean
+    beginsWith: Boolean
+    endsWith: Boolean
+    gt: Boolean
+    gte: Boolean
+    lt: Boolean
+    lte: Boolean
+    and: IntFilter
+    or: IntFilter
+}

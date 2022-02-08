@@ -8,10 +8,12 @@ type UserList {
 }
 
 input UserListFilter {
-    id : ID
-    name: String
+    id : StringFilter
+    name: StringFilter
+    and: UserListFilter
+    or: UserListFilter
 }
 
 extend type Query {
-    users(filter: UserListFilter): UserList
+    users(filter: UserListFilter,limit: Int, perPage: Int): UserList
 }
