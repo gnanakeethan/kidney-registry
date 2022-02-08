@@ -62,7 +62,7 @@
 <a
 	{active}
 	bind:this={link}
-	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2 transition-all duration-300 ease-in-out first:border-t"
+	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2.5 transition-all duration-300 ease-in-out first:border-t"
 	class:activeGroup
 	class:bg-neutral-500={active}
 	class:border-white={active}

@@ -28,10 +28,10 @@
 		activeUrl: '/',
 		routes: [
 			{ name: 'Dashboard', route: '/app', icon: DashboardIcon },
-			{ name: 'Follow Ups', route: '/app/h', icon: RecurringIcon },
+			{ name: 'Follow Ups', route: '/app/f', icon: RecurringIcon },
 			{ name: 'Investigations', route: '/app/y', icon: SearchIcon },
 			{ name: 'Recipients', route: '/app/s', icon: PatientIcon },
-			{ name: 'Donors', route: '/app/f', icon: DonorIcon },
+			{ name: 'Donors', route: '/app/h', icon: DonorIcon },
 			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon },
 			{ name: 'Users', route: '/app/x', icon: UserIcon }
 			// { name: '', route: '/app/i', icon: DoctorIcon }
@@ -140,11 +140,14 @@
 	class="text-system flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50"
 	style="height:calc(100vh - 3.25rem);min-height:fit-content"
 >
-	<div class="relative flex flex-col justify-between overflow-scroll">
+	<div
+		class="relative flex flex-col justify-between overflow-scroll"
+		style="min-width: fit-content"
+	>
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
 		<div
-			class="absolute bottom-32 right-4"
+			class="absolute bottom-32 right-5"
 			on:click={() => {
 				minimized.set(!$minimized);
 			}}
