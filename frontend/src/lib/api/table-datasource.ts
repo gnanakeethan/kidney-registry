@@ -7,7 +7,7 @@ export class DataSourceConnector<T> implements DataSource<T> {
 	perPage: number;
 	prevPage: number;
 	totalPages: number;
-	currentRows: T[];
+	currentRows: T[] = [];
 	query: string;
 
 	constructor(private queryRepository: QueryRepository<T>) {}

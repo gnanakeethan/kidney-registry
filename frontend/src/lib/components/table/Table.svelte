@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DataSource } from 'lib/interfaces/datasource';
+	import { DataSource } from '$lib/interfaces/datasource';
 
 	// ts:ignore
 	type T = $$Generic; //MAGIC TYPE FROM Svelte for generics

@@ -1,11 +1,11 @@
 <script context="module" lang="ts">
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
+	import { AuthState, authState } from '$lib/state/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import { minimized as minimized } from '$lib/state/SidebarStore';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 	import { createClient } from '@urql/svelte';
-	import { AuthState, authState } from 'lib/state/auth';
 	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
 	import DonorIcon from '~icons/bi/person';
