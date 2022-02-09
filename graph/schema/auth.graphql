@@ -5,6 +5,7 @@ input UserLogin {
 
 type UserToken {
     token: String!
+    error: Error
     user: User
 }
 

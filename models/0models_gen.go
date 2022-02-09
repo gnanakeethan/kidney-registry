@@ -73,7 +73,8 @@ type UserLogin struct {
 	Password string `json:"password"`
 }
 
-type UserToken struct {
+type UserTokenResponse struct {
 	Token string `json:"token"`
+	Error *Error `json:"error"`
 	User  *User  `json:"user"`
 }
