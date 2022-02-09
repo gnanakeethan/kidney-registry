@@ -30,6 +30,7 @@ specifiers:
   fetch: ^1.1.0
   graphql: ^16.3.0
   graphql-codegen-svelte-apollo: ^1.1.0
+  graphql-tag: ^2.12.6
   gzipme: ^1.0.0
   miragejs: ^0.1.43
   postcss: ^8.4.6
@@ -58,8 +59,9 @@ specifiers:
 dependencies:
   '@graphql-codegen/typescript': 2.4.3_graphql@16.3.0
   '@graphql-codegen/typescript-operations': 2.2.4_graphql@16.3.0
-  '@graphql-codegen/typescript-urql': 3.5.1_graphql@16.3.0
+  '@graphql-codegen/typescript-urql': 3.5.1_e20029557891e0afb887c44ec7f516f8
   graphql-codegen-svelte-apollo: 1.1.0_graphql@16.3.0
+  graphql-tag: 2.12.6_graphql@16.3.0
 
 devDependencies:
   '@graphql-codegen/cli': 2.5.0_graphql@16.3.0+typescript@4.5.5
@@ -850,7 +852,7 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-codegen/typescript-urql/3.5.1_graphql@16.3.0:
+  /@graphql-codegen/typescript-urql/3.5.1_e20029557891e0afb887c44ec7f516f8:
     resolution: {integrity: sha512-vrOLJ7fAQQuckn01wMXi+Htx1UxKP9bAq1hxfrRNCaz1EOTAhoPy1dwf1nowZ53RzuiGQFuqRU3eSlDs5CI+lQ==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -860,6 +862,7 @@ packages:
       '@graphql-codegen/visitor-plugin-common': 2.6.0_graphql@16.3.0
       auto-bind: 4.0.0
       graphql: 16.3.0
+      graphql-tag: 2.12.6_graphql@16.3.0
       tslib: 2.3.1
     transitivePeerDependencies:
       - encoding
