@@ -14,12 +14,12 @@ import (
 
 func (r *queryResolver) Users(ctx context.Context, filter *models.UserListFilter, limit *int, perPage *int) (*models.UserList, error) {
 	userList := &models.UserList{}
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 5; i++ {
 		user := &models.User{
 			ID:   uuid.Must(uuid.NewUUID()).String(),
 			Name: uuid.Must(uuid.NewUUID()).String(),
 		}
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(250 * time.Millisecond)
 		userList.Users = append(userList.Users, user)
 	}
 	return userList, nil

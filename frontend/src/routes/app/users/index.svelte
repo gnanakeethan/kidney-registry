@@ -12,8 +12,20 @@
 	const queryRepository = new GraphQLQueryRepository<User>();
 	let dataSource = new DataSourceConnector<User>(queryRepository, ListUsersDocument);
 	dataSource.loadCurrentPage();
+
+	let columns = [
+		{ key: 'id', name: 'ID' },
+		{ key: 'name', name: 'Name' },
+		{ key: 'address', name: 'Address' }
+	];
+	let displayedColumns = ['id', 'name', 'address'];
 </script>
 
 <div class="p-2 p-4">
-	<Table bind:dtSource={dataSource} />
+	<Table
+		bind:dtSource={dataSource}
+		{columns}
+		{displayedColumns}
+		rootAccessPath="data.users.users"
+	/>
 </div>
