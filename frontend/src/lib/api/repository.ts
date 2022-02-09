@@ -1,6 +1,7 @@
 import { getClient } from '@urql/svelte';
+import { DocumentNode } from 'graphql';
 import { QueryRepository } from 'lib/interfaces/repository';
-import { Client } from 'urql';
+import { Client, OperationResult, PromisifiedSource } from 'urql';
 
 export class GraphQLQueryRepository<T> implements QueryRepository<T> {
 	client: Client;
@@ -10,8 +11,10 @@ export class GraphQLQueryRepository<T> implements QueryRepository<T> {
 		console.log(this.client);
 	}
 
-	getItems(query: string, page: number, perPage: number): T[] {
-		this.client.query(query);
-		return [];
+	getItems(query: DocumentNode, page: number, perPage: number): PromisifiedSource<OperationResult> {
+		return this.client.query(query, {
+			page: page,
+			perPage: perPage
+		});
 	}
 }

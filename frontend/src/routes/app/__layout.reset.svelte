@@ -29,12 +29,12 @@
 		activeUrl: '/',
 		routes: [
 			{ name: 'Dashboard', route: '/app', icon: DashboardIcon },
-			{ name: 'Follow Ups', route: '/app/f', icon: RecurringIcon },
+			{ name: 'Follow Ups', route: '/app/x', icon: RecurringIcon },
 			{ name: 'Investigations', route: '/app/y', icon: SearchIcon },
 			{ name: 'Recipients', route: '/app/s', icon: PatientIcon },
 			{ name: 'Donors', route: '/app/h', icon: DonorIcon },
 			{ name: 'Doctors', route: '/app/g', icon: DoctorIcon },
-			{ name: 'Users', route: '/app/x', icon: UserIcon }
+			{ name: 'Users', route: '/app/users', icon: UserIcon }
 			// { name: '', route: '/app/i', icon: DoctorIcon }
 		]
 	};

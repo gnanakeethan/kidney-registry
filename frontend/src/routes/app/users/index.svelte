@@ -2,6 +2,7 @@
 	import { GraphQLQueryRepository } from '$lib/api/repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
+	import { ListUsersDocument } from '$lib/graphql/generated';
 
 	interface User {
 		name: string;
@@ -9,7 +10,8 @@
 	}
 
 	const queryRepository = new GraphQLQueryRepository<User>();
-	let dataSource = new DataSourceConnector<User>(queryRepository);
+	let dataSource = new DataSourceConnector<User>(queryRepository, ListUsersDocument);
+	dataSource.loadItems();
 </script>
 
 <div class="p-2 p-4">

@@ -1,7 +1,8 @@
-import { Client } from 'urql';
+import { DocumentNode } from 'graphql';
+import { Client, OperationResult, PromisifiedSource } from 'urql';
 
 export interface QueryRepository<T> {
 	client: Client;
 
-	getItems(query: string, page: number, perPage: number): T[];
+	getItems(query: DocumentNode, page: number, perPage: number): PromisifiedSource<OperationResult>;
 }

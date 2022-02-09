@@ -124,12 +124,15 @@ export type UserLogin = {
 
 export type UserToken = {
   __typename?: 'UserToken';
+  error?: Maybe<Error>;
   token: Scalars['String'];
   user?: Maybe<User>;
 };
 
 export type ListUsersQueryVariables = Exact<{
   filter?: InputMaybe<UserListFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  perPage?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -137,8 +140,8 @@ export type ListUsersQuery = { __typename?: 'Query', users?: { __typename?: 'Use
 
 
 export const ListUsersDocument = gql`
-    query ListUsers($filter: UserListFilter) {
-  users(filter: $filter) {
+    query ListUsers($filter: UserListFilter, $limit: Int, $perPage: Int) {
+  users(filter: $filter, perPage: $perPage, limit: $limit) {
     users {
       name
       id
