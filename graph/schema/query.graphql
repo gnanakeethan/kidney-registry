@@ -1,0 +1,12 @@
+query ListUsers ($filter: UserListFilter){
+    users(filter: $filter){
+        users {
+            name
+            id
+        }
+        pagination {
+            itemsPerPage
+            totalItems
+        }
+    }
+}
