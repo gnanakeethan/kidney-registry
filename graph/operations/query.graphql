@@ -1,5 +1,5 @@
-query ListUsers ($filter: UserListFilter,$limit: Int,$perPage: Int){
-    users(filter: $filter,perPage: $perPage,limit: $limit){
+query ListUsers ($filter: UserListFilter,$perPage: Int){
+    users(filter: $filter,perPage: $perPage){
         users {
             name
             id

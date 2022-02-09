@@ -5,21 +5,22 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
-
+	"time"
+	
+	"github.com/google/uuid"
+	
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *queryResolver) Users(ctx context.Context, filter *models.UserListFilter, limit *int, perPage *int) (*models.UserList, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) LoginUser(ctx context.Context, input models.UserLogin) (*models.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	userList := &models.UserList{}
+	for i := 0; i < 10; i++ {
+		user := &models.User{
+			ID:   uuid.Must(uuid.NewUUID()).String(),
+			Name: uuid.Must(uuid.NewUUID()).String(),
+		}
+		time.Sleep(100 * time.Millisecond)
+		userList.Users = append(userList.Users, user)
+	}
+	return userList, nil
 }

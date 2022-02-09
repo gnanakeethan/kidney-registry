@@ -15,5 +15,5 @@ input UserListFilter {
 }
 
 extend type Query {
-    users(filter: UserListFilter,limit: Int, perPage: Int): UserList
+    users(filter: UserListFilter, perPage: Int, currentPage: Int): UserList
 }
