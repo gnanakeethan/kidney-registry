@@ -96,7 +96,7 @@ type ComplexityRoot struct {
 		Users      func(childComplexity int) int
 	}
 
-	UserTokenResponse struct {
+	UserToken struct {
 		Error func(childComplexity int) int
 		Token func(childComplexity int) int
 		User  func(childComplexity int) int
@@ -105,7 +105,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserTokenResponse, error)
+	UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserToken, error)
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
@@ -294,26 +294,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserList.Users(childComplexity), true
 
-	case "UserTokenResponse.error":
-		if e.complexity.UserTokenResponse.Error == nil {
+	case "UserToken.error":
+		if e.complexity.UserToken.Error == nil {
 			break
 		}
 
-		return e.complexity.UserTokenResponse.Error(childComplexity), true
+		return e.complexity.UserToken.Error(childComplexity), true
 
-	case "UserTokenResponse.token":
-		if e.complexity.UserTokenResponse.Token == nil {
+	case "UserToken.token":
+		if e.complexity.UserToken.Token == nil {
 			break
 		}
 
-		return e.complexity.UserTokenResponse.Token(childComplexity), true
+		return e.complexity.UserToken.Token(childComplexity), true
 
-	case "UserTokenResponse.user":
-		if e.complexity.UserTokenResponse.User == nil {
+	case "UserToken.user":
+		if e.complexity.UserToken.User == nil {
 			break
 		}
 
-		return e.complexity.UserTokenResponse.User(childComplexity), true
+		return e.complexity.UserToken.User(childComplexity), true
 
 	}
 	return 0, false
@@ -446,14 +446,14 @@ input IntFilter {
     password: String!
 }
 
-type UserTokenResponse {
+type UserToken {
     token: String!
     error: Error
     user: User
 }
 
 extend type Mutation {
-    userLogin(userLogin: UserLogin): UserTokenResponse
+    userLogin(userLogin: UserLogin): UserToken
 }`, BuiltIn: false},
 	{Name: "graph/schema/menu.graphql", Input: `type DashboardMenus {
     sidebarTop: Menu
@@ -940,9 +940,9 @@ func (ec *executionContext) _Mutation_userLogin(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.UserTokenResponse)
+	res := resTmp.(*models.UserToken)
 	fc.Result = res
-	return ec.marshalOUserTokenResponse2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserTokenResponse(ctx, field.Selections, res)
+	return ec.marshalOUserToken2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserToken(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_currentPage(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {
@@ -1429,7 +1429,7 @@ func (ec *executionContext) _UserList_pagination(ctx context.Context, field grap
 	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserTokenResponse_token(ctx context.Context, field graphql.CollectedField, obj *models.UserTokenResponse) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserToken_token(ctx context.Context, field graphql.CollectedField, obj *models.UserToken) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1437,7 +1437,7 @@ func (ec *executionContext) _UserTokenResponse_token(ctx context.Context, field 
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "UserTokenResponse",
+		Object:     "UserToken",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1464,7 +1464,7 @@ func (ec *executionContext) _UserTokenResponse_token(ctx context.Context, field 
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserTokenResponse_error(ctx context.Context, field graphql.CollectedField, obj *models.UserTokenResponse) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserToken_error(ctx context.Context, field graphql.CollectedField, obj *models.UserToken) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1472,7 +1472,7 @@ func (ec *executionContext) _UserTokenResponse_error(ctx context.Context, field 
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "UserTokenResponse",
+		Object:     "UserToken",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1496,7 +1496,7 @@ func (ec *executionContext) _UserTokenResponse_error(ctx context.Context, field 
 	return ec.marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserTokenResponse_user(ctx context.Context, field graphql.CollectedField, obj *models.UserTokenResponse) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserToken_user(ctx context.Context, field graphql.CollectedField, obj *models.UserToken) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1504,7 +1504,7 @@ func (ec *executionContext) _UserTokenResponse_user(ctx context.Context, field g
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "UserTokenResponse",
+		Object:     "UserToken",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -3322,19 +3322,19 @@ func (ec *executionContext) _UserList(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var userTokenResponseImplementors = []string{"UserTokenResponse"}
+var userTokenImplementors = []string{"UserToken"}
 
-func (ec *executionContext) _UserTokenResponse(ctx context.Context, sel ast.SelectionSet, obj *models.UserTokenResponse) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, userTokenResponseImplementors)
+func (ec *executionContext) _UserToken(ctx context.Context, sel ast.SelectionSet, obj *models.UserToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userTokenImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("UserTokenResponse")
+			out.Values[i] = graphql.MarshalString("UserToken")
 		case "token":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._UserTokenResponse_token(ctx, field, obj)
+				return ec._UserToken_token(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -3344,14 +3344,14 @@ func (ec *executionContext) _UserTokenResponse(ctx context.Context, sel ast.Sele
 			}
 		case "error":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._UserTokenResponse_error(ctx, field, obj)
+				return ec._UserToken_error(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
 
 		case "user":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._UserTokenResponse_user(ctx, field, obj)
+				return ec._UserToken_user(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -4340,11 +4340,11 @@ func (ec *executionContext) unmarshalOUserLogin2ᚖgithubᚗcomᚋgnanakeethan�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOUserTokenResponse2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserTokenResponse(ctx context.Context, sel ast.SelectionSet, v *models.UserTokenResponse) graphql.Marshaler {
+func (ec *executionContext) marshalOUserToken2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserToken(ctx context.Context, sel ast.SelectionSet, v *models.UserToken) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._UserTokenResponse(ctx, sel, v)
+	return ec._UserToken(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

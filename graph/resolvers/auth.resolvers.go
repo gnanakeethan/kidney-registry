@@ -6,10 +6,10 @@ package resolvers
 import (
 	"context"
 	"fmt"
-
+	
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *mutationResolver) UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserTokenResponse, error) {
+func (r *mutationResolver) UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserToken, error) {
 	panic(fmt.Errorf("not implemented"))
 }
