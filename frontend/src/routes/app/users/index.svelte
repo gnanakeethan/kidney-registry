@@ -11,7 +11,7 @@
 
 	const queryRepository = new GraphQLQueryRepository<User>();
 	let dataSource = new DataSourceConnector<User>(queryRepository, ListUsersDocument);
-	dataSource.loadItems();
+	dataSource.loadCurrentPage();
 </script>
 
 <div class="p-2 p-4">

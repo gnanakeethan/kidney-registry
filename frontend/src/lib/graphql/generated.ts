@@ -1,11 +1,10 @@
-import gql from 'graphql-tag';
-import * as Urql from 'urql';
+import type { OperationStore } from '@urql/svelte';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -131,7 +130,6 @@ export type UserToken = {
 
 export type ListUsersQueryVariables = Exact<{
   filter?: InputMaybe<UserListFilter>;
-  limit?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
 }>;
 
@@ -139,21 +137,5 @@ export type ListUsersQueryVariables = Exact<{
 export type ListUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserList', users: Array<{ __typename?: 'User', name: string, id: string }>, pagination?: { __typename?: 'Pagination', itemsPerPage?: number | null, totalItems?: number | null } | null } | null };
 
 
-export const ListUsersDocument = gql`
-    query ListUsers($filter: UserListFilter, $limit: Int, $perPage: Int) {
-  users(filter: $filter, perPage: $perPage, limit: $limit) {
-    users {
-      name
-      id
-    }
-    pagination {
-      itemsPerPage
-      totalItems
-    }
-  }
-}
-    `;
-
-export function useListUsersQuery(options?: Omit<Urql.UseQueryArgs<ListUsersQueryVariables>, 'query'>) {
-  return Urql.useQuery<ListUsersQuery>({ query: ListUsersDocument, ...options });
-};
+export const ListUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserListFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalItems"}}]}}]}}]}}]} as unknown as DocumentNode<ListUsersQuery, ListUsersQueryVariables>;
+export type ListUsersQueryStore = OperationStore<ListUsersQuery, ListUsersQueryVariables>;

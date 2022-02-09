@@ -1,4 +1,4 @@
-import { OperationResult, PromisifiedSource } from 'urql';
+import { OperationResult } from 'urql';
 
 export interface DataSource<T> {
 	currentPage: number;
@@ -6,7 +6,7 @@ export interface DataSource<T> {
 	prevPage: number;
 	totalPages: number;
 	perPage: number;
-	currentRows: PromisifiedSource<OperationResult<T>>;
+	currentRows: OperationResult<T>;
 
 	loadCurrentPage(): void;
 

@@ -1,7 +1,7 @@
-import { DataSource } from '$lib/interfaces/datasource';
+import { OperationResult } from '@urql/svelte/dist/types';
 import { DocumentNode } from 'graphql';
+import { DataSource } from 'lib/interfaces/datasource';
 import { QueryRepository } from 'lib/interfaces/repository';
-import { OperationResult, PromisifiedSource } from 'urql';
 
 export class DataSourceConnector<T> implements DataSource<T> {
 	currentPage = 1;
@@ -9,12 +9,13 @@ export class DataSourceConnector<T> implements DataSource<T> {
 	perPage = 15;
 	prevPage: number;
 	totalPages = 2;
-	currentRows: PromisifiedSource<OperationResult<T>>;
+	currentRows: OperationResult<T>;
 
 	constructor(private queryRepository: QueryRepository<T>, private query: DocumentNode) {}
 
 	loadCurrentPage(): void {
 		this.currentRows = this.queryRepository.getItems(this.query, this.currentPage, this.perPage);
+		console.log(this.currentRows);
 	}
 
 	goToFirstPage(): void {

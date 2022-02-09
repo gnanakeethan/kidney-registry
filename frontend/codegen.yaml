@@ -5,4 +5,5 @@ generates:
     plugins:
       - typescript
       - typescript-operations
-      - typescript-urql
+      - typed-document-node
+      - urql-svelte-operations-store
