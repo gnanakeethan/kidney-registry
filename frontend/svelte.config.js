@@ -31,6 +31,9 @@ const config = {
 		},
 		floc: false,
 		vite: {
+			optimizeDeps: {
+				exclude: ['@urql/svelte']
+			},
 			plugins: [
 				Icons({
 					compiler: 'svelte',

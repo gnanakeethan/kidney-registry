@@ -56,12 +56,12 @@
 
 <script lang="ts">
 	import { userType } from '$lib/state/auth';
-	import { initClient } from '@urql/svelte';
+	import { createClient, setClient } from '@urql/svelte';
 	import { ENV } from '$lib/environment/environment';
 
 	let auth: AuthState = { loggedIn: false, token: '', loginAs: null };
 	authState.subscribe((authStateS: AuthState) => (auth = authStateS));
-	initClient({
+	const client = createClient({
 		url: ENV.basePath,
 		fetchOptions: () => {
 			console.log(auth);
@@ -73,6 +73,7 @@
 			return {};
 		}
 	});
+	setClient(client);
 	// userType.subscribe((userType) => {});
 </script>
 

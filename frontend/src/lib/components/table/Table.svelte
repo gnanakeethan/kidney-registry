@@ -25,6 +25,13 @@
 		return displayedColumns.includes(i.key);
 	});
 	$: console.log(activeColumns);
+
+	function nextPage() {
+		console.log(dtSource);
+		if (dtSource !== null) {
+			dtSource.goToNextPage();
+		}
+	}
 </script>
 
 <table class="w-full border-collapse">
@@ -42,28 +49,19 @@
 	<tbody>
 		{#if dtSource != null}
 			{#if $currentRowsSubscription.fetching}
-				<div class="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4 shadow">
-					<div class="flex animate-pulse space-x-4">
-						<div class="h-10 w-10 rounded-full bg-slate-200" />
-						<div class="flex-1 space-y-6 py-1">
-							<div class="h-2 rounded bg-slate-200" />
-							<div class="space-y-3">
-								<div class="grid grid-cols-3 gap-4">
-									<div class="col-span-2 h-2 rounded bg-slate-200" />
-									<div class="col-span-1 h-2 rounded bg-slate-200" />
-								</div>
-								<div class="h-2 rounded bg-slate-200" />
-							</div>
-						</div>
-					</div>
-				</div>
 				{#each { length: 4 } as _, i}
 					<tr class="animate-pulse">
+						<td class="border border-neutral-600 bg-zinc-200/75 p-2">
+							<div class="h-2 bg-zinc-400">&nbsp;</div>
+						</td>
 						{#each activeColumns as i}
-							<td class="p-2">
-								<span class="h-2 w-full bg-neutral-400">&nbsp;</span>
+							<td class="border border-neutral-600 bg-zinc-200/75 p-2">
+								<div class="h-2 bg-zinc-400">&nbsp;</div>
 							</td>
 						{/each}
+						<td class="border border-neutral-600 bg-zinc-200/75 p-2">
+							<div class="h-2 bg-zinc-400">&nbsp;</div>
+						</td>
 					</tr>
 				{/each}
 			{:else if $currentRowsSubscription.error}
@@ -76,10 +74,10 @@
 						</td>
 						{#each activeColumns as i}
 							<td class="border border-neutral-600 bg-zinc-200/75 p-2">{element[i.key]}</td>
-							<td class="border border-neutral-600 bg-zinc-200/75 p-2">
-								<slot name="actions" {element} />
-							</td>
 						{/each}
+						<td class="border border-neutral-600 bg-zinc-200/75 p-2">
+							<slot name="actions" {element} />
+						</td>
 					</tr>
 				{/each}
 			{/if}
@@ -92,3 +90,4 @@
 		{/if}
 	</tbody>
 </table>
+<button on:click={nextPage}>Next</button>

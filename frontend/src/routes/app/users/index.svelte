@@ -19,13 +19,15 @@
 		{ key: 'address', name: 'Address' }
 	];
 	let displayedColumns = ['id', 'name', 'address'];
+	let element: User;
 </script>
 
 <div class="p-2 p-4">
-	<Table
-		bind:dtSource={dataSource}
-		{columns}
-		{displayedColumns}
-		rootAccessPath="data.users.users"
-	/>
+	<Table bind:dtSource={dataSource} {columns} {displayedColumns} rootAccessPath="data.users.users">
+		<svelte:fragment let:element={User} slot="actions">
+			{User.id}
+			{User.name}
+			{JSON.stringify(element)}
+		</svelte:fragment>
+	</Table>
 </div>
