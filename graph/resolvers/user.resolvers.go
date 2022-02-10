@@ -19,7 +19,7 @@ func (r *queryResolver) Users(ctx context.Context, filter *models.UserListFilter
 			ID:   uuid.Must(uuid.NewUUID()).String(),
 			Name: uuid.Must(uuid.NewUUID()).String(),
 		}
-		time.Sleep(250 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 		userList.Users = append(userList.Users, user)
 	}
 	return userList, nil
