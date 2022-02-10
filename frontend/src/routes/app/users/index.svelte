@@ -24,12 +24,15 @@
 	];
 	let displayedColumns = ['id', 'name', 'address'];
 	let element: User;
+	let selectedRows = [];
+	$: console.log(selectedRows);
 </script>
 
 <div class="p-2 p-4">
 	<Table
 		bind:dtSource={dataSource}
 		bind:loading
+		bind:selectedRows
 		{columns}
 		{displayedColumns}
 		rootAccessPath="data.users.users"
