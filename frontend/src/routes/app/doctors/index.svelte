@@ -12,10 +12,13 @@
 	const queryRepository = new GraphQLQueryRepository<User>();
 	let dataSource = new DataSourceConnector<User>(queryRepository, ListPeopleDocument);
 	let loading = true;
-	dataSource.loadCurrentPage().then((data) => {
-		console.log(data);
-		loading = false;
-	});
+
+	dataSource.loadCurrentPage();
+	// onMount(() => {
+	// 	if (dataSource !== null) {
+	// 		dataSource.loadCurrentPage();
+	// 	}
+	// });
 
 	let columns = [
 		{ key: 'id', name: 'ID' },
