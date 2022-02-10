@@ -79,7 +79,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Error func(childComplexity int) int
-		Users func(childComplexity int, filter *models.UserListFilter, limit *int, perPage *int) int
+		Users func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
 	}
 
 	Subscription struct {
@@ -109,7 +109,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	Users(ctx context.Context, filter *models.UserListFilter, limit *int, perPage *int) (*models.UserList, error)
+	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 }
 type SubscriptionResolver interface {
 	Error(ctx context.Context) (<-chan *models.Error, error)
@@ -257,7 +257,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserListFilter), args["limit"].(*int), args["perPage"].(*int)), true
+		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserListFilter), args["perPage"].(*int), args["currentPage"].(*int)), true
 
 	case "Subscription.error":
 		if e.complexity.Subscription.Error == nil {
@@ -487,7 +487,7 @@ input UserListFilter {
 }
 
 extend type Query {
-    users(filter: UserListFilter,limit: Int, perPage: Int): UserList
+    users(filter: UserListFilter, perPage: Int, currentPage: Int): UserList
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -539,23 +539,23 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 	}
 	args["filter"] = arg0
 	var arg1 *int
-	if tmp, ok := rawArgs["limit"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+	if tmp, ok := rawArgs["perPage"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("perPage"))
 		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["limit"] = arg1
+	args["perPage"] = arg1
 	var arg2 *int
-	if tmp, ok := rawArgs["perPage"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("perPage"))
+	if tmp, ok := rawArgs["currentPage"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("currentPage"))
 		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["perPage"] = arg2
+	args["currentPage"] = arg2
 	return args, nil
 }
 
@@ -1162,7 +1162,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Users(rctx, args["filter"].(*models.UserListFilter), args["limit"].(*int), args["perPage"].(*int))
+		return ec.resolvers.Query().Users(rctx, args["filter"].(*models.UserListFilter), args["perPage"].(*int), args["currentPage"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

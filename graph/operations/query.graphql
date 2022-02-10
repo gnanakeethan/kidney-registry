@@ -10,3 +10,16 @@ query ListUsers ($filter: UserListFilter,$perPage: Int){
         }
     }
 }
+
+query ListPeople ($filter: UserListFilter,$perPage: Int) {
+    users(filter: $filter,perPage: $perPage){
+        users {
+            name
+            id
+        }
+        pagination {
+            itemsPerPage
+            totalItems
+        }
+    }
+}
