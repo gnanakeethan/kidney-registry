@@ -11,7 +11,11 @@
 
 	const queryRepository = new GraphQLQueryRepository<User>();
 	let dataSource = new DataSourceConnector<User>(queryRepository, ListUsersDocument);
-	dataSource.loadCurrentPage();
+	let loading = true;
+	dataSource.loadCurrentPage().then((data) => {
+		console.log(data);
+		loading = false;
+	});
 
 	let columns = [
 		{ key: 'id', name: 'ID' },
@@ -23,7 +27,13 @@
 </script>
 
 <div class="p-2 p-4">
-	<Table bind:dtSource={dataSource} {columns} {displayedColumns} rootAccessPath="data.users.users">
+	<Table
+		bind:dtSource={dataSource}
+		bind:loading
+		{columns}
+		{displayedColumns}
+		rootAccessPath="data.users.users"
+	>
 		<svelte:fragment let:element={User} slot="actions">
 			{User.id}
 			{User.name}

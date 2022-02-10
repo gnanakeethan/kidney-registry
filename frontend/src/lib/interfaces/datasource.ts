@@ -6,15 +6,15 @@ export interface DataSource<T> {
 	prevPage: number;
 	totalPages: number;
 	perPage: number;
-	currentRows: OperationResult<T>;
+	currentRows: Promise<OperationResult<T>>;
 
-	loadCurrentPage(): void;
+	loadCurrentPage(): Promise<OperationResult<T>>;
 
-	goToNextPage(): void;
+	goToNextPage(): Promise<OperationResult<T>>;
 
-	goToPrevPage(): void;
+	goToPrevPage(): Promise<OperationResult<T>>;
 
-	goToLastPage(): void;
+	goToLastPage(): Promise<OperationResult<T>>;
 
-	goToFirstPage(): void;
+	goToFirstPage(): Promise<OperationResult<T>>;
 }

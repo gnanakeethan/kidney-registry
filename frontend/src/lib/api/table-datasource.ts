@@ -9,34 +9,39 @@ export class DataSourceConnector<T> implements DataSource<T> {
 	perPage = 15;
 	prevPage: number;
 	totalPages = 2;
-	currentRows: OperationResult<T>;
+	currentRows: Promise<OperationResult<T>>;
 
 	constructor(private queryRepository: QueryRepository<T>, private query: DocumentNode) {}
 
-	loadCurrentPage(): void {
+	loadCurrentPage(): Promise<OperationResult<T>> {
+		console.log(this.queryRepository.getItems(this.query, this.currentPage, this.perPage));
 		this.currentRows = this.queryRepository.getItems(this.query, this.currentPage, this.perPage);
-		console.log(this.currentRows);
+		return this.currentRows;
 	}
 
-	goToFirstPage(): void {
+	goToFirstPage(): Promise<OperationResult<T>> {
 		this.currentRows = this.queryRepository.getItems(this.query, 1, this.perPage);
+		return this.currentRows;
 	}
 
-	goToLastPage(): void {
+	goToLastPage(): Promise<OperationResult<T>> {
 		this.currentRows = this.queryRepository.getItems(this.query, this.totalPages, this.perPage);
+		return this.currentRows;
 	}
 
-	goToNextPage(): void {
+	goToNextPage(): Promise<OperationResult<T>> {
 		this.currentRows = this.queryRepository.getItems(this.query, ++this.currentPage, this.perPage);
+		return this.currentRows;
 	}
 
-	goToPrevPage(): void {
+	goToPrevPage(): Promise<OperationResult<T>> {
 		if (this.currentPage > 1) {
 			this.currentRows = this.queryRepository.getItems(
 				this.query,
 				--this.currentPage,
 				this.perPage
 			);
+			return this.currentRows;
 		}
 	}
 }
