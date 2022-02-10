@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	export let columns = [];
 	export let displayedColumns = [];
 	// Type DataSource<T>
@@ -12,11 +14,12 @@
 	export let selectedRows = [];
 	$: if (loading) {
 		let accessPath = rootAccessPath.split('.');
+
+		console.log(accessPath);
 		let data = dtSource.currentRows.then((data) => {
-			console.log(accessPath);
 			for (let i = 0; i < accessPath.length; i++) {
 				data = data[accessPath[i]];
-				console.log(data);
+				//console.log(data);
 				currentRows = data;
 			}
 			loading = false;
@@ -30,22 +33,22 @@
 		return displayedColumns.includes(i.key);
 	});
 	$: selectedRows = currentRows.filter((i) => i.__selected);
-	$: console.log(activeColumns);
-	$: console.log(currentRows);
+	//console.log(activeColumns);
+	// $: console.log(currentRows);
 	let indeterminateSelected = false;
 
 	let selectedAll = false;
 
 	function selectAll() {
-		console.log(selectedAll);
+		//console.log(selectedAll);
 		currentRows.forEach((data, i) => {
 			currentRows[i].__selected = selectedAll;
-			console.log(currentRows[i]);
+			//console.log(currentRows[i]);
 		});
 	}
 
 	function nextPage() {
-		console.log(dtSource);
+		//console.log(dtSource);
 		if (dtSource !== null) {
 			loading = true;
 			dtSource.goToNextPage();
@@ -60,7 +63,7 @@
 			if (currentRows[i].__selected) {
 				noneSelected = false;
 				indeterminateSelected = currentRows[i].__selected;
-				console.log(currentRows[i].__selected);
+				//console.log(currentRows[i].__selected);
 			}
 		});
 		if (noneSelected) {
@@ -72,6 +75,11 @@
 			indeterminateSelected = false;
 		}
 	}
+
+	onMount(() => {
+		dtSource.loadCurrentPage();
+		// dataSource = new DataSourceConnector<Apple>(queryRepository, ListPeopleDocument);
+	});
 </script>
 
 <table class="w-full border-collapse">
