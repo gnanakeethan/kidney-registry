@@ -1,12 +1,7 @@
 <script>
-	import { authState } from '../../lib/state/auth';
 	import { goto } from '$app/navigation';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
-
-	let username = '';
-	let password = '';
-	let email = '';
 
 	const { form, errors, state, handleChange, handleSubmit } = createForm({
 		initialValues: {
@@ -19,11 +14,11 @@
 		}),
 		onSubmit: (values) => {
 			// alert(JSON.stringify(values));
-			authState.set({
-				loggedIn: true,
-				token: 'sometokehrestdyfugihojpihugytfrdestyfguhijon',
-				loginAs: null
-			});
+			// authState.set({
+			// 	loggedIn: true,
+			// 	token: 'sometokehrestdyfugihojpihugytfrdestyfguhijon',
+			// 	loginAs: null
+			// });
 			goto('/app');
 		}
 	});
@@ -69,6 +64,6 @@
 		class="my-2 mx-auto w-1/2 bg-red-300/50 p-3 transition duration-200 hover:bg-green-700/25 hover:text-white"
 		type="submit"
 	>
-		submit
+		Login
 	</button>
 </form>

@@ -15,10 +15,10 @@ export async function authGuard({ url, params, props }: LoadInput): Promise<Load
 	}
 	if (auth.loggedIn && auth.token.length > 5 && url.pathname === '/auth/login') {
 		console.log(base, '1');
-		return { status: 302, redirect: '/' };
-	} else if ((auth.loggedIn && auth.token.length > 5) || url.pathname !== '/auth/login') {
-		console.log(base, '2');
 		return {};
+	} else if ((auth.loggedIn && auth.token.length > 5) || url.pathname !== '/auth/login') {
+		console.log(base, '2 logged in');
+		return { status: 302, redirect: '/auth/login' };
 	} else {
 		console.log(base, '3');
 		return { status: 302, redirect: base + '/auth/login' };
