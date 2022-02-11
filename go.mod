@@ -9,6 +9,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.2
 	github.com/lib/pq v1.0.0
+	github.com/segmentio/ksuid v1.0.4
 	github.com/vektah/gqlparser/v2 v2.3.1
 )
 

@@ -5,11 +5,20 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserToken, error) {
-	panic(fmt.Errorf("not implemented"))
+	return &models.UserToken{
+		Token: ksuid.New().String(),
+		Error: nil,
+		User: &models.User{
+			ID:   ksuid.New().String(),
+			Name: userLogin.Email,
+			// Name: userLogin.Email,
+		},
+	}, nil
 }

@@ -1,11 +1,14 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
+	import { mutation } from '@urql/svelte';
+	import { UserLoginDocument } from '$lib/graphql/generated.ts';
 
+	const loginMutation = mutation({
+		query: UserLoginDocument
+	});
 	const { form, errors, state, handleChange, handleSubmit } = createForm({
 		initialValues: {
-			name: '',
 			email: ''
 		},
 		validationSchema: yup.object().shape({
@@ -13,13 +16,16 @@
 			email: yup.string().email().required()
 		}),
 		onSubmit: (values) => {
-			// alert(JSON.stringify(values));
+			alert(JSON.stringify(values));
+			const result = loginMutation({ userLogin: values });
+			// const result = mutation(operationStore(UserLoginDocument, {userLogin: values}));
+			console.log(result);
 			// authState.set({
 			// 	loggedIn: true,
 			// 	token: 'sometokehrestdyfugihojpihugytfrdestyfguhijon',
 			// 	loginAs: null
 			// });
-			goto('/app');
+			// goto('/app');
 		}
 	});
 </script>

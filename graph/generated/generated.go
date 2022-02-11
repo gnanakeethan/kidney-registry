@@ -442,7 +442,7 @@ input IntFilter {
     or: IntFilter
 }`, BuiltIn: false},
 	{Name: "graph/schema/auth.graphql", Input: `input UserLogin {
-    username: String!
+    email: String!
     password: String!
 }
 
@@ -2863,11 +2863,11 @@ func (ec *executionContext) unmarshalInputUserLogin(ctx context.Context, obj int
 
 	for k, v := range asMap {
 		switch k {
-		case "username":
+		case "email":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
-			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			it.Email, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
