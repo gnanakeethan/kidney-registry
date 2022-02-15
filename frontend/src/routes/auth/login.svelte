@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
+	import { mutation } from '@urql/svelte';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
-	import { mutation } from '@urql/svelte';
-	import { UserLoginDocument } from '$lib/graphql/generated.ts';
+	import type { UserLoginMutation } from '../../lib/graphql/generated';
+	import { UserLoginDocument } from '../../lib/graphql/generated';
 
-	const loginMutation = mutation({
+	const loginMutation = mutation<UserLoginMutation>({
 		query: UserLoginDocument
 	});
 	const { form, errors, state, handleChange, handleSubmit } = createForm({
@@ -16,13 +17,14 @@
 			email: yup.string().email().required()
 		}),
 		onSubmit: (values) => {
-			alert(JSON.stringify(values));
-			const result = loginMutation({ userLogin: values });
+			// alert(JSON.stringify(values));
+			loginMutation<UserLoginMutation>({ userLogin: values }).then((result) => {
+				console.log(result.data.userLogin);
+			});
 			// const result = mutation(operationStore(UserLoginDocument, {userLogin: values}));
-			console.log(result);
 			// authState.set({
 			// 	loggedIn: true,
-			// 	token: 'sometokehrestdyfugihojpihugytfrdestyfguhijon',
+			// 	token: result,
 			// 	loginAs: null
 			// });
 			// goto('/app');

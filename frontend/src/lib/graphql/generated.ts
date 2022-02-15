@@ -117,8 +117,8 @@ export type UserListFilter = {
 };
 
 export type UserLogin = {
+  email: Scalars['String'];
   password: Scalars['String'];
-  username: Scalars['String'];
 };
 
 export type UserToken = {

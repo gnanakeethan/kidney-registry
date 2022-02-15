@@ -25,7 +25,6 @@ const config = {
 			routes: 'src/routes',
 			template: 'src/app.html'
 		},
-		// ssr: false,
 		prerender: {
 			enabled: false
 		},
