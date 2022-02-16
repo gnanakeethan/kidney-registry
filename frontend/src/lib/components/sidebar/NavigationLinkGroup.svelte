@@ -3,13 +3,15 @@
 	import { scale } from 'svelte/transition';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import NavigationLink from './NavigationLink.svelte';
+	import CollapsibleIcon from '~icons/clarity/collapse-line';
 
 	export let routes = [];
 	export let name = null;
 	export let route = null;
 	export let disabled = false;
+	export let icon = null;
 
-	let groupOpen = true;
+	let groupOpen = false;
 	let activeSubRoute = null;
 
 	const dispatch = createEventDispatcher();
@@ -51,6 +53,7 @@
 
 	// The active unsubscribe is required due the usage of a callback function.
 	onDestroy(unsubscribe);
+	$: console.log(groupOpen);
 </script>
 
 <div class="flex flex-row">
@@ -64,6 +67,7 @@
 			{name}
 			{route}
 			{disabled}
+			{icon}
 			activeGroup={Boolean(activeSubRoute)}
 			on:active={handleActiveChange}
 		/>
@@ -80,7 +84,13 @@
 				aria-controls={`${route}-group`}
 				aria-label="Toggle the visibility of child navigation links"
 				title="Toggle the visibility of child navigation links"
-			/>
+			>
+				{#if groupOpen}
+					<CollapsibleIcon class="rotate-180 text-xl" />
+				{:else}
+					<CollapsibleIcon class="rotate-90 text-xl" />
+				{/if}
+			</button>
 		{/if}
 	{/if}
 </div>
