@@ -26,10 +26,11 @@ const config = {
 			template: 'src/app.html'
 		},
 		prerender: {
-			enabled: false
+			enabled: true
 		},
 		floc: false,
 		vite: {
+			server: {},
 			optimizeDeps: {
 				exclude: ['@urql/svelte']
 			},

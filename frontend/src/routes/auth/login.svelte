@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
+	// import { UserLoginDocument } from '$lib/graphql/generated';
 	import { mutation } from '@urql/svelte';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
 	import type { UserLoginMutation } from '../../lib/graphql/generated';
 	import { UserLoginDocument } from '../../lib/graphql/generated';
+	import { authState } from '../../lib/state/auth';
 
 	const loginMutation = mutation<UserLoginMutation>({
 		query: UserLoginDocument
@@ -20,14 +24,13 @@
 			// alert(JSON.stringify(values));
 			loginMutation<UserLoginMutation>({ userLogin: values }).then((result) => {
 				console.log(result.data.userLogin);
+				authState.set({
+					loggedIn: true,
+					token: result.data.userLogin.token,
+					loginAs: null
+				});
+				goto('/');
 			});
-			// const result = mutation(operationStore(UserLoginDocument, {userLogin: values}));
-			// authState.set({
-			// 	loggedIn: true,
-			// 	token: result,
-			// 	loginAs: null
-			// });
-			// goto('/app');
 		}
 	});
 </script>

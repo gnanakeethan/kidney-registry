@@ -12,7 +12,7 @@ authState.subscribe((authState) => (auth = authState));
 
 // common method for attaching additional params.
 // TODO: implement middleware for axios
-const apiRequest = (method, url, request) => {
+export const apiRequest = (method, url, request) => {
 	if (!auth.loggedIn || auth.token == '') {
 		goto(environmentConstants.LOGIN_PAGE);
 	}

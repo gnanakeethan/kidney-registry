@@ -4,21 +4,17 @@ import { AuthState, authState } from '../state/auth';
 
 let auth: AuthState = { loggedIn: false, token: '', loginAs: null };
 authState.subscribe((authStateS) => (auth = authStateS));
-console.log(base);
 
 export async function authGuard({ url, params, props }: LoadInput): Promise<LoadOutput> {
 	const token = url.searchParams.get('token');
-	console.log(auth);
+	console.log(url, params, props, auth);
 	if (token !== undefined && token !== null && token.length > 32) {
 		authState.set({ loggedIn: true, token: token, loginAs: null });
+		console.log(base, '1');
 		return { status: 302, redirect: '/' };
 	}
-	if (auth.loggedIn && auth.token.length > 5 && url.pathname === '/auth/login') {
-		console.log(base, '1');
+	if (auth.loggedIn && auth.token.length > 5) {
 		return {};
-	} else if ((auth.loggedIn && auth.token.length > 5) || url.pathname !== '/auth/login') {
-		console.log(base, '2 logged in');
-		return { status: 302, redirect: '/auth/login' };
 	} else {
 		console.log(base, '3');
 		return { status: 302, redirect: base + '/auth/login' };

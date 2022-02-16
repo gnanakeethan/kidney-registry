@@ -19,7 +19,7 @@ export const menuState: Writable<MenuState> = writable({
 		{
 			name: 'Dashboard',
 			icon: null,
-			url: '/app/publisher/dashboard'
+			url: '/'
 		}
 	],
 	active: 0
