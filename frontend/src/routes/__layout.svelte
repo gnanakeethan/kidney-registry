@@ -29,10 +29,10 @@
 		activeUrl: '/',
 		routes: [
 			{ name: 'Dashboard', route: '/', icon: DashboardIcon },
-			{ name: 'Follow Ups', route: '/x', icon: RecurringIcon },
-			{ name: 'Investigations', route: '/y', icon: SearchIcon },
-			{ name: 'Recipients', route: '/s', icon: PatientIcon },
-			{ name: 'Donors', route: '/h', icon: DonorIcon },
+			{ name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
+			{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
+			{ name: 'Recipients', route: '/recipients', icon: PatientIcon },
+			{ name: 'Donors', route: '/donors', icon: DonorIcon },
 			{ name: 'Doctors', route: '/doctors', icon: DoctorIcon },
 			{ name: 'Users', route: '/users', icon: UserIcon }
 			// { name: '', route: '/i', icon: DoctorIcon }
