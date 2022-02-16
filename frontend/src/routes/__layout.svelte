@@ -18,6 +18,7 @@
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import KidneyOutline from '~icons/whh/kidney';
 	import '../assets/styles/app.scss';
+	import { activeUrl as storeActiveUrl } from '../lib/state/SidebarStore';
 
 	// import makeServer from '../../mirage/mirage';
 	//
@@ -31,7 +32,7 @@
 			{ name: 'Dashboard', route: '/', icon: DashboardIcon },
 			{ name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
 			{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
-			{ name: 'Examinations', route: '/examinations', icon: SearchIcon },
+			{ name: 'Examinations', route: '/examinations/', icon: SearchIcon },
 			{ name: 'Recipients', route: '/recipients', icon: PatientIcon },
 			{ name: 'Donors', route: '/donors', icon: DonorIcon },
 			{ name: 'Doctors', route: '/doctors', icon: DoctorIcon },
@@ -49,8 +50,9 @@
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
 		console.log(loadInput.url);
-		props.activeUrl = loadInput.url.pathname;
-		bottomProps.activeUrl = loadInput.url.pathname;
+		storeActiveUrl.set(loadInput.url.pathname);
+		// props.activeUrl = loadInput.url.pathname;
+		// bottomProps.activeUrl = loadInput.url.pathname;
 		return await authGuard(loadInput);
 	}
 </script>
