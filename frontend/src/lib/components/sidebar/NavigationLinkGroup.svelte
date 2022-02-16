@@ -1,7 +1,7 @@
 <script>
 	import { createEventDispatcher, onDestroy } from 'svelte';
 	import { scale } from 'svelte/transition';
-	import { activeUrl } from '$lib/state/SidebarStore';
+	import { activeUrl } from '../../../lib/state/SidebarStore';
 	import NavigationLink from './NavigationLink.svelte';
 	import CollapsibleIcon from '~icons/clarity/collapse-line';
 
@@ -11,7 +11,7 @@
 	export let disabled = false;
 	export let icon = null;
 
-	let groupOpen = false;
+	export let groupOpen = false;
 	let activeSubRoute = null;
 
 	const dispatch = createEventDispatcher();
@@ -56,7 +56,7 @@
 	$: console.log(groupOpen);
 </script>
 
-<div class="flex flex-row">
+<div class="flex flex-row bg-green-50">
 	<!-- A groups heading is differentiated by having a name and a route -->
 	{#if name && route}
 		<!--
@@ -68,6 +68,7 @@
 			{route}
 			{disabled}
 			{icon}
+			on:click={toggleGroup}
 			activeGroup={Boolean(activeSubRoute)}
 			on:active={handleActiveChange}
 		/>
@@ -77,8 +78,8 @@
         -->
 		{#if !disabled}
 			<button
-				class="group-toggle"
-				class:open={groupOpen}
+				class:bg-neutral-500={groupOpen}
+				class="border-b border-dashed border-neutral-500 bg-white"
 				on:click={toggleGroup}
 				aria-expanded={groupOpen}
 				aria-controls={`${route}-group`}

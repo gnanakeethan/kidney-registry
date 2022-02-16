@@ -67,12 +67,12 @@
 	bind:this={link}
 	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2.5 transition-all duration-300 ease-in-out first:border-t"
 	class:activeGroup
-	class:bg-neutral-500={active}
+	class:bg-neutral-500={active || activeGroup}
 	class:border-white={active}
-	class:font-bold={active}
+	class:font-bold={active || activeGroup}
 	class:px-2={$minimized}
 	class:px-3={!$minimized}
-	class:text-white={active}
+	class:text-white={active || activeGroup}
 	{disabled}
 	href={route}
 	on:click={onClick(event, route)}
