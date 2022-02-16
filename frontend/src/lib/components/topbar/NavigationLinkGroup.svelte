@@ -53,6 +53,7 @@
 
 	// The active unsubscribe is required due the usage of a callback function.
 	onDestroy(unsubscribe);
+	$: console.log(groupOpen);
 </script>
 
 <div class="flex flex-row bg-green-50">
@@ -96,6 +97,7 @@
 </div>
 <!-- Child routes of the group -->
 <div
+	class="flex flex-row"
 	hidden={!groupOpen || disabled}
 	id={`${route ? route : 'root'}-group`}
 	in:scale={{ duration: 250 }}

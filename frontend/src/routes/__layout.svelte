@@ -35,11 +35,11 @@
 			{
 				name: 'Examinations',
 				route: '/examinations',
-				icon: SearchIcon,
-				childRoutes: [
-					{ name: 'New', route: '/examinations/new', icon: SearchIcon },
-					{ name: 'New', route: '/examinations/new2', icon: SearchIcon }
-				]
+				icon: SearchIcon
+				// childRoutes: [
+				// 	{ name: 'New', route: '/examinations/new', icon: SearchIcon },
+				// 	{ name: 'New', route: '/examinations/new2', icon: SearchIcon }
+				// ]
 			},
 			{ name: 'Recipients', route: '/recipients', icon: PatientIcon },
 			{ name: 'Donors', route: '/donors', icon: DonorIcon },

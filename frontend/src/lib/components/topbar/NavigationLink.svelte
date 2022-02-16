@@ -10,10 +10,14 @@
 	export let activeGroup = false; // Whether the link is part of an active `NavigationLinkGroup`.
 
 	let link;
-	$: active =
-		$activeUrl && $activeUrl.startsWith(route) ? $activeUrl === route || route !== '/' : false;
-	$: console.log(active, route, $activeUrl);
-	$: console.log($activeUrl, $activeUrl ? $activeUrl.startsWith(route) && $activeUrl !== '/' : '');
+	/*
+	 * Whether the link is active is computed comparing the route
+	 * with `activeRoute` from `SidebarStore`.
+	 */
+	$: active = $activeUrl === route;
+	$: console.log(route);
+	$: console.log(active);
+
 	$: $minimized === true
 		? setTimeout(() => {
 				minimizedActive = true;
@@ -61,7 +65,7 @@
 <a
 	{active}
 	bind:this={link}
-	class="flex flex-row items-center border-b border-dashed border-neutral-500 bg-white fill-current py-2.5 transition-all duration-300 ease-in-out first:border-t"
+	class="flex flex-row items-center border-b border-r border-dashed border-neutral-500 bg-white fill-current py-2.5 transition-all duration-300 ease-in-out"
 	class:activeGroup
 	class:bg-neutral-500={active || activeGroup}
 	class:border-white={active}
