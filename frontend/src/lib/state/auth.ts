@@ -27,7 +27,8 @@ export const authState: PersistentStore<AuthState> = persist(
 			displayName: '',
 			email: '',
 			userType: ''
-		}
+		},
+		redirectPage: '/'
 	} as AuthState),
 	localStorage(),
 	'authState'

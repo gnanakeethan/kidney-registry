@@ -8,11 +8,11 @@
 	import { createClient, setClient } from '@urql/svelte';
 	import { goto } from '$app/navigation';
 
-	let auth: AuthState = { loggedIn: false, token: '', loginAs: null };
+	let auth: AuthState;
 	authState.subscribe((authStateS: AuthState) => {
 		auth = authStateS;
 		if (auth.loggedIn && auth.token.length > 5) {
-			goto('/');
+			goto(auth.redirectPage);
 		}
 	});
 	const client = createClient({

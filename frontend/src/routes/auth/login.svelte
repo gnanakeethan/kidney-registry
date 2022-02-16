@@ -7,7 +7,15 @@
 	import * as yup from 'yup';
 	import type { UserLoginMutation } from '../../lib/graphql/generated';
 	import { UserLoginDocument } from '../../lib/graphql/generated';
-	import { authState } from '../../lib/state/auth';
+	import { AuthState, authState } from '../../lib/state/auth';
+
+	let auth: AuthState;
+	authState.subscribe((authStateS: AuthState) => {
+		auth = authStateS;
+		if (auth.loggedIn && auth.token.length > 5) {
+			goto(auth.redirectPage);
+		}
+	});
 
 	const loginMutation = mutation<UserLoginMutation>({
 		query: UserLoginDocument
@@ -24,12 +32,10 @@
 			// alert(JSON.stringify(values));
 			loginMutation<UserLoginMutation>({ userLogin: values }).then((result) => {
 				console.log(result.data.userLogin);
-				authState.set({
-					loggedIn: true,
-					token: result.data.userLogin.token,
-					loginAs: null
-				});
-				goto('/');
+				auth.loggedIn = true;
+				auth.token = result.data.userLogin.token;
+				authState.set(auth);
+				goto(auth.redirectPage);
 			});
 		}
 	});
