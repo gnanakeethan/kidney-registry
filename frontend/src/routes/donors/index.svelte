@@ -7,7 +7,7 @@
 		<div>
 			<a
 				class="m-2 rounded bg-green-600 p-2 font-raleway text-lg font-bold text-white"
-				href="/investigations/new">New</a
+				href="/donors/new">New</a
 			>
 		</div>
 	</div>
