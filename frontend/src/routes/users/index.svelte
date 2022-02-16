@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { GraphQLQueryRepository } from '$lib/api/query-repository';
-	import { DataSourceConnector } from '$lib/api/table-datasource';
-	import Table from '$lib/components/table/Table.svelte';
-	import { ListUsersDocument } from '$lib/graphql/generated';
+	import { GraphQLQueryRepository } from '../../lib/api/query-repository';
+	import { DataSourceConnector } from '../../lib/api/table-datasource';
+	import Table from '../../lib/components/table/Table.svelte';
+	import { ListUsersDocument } from '../../lib/graphql/generated';
 
 	interface User {
 		name: string;

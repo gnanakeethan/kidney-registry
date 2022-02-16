@@ -28,7 +28,7 @@
 	let props = {
 		activeUrl: '/',
 		routes: [
-			{ name: 'Dashboard', route: '/app', icon: DashboardIcon },
+			{ name: 'Dashboard', route: '/', icon: DashboardIcon },
 			{ name: 'Follow Ups', route: '/x', icon: RecurringIcon },
 			{ name: 'Investigations', route: '/y', icon: SearchIcon },
 			{ name: 'Recipients', route: '/s', icon: PatientIcon },
@@ -82,7 +82,7 @@
 <div
 	class="text-system sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-gray-500"
 >
-	<a class="flex flex-row items-center py-2 pl-4 text-neutral-600" href="/app">
+	<a class="flex flex-row items-center py-2 pl-4 text-neutral-600" href="/">
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
 		<div class="font-raleway text-2xl font-extrabold">Registry</div>
 	</a>
