@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
-	import { AuthState, authState } from '$lib/state/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import { minimized as minimized } from '$lib/state/SidebarStore';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
@@ -19,6 +18,7 @@
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import KidneyOutline from '~icons/whh/kidney';
 	import '../assets/styles/app.scss';
+
 	// import makeServer from '../../mirage/mirage';
 	//
 	// if (process.env.NODE_ENV === 'development' && typeof makeServer === 'function') {
@@ -58,9 +58,10 @@
 	import { userType } from '$lib/state/auth';
 	import { createClient, setClient } from '@urql/svelte';
 	import { ENV } from '$lib/environment/environment';
+	import { auth, authState } from '../lib/state/auth';
 
-	let auth: AuthState = { loggedIn: false, token: '', loginAs: null };
-	authState.subscribe((authStateS: AuthState) => (auth = authStateS));
+	auth.viewLoaded = true;
+	authState.set(auth);
 	const client = createClient({
 		url: ENV.basePath,
 		fetchOptions: () => {

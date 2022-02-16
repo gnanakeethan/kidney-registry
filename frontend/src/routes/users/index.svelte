@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GraphQLQueryRepository } from '$lib/api/repository';
+	import { GraphQLQueryRepository } from '$lib/api/query-repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
 	import { ListUsersDocument } from '$lib/graphql/generated';
@@ -19,7 +19,7 @@
 
 	let columns = [
 		{ key: 'id', name: 'ID' },
-		{ key: 'name', name: 'Name' },
+		{ key: 'name', name: 'Nama' },
 		{ key: 'address', name: 'Address' }
 	];
 	let displayedColumns = ['id', 'name', 'address'];

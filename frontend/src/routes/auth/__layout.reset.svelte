@@ -15,6 +15,8 @@
 			goto(auth.redirectPage);
 		}
 	});
+	auth.viewLoaded = true;
+	authState.set(auth);
 	const client = createClient({
 		url: ENV.basePath,
 		fetchOptions: () => {

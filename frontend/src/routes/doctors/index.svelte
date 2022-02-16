@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { GraphQLQueryRepository } from '$lib/api/repository';
+	import { GraphQLQueryRepository } from '$lib/api/query-repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
-	import { ListPeopleDocument } from '$lib/graphql/generated';
+	import { ListUsersDocument } from '$lib/graphql/generated';
 
 	interface User {
 		name: string;
@@ -10,15 +10,12 @@
 	}
 
 	const queryRepository = new GraphQLQueryRepository<User>();
-	let dataSource = new DataSourceConnector<User>(queryRepository, ListPeopleDocument);
+	let dataSource = new DataSourceConnector<User>(queryRepository, ListUsersDocument);
 	let loading = true;
-
-	dataSource.loadCurrentPage();
-	// onMount(() => {
-	// 	if (dataSource !== null) {
-	// 		dataSource.loadCurrentPage();
-	// 	}
-	// });
+	dataSource.loadCurrentPage().then((data) => {
+		console.log(data);
+		loading = false;
+	});
 
 	let columns = [
 		{ key: 'id', name: 'ID' },
