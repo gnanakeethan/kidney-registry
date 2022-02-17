@@ -1,6 +1,7 @@
-<script>
-	import { afterUpdate, createEventDispatcher } from 'svelte';
+<script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { activeUrl, minimized, onLinkClick } from '$lib/state/SidebarStore';
+	import { afterUpdate, createEventDispatcher } from 'svelte';
 
 	export let name;
 	export let icon;
@@ -25,9 +26,11 @@
 		: setTimeout(() => {
 				minimizedActive = false;
 		  }, 100);
+	afterNavigate(function (p1: { from: URL; to: URL | null }) {
+		$activeUrl = p1.to.pathname;
+	});
 
 	function onClick(event, route) {
-		$activeUrl = route;
 		if (disabled) {
 			event.preventDefault();
 		} else if ($onLinkClick) {

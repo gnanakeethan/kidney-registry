@@ -6,7 +6,7 @@ import { writable } from 'svelte/store';
  * as prop to every `NavigationLinkGroup` & `NavigationLink`.
  */
 
-export const activeUrl = writable(null);
+export const activeUrl = writable('');
 
 export const activeGroup = writable(null);
 

@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { beforeNavigate } from '$app/navigation';
 	import { get } from 'svelte/store';
 	import Field from '../../lib/components/form-builder/Components/Field.svelte';
 	import { valuesForm } from '../../lib/components/form-builder/lib/stores';
+	import { activeUrl } from '../../lib/state/SidebarStore';
 
 	const fields = [
 		{
@@ -40,18 +41,21 @@
 
 	let message = '';
 	let values = {};
-
-	onMount(() => {
-		console.log('Inner1 mount');
-
-		return (event) => {
-			if (values !== {}) {
-				alert('values found');
+	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+		if (values !== {}) {
+			if (
+				!confirm(
+					'Are you sure you want to navigate away from this page?\n\n' +
+						'\n\nPress OK to continue, or Cancel to stay on the current page.'
+				)
+			) {
+				p1.cancel();
+			} else {
+				console.log(p1.from);
+				$activeUrl = p1.from.pathname;
 			}
-			console.log('Inner1 unmount');
-		};
+		}
 	});
-	$: console.log(values);
 
 	function onSubmit() {
 		const data = get(valuesForm);
