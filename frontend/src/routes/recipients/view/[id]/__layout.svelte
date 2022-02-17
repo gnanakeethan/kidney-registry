@@ -12,6 +12,8 @@
 
 <script lang="ts">
 	import UserIcon from '~icons/bi/person';
+	import SearchIcon from '~icons/carbon/search-locate';
+	import RecurringIcon from '~icons/ic/round-event-repeat';
 	import Topbar from '../../../../lib/components/topbar/Topbar.svelte';
 	import { activePath } from '../../../../lib/state/SidebarStore';
 
@@ -20,7 +22,22 @@
 		base: '/recipients/view/' + $recipientId,
 		routes: [
 			{ name: 'Recipient', route: '/recipients/view/' + $recipientId, icon: UserIcon },
-			{ name: 'Donors', route: '/recipients/view/' + $recipientId + '/donors', icon: UserIcon }
+			{ name: 'Donors', route: '/recipients/view/' + $recipientId + '/donors', icon: UserIcon },
+			{
+				name: 'Follow Ups',
+				route: '/recipients/view/' + $recipientId + '/followups',
+				icon: RecurringIcon
+			},
+			{
+				name: 'Investigations',
+				route: '/recipients/view/' + $recipientId + '/investigations',
+				icon: SearchIcon
+			},
+			{
+				name: 'Examinations',
+				route: '/recipients/view/' + $recipientId + '/examinations',
+				icon: SearchIcon
+			}
 		]
 	};
 </script>
