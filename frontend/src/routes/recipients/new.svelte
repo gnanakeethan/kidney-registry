@@ -16,7 +16,7 @@
 			},
 			attributes: {
 				type: 'text',
-				label: 'Recipient ID',
+				label: 'Patient ID',
 				id: 'recipient_id',
 				classes: ['form-input bg-gray-200 rounded w-full']
 			},
@@ -108,7 +108,7 @@
 		class="custom-form mx-auto my-auto w-1/2 rounded-xl border border-neutral-500 p-4"
 		on:submit|preventDefault={onSubmit}
 	>
-		<div class="text-xl font-bold">New Recipient</div>
+		<div class="text-xl font-bold">New Patient</div>
 		<Field {fields} {valuesForm} />
 		<button class=" m-8 rounded bg-green-400 py-2 px-4 text-lg uppercase" type="submit">
 			Save

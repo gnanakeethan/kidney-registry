@@ -4,7 +4,7 @@
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
 		const id = loadInput.params.id ?? '';
-		console.log('RECIPIENT ID:', id);
+		console.log('PATIENT ID:', id);
 		recipientId.set(id);
 		return { props: { id } };
 	}
@@ -22,7 +22,7 @@
 		activeUrl: activePath,
 		base: '/recipients/view/' + $recipientId,
 		routes: [
-			{ name: 'Recipient', route: '/recipients/view/' + $recipientId, icon: UserIcon },
+			{ name: 'Patient', route: '/recipients/view/' + $recipientId, icon: UserIcon },
 			{ name: 'Donors', route: '/recipients/view/' + $recipientId + '/donors', icon: UserIcon },
 			{
 				name: 'Follow Ups',

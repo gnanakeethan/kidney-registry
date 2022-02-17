@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-	import { recipientId } from '$lib/state/recipient';
+	import { recipientId } from '$lib/state/patient';
 
 	export let examinationId = '';
 </script>

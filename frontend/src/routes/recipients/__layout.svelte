@@ -12,8 +12,8 @@
 		base: '/recipients',
 		routes: [
 			{ name: 'Recipients', route: '/recipients', icon: DashboardIcon },
-			{ name: 'New Recipient', route: '/recipients/new', icon: NewIcon },
-			{ name: 'Recipient', route: '/recipients/view/' + $recipientId, icon: UserIcon }
+			{ name: 'New Patient', route: '/recipients/new', icon: NewIcon },
+			{ name: 'Patient', route: '/recipients/view/' + $recipientId, icon: UserIcon }
 		]
 	};
 </script>

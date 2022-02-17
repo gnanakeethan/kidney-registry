@@ -4,7 +4,7 @@
 	recipientId.set('25DZi7TRDfmVDEgDBjuRRsLfWzy');
 </script>
 
-<div class="p-2">
+<div class="h-full bg-gradient-to-b from-blue-100 to-stone-100 p-2">
 	<div class="p-2">
 		PATIENT VIEW ID: {$recipientId}
 	</div>

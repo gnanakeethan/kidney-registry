@@ -9,14 +9,14 @@
 </script>
 
 <script lang="ts">
-	import { recipientId } from '$lib/state/recipient';
+	import { recipientId } from '$lib/state/patient';
 
 	export let donorId = '';
 </script>
 
 <div class="p-2">
 	<div class="p-2">
-		RECIPIENT :{$recipientId}
+		PATIENT :{$recipientId}
 		DONOR: {donorId}
 	</div>
 </div>

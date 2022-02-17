@@ -16,7 +16,7 @@
 			},
 			attributes: {
 				type: 'text',
-				label: 'Recipient ID',
+				label: 'Patient ID',
 				id: 'recipient_id',
 				classes: ['form-input bg-gray-200 rounded w-full']
 			},

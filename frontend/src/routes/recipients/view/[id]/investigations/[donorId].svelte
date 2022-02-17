@@ -16,7 +16,7 @@
 
 <div class="p-2">
 	<div class="p-2">
-		RECIPIENT :{$recipientId}
+		patient :{$recipientId}
 		DONOR: {donorId}
 	</div>
 </div>
