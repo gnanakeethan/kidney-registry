@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { getContext, onMount } from 'svelte';
-	import { Writable } from 'svelte/store';
+	import { FormValues, valuesForm } from '$lib/components/form-builder/lib/stores';
+	import { onMount } from 'svelte';
 
 	import { preprocessField } from '../lib/helpers';
-	import { FormValues } from '../lib/stores';
 	import { validate } from '../Validation/index';
 	import AutoComplete from './AutoComplete.svelte';
 	import Checkbox from './Checkbox.svelte';
@@ -24,11 +23,6 @@
 	let values = {};
 	let itemsField = [];
 	$: listFields = itemsField;
-	export let contextKey = '';
-	let valuesForm = getContext('values') as Writable<FormValues>;
-	// values = get(valuesForm).values;
-
-	$: console.log(valuesForm);
 
 	// Change values.
 	const changeValueHander = async (event) => {
@@ -51,13 +45,14 @@
 				return field;
 			})
 		);
-		const dirty = mylist.find((item) => {
-			// if (item.validation) {
-			// 	return item.validation.dirty === true;
-			// }
+		console.log(mylist);
+		const dirty = mylist.find((item: { validation: { dirty: boolean } }) => {
+			if (item.validation) {
+				return item.validation.dirty === true;
+			}
 		});
 		isValidForm = dirty ? false : true;
-		// valuesForm.set(<FormValues>{ values, valid: isValidForm });
+		valuesForm.set(<FormValues>{ values, valid: isValidForm });
 		itemsField = mylist;
 	};
 
@@ -81,7 +76,7 @@
 			// }
 		});
 		isValidForm = dirty ? false : true;
-		// valuesForm.set(<FormValues>{ values: values, valid: isValidForm });
+		valuesForm.set(<FormValues>{ values: values, valid: isValidForm });
 		itemsField = mylist;
 	});
 </script>
@@ -98,7 +93,7 @@
 		<!-- Label -->
 		{#if field.attributes}
 			{#if field.attributes.label}
-				<!--				<label for={field.id} class="label">{field.attributes.label}</label>-->
+				<label for={field.id} class="label">{field.attributes.label}</label>
 			{/if}
 		{/if}
 

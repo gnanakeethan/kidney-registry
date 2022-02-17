@@ -13,6 +13,7 @@ export interface FormValues {
 
 export const valuesForm: Writable<FormValues> = writable({
 	valid: true,
+	dirty: false,
 	values: {}
 });
 
