@@ -13,5 +13,9 @@
 	<!--			</a>-->
 	<!--		</div>-->
 	<!--	</div>-->
-	<div class="? p-2" />
+	<div class="? p-2">
+		{#each { length: 100 } as _, i}
+			{i} <br />
+		{/each}
+	</div>
 </div>
