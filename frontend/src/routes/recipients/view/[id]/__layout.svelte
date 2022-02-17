@@ -11,6 +11,7 @@
 </script>
 
 <script lang="ts">
+	import NewIcon from '~icons/ci/file-new';
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
 	import RecurringIcon from '~icons/ic/round-event-repeat';
@@ -29,14 +30,29 @@
 				icon: RecurringIcon
 			},
 			{
+				name: 'New Followup',
+				route: '/recipients/view/' + $recipientId + '/followups/new',
+				icon: NewIcon
+			},
+			{
 				name: 'Investigations',
 				route: '/recipients/view/' + $recipientId + '/investigations',
 				icon: SearchIcon
 			},
 			{
+				name: 'New Investigation',
+				route: '/recipients/view/' + $recipientId + '/investigations/new',
+				icon: NewIcon
+			},
+			{
 				name: 'Examinations',
 				route: '/recipients/view/' + $recipientId + '/examinations',
 				icon: SearchIcon
+			},
+			{
+				name: 'New Examination',
+				route: '/recipients/view/' + $recipientId + '/examinations/new',
+				icon: NewIcon
 			}
 		]
 	};
