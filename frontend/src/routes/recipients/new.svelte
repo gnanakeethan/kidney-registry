@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import Field from '../../lib/components/form-builder/Components/Field.svelte';
 	import { valuesForm } from '../../lib/components/form-builder/lib/stores';
@@ -39,6 +40,18 @@
 
 	let message = '';
 	let values = {};
+
+	onMount(() => {
+		console.log('Inner1 mount');
+
+		return (event) => {
+			if (values !== {}) {
+				alert('values found');
+			}
+			console.log('Inner1 unmount');
+		};
+	});
+	$: console.log(values);
 
 	function onSubmit() {
 		const data = get(valuesForm);
