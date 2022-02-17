@@ -6,14 +6,14 @@ import (
 	"reflect"
 	"strings"
 	"time"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type PersonOrganDonation struct {
 	Id             int       `orm:"column(id);pk"`
-	ReceiverId     *Persons  `orm:"column(receiver_id);rel(fk)"`
-	DonorId        *Persons  `orm:"column(donor_id);rel(fk)"`
+	ReceiverId     *Person   `orm:"column(receiver_id);rel(fk)"`
+	DonorId        *Person   `orm:"column(donor_id);rel(fk)"`
 	DonationType   string    `orm:"column(donation_type)"`
 	PlannedDate    time.Time `orm:"column(planned_date);type(timestamp without time zone);null"`
 	PerformedDate  time.Time `orm:"column(performed_date);type(timestamp without time zone);null"`
@@ -102,7 +102,7 @@ func GetAllPersonOrganDonation(query map[string]string, fields []string, sortby 
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []PersonOrganDonation
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {

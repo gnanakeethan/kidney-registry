@@ -5,13 +5,13 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-
+	
 	"github.com/gnanakeethan/kidney-registry/models"
-
+	
 	beego "github.com/beego/beego/v2/server/web"
 )
 
-// PersonsController operations for Persons
+// PersonsController operations for Person
 type PersonsController struct {
 	beego.Controller
 }
@@ -27,13 +27,13 @@ func (c *PersonsController) URLMapping() {
 
 // Post ...
 // @Title Post
-// @Description create Persons
-// @Param	body		body 	models.Persons	true		"body for Persons content"
-// @Success 201 {int} models.Persons
+// @Description create Person
+// @Param	body		body 	models.Person	true		"body for Person content"
+// @Success 201 {int} models.Person
 // @Failure 403 body is empty
 // @router / [post]
 func (c *PersonsController) Post() {
-	var v models.Persons
+	var v models.Person
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddPersons(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
@@ -49,9 +49,9 @@ func (c *PersonsController) Post() {
 
 // GetOne ...
 // @Title Get One
-// @Description get Persons by id
+// @Description get Person by id
 // @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.Persons
+// @Success 200 {object} models.Person
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *PersonsController) GetOne() {
@@ -68,14 +68,14 @@ func (c *PersonsController) GetOne() {
 
 // GetAll ...
 // @Title Get All
-// @Description get Persons
+// @Description get Person
 // @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
 // @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
 // @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
 // @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
 // @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
 // @Param	offset	query	string	false	"Start position of result set. Must be an integer"
-// @Success 200 {object} models.Persons
+// @Success 200 {object} models.Person
 // @Failure 403
 // @router / [get]
 func (c *PersonsController) GetAll() {
@@ -85,7 +85,7 @@ func (c *PersonsController) GetAll() {
 	var query = make(map[string]string)
 	var limit int64 = 10
 	var offset int64
-
+	
 	// fields: col1,col2,entity.col3
 	if v := c.GetString("fields"); v != "" {
 		fields = strings.Split(v, ",")
@@ -119,7 +119,7 @@ func (c *PersonsController) GetAll() {
 			query[k] = v
 		}
 	}
-
+	
 	l, err := models.GetAllPersons(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()
@@ -131,16 +131,16 @@ func (c *PersonsController) GetAll() {
 
 // Put ...
 // @Title Put
-// @Description update the Persons
+// @Description update the Person
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Persons	true		"body for Persons content"
-// @Success 200 {object} models.Persons
+// @Param	body		body 	models.Person	true		"body for Person content"
+// @Success 200 {object} models.Person
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *PersonsController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(idStr)
-	v := models.Persons{Id: id}
+	v := models.Person{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdatePersonsById(&v); err == nil {
 			c.Data["json"] = "OK"
@@ -155,7 +155,7 @@ func (c *PersonsController) Put() {
 
 // Delete ...
 // @Title Delete
-// @Description delete the Persons
+// @Description delete the Person
 // @Param	id		path 	string	true		"The id you want to delete"
 // @Success 200 {string} delete success!
 // @Failure 403 id is empty

@@ -11,7 +11,7 @@ import (
 
 type PersonAllergy struct {
 	Id        int        `orm:"column(id);pk"`
-	PersonId  *Persons   `orm:"column(person_id);rel(fk)"`
+	PersonId  *Person    `orm:"column(person_id);rel(fk)"`
 	AllergyId *Allergies `orm:"column(allergy_id);rel(fk)"`
 	Note      string     `orm:"column(note);null"`
 }

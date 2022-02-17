@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -18,7 +18,7 @@ func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*
 
 func (r *queryResolver) ListPatients(ctx context.Context) (*models.PersonList, error) {
 	personList = &models.PersonList{
-		Persons: &models.Persons{
+		Persons: &models.Person{
 			Id:                  0,
 			FirstName:           "",
 			LastName:            "",

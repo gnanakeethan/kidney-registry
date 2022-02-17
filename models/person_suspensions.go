@@ -6,13 +6,13 @@ import (
 	"reflect"
 	"strings"
 	"time"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type PersonSuspensions struct {
 	Id             int            `orm:"column(id);pk"`
-	PersonId       *Persons       `orm:"column(person_id);rel(fk)"`
+	PersonId       *Person        `orm:"column(person_id);rel(fk)"`
 	WorkupId       *PersonWorkups `orm:"column(workup_id);rel(fk)"`
 	Reason         string         `orm:"column(reason);null"`
 	ReviewedDate   time.Time      `orm:"column(reviewed_date);type(timestamp without time zone);null"`
@@ -101,7 +101,7 @@ func GetAllPersonSuspensions(query map[string]string, fields []string, sortby []
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []PersonSuspensions
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {

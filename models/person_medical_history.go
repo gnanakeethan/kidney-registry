@@ -13,8 +13,8 @@ type PersonMedicalHistory struct {
 	Id          int      `orm:"column(id);pk"`
 	Duration    string   `orm:"column(duration)"`
 	Disease     string   `orm:"column(disease)"`
-	Medications string   `orm:"column(medications);null"`
-	PersonId    *Persons `orm:"column(person_id);rel(fk)"`
+	Medications string  `orm:"column(medications);null"`
+	PersonId    *Person `orm:"column(person_id);rel(fk)"`
 }
 
 func (t *PersonMedicalHistory) TableName() string {

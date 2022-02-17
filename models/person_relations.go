@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type PersonRelations struct {
-	Id           int      `orm:"column(id);pk"`
-	PatientId    *Persons `orm:"column(patient_id);rel(fk)"`
-	RelationId   *Persons `orm:"column(relation_id);rel(fk)"`
-	RelationType string   `orm:"column(relation_type)"`
+	Id           int     `orm:"column(id);pk"`
+	PatientId    *Person `orm:"column(patient_id);rel(fk)"`
+	RelationId   *Person `orm:"column(relation_id);rel(fk)"`
+	RelationType string  `orm:"column(relation_type)"`
 }
 
 func (t *PersonRelations) TableName() string {
@@ -97,7 +97,7 @@ func GetAllPersonRelations(query map[string]string, fields []string, sortby []st
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []PersonRelations
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {

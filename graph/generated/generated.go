@@ -618,20 +618,20 @@ type MenuItem {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/person.graphql", Input: `type Person {
-    ID : ID
-    FirstName          : String
-    LastName            :String
-    Address             :String
-    DateOfBirth         : String
-    Ethnicity           : String
-    Phn                 :String
-    PrimaryRenalDisease :String
-    Weight              :Float
-    Height              :Float
-    Sex                 :String
-    MaritalStatus       :String
-    ContactNo           :String
-    PersonType          :String
+    ID                     : ID
+    FirstName              : String
+    LastName               : String
+    Address                : String
+    DateOfBirth            : String
+    Ethnicity              : String
+    Phn                    : String
+    PrimaryRenalDisease    : String
+    Weight                 : Float
+    Height                 : Float
+    Sex                    : String
+    MaritalStatus          : String
+    ContactNo              : String
+    PersonType             : String
 }
 type PersonList {
     persons: [Person!]!

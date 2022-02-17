@@ -35,17 +35,17 @@ func init() {
 	orm.RegisterModel(new(Person))
 }
 
-// AddPerson insert a new Person into database and returns
+// AddPersons insert a new Person into database and returns
 // last inserted Id on success.
-func AddPerson(m *Person) (id int64, err error) {
+func AddPersons(m *Person) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonById retrieves Person by Id. Returns error if
+// GetPersonsById retrieves Person by Id. Returns error if
 // Id doesn't exist
-func GetPersonById(id int) (v *Person, err error) {
+func GetPersonsById(id int) (v *Person, err error) {
 	o := orm.NewOrm()
 	v = &Person{Id: id}
 	if err = o.Read(v); err == nil {
@@ -54,9 +54,9 @@ func GetPersonById(id int) (v *Person, err error) {
 	return nil, err
 }
 
-// GetAllPerson retrieves all Person matches certain condition. Returns empty list if
+// GetAllPersons retrieves all Person matches certain condition. Returns empty list if
 // no records exist
-func GetAllPerson(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllPersons(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Person))
@@ -132,9 +132,9 @@ func GetAllPerson(query map[string]string, fields []string, sortby []string, ord
 	return nil, err
 }
 
-// UpdatePerson updates Person by Id and returns error if
+// UpdatePersons updates Person by Id and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonById(m *Person) (err error) {
+func UpdatePersonsById(m *Person) (err error) {
 	o := orm.NewOrm()
 	v := Person{Id: m.Id}
 	// ascertain id exists in the database
@@ -147,9 +147,9 @@ func UpdatePersonById(m *Person) (err error) {
 	return
 }
 
-// DeletePerson deletes Person by Id and returns error if
+// DeletePersons deletes Person by Id and returns error if
 // the record to be deleted doesn't exist
-func DeletePerson(id int) (err error) {
+func DeletePersons(id int) (err error) {
 	o := orm.NewOrm()
 	v := Person{Id: id}
 	// ascertain id exists in the database
