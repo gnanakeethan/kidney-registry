@@ -72,6 +72,7 @@
     "yup": "^0.32.11"
   },
   "dependencies": {
+    "clsx": "^1.1.1",
     "graphql-codegen-svelte-apollo": "^1.1.0",
     "graphql-tag": "^2.12.6",
     "ksuid": "^3.0.0",

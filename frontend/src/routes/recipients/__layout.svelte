@@ -13,6 +13,8 @@
 		routes: [
 			{ name: 'Recipients', route: '/recipients', icon: DashboardIcon },
 			{ name: 'New Recipient', route: '/recipients/new', icon: NewIcon },
+			{ name: 'New Recipient', route: '/recipients/f23', icon: NewIcon },
+			{ name: 'New Recipient', route: '/recipients/f24', icon: NewIcon },
 			{ name: 'Recipient', route: '/recipients/view/' + $recipientId, icon: UserIcon }
 		]
 	};

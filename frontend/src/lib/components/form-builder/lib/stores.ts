@@ -1,22 +1,27 @@
-import { writable } from 'svelte/store'
+import { Writable, writable } from 'svelte/store';
 
 export const storeValues = writable({
-  valid: true
-})
+	valid: true
+});
 
-export const currentFieldStore = writable(null)
+export const currentFieldStore = writable(null);
 
-export const valuesForm = writable({
-  valid: true,
-  values: {}
-})
+export interface FormValues {
+	valid: true;
+	values: Record<string, unknown>;
+}
 
-export const fieldsStore = writable([])
+export const valuesForm: Writable<FormValues> = writable({
+	valid: true,
+	values: {}
+});
+
+export const fieldsStore = writable([]);
 
 export const settingStore = writable({
-  style: null
-})
+	style: null
+});
 
-export const alertsStore = writable([])
+export const alertsStore = writable([]);
 
-export const testStore = writable([])
+export const testStore = writable([]);
