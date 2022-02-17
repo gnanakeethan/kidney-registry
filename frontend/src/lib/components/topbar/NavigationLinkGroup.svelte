@@ -53,7 +53,6 @@
 
 	// The active unsubscribe is required due the usage of a callback function.
 	onDestroy(unsubscribe);
-	$: console.log(groupOpen);
 </script>
 
 <div class="flex flex-row bg-green-50">

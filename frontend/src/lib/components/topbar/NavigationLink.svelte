@@ -15,9 +15,6 @@
 	 * with `activeRoute` from `SidebarStore`.
 	 */
 	$: active = $activeUrl === route;
-	$: console.log(route);
-	$: console.log(active);
-
 	$: $minimized === true
 		? setTimeout(() => {
 				minimizedActive = true;

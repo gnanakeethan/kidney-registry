@@ -6,7 +6,6 @@
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
-	import DonorIcon from '~icons/bi/person';
 	import UserIcon from '~icons/bi/person';
 	import NotificationIcon from '~icons/carbon/notification';
 	import SearchIcon from '~icons/carbon/search-locate';
@@ -32,17 +31,8 @@
 			{ name: 'Dashboard', route: '/', icon: DashboardIcon },
 			{ name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
 			{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
-			{
-				name: 'Examinations',
-				route: '/examinations',
-				icon: SearchIcon
-				// childRoutes: [
-				// 	{ name: 'New', route: '/examinations/new', icon: SearchIcon },
-				// 	{ name: 'New', route: '/examinations/new2', icon: SearchIcon }
-				// ]
-			},
+			{ name: 'Examinations', route: '/examinations', icon: SearchIcon },
 			{ name: 'Recipients', route: '/recipients', icon: PatientIcon },
-			{ name: 'Donors', route: '/donors', icon: DonorIcon },
 			{ name: 'Doctors', route: '/doctors', icon: DoctorIcon },
 			{ name: 'Users', route: '/users', icon: UserIcon }
 			// { name: '', route: '/i', icon: DoctorIcon }

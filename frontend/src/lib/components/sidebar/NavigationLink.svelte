@@ -12,8 +12,6 @@
 	let link;
 	$: active =
 		$activeUrl && $activeUrl.startsWith(route) ? $activeUrl === route || route !== '/' : false;
-	$: console.log(active, route, $activeUrl);
-	$: console.log($activeUrl, $activeUrl ? $activeUrl.startsWith(route) && $activeUrl !== '/' : '');
 	$: $minimized === true
 		? setTimeout(() => {
 				minimizedActive = true;

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import UserIcon from '~icons/bi/person';
 	import NewIcon from '~icons/bi/person-plus';
+
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import Topbar from '../../lib/components/topbar/Topbar.svelte';
 	import { activePath } from '../../lib/state/SidebarStore';
@@ -8,15 +10,8 @@
 		activeUrl: activePath,
 		routes: [
 			{ name: 'Recipients', route: '/recipients', icon: DashboardIcon },
-			{ name: 'New Recipient', route: '/recipients/new', icon: NewIcon }
-			// { name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
-			// { name: 'Investigations', route: '/investigations', icon: SearchIcon },
-			// { name: 'Examinations', route: '/examinations', icon: SearchIcon },
-			// { name: 'Recipients', route: '/recipients', icon: PatientIcon },
-			// { name: 'Donors', route: '/donors', icon: DonorIcon },
-			// { name: 'Doctors', route: '/doctors', icon: DoctorIcon },
-			// { name: 'Users', route: '/users', icon: UserIcon }
-			// { name: '', route: '/i', icon: DoctorIcon }
+			{ name: 'New Recipient', route: '/recipients/new', icon: NewIcon },
+			{ name: 'Recipient', route: '/recipients/view/:id', icon: UserIcon }
 		]
 	};
 </script>
