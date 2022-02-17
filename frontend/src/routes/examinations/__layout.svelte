@@ -1,13 +1,13 @@
 <script lang="ts">
-	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
+	import NewIcon from '~icons/ci/file-new';
 	import Topbar from '../../lib/components/topbar/Topbar.svelte';
 	import { activePath } from '../../lib/state/SidebarStore';
 
 	let props = {
 		activeUrl: activePath,
 		routes: [
-			{ name: 'Examinations', route: '/examinations', icon: DashboardIcon },
-			{ name: 'Examinations', route: '/examinations/new', icon: DashboardIcon }
+			// { name: 'Examinations', route: '/examinations', icon: DashboardIcon },
+			{ name: 'New Examination', route: '/examinations/new', icon: NewIcon }
 			// { name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
 			// { name: 'Investigations', route: '/investigations', icon: SearchIcon },
 			// { name: 'Examinations', route: '/examinations', icon: SearchIcon },

@@ -97,7 +97,7 @@
 </div>
 <!-- Child routes of the group -->
 <div
-	class="flex flex-row"
+	class="flex flex-row border-b border-dashed border-neutral-500"
 	hidden={!groupOpen || disabled}
 	id={`${route ? route : 'root'}-group`}
 	in:scale={{ duration: 250 }}
