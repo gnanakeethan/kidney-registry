@@ -22,8 +22,12 @@
 		activeUrl: activePath,
 		base: '/recipients/view/' + $recipientId,
 		routes: [
-			{ name: 'Patient', route: '/recipients/view/' + $recipientId, icon: UserIcon },
-			{ name: 'Donors', route: '/recipients/view/' + $recipientId + '/donors', icon: UserIcon },
+			{ name: 'Patient Details', route: '/recipients/view/' + $recipientId, icon: UserIcon },
+			{
+				name: 'Donors Details',
+				route: '/recipients/view/' + $recipientId + '/donors',
+				icon: UserIcon
+			},
 			{
 				name: 'Follow Ups',
 				route: '/recipients/view/' + $recipientId + '/followups',

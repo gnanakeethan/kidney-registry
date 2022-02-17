@@ -11,9 +11,9 @@
 		activeUrl: activePath,
 		base: '/recipients',
 		routes: [
-			{ name: 'Recipients', route: '/recipients', icon: DashboardIcon },
+			{ name: 'Patients', route: '/recipients', icon: DashboardIcon },
 			{ name: 'New Patient', route: '/recipients/new', icon: NewIcon },
-			{ name: 'Patient', route: '/recipients/view/' + $recipientId, icon: UserIcon }
+			{ name: 'View Patient', route: '/recipients/view/' + $recipientId, icon: UserIcon }
 		]
 	};
 </script>

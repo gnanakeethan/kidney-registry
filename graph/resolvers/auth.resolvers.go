@@ -5,10 +5,9 @@ package resolvers
 
 import (
 	"context"
-	
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserToken, error) {

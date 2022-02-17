@@ -42,6 +42,11 @@ type Pagination struct {
 	ItemsPerPage *int `json:"itemsPerPage"`
 }
 
+type PersonList struct {
+	Persons    []*Person   `json:"persons"`
+	Pagination *Pagination `json:"pagination"`
+}
+
 type StringFilter struct {
 	Eq         *bool         `json:"eq"`
 	Contains   *bool         `json:"contains"`
