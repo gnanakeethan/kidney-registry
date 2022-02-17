@@ -1,12 +1,13 @@
 <script lang="ts">
 	import NewIcon from '~icons/ci/file-new';
+	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import Topbar from '../../lib/components/topbar/Topbar.svelte';
 	import { activePath } from '../../lib/state/SidebarStore';
 
 	let props = {
 		activeUrl: activePath,
 		routes: [
-			// { name: 'Examinations', route: '/examinations', icon: DashboardIcon },
+			{ name: 'Examinations', route: '/examinations', icon: DashboardIcon },
 			{ name: 'New Examination', route: '/examinations/new', icon: NewIcon }
 			// { name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
 			// { name: 'Investigations', route: '/investigations', icon: SearchIcon },
@@ -23,8 +24,8 @@
 <div class="flex flex-col">
 	<Topbar {...props} />
 	<div
-		class="h-full w-full border-r border-dashed border-neutral-500"
-		style="height:calc(100vh - 3.25rem);min-height:fit-content;"
+		class="? h-full w-full border-r border-dashed border-neutral-500"
+		style="height:calc(100vh - 5.7rem);min-height:fit-content;"
 	>
 		<slot />
 	</div>
