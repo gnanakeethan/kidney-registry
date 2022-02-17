@@ -3,14 +3,20 @@
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
 		console.log(loadInput.url);
-		const { id } = loadInput.params;
-		console.log('ID:', id);
-		return { props: { id: id } };
+		const { donorId } = loadInput.params;
+		return { props: { donorId } };
 	}
 </script>
 
-<div class="? p-2">
-	<div class="? p-2">
-		<slot />
+<script lang="ts">
+	import { recipientId } from '$lib/state/recipient';
+
+	export let donorId = '';
+</script>
+
+<div class="p-2">
+	<div class="p-2">
+		RECIPIENT :{$recipientId}
+		DONOR: {donorId}
 	</div>
 </div>

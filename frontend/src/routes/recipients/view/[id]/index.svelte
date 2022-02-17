@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
+	import { recipientId } from '../../../../lib/state/recipient';
 
-	let recipientId = getContext('recipientId') as string;
-	$: console.log(recipientId);
+	recipientId.set('25DZi7TRDfmVDEgDBjuRRsLfWzy');
 </script>
 
-<div class="? p-2">
-	<div class="? p-2">
-		ID: {recipientId}
+<div class="p-2">
+	<div class="p-2">
+		PATIENT VIEW ID: {$recipientId}
 	</div>
 </div>

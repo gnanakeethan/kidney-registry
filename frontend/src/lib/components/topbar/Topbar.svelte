@@ -8,6 +8,7 @@
 
 	export let activeUrl = null;
 	export let routes = [];
+	export let base = '';
 	export let onLinkClick = null;
 	export let open = true;
 
@@ -22,6 +23,6 @@
 
 <nav class:open id="svelte-topbar">
 	{#if open}
-		<NavigationLinkGroup {routes} />
+		<NavigationLinkGroup {routes} {base} />
 	{/if}
 </nav>

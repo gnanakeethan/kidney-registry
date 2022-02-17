@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-
-	let recipientId = getContext('recipientId') as string;
-	$: console.log(recipientId);
+	import { recipientId } from '../../../../../lib/state/recipient';
 </script>
 
-<div class="? p-2">
-	<div class="? p-2">
-		DONORS {recipientId}
+<div class="p-2">
+	<div class=" p-2">
+		DONORS {$recipientId}
+		<a href="/recipients/view/{$recipientId}/donors/{$recipientId}">Donor</a>
 	</div>
 </div>

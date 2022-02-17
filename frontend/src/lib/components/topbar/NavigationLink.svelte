@@ -5,6 +5,7 @@
 	export let name;
 	export let icon;
 	export let route;
+	export let base = '';
 	export let disabled = false;
 	export let minimizedActive = false;
 	export let activeGroup = false; // Whether the link is part of an active `NavigationLinkGroup`.
@@ -14,7 +15,9 @@
 	 * Whether the link is active is computed comparing the route
 	 * with `activeRoute` from `SidebarStore`.
 	 */
-	$: active = $activeUrl === route;
+	$: active =
+		$activeUrl && $activeUrl.startsWith(route) ? $activeUrl === route || route !== base : false;
+
 	$: $minimized === true
 		? setTimeout(() => {
 				minimizedActive = true;

@@ -8,6 +8,7 @@
 	export let routes = [];
 	export let name = null;
 	export let route = null;
+	export let base = null;
 	export let disabled = false;
 	export let icon = null;
 
@@ -121,6 +122,7 @@
 		{:else}
 			<NavigationLink
 				{...route}
+				{base}
 				activeGroup={activeSubRoute === route.route}
 				on:active={handleActiveChange}
 			/>
