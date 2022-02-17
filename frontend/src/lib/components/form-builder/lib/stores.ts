@@ -1,4 +1,4 @@
-import { Writable, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 export const storeValues = writable({
 	valid: true
@@ -11,9 +11,8 @@ export interface FormValues {
 	values: Record<string, unknown>;
 }
 
-export const valuesForm: Writable<FormValues> = writable({
+export const valuesForm = writable({
 	valid: true,
-	dirty: false,
 	values: {}
 });
 

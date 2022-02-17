@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { FormValues, valuesForm } from '$lib/components/form-builder/lib/stores';
-	import { onMount } from 'svelte';
+	import { FormValues } from '$lib/components/form-builder/lib/stores';
+	import { getContext, onMount } from 'svelte';
+	import { Writable } from 'svelte/store';
 
 	import { preprocessField } from '../lib/helpers';
 	import { validate } from '../Validation/index';
@@ -24,8 +25,12 @@
 	let itemsField = [];
 	$: listFields = itemsField;
 
+	export let contextKey = 'values';
+	$: console.log(contextKey);
+	$: valuesForm = getContext(contextKey) as Writable<FormValues>;
 	// Change values.
 	const changeValueHander = async (event) => {
+		console.log(contextKey);
 		values = {
 			...values,
 			[event.detail.name]: event.detail.value,
@@ -51,8 +56,10 @@
 				return item.validation.dirty === true;
 			}
 		});
-		isValidForm = dirty ? false : true;
-		valuesForm.set(<FormValues>{ values, valid: isValidForm });
+		isValidForm = !dirty;
+		console.log($valuesForm);
+		valuesForm.set({ values, valid: isValidForm });
+		console.log($valuesForm);
 		itemsField = mylist;
 	};
 
