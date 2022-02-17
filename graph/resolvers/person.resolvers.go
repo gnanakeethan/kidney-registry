@@ -5,7 +5,6 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 	"time"
 	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
@@ -13,29 +12,31 @@ import (
 )
 
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return nil, nil
 }
 
-func (r *queryResolver) ListPatients(ctx context.Context) (*models.PersonList, error) {
-	personList = &models.PersonList{
-		Persons: &models.Person{
-			Id:                  0,
-			FirstName:           "",
-			LastName:            "",
-			Address:             "",
-			DateOfBirth:         time.Time{},
-			Ethnicity:           "",
-			Phn:                 "",
-			PrimaryRenalDisease: "",
-			Weight:              0,
-			Height:              0,
-			Sex:                 "",
-			MaritalStatus:       "",
-			ContactNo:           "",
-			PersonType:          "",
+func (r *queryResolver) ListPatients(ctx context.Context, limit *int) (*models.PersonList, error) {
+	return &models.PersonList{
+		Persons: []*models.Person{
+			{
+				Id:                  0,
+				FirstName:           "",
+				LastName:            "",
+				Address:             "",
+				DateOfBirth:         time.Time{},
+				Ethnicity:           "",
+				Phn:                 "",
+				PrimaryRenalDisease: "",
+				Weight:              0,
+				Height:              0,
+				Sex:                 "",
+				MaritalStatus:       "",
+				ContactNo:           "",
+				PersonType:          "",
+			},
 		},
 		Pagination: nil,
-	}
+	}, nil
 }
 
 // Person returns generated.PersonResolver implementation.

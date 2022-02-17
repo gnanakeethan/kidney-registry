@@ -70,9 +70,34 @@ export type Pagination = {
   totalItems?: Maybe<Scalars['Int']>;
 };
 
+export type Person = {
+  __typename?: 'Person';
+  Address?: Maybe<Scalars['String']>;
+  ContactNo?: Maybe<Scalars['String']>;
+  DateOfBirth?: Maybe<Scalars['String']>;
+  Ethnicity?: Maybe<Scalars['String']>;
+  FirstName?: Maybe<Scalars['String']>;
+  Height?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['ID']>;
+  LastName?: Maybe<Scalars['String']>;
+  MaritalStatus?: Maybe<Scalars['String']>;
+  PersonType?: Maybe<Scalars['String']>;
+  Phn?: Maybe<Scalars['String']>;
+  PrimaryRenalDisease?: Maybe<Scalars['String']>;
+  Sex?: Maybe<Scalars['String']>;
+  Weight?: Maybe<Scalars['Float']>;
+};
+
+export type PersonList = {
+  __typename?: 'PersonList';
+  pagination?: Maybe<Pagination>;
+  persons: Array<Person>;
+};
+
 export type Query = {
   __typename?: 'Query';
   error?: Maybe<Error>;
+  listPatients?: Maybe<PersonList>;
   users?: Maybe<UserList>;
 };
 

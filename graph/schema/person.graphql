@@ -20,5 +20,5 @@ type PersonList {
 }
 
 extend type Query {
-    listPatients : PersonList
+    listPatients(limit:Int) : PersonList
 }

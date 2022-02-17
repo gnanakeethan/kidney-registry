@@ -11,6 +11,23 @@ query ListUsers ($filter: UserListFilter,$perPage: Int){
     }
 }
 
+query ListPatients ($limit: Int){
+    listPatients(limit: $limit) {
+        pagination {
+            totalItems
+            prevPage
+            currentPage
+            itemsPerPage
+        }
+        persons {
+            ID
+            DateOfBirth
+            FirstName
+            LastName
+        }
+    }
+}
+
 query ListPeople ($filter: UserListFilter,$perPage: Int) {
     users(filter: $filter,perPage: $perPage){
         users {

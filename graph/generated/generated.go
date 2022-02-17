@@ -102,7 +102,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Error        func(childComplexity int) int
-		ListPatients func(childComplexity int) int
+		ListPatients func(childComplexity int, limit *int) int
 		Users        func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
 	}
 
@@ -136,7 +136,7 @@ type PersonResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	ListPatients(ctx context.Context) (*models.PersonList, error)
+	ListPatients(ctx context.Context, limit *int) (*models.PersonList, error)
 	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 }
 type SubscriptionResolver interface {
@@ -392,7 +392,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.ListPatients(childComplexity), true
+		args, err := ec.field_Query_listPatients_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ListPatients(childComplexity, args["limit"].(*int)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -639,7 +644,7 @@ type PersonList {
 }
 
 extend type Query {
-    listPatients : PersonList
+    listPatients(limit:Int) : PersonList
 }`, BuiltIn: false},
 	{Name: "graph/schema/user.graphql", Input: `type User {
     id: ID!
@@ -694,6 +699,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_listPatients_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["limit"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limit"] = arg0
 	return args, nil
 }
 
@@ -1839,9 +1859,16 @@ func (ec *executionContext) _Query_listPatients(ctx context.Context, field graph
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_listPatients_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListPatients(rctx)
+		return ec.resolvers.Query().ListPatients(rctx, args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

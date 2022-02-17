@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
@@ -97,7 +97,7 @@ func GetAllPersonAllergy(query map[string]string, fields []string, sortby []stri
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []PersonAllergy
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
