@@ -33,10 +33,14 @@
 			[event.detail.name]: event.detail.value,
 			touched: event.detail.name
 		};
+		console.log('EVENT', event);
 		let mylist = await Promise.all(
 			listFields.map(async (field) => {
 				if (field.name == event.detail.name) {
+					field.dirty = true;
 					field.value = event.detail.value;
+				} else {
+					return field;
 				}
 				if (field.preprocess) {
 					const fnc = field.preprocess;
@@ -95,50 +99,59 @@
 			: 'form-group'}
 	>
 		<!-- Label -->
-		{#if field.attributes}
-			{#if field.attributes.label}
-				<label for={field.id} class="label">{field.attributes.label}</label>
+		<div class="flex w-full flex-row items-center justify-between">
+			{#if field.attributes}
+				{#if field.attributes.label}
+					<label for={field.id} class="label w-1/2">{field.attributes.label}</label>
+				{/if}
+				<div class="w-1/2">
+					{#if field.type === 'input'}
+						<Input {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'textarea'}
+						<Textarea {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'select'}
+						<Select {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'autocomplete'}
+						<AutoComplete {field} on:changeValue={changeValueHander} on:onSelectItem />
+					{:else if field.type === 'radio'}
+						<Radio {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'checkbox'}
+						<Checkbox {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'customcheckbox'}
+						<CustomCheckbox {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'file'}
+						<File {field} on:changeValue={changeValueHander} />
+					{/if}
+				</div>
 			{/if}
-		{/if}
+		</div>
+		{#if field.description || field.dirty}
+			<div class="w-full ">
+				<div class="w-1/2" />
+				<div class="flex w-1/2 flex-col">
+					<!-- Description -->
+					{#if field.description}
+						{#if field.description.text}
+							<Tag
+								tag={field.description.tag}
+								classes={field.description.classes ? field.description.classes : ''}
+							>
+								{field.description.text}
+							</Tag>
+						{/if}
+					{/if}
 
+					<!-- Error messages -->
+					{#if !isValidForm}
+						{#if field.dirty && field.validation.errors.length > 0}
+							{#each field.validation.errors as error}
+								<Message {error} messages={field.messages ? field.messages : []} />
+							{/each}
+						{/if}
+					{/if}
+				</div>
+			</div>
+		{/if}
 		<!-- Field -->
-		{#if field.type === 'input'}
-			<Input {field} on:changeValue={changeValueHander} />
-		{:else if field.type === 'textarea'}
-			<Textarea {field} on:changeValue={changeValueHander} />
-		{:else if field.type === 'select'}
-			<Select {field} on:changeValue={changeValueHander} />
-		{:else if field.type === 'autocomplete'}
-			<AutoComplete {field} on:changeValue={changeValueHander} on:onSelectItem />
-		{:else if field.type === 'radio'}
-			<Radio {field} on:changeValue={changeValueHander} />
-		{:else if field.type === 'checkbox'}
-			<Checkbox {field} on:changeValue={changeValueHander} />
-		{:else if field.type === 'customcheckbox'}
-			<CustomCheckbox {field} on:changeValue={changeValueHander} />
-		{:else if field.type === 'file'}
-			<File {field} on:changeValue={changeValueHander} />
-		{/if}
-
-		<!-- Description -->
-		{#if field.description}
-			{#if field.description.text}
-				<Tag
-					tag={field.description.tag}
-					classes={field.description.classes ? field.description.classes : ''}
-				>
-					{field.description.text}
-				</Tag>
-			{/if}
-		{/if}
-
-		<!-- Error messages -->
-		{#if !isValidForm}
-			{#if field.validation.errors.length > 0}
-				{#each field.validation.errors as error}
-					<Message {error} messages={field.messages ? field.messages : []} />
-				{/each}
-			{/if}
-		{/if}
 	</Tag>
 {/each}

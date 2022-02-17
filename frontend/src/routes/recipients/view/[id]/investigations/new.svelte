@@ -103,12 +103,12 @@
 	}
 </script>
 
-<div class="h-full bg-gradient-to-b from-red-50 to-stone-50 p-2">
+<div class="h-full bg-gradient-to-b from-blue-50 to-stone-50 p-2">
 	<form
 		class="custom-form mx-auto my-auto w-1/2 rounded-xl border border-neutral-500 p-4"
 		on:submit|preventDefault={onSubmit}
 	>
-		<div class="text-xl font-bold">New Examination</div>
+		<div class="text-xl font-bold">New Investigation</div>
 		<Field {fields} {valuesForm} />
 		<button class=" m-8 rounded bg-green-400 py-2 px-4 text-lg uppercase" type="submit">
 			Save

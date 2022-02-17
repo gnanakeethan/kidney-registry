@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
+	import { recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { get, writable, Writable } from 'svelte/store';
 	import { FormValues } from '../../lib/components/form-builder/lib/stores';
@@ -8,13 +9,35 @@
 	const fields = [
 		{
 			type: 'input',
-			name: 'firstsga',
+			name: 'patient_identifier',
+			value: $recipientId,
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Recipient ID',
+				id: 'recipient_id',
+				classes: ['form-input bg-gray-200 rounded w-full']
+			},
+			rules: ['required', 'min:6'],
+			messages: {
+				required: 'Firstname field is required!',
+				min: 'First name field must have more that 6 caracters!'
+			}
+		},
+		{
+			type: 'input',
+			name: 'first_name',
 			value: '',
+			prefix: {
+				classes: ['flex flex-row items-center justify-between w-full py-2']
+			},
 			attributes: {
 				type: 'text',
 				label: 'First Name',
 				id: 'firstname',
-				classes: ['form-input'],
+				classes: ['form-input rounded w-full'],
 				placeholder: "Patient's First Name"
 			},
 			rules: ['required', 'min:6'],
@@ -25,59 +48,25 @@
 		},
 		{
 			type: 'input',
-			name: 'firstsfa',
+			name: 'last_name',
 			value: '',
+			prefix: {
+				classes: ['flex flex-row items-center justify-between w-full py-2']
+			},
 			attributes: {
 				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input'],
-				placeholder: "Patient's First Name"
+				label: 'Last Name',
+				id: 'lastname',
+				classes: ['form-input rounded w-full'],
+				placeholder: "Patient's Last Name"
 			},
 			rules: ['required', 'min:6'],
 			messages: {
-				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
+				required: 'Lastname field is required!',
+				min: 'Last name field must have more that 6 caracters!'
 			}
 		}
 	];
-	const fields2 = [
-		{
-			type: 'input',
-			name: 'firstfdef',
-			value: '',
-			attributes: {
-				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input'],
-				placeholder: "Patient's First Name"
-			},
-			rules: ['required', 'min:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'firstsub',
-			value: '',
-			attributes: {
-				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input'],
-				placeholder: "Patient's First Name"
-			},
-			rules: ['required', 'min:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
-			}
-		}
-	];
-
 	let message = '';
 	let values = {};
 	export let contextKey = 'test';
@@ -105,7 +94,7 @@
 
 	function onSubmit() {
 		const data = get(valuesForm);
-		if (!data.valid) {
+		if (data.valid) {
 			values = data.values;
 			message = 'Congratulation! now your form is valid';
 		} else {
@@ -115,15 +104,15 @@
 </script>
 
 <div class="h-full bg-gradient-to-b from-blue-50 to-stone-50 p-2">
-	<h3>{message}</h3>
 	<form
-		class="custom-form rounded-xl border border-neutral-500 p-4 py-8"
+		class="custom-form mx-auto my-auto w-1/2 rounded-xl border border-neutral-500 p-4"
 		on:submit|preventDefault={onSubmit}
 	>
-		<input bind:value={contextKey} class="form-input" type="text" />
+		<div class="text-xl font-bold">New Recipient</div>
 		<Field {fields} {valuesForm} />
-		<Field fields={fields2} {valuesForm} />
-		<button class="rounded bg-green-400 p-4 text-lg uppercase" type="submit">Save</button>
+		<button class=" m-8 rounded bg-green-400 py-2 px-4 text-lg uppercase" type="submit">
+			Save
+		</button>
 	</form>
 </div>
 
