@@ -2,7 +2,6 @@
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { activeUrl } from '$lib/state/SidebarStore';
-	import { getContext, setContext } from 'svelte';
 	import { get, writable, Writable } from 'svelte/store';
 	import { FormValues } from '../../lib/components/form-builder/lib/stores';
 
@@ -84,23 +83,8 @@
 	export let contextKey = 'test';
 	let valuesForm: Writable<FormValues> = writable<FormValues>({
 		valid: true,
-		values: {}
+		values: { test: 'test1' }
 	});
-	$: console.log(contextKey);
-
-	$: contextP = getContext(contextKey);
-	$: console.log($contextP);
-	$: if (contextP !== undefined) {
-		console.log($contextP);
-		valuesForm = getContext(contextKey) as Writable<FormValues>;
-	} else {
-		setContext('test1', valuesForm);
-		setContext('test2', valuesForm);
-	}
-
-	function log() {
-		console.log($contextP);
-	}
 
 	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
 		const data = get(valuesForm) as FormValues;
@@ -120,7 +104,6 @@
 	});
 
 	function onSubmit() {
-		log();
 		const data = get(valuesForm);
 		if (!data.valid) {
 			values = data.values;
@@ -138,8 +121,8 @@
 		on:submit|preventDefault={onSubmit}
 	>
 		<input bind:value={contextKey} class="form-input" type="text" />
-		<Field contextKey={'test1'} {fields} />
-		<Field contextKey={'test2'} fields={fields2} />
+		<Field {fields} {valuesForm} />
+		<Field fields={fields2} {valuesForm} />
 		<button class="rounded bg-green-400 p-4 text-lg uppercase" type="submit">Save</button>
 	</form>
 </div>
