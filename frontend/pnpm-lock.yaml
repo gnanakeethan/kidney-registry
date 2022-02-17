@@ -49,6 +49,7 @@ specifiers:
   svelte-check: ^2.4.2
   svelte-formly: ^1.1.1
   svelte-forms-lib: ^2.0.1
+  svelte-formula: ^0.11.0
   svelte-fsm: ^1.1.2
   svelte-inline-svg: ^1.0.8
   svelte-local-storage-store: ^0.2.6
@@ -67,6 +68,7 @@ dependencies:
   graphql-tag: 2.12.6_graphql@16.3.0
   ksuid: 3.0.0
   svelte-formly: 1.1.1
+  svelte-formula: 0.11.0_svelte@3.46.4
 
 devDependencies:
   '@graphql-codegen/cli': 2.5.0_graphql@16.3.0+typescript@4.5.5
@@ -5523,6 +5525,14 @@ packages:
     dependencies:
       dequal: 2.0.2
     dev: true
+
+  /svelte-formula/0.11.0_svelte@3.46.4:
+    resolution: {integrity: sha512-xsDNYyg87Snl8eiWgvEAmWfaq9DuBukeRpT5S34Is3ewHzDXUQVIR5kvGeNwGLekOrzHFcNaCWL/qeb8+zSRPg==}
+    peerDependencies:
+      svelte: '>=3.0.0'
+    dependencies:
+      svelte: 3.46.4
+    dev: false
 
   /svelte-fsm/1.1.2:
     resolution: {integrity: sha512-lGeuhELDkQC5WK4+MHJtdigXCqwsYMR1euyRTacDCwtbORzEy5ovivTY3Mnd5bM7H+huO3nKjNjdPvDLcLn3pQ==}

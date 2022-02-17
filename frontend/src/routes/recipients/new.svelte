@@ -4,10 +4,15 @@
 
 	const fields = [
 		{
-			type: 'input',
+			type: 'meter',
 			name: 'color',
 			attributes: {
-				type: 'text',
+				min: '2',
+				max: '100',
+				low: '22',
+				high: '66',
+				optimum: '100',
+				value: '5',
 				label: 'Color',
 				id: 'color',
 				classes: ['class-field-color pl-4']
@@ -28,6 +33,34 @@
 			messages: {
 				required: 'Firstname field is required!',
 				min: 'First name field must have more that 6 caracters!'
+			}
+		},
+		{
+			type: 'checkbox', // required
+			name: 'name-field', // required
+			attributes: {
+				id: 'id-field', // required
+				classes: [], // optional
+				label: '' // optional
+			},
+			extra: {
+				items: [
+					{
+						value: 1,
+						name: 'checkbox-1',
+						title: 'checkbox 1'
+					},
+					{
+						value: 2,
+						name: 'checkbox-2',
+						title: 'checkbox 2'
+					}
+				]
+			},
+			rules: [], // optional
+			preprocess: (field, fields, values) => {
+				// Hook to alter current field
+				return field;
 			}
 		},
 		{
@@ -112,7 +145,6 @@
 		const data = get(valuesForm);
 		if (data.valid) {
 			values = data.values;
-			color = values.color ? values.color : color;
 			message = 'Congratulation! now your form is valid';
 		} else {
 			message = 'Your form is not valid!';

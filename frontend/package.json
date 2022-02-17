@@ -75,6 +75,7 @@
     "graphql-codegen-svelte-apollo": "^1.1.0",
     "graphql-tag": "^2.12.6",
     "ksuid": "^3.0.0",
-    "svelte-formly": "^1.1.1"
+    "svelte-formly": "^1.1.1",
+    "svelte-formula": "^0.11.0"
   }
 }
