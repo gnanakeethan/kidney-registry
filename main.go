@@ -25,6 +25,7 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
 		AllowCredentials: true,
 	}))
+	beego.BConfig.Listen.HTTPAddr = "0.0.0.0"
 	beego.Run()
 }
 
