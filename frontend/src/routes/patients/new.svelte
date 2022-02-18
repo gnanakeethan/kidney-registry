@@ -78,6 +78,7 @@
 				label: 'Date of Birth',
 				id: 'dob',
 				max: new Date().toISOString().split('T')[0],
+				min: '1900-01-01',
 				classes: ['form-input rounded w-full']
 			}
 		}
