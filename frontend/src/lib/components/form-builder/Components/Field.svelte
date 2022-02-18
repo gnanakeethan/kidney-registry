@@ -126,8 +126,8 @@
 			{/if}
 		</div>
 		{#if field.description || field.dirty}
-			<div class="w-full ">
-				<div class="w-1/2" />
+			<div class="flex w-full flex-row">
+				<div class="w-1/2">&nbsp;</div>
 				<div class="flex w-1/2 flex-col">
 					<!-- Description -->
 					{#if field.description}

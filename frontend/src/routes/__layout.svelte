@@ -77,7 +77,6 @@
 		requestPolicy: 'cache-and-network'
 	});
 	setClient(client);
-	// userType.subscribe((userType) => {});
 </script>
 
 <div
@@ -90,9 +89,7 @@
 	<div class=" flex-grow"><span>&nbsp;</span></div>
 	<div class="relative mx-4 flex flex-row items-center">
 		<input
-			class="bg-light-gray block h-8 flex-grow border-gray-300 pl-4 pr-12 font-sans text-xs text-sm focus:border-none focus:ring-0"
-			id="price"
-			name="price"
+			class="bg-light-gray block h-8 w-32 flex-grow border-gray-300 pl-4 pr-12 font-sans text-xs text-sm focus:border-none focus:ring-0"
 			placeholder="Search"
 			type="text"
 		/>

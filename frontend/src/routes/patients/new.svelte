@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
+	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { get, writable, Writable } from 'svelte/store';
-	import { FormValues } from '../../lib/components/form-builder/lib/stores';
 
 	const fields = [
 		{
@@ -16,14 +16,14 @@
 			},
 			attributes: {
 				type: 'text',
-				label: 'Patient ID',
+				label: 'Recipient ID',
 				id: 'recipient_id',
 				classes: ['form-input bg-gray-200 rounded w-full']
 			},
-			rules: ['required', 'min:6'],
+			rules: ['required', 'minlen:6'],
 			messages: {
 				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
+				minlen: 'First name field must have more that 6 characters!'
 			}
 		},
 		{
@@ -31,7 +31,7 @@
 			name: 'first_name',
 			value: '',
 			prefix: {
-				classes: ['flex flex-row items-center justify-between w-full py-2']
+				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
@@ -40,10 +40,10 @@
 				classes: ['form-input rounded w-full'],
 				placeholder: "Patient's First Name"
 			},
-			rules: ['required', 'min:6'],
+			rules: ['required', 'minlen:6'],
 			messages: {
 				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
+				minlen: 'First name field must have more that 6 characters!'
 			}
 		},
 		{
@@ -51,7 +51,7 @@
 			name: 'last_name',
 			value: '',
 			prefix: {
-				classes: ['flex flex-row items-center justify-between w-full py-2']
+				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
@@ -60,16 +60,15 @@
 				classes: ['form-input rounded w-full'],
 				placeholder: "Patient's Last Name"
 			},
-			rules: ['required', 'min:6'],
+			rules: ['required', 'minlen:6'],
 			messages: {
 				required: 'Lastname field is required!',
-				min: 'Last name field must have more that 6 caracters!'
+				minlen: 'Last name field must have more that 6 characters!'
 			}
 		}
 	];
 	let message = '';
 	let values = {};
-	export let contextKey = 'test';
 	let valuesForm: Writable<FormValues> = writable<FormValues>({
 		valid: true,
 		values: { test: 'test1' }
@@ -103,15 +102,18 @@
 	}
 </script>
 
-<div class="h-full bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
 	<form
-		class="custom-form mx-auto my-auto w-1/2 rounded-xl border border-neutral-500 p-4"
+		class="mx-auto my-auto rounded-xl border border-neutral-500 p-4 md:w-1/2"
 		on:submit|preventDefault={onSubmit}
 	>
 		<div class="text-xl font-bold">New Patient</div>
 		<Field {fields} {valuesForm} />
-		<button class=" m-8 rounded bg-green-400 py-2 px-4 text-lg uppercase" type="submit">
-			Save
+		<button
+			class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
+			type="submit"
+		>
+			Register Patient
 		</button>
 	</form>
 </div>

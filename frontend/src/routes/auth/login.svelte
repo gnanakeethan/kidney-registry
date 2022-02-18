@@ -47,7 +47,7 @@
 		<label for="email">Email</label>
 		<input
 			bind:value={$form.email}
-			class="w-full"
+			class="form-input w-full"
 			id="email"
 			name="email"
 			on:change={handleChange}
@@ -61,7 +61,7 @@
 		<label for="password">Password</label>
 		<input
 			bind:value={$form.password}
-			class="w-full"
+			class="form-input w-full"
 			id="password"
 			name="password"
 			on:change={handleChange}

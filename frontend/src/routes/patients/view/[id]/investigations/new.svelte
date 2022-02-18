@@ -20,10 +20,10 @@
 				id: 'recipient_id',
 				classes: ['form-input bg-gray-200 rounded w-full']
 			},
-			rules: ['required', 'min:6'],
+			rules: ['required', 'minlen:6'],
 			messages: {
 				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
+				minlen: 'First name field must have more that 6 characters!'
 			}
 		},
 		{
@@ -31,7 +31,7 @@
 			name: 'first_name',
 			value: '',
 			prefix: {
-				classes: ['flex flex-row items-center justify-between w-full py-2']
+				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
@@ -40,10 +40,10 @@
 				classes: ['form-input rounded w-full'],
 				placeholder: "Patient's First Name"
 			},
-			rules: ['required', 'min:6'],
+			rules: ['required', 'minlen:6'],
 			messages: {
 				required: 'Firstname field is required!',
-				min: 'First name field must have more that 6 caracters!'
+				minlen: 'First name field must have more that 6 characters!'
 			}
 		},
 		{
@@ -51,7 +51,7 @@
 			name: 'last_name',
 			value: '',
 			prefix: {
-				classes: ['flex flex-row items-center justify-between w-full py-2']
+				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
@@ -60,10 +60,10 @@
 				classes: ['form-input rounded w-full'],
 				placeholder: "Patient's Last Name"
 			},
-			rules: ['required', 'min:6'],
+			rules: ['required', 'minlen:6'],
 			messages: {
 				required: 'Lastname field is required!',
-				min: 'Last name field must have more that 6 caracters!'
+				minlen: 'Last name field must have more that 6 characters!'
 			}
 		}
 	];
