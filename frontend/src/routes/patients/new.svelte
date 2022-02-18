@@ -77,8 +77,8 @@
 				type: 'date',
 				label: 'Date of Birth',
 				id: 'dob',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Date of Birth"
+				max: new Date().toISOString().split('T')[0],
+				classes: ['form-input rounded w-full']
 			}
 		}
 		//phonenumber
@@ -120,7 +120,7 @@
 
 <div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
 	<form
-		class="mx-auto my-auto rounded-xl border border-neutral-500 p-4 md:w-1/2"
+		class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 		on:submit|preventDefault={onSubmit}
 	>
 		<div class="text-xl font-bold">New Patient</div>

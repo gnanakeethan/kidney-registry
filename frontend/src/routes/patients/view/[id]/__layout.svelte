@@ -29,6 +29,11 @@
 				icon: UserIcon
 			},
 			{
+				name: 'New Donor',
+				route: '/patients/view/' + $recipientId + '/donors/new',
+				icon: UserIcon
+			},
+			{
 				name: 'Follow Ups',
 				route: '/patients/view/' + $recipientId + '/followups',
 				icon: RecurringIcon
