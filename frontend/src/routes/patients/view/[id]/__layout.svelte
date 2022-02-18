@@ -24,7 +24,7 @@
 		routes: [
 			{ name: 'Patient Details', route: '/patients/view/' + $recipientId, icon: UserIcon },
 			{
-				name: 'Donors Details',
+				name: 'Donor Details',
 				route: '/patients/view/' + $recipientId + '/donors',
 				icon: UserIcon
 			},

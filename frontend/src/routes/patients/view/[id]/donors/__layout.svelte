@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { recipientId } from '$lib/state/recipient';
+	import { donorsId, recipientId } from '$lib/state/recipient';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
@@ -15,48 +15,27 @@
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
 	import RecurringIcon from '~icons/ic/round-event-repeat';
-	import Topbar from '../../../../lib/components/topbar/Topbar.svelte';
-	import { activePath } from '../../../../lib/state/SidebarStore';
+	import Topbar from '../../../../../lib/components/topbar/Topbar.svelte';
+	import { activePath } from '../../../../../lib/state/SidebarStore';
 
 	let props = {
 		activeUrl: activePath,
-		base: '/patients/view/' + $recipientId,
+		base: '/patients/view/' + $recipientId + '/donors',
 		routes: [
-			{ name: 'Patient Details', route: '/patients/view/' + $recipientId, icon: UserIcon },
 			{
-				name: 'Donors Details',
+				name: 'New Donor',
+				route: '/patients/view/' + $recipientId + '/donors/new',
+				icon: UserIcon
+			},
+			{
+				name: 'Donors List',
 				route: '/patients/view/' + $recipientId + '/donors',
 				icon: UserIcon
 			},
 			{
-				name: 'Follow Ups',
-				route: '/patients/view/' + $recipientId + '/followups',
-				icon: RecurringIcon
-			},
-			{
-				name: 'New Followup',
-				route: '/patients/view/' + $recipientId + '/followups/new',
-				icon: NewIcon
-			},
-			{
-				name: 'Investigations',
-				route: '/patients/view/' + $recipientId + '/investigations',
-				icon: SearchIcon
-			},
-			{
-				name: 'New Investigation',
-				route: '/patients/view/' + $recipientId + '/investigations/new',
-				icon: NewIcon
-			},
-			{
-				name: 'Examinations',
-				route: '/patients/view/' + $recipientId + '/examinations',
-				icon: SearchIcon
-			},
-			{
-				name: 'New Examination',
-				route: '/patients/view/' + $recipientId + '/examinations/new',
-				icon: NewIcon
+				name: 'View Donor',
+				route: '/patients/view/' + $recipientId + '/donors/' + $donorsId,
+				icon: UserIcon
 			}
 		]
 	};
