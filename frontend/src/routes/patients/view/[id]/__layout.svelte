@@ -20,42 +20,42 @@
 
 	let props = {
 		activeUrl: activePath,
-		base: '/recipients/view/' + $recipientId,
+		base: '/patients/view/' + $recipientId,
 		routes: [
-			{ name: 'Patient Details', route: '/recipients/view/' + $recipientId, icon: UserIcon },
+			{ name: 'Patient Details', route: '/patients/view/' + $recipientId, icon: UserIcon },
 			{
 				name: 'Donors Details',
-				route: '/recipients/view/' + $recipientId + '/donors',
+				route: '/patients/view/' + $recipientId + '/donors',
 				icon: UserIcon
 			},
 			{
 				name: 'Follow Ups',
-				route: '/recipients/view/' + $recipientId + '/followups',
+				route: '/patients/view/' + $recipientId + '/followups',
 				icon: RecurringIcon
 			},
 			{
 				name: 'New Followup',
-				route: '/recipients/view/' + $recipientId + '/followups/new',
+				route: '/patients/view/' + $recipientId + '/followups/new',
 				icon: NewIcon
 			},
 			{
 				name: 'Investigations',
-				route: '/recipients/view/' + $recipientId + '/investigations',
+				route: '/patients/view/' + $recipientId + '/investigations',
 				icon: SearchIcon
 			},
 			{
 				name: 'New Investigation',
-				route: '/recipients/view/' + $recipientId + '/investigations/new',
+				route: '/patients/view/' + $recipientId + '/investigations/new',
 				icon: NewIcon
 			},
 			{
 				name: 'Examinations',
-				route: '/recipients/view/' + $recipientId + '/examinations',
+				route: '/patients/view/' + $recipientId + '/examinations',
 				icon: SearchIcon
 			},
 			{
 				name: 'New Examination',
-				route: '/recipients/view/' + $recipientId + '/examinations/new',
+				route: '/patients/view/' + $recipientId + '/examinations/new',
 				icon: NewIcon
 			}
 		]

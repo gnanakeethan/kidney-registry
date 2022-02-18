@@ -9,11 +9,11 @@
 
 	$: props = {
 		activeUrl: activePath,
-		base: '/recipients',
+		base: '/patients',
 		routes: [
-			{ name: 'Patients', route: '/recipients', icon: DashboardIcon },
-			{ name: 'New Patient', route: '/recipients/new', icon: NewIcon },
-			{ name: 'View Patient', route: '/recipients/view/' + $recipientId, icon: UserIcon }
+			{ name: 'Patients', route: '/patients', icon: DashboardIcon },
+			{ name: 'New Patient', route: '/patients/new', icon: NewIcon },
+			{ name: 'View Patient', route: '/patients/view/' + $recipientId, icon: UserIcon }
 		]
 	};
 </script>

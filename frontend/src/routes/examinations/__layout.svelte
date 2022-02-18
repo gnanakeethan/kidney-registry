@@ -12,7 +12,7 @@
 			// { name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
 			// { name: 'Investigations', route: '/investigations', icon: SearchIcon },
 			// { name: 'Examinations', route: '/examinations', icon: SearchIcon },
-			// { name: 'Recipients', route: '/recipients', icon: PatientIcon },
+			// { name: 'Recipients', route: '/patients', icon: PatientIcon },
 			// { name: 'Donors', route: '/donors', icon: DonorIcon },
 			// { name: 'Doctors', route: '/doctors', icon: DoctorIcon },
 			// { name: 'Users', route: '/users', icon: UserIcon }
