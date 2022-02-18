@@ -65,7 +65,23 @@
 				required: 'Lastname field is required!',
 				minlen: 'Last name field must have more that 6 characters!'
 			}
+		},
+		{
+			type: 'input',
+			name: 'dob',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'date',
+				label: 'Date of Birth',
+				id: 'dob',
+				classes: ['form-input rounded w-full'],
+				placeholder: "Patient's Date of Birth"
+			}
 		}
+		//phonenumber
 	];
 	let message = '';
 	let values = {};

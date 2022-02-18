@@ -102,9 +102,9 @@
 		<div class="flex w-full flex-row items-center justify-between">
 			{#if field.attributes}
 				{#if field.attributes.label}
-					<label for={field.id} class="label w-1/2">{field.attributes.label}</label>
+					<label for={field.id} class="label w-1/4">{field.attributes.label}</label>
 				{/if}
-				<div class="w-1/2">
+				<div class="w-3/4">
 					{#if field.type === 'input'}
 						<Input {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'textarea'}
