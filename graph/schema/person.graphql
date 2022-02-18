@@ -19,6 +19,25 @@ type PersonList {
     pagination: Pagination
 }
 
+input PatientFilter {
+    ID                     : ID
+    FirstName              : StringFilter
+    LastName               : StringFilter
+    Address                : StringFilter
+    DateOfBirth            : StringFilter
+    Ethnicity              : StringFilter
+    Phn                    : StringFilter
+    PrimaryRenalDisease    : StringFilter
+    Weight                 : FloatFilter
+    Height                 : FloatFilter
+    Sex                    : StringFilter
+    MaritalStatus          : StringFilter
+    ContactNo              : StringFilter
+    PersonType             : StringFilter
+    and                    : UserListFilter
+    or                     : UserListFilter
+}
+
 extend type Query {
-    listPatients(limit:Int) : PersonList
+    listPatients(filter: PatientFilter,limit:Int) : PersonList
 }

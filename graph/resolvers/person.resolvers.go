@@ -6,7 +6,7 @@ package resolvers
 import (
 	"context"
 	"time"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -15,7 +15,7 @@ func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*
 	return nil, nil
 }
 
-func (r *queryResolver) ListPatients(ctx context.Context, limit *int) (*models.PersonList, error) {
+func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PatientFilter, limit *int) (*models.PersonList, error) {
 	return &models.PersonList{
 		Persons: []*models.Person{
 			{

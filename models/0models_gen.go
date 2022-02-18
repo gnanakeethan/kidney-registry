@@ -12,6 +12,18 @@ type Error struct {
 	Status int    `json:"status"`
 }
 
+type FloatFilter struct {
+	Eq         *bool      `json:"eq"`
+	BeginsWith *bool      `json:"beginsWith"`
+	EndsWith   *bool      `json:"endsWith"`
+	Gt         *bool      `json:"gt"`
+	Gte        *bool      `json:"gte"`
+	Lt         *bool      `json:"lt"`
+	Lte        *bool      `json:"lte"`
+	And        *IntFilter `json:"and"`
+	Or         *IntFilter `json:"or"`
+}
+
 type IntFilter struct {
 	Eq         *bool      `json:"eq"`
 	BeginsWith *bool      `json:"beginsWith"`
@@ -40,6 +52,25 @@ type Pagination struct {
 	NextPage     *int `json:"nextPage"`
 	TotalItems   *int `json:"totalItems"`
 	ItemsPerPage *int `json:"itemsPerPage"`
+}
+
+type PatientFilter struct {
+	ID                  *string         `json:"ID"`
+	FirstName           *StringFilter   `json:"FirstName"`
+	LastName            *StringFilter   `json:"LastName"`
+	Address             *StringFilter   `json:"Address"`
+	DateOfBirth         *StringFilter   `json:"DateOfBirth"`
+	Ethnicity           *StringFilter   `json:"Ethnicity"`
+	Phn                 *StringFilter   `json:"Phn"`
+	PrimaryRenalDisease *StringFilter   `json:"PrimaryRenalDisease"`
+	Weight              *FloatFilter    `json:"Weight"`
+	Height              *FloatFilter    `json:"Height"`
+	Sex                 *StringFilter   `json:"Sex"`
+	MaritalStatus       *StringFilter   `json:"MaritalStatus"`
+	ContactNo           *StringFilter   `json:"ContactNo"`
+	PersonType          *StringFilter   `json:"PersonType"`
+	And                 *UserListFilter `json:"and"`
+	Or                  *UserListFilter `json:"or"`
 }
 
 type PersonList struct {

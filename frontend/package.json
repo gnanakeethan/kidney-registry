@@ -13,6 +13,7 @@
     "format": "prettier --write --plugin-search-dir=. .",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
+  "graphql": "codegen.yaml",
   "imports": {
     "$lib/*": "./src/lib/*"
   },

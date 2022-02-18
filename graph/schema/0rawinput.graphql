@@ -18,3 +18,15 @@ input IntFilter {
     and: IntFilter
     or: IntFilter
 }
+
+input FloatFilter {
+    eq: Boolean
+    beginsWith: Boolean
+    endsWith: Boolean
+    gt: Boolean
+    gte: Boolean
+    lt: Boolean
+    lte: Boolean
+    and: IntFilter
+    or: IntFilter
+}
