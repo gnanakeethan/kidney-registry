@@ -44,16 +44,18 @@ func extractFilter(filterInterface interface{}) *orm.Condition {
 				fieldVal := reflect.ValueOf(fieldValInterface).Elem()
 				if fieldVal.IsValid() {
 					comparision := fieldVal.FieldByName("Comparison").String()
-					if StringInSlice(j.Name, []string{"and", "or"}) {
+					pretty.Println(j.Name)
+					if StringInSlice(j.Name, []string{"And", "Or"}) {
+						pretty.Println(fieldVal.Interface())
 						switch j.Name {
-						case "or":
-							condition = condition.OrCond(extractFilter(&fieldValInterface))
-						case "orNot":
-							condition = condition.OrNotCond(extractFilter(&fieldValInterface))
-						case "and":
-							condition = condition.AndCond(extractFilter(&fieldValInterface))
-						case "andNot":
-							condition = condition.AndNotCond(extractFilter(&fieldValInterface))
+						case "Or":
+							condition = condition.OrCond(extractFilter(fieldVal.Interface()))
+						case "OrNot":
+							condition = condition.OrNotCond(extractFilter(fieldVal.Interface()))
+						case "And":
+							condition = condition.AndCond(extractFilter(fieldVal.Interface()))
+						case "AndNot":
+							condition = condition.AndNotCond(extractFilter(fieldVal.Interface()))
 						}
 					} else {
 						switch comparision {
