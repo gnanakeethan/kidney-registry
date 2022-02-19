@@ -573,37 +573,40 @@ type Subscription {
     error: Error!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/0rawinput.graphql", Input: `input StringFilter {
-    eq: Boolean
-    contains: Boolean
-    beginsWith: Boolean
-    endsWith: Boolean
+	{Name: "graph/schema/0rawinput.graphql", Input: `enum ComparisonType {
+    EQUAL
+    NOT_EQUAL
+    GREATER_THAN
+    GREATER_THAN_OR_EQUAL
+    LESS_THAN
+    LESS_THAN_OR_EQUAL
+    BETWEEN
+    CONTAINS
+    NOT_CONTAINS
+    STARTS_WITH
+    ENDS_WITH
+
+}
+
+input StringFilter {
+    comparison: ComparisonType!
     and: StringFilter
     or: StringFilter
+    value: String
 }
 
 input IntFilter {
-    eq: Boolean
-    beginsWith: Boolean
-    endsWith: Boolean
-    gt: Boolean
-    gte: Boolean
-    lt: Boolean
-    lte: Boolean
+    comparison: ComparisonType!
     and: IntFilter
     or: IntFilter
+    value: Int
 }
 
 input FloatFilter {
-    eq: Boolean
-    beginsWith: Boolean
-    endsWith: Boolean
-    gt: Boolean
-    gte: Boolean
-    lt: Boolean
-    lte: Boolean
-    and: IntFilter
-    or: IntFilter
+    comparison: ComparisonType!
+    and: FloatFilter
+    or: FloatFilter
+    value: Float
 }`, BuiltIn: false},
 	{Name: "graph/schema/auth.graphql", Input: `input UserLogin {
     email: String!
@@ -670,8 +673,8 @@ input PatientFilter {
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
-    and: UserListFilter
-    or: UserListFilter
+    and                    : UserListFilter
+    or                     : UserListFilter
 }
 
 extend type Query {
@@ -692,6 +695,7 @@ input UserListFilter {
     and: UserListFilter
     or: UserListFilter
 }
+
 
 extend type Query {
     users(filter: UserListFilter, perPage: Int, currentPage: Int): UserList
@@ -3451,59 +3455,11 @@ func (ec *executionContext) unmarshalInputFloatFilter(ctx context.Context, obj i
 
 	for k, v := range asMap {
 		switch k {
-		case "eq":
+		case "comparison":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("eq"))
-			it.Eq, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "beginsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginsWith"))
-			it.BeginsWith, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endsWith"))
-			it.EndsWith, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "gt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("gt"))
-			it.Gt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "gte":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("gte"))
-			it.Gte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "lt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lt"))
-			it.Lt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "lte":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lte"))
-			it.Lte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comparison"))
+			it.Comparison, err = ec.unmarshalNComparisonType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComparisonType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3511,7 +3467,7 @@ func (ec *executionContext) unmarshalInputFloatFilter(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐIntFilter(ctx, v)
+			it.And, err = ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐFloatFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3519,7 +3475,15 @@ func (ec *executionContext) unmarshalInputFloatFilter(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐIntFilter(ctx, v)
+			it.Or, err = ec.unmarshalOFloatFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐFloatFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "value":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			it.Value, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3538,59 +3502,11 @@ func (ec *executionContext) unmarshalInputIntFilter(ctx context.Context, obj int
 
 	for k, v := range asMap {
 		switch k {
-		case "eq":
+		case "comparison":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("eq"))
-			it.Eq, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "beginsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginsWith"))
-			it.BeginsWith, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endsWith"))
-			it.EndsWith, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "gt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("gt"))
-			it.Gt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "gte":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("gte"))
-			it.Gte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "lt":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lt"))
-			it.Lt, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "lte":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lte"))
-			it.Lte, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comparison"))
+			it.Comparison, err = ec.unmarshalNComparisonType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComparisonType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3607,6 +3523,14 @@ func (ec *executionContext) unmarshalInputIntFilter(ctx context.Context, obj int
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			it.Or, err = ec.unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐIntFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "value":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			it.Value, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3768,35 +3692,11 @@ func (ec *executionContext) unmarshalInputStringFilter(ctx context.Context, obj 
 
 	for k, v := range asMap {
 		switch k {
-		case "eq":
+		case "comparison":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("eq"))
-			it.Eq, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "contains":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contains"))
-			it.Contains, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "beginsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("beginsWith"))
-			it.BeginsWith, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "endsWith":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endsWith"))
-			it.EndsWith, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comparison"))
+			it.Comparison, err = ec.unmarshalNComparisonType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComparisonType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3813,6 +3713,14 @@ func (ec *executionContext) unmarshalInputStringFilter(ctx context.Context, obj 
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			it.Or, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "value":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			it.Value, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4993,6 +4901,16 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNComparisonType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComparisonType(ctx context.Context, v interface{}) (models.ComparisonType, error) {
+	var res models.ComparisonType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNComparisonType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComparisonType(ctx context.Context, sel ast.SelectionSet, v models.ComparisonType) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNError2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx context.Context, sel ast.SelectionSet, v models.Error) graphql.Marshaler {
 	return ec._Error(ctx, sel, &v)
 }
@@ -5453,6 +5371,22 @@ func (ec *executionContext) unmarshalOFloat2float64(ctx context.Context, v inter
 
 func (ec *executionContext) marshalOFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
 	res := graphql.MarshalFloatContext(v)
+	return graphql.WrapContextMarshaler(ctx, res)
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 

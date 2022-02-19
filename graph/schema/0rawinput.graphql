@@ -1,32 +1,36 @@
+enum ComparisonType {
+    EQUAL
+    #    NOT_EQUAL
+    GREATER_THAN
+    GREATER_THAN_OR_EQUAL
+    LESS_THAN
+    LESS_THAN_OR_EQUAL
+    BETWEEN
+    CONTAINS
+    ICONTAINS
+    NOT_CONTAINS
+    STARTS_WITH
+    ENDS_WITH
+
+}
+
 input StringFilter {
-    eq: Boolean
-    contains: Boolean
-    beginsWith: Boolean
-    endsWith: Boolean
+    comparison: ComparisonType!
     and: StringFilter
     or: StringFilter
+    value: String
 }
 
 input IntFilter {
-    eq: Boolean
-    beginsWith: Boolean
-    endsWith: Boolean
-    gt: Boolean
-    gte: Boolean
-    lt: Boolean
-    lte: Boolean
+    comparison: ComparisonType!
     and: IntFilter
     or: IntFilter
+    value: Int
 }
 
 input FloatFilter {
-    eq: Boolean
-    beginsWith: Boolean
-    endsWith: Boolean
-    gt: Boolean
-    gte: Boolean
-    lt: Boolean
-    lte: Boolean
-    and: IntFilter
-    or: IntFilter
+    comparison: ComparisonType!
+    and: FloatFilter
+    or: FloatFilter
+    value: Float
 }

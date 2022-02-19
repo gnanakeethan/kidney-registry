@@ -2,6 +2,12 @@
 
 package models
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
 type DashboardMenus struct {
 	SidebarTop    *Menu `json:"sidebarTop"`
 	SidebarBottom *Menu `json:"sidebarBottom"`
@@ -13,27 +19,17 @@ type Error struct {
 }
 
 type FloatFilter struct {
-	Eq         *bool      `json:"eq"`
-	BeginsWith *bool      `json:"beginsWith"`
-	EndsWith   *bool      `json:"endsWith"`
-	Gt         *bool      `json:"gt"`
-	Gte        *bool      `json:"gte"`
-	Lt         *bool      `json:"lt"`
-	Lte        *bool      `json:"lte"`
-	And        *IntFilter `json:"and"`
-	Or         *IntFilter `json:"or"`
+	Comparison ComparisonType `json:"comparison"`
+	And        *FloatFilter   `json:"and"`
+	Or         *FloatFilter   `json:"or"`
+	Value      *float64       `json:"value"`
 }
 
 type IntFilter struct {
-	Eq         *bool      `json:"eq"`
-	BeginsWith *bool      `json:"beginsWith"`
-	EndsWith   *bool      `json:"endsWith"`
-	Gt         *bool      `json:"gt"`
-	Gte        *bool      `json:"gte"`
-	Lt         *bool      `json:"lt"`
-	Lte        *bool      `json:"lte"`
-	And        *IntFilter `json:"and"`
-	Or         *IntFilter `json:"or"`
+	Comparison ComparisonType `json:"comparison"`
+	And        *IntFilter     `json:"and"`
+	Or         *IntFilter     `json:"or"`
+	Value      *int           `json:"value"`
 }
 
 type Menu struct {
@@ -79,12 +75,10 @@ type PersonList struct {
 }
 
 type StringFilter struct {
-	Eq         *bool         `json:"eq"`
-	Contains   *bool         `json:"contains"`
-	BeginsWith *bool         `json:"beginsWith"`
-	EndsWith   *bool         `json:"endsWith"`
-	And        *StringFilter `json:"and"`
-	Or         *StringFilter `json:"or"`
+	Comparison ComparisonType `json:"comparison"`
+	And        *StringFilter  `json:"and"`
+	Or         *StringFilter  `json:"or"`
+	Value      *string        `json:"value"`
 }
 
 type User struct {
@@ -113,4 +107,63 @@ type UserToken struct {
 	Token string `json:"token"`
 	Error *Error `json:"error"`
 	User  *User  `json:"user"`
+}
+
+type ComparisonType string
+
+const (
+	ComparisonTypeEqual              ComparisonType = "EQUAL"
+	ComparisonTypeNotEqual           ComparisonType = "NOT_EQUAL"
+	ComparisonTypeGreaterThan        ComparisonType = "GREATER_THAN"
+	ComparisonTypeGreaterThanOrEqual ComparisonType = "GREATER_THAN_OR_EQUAL"
+	ComparisonTypeLessThan           ComparisonType = "LESS_THAN"
+	ComparisonTypeLessThanOrEqual    ComparisonType = "LESS_THAN_OR_EQUAL"
+	ComparisonTypeBetween            ComparisonType = "BETWEEN"
+	ComparisonTypeContains           ComparisonType = "CONTAINS"
+	ComparisonTypeNotContains        ComparisonType = "NOT_CONTAINS"
+	ComparisonTypeStartsWith         ComparisonType = "STARTS_WITH"
+	ComparisonTypeEndsWith           ComparisonType = "ENDS_WITH"
+)
+
+var AllComparisonType = []ComparisonType{
+	ComparisonTypeEqual,
+	ComparisonTypeNotEqual,
+	ComparisonTypeGreaterThan,
+	ComparisonTypeGreaterThanOrEqual,
+	ComparisonTypeLessThan,
+	ComparisonTypeLessThanOrEqual,
+	ComparisonTypeBetween,
+	ComparisonTypeContains,
+	ComparisonTypeNotContains,
+	ComparisonTypeStartsWith,
+	ComparisonTypeEndsWith,
+}
+
+func (e ComparisonType) IsValid() bool {
+	switch e {
+	case ComparisonTypeEqual, ComparisonTypeNotEqual, ComparisonTypeGreaterThan, ComparisonTypeGreaterThanOrEqual, ComparisonTypeLessThan, ComparisonTypeLessThanOrEqual, ComparisonTypeBetween, ComparisonTypeContains, ComparisonTypeNotContains, ComparisonTypeStartsWith, ComparisonTypeEndsWith:
+		return true
+	}
+	return false
+}
+
+func (e ComparisonType) String() string {
+	return string(e)
+}
+
+func (e *ComparisonType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ComparisonType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ComparisonType", str)
+	}
+	return nil
+}
+
+func (e ComparisonType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
