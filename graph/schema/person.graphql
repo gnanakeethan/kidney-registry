@@ -34,8 +34,10 @@ input PatientFilter {
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
-    and                    : UserListFilter
-    or                     : UserListFilter
+    and                    : PatientFilter
+    andNot                 : PatientFilter
+    or                     : PatientFilter
+    orNot                  : PatientFilter
 }
 
 extend type Query {

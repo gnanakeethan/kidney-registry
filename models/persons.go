@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
@@ -55,20 +54,12 @@ func GetPersonsById(id string) (v *Person, err error) {
 
 // GetAllPersons retrieves all Person matches certain condition. Returns empty list if
 // no records exist
-func GetAllPersons(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllPersons(query *orm.Condition, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (l []*Person, totalItems int64, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Person))
+	qs.SetCond(query)
 	// query k=v
-	for k, v := range query {
-		// rewrite dot-notation to Object__Attribute
-		k = strings.Replace(k, ".", "__", -1)
-		if strings.Contains(k, "isnull") {
-			qs = qs.Filter(k, v == "true" || v == "1")
-		} else {
-			qs = qs.Filter(k, v)
-		}
-	}
 	// order by:
 	var sortFields []string
 	if len(sortby) != 0 {

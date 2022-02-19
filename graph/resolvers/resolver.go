@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"sync"
 	
+	"github.com/beego/beego/v2/client/orm"
+	
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
@@ -29,8 +31,8 @@ func randString(n int) string {
 	return string(b)
 }
 
-func extractFilter(filter *models.PatientFilter) map[string]string {
-	query := map[string]string{}
+func extractFilter(filter *interface{}) *orm.Condition {
+	condition := orm.NewCondition()
 	if filter != nil {
 		fields := reflect.VisibleFields(reflect.TypeOf(*filter))
 		v := reflect.ValueOf(*filter)
@@ -40,46 +42,69 @@ func extractFilter(filter *models.PatientFilter) map[string]string {
 				fieldVal := reflect.ValueOf(fieldValInterface).Elem()
 				if fieldVal.IsValid() {
 					comparision := fieldVal.FieldByName("Comparison").String()
-					switch comparision {
-					case "EQUAL":
-						query[j.Name] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "NOT_EQUAL":
-						// query[j.Name] = fieldVal.FieldByName("Value").Interface().(string)
-						break
-					case "GREATER_THAN":
-						query[j.Name+"__gt"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "GREATER_THAN_OR_EQUAL":
-						query[j.Name+"__gte"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "LESS_THAN":
-						query[j.Name+"__te"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "LESS_THAN_OR_EQUAL":
-						query[j.Name+"__lte"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "BETWEEN":
-						// query[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "CONTAINS":
-						query[j.Name+"__contains"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "ICONTAINS":
-						query[j.Name+"__icontains"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "STARTS_WITH":
-						query[j.Name+"__startswith"] = fieldVal.FieldByName("Value").Elem().String()
-						break
-					case "ENDS_WITH":
-						query[j.Name+"__endswith"] = fieldVal.FieldByName("Value").Elem().String()
-						break
+					if StringInSlice(j.Name, []string{"and", "or"}) {
+						switch j.Name {
+						case "or":
+							condition.OrCond(extractFilter(&fieldValInterface))
+						case "orNot":
+							condition.OrNotCond(extractFilter(&fieldValInterface))
+						case "and":
+							condition.AndCond(extractFilter(&fieldValInterface))
+						case "andNot":
+							condition.AndNotCond(extractFilter(&fieldValInterface))
+						}
+					} else {
+						switch comparision {
+						case "EQUAL":
+							condition.And(j.Name, fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "NOT_EQUAL":
+							condition.AndNot(j.Name, fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "GREATER_THAN":
+							condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "GREATER_THAN_OR_EQUAL":
+							condition.And(j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "LESS_THAN":
+							condition.And(j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "LESS_THAN_OR_EQUAL":
+							condition.And(j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "BETWEEN":
+							// condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
+							// condition.And(j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
+							// condition[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
+							break
+						case "CONTAINS":
+							condition.And(j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "ICONTAINS":
+							condition.And(j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "STARTS_WITH":
+							condition.And(j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
+							break
+						case "ENDS_WITH":
+							condition.And(j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
+							break
+						}
 					}
-					// pretty.Println(j.Name)
-					// pretty.Println(fieldVal.Interface())
 				}
+				
 			}
 		}
 	}
-	return query
+	return condition
+}
+
+func StringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
