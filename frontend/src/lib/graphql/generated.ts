@@ -14,6 +14,20 @@ export type Scalars = {
   Float: number;
 };
 
+export enum ComparisonType {
+  Between = 'BETWEEN',
+  Contains = 'CONTAINS',
+  EndsWith = 'ENDS_WITH',
+  Equal = 'EQUAL',
+  GreaterThan = 'GREATER_THAN',
+  GreaterThanOrEqual = 'GREATER_THAN_OR_EQUAL',
+  Icontains = 'ICONTAINS',
+  LessThan = 'LESS_THAN',
+  LessThanOrEqual = 'LESS_THAN_OR_EQUAL',
+  NotContains = 'NOT_CONTAINS',
+  StartsWith = 'STARTS_WITH'
+}
+
 export type DashboardMenus = {
   __typename?: 'DashboardMenus';
   sidebarBottom?: Maybe<Menu>;
@@ -27,27 +41,17 @@ export type Error = {
 };
 
 export type FloatFilter = {
-  and?: InputMaybe<IntFilter>;
-  beginsWith?: InputMaybe<Scalars['Boolean']>;
-  endsWith?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['Boolean']>;
-  gt?: InputMaybe<Scalars['Boolean']>;
-  gte?: InputMaybe<Scalars['Boolean']>;
-  lt?: InputMaybe<Scalars['Boolean']>;
-  lte?: InputMaybe<Scalars['Boolean']>;
-  or?: InputMaybe<IntFilter>;
+  and?: InputMaybe<FloatFilter>;
+  comparison: ComparisonType;
+  or?: InputMaybe<FloatFilter>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IntFilter = {
   and?: InputMaybe<IntFilter>;
-  beginsWith?: InputMaybe<Scalars['Boolean']>;
-  endsWith?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['Boolean']>;
-  gt?: InputMaybe<Scalars['Boolean']>;
-  gte?: InputMaybe<Scalars['Boolean']>;
-  lt?: InputMaybe<Scalars['Boolean']>;
-  lte?: InputMaybe<Scalars['Boolean']>;
+  comparison: ComparisonType;
   or?: InputMaybe<IntFilter>;
+  value?: InputMaybe<Scalars['Int']>;
 };
 
 export type Menu = {
@@ -75,11 +79,11 @@ export type MutationUserLoginArgs = {
 
 export type Pagination = {
   __typename?: 'Pagination';
-  currentPage?: Maybe<Scalars['Int']>;
-  itemsPerPage?: Maybe<Scalars['Int']>;
-  nextPage?: Maybe<Scalars['Int']>;
-  prevPage?: Maybe<Scalars['Int']>;
-  totalItems?: Maybe<Scalars['Int']>;
+  currentPage: Scalars['Int'];
+  itemsPerPage: Scalars['Int'];
+  nextPage: Scalars['Int'];
+  prevPage: Scalars['Int'];
+  totalItems: Scalars['Int'];
 };
 
 export type PatientFilter = {
@@ -97,8 +101,10 @@ export type PatientFilter = {
   PrimaryRenalDisease?: InputMaybe<StringFilter>;
   Sex?: InputMaybe<StringFilter>;
   Weight?: InputMaybe<FloatFilter>;
-  and?: InputMaybe<UserListFilter>;
-  or?: InputMaybe<UserListFilter>;
+  and?: InputMaybe<PatientFilter>;
+  andNot?: InputMaybe<PatientFilter>;
+  or?: InputMaybe<PatientFilter>;
+  orNot?: InputMaybe<PatientFilter>;
 };
 
 export type Person = {
@@ -136,6 +142,7 @@ export type Query = {
 export type QueryListPatientsArgs = {
   filter?: InputMaybe<PatientFilter>;
   limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -147,11 +154,9 @@ export type QueryUsersArgs = {
 
 export type StringFilter = {
   and?: InputMaybe<StringFilter>;
-  beginsWith?: InputMaybe<Scalars['Boolean']>;
-  contains?: InputMaybe<Scalars['Boolean']>;
-  endsWith?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['Boolean']>;
+  comparison: ComparisonType;
   or?: InputMaybe<StringFilter>;
+  value?: InputMaybe<Scalars['String']>;
 };
 
 export type Subscription = {
@@ -196,14 +201,14 @@ export type ListUsersQueryVariables = Exact<{
 }>;
 
 
-export type ListUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserList', users: Array<{ __typename?: 'User', name: string, id: string }>, pagination?: { __typename?: 'Pagination', itemsPerPage?: number | null, totalItems?: number | null } | null } | null };
+export type ListUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserList', users: Array<{ __typename?: 'User', name: string, id: string }>, pagination?: { __typename?: 'Pagination', itemsPerPage: number, totalItems: number } | null } | null };
 
 export type ListPatientsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type ListPatientsQuery = { __typename?: 'Query', listPatients?: { __typename?: 'PersonList', pagination?: { __typename?: 'Pagination', totalItems?: number | null, prevPage?: number | null, currentPage?: number | null, itemsPerPage?: number | null } | null, persons: Array<{ __typename?: 'Person', ID?: string | null, DateOfBirth?: string | null, FirstName?: string | null, LastName?: string | null }> } | null };
+export type ListPatientsQuery = { __typename?: 'Query', listPatients?: { __typename?: 'PersonList', pagination?: { __typename?: 'Pagination', totalItems: number, prevPage: number, currentPage: number, itemsPerPage: number } | null, persons: Array<{ __typename?: 'Person', ID?: string | null, DateOfBirth?: string | null, FirstName?: string | null, LastName?: string | null }> } | null };
 
 export type ListPeopleQueryVariables = Exact<{
   filter?: InputMaybe<UserListFilter>;
@@ -211,7 +216,7 @@ export type ListPeopleQueryVariables = Exact<{
 }>;
 
 
-export type ListPeopleQuery = { __typename?: 'Query', users?: { __typename?: 'UserList', users: Array<{ __typename?: 'User', name: string, id: string }>, pagination?: { __typename?: 'Pagination', itemsPerPage?: number | null, totalItems?: number | null } | null } | null };
+export type ListPeopleQuery = { __typename?: 'Query', users?: { __typename?: 'UserList', users: Array<{ __typename?: 'User', name: string, id: string }>, pagination?: { __typename?: 'Pagination', itemsPerPage: number, totalItems: number } | null } | null };
 
 export type UserLoginMutationVariables = Exact<{
   userLogin?: InputMaybe<UserLogin>;
