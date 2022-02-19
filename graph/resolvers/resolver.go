@@ -7,6 +7,7 @@ import (
 	"sync"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 	
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -31,7 +32,8 @@ func randString(n int) string {
 	return string(b)
 }
 
-func extractFilter(filter *interface{}) *orm.Condition {
+func extractFilter(filterInterface interface{}) *orm.Condition {
+	filter := &filterInterface
 	condition := orm.NewCondition()
 	if filter != nil {
 		fields := reflect.VisibleFields(reflect.TypeOf(*filter))
@@ -45,33 +47,33 @@ func extractFilter(filter *interface{}) *orm.Condition {
 					if StringInSlice(j.Name, []string{"and", "or"}) {
 						switch j.Name {
 						case "or":
-							condition.OrCond(extractFilter(&fieldValInterface))
+							condition = condition.OrCond(extractFilter(&fieldValInterface))
 						case "orNot":
-							condition.OrNotCond(extractFilter(&fieldValInterface))
+							condition = condition.OrNotCond(extractFilter(&fieldValInterface))
 						case "and":
-							condition.AndCond(extractFilter(&fieldValInterface))
+							condition = condition.AndCond(extractFilter(&fieldValInterface))
 						case "andNot":
-							condition.AndNotCond(extractFilter(&fieldValInterface))
+							condition = condition.AndNotCond(extractFilter(&fieldValInterface))
 						}
 					} else {
 						switch comparision {
 						case "EQUAL":
-							condition.And(j.Name, fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name, fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "NOT_EQUAL":
-							condition.AndNot(j.Name, fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.AndNot(j.Name, fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "GREATER_THAN":
-							condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "GREATER_THAN_OR_EQUAL":
-							condition.And(j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "LESS_THAN":
-							condition.And(j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "LESS_THAN_OR_EQUAL":
-							condition.And(j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "BETWEEN":
 							// condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
@@ -79,16 +81,16 @@ func extractFilter(filter *interface{}) *orm.Condition {
 							// condition[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
 							break
 						case "CONTAINS":
-							condition.And(j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "ICONTAINS":
-							condition.And(j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "STARTS_WITH":
-							condition.And(j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "ENDS_WITH":
-							condition.And(j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
 							break
 						}
 					}
@@ -97,6 +99,7 @@ func extractFilter(filter *interface{}) *orm.Condition {
 			}
 		}
 	}
+	pretty.Println(condition)
 	return condition
 }
 

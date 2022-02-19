@@ -58,7 +58,7 @@ func GetAllPersons(query *orm.Condition, fields []string, sortby []string, order
 	offset int64, limit int64) (l []*Person, totalItems int64, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Person))
-	qs.SetCond(query)
+	qs = qs.SetCond(query)
 	// query k=v
 	// order by:
 	var sortFields []string

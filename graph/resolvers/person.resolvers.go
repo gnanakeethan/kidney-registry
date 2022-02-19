@@ -17,7 +17,7 @@ func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*
 }
 
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error) {
-	query := extractFilter(filter)
+	query := extractFilter(*filter)
 	currentPage := int64(1)
 	perPage := int64(15)
 	if page != nil {

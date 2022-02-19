@@ -674,8 +674,10 @@ input PatientFilter {
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
-    and                    : UserListFilter
-    or                     : UserListFilter
+    and                    : PatientFilter
+    andNot                 : PatientFilter
+    or                     : PatientFilter
+    orNot                  : PatientFilter
 }
 
 extend type Query {
@@ -3690,7 +3692,15 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOUserListFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserListFilter(ctx, v)
+			it.And, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "andNot":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("andNot"))
+			it.AndNot, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3698,7 +3708,15 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOUserListFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserListFilter(ctx, v)
+			it.Or, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "orNot":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orNot"))
+			it.OrNot, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
