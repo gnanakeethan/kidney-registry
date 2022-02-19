@@ -45,7 +45,7 @@ func extractFilter(filterInterface interface{}) *orm.Condition {
 				if fieldVal.IsValid() {
 					comparision := fieldVal.FieldByName("Comparison").String()
 					pretty.Println(j.Name)
-					if StringInSlice(j.Name, []string{"And", "Or"}) {
+					if StringInSlice(j.Name, []string{"And", "Or", "AndNot", "OrNot"}) {
 						pretty.Println(fieldVal.Interface())
 						switch j.Name {
 						case "Or":
