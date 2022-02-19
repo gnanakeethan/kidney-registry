@@ -39,5 +39,5 @@ input PatientFilter {
 }
 
 extend type Query {
-    listPatients(filter: PatientFilter,limit:Int) : PersonList
+    listPatients(filter: PatientFilter,page:Int,limit:Int) : PersonList
 }

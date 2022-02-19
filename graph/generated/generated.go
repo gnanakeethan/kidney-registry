@@ -102,7 +102,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Error        func(childComplexity int) int
-		ListPatients func(childComplexity int, filter *models.PatientFilter, limit *int) int
+		ListPatients func(childComplexity int, filter *models.PatientFilter, page *int, limit *int) int
 		Users        func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
 	}
 
@@ -136,7 +136,7 @@ type PersonResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	ListPatients(ctx context.Context, filter *models.PatientFilter, limit *int) (*models.PersonList, error)
+	ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error)
 	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 }
 type SubscriptionResolver interface {
@@ -397,7 +397,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ListPatients(childComplexity, args["filter"].(*models.PatientFilter), args["limit"].(*int)), true
+		return e.complexity.Query.ListPatients(childComplexity, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -554,11 +554,11 @@ var sources = []*ast.Source{
 }
 
 type Pagination {
-    currentPage: Int
-    prevPage: Int
-    nextPage: Int
-    totalItems: Int
-    itemsPerPage: Int
+    currentPage: Int!
+    prevPage: Int!
+    nextPage: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
 }
 
 type Mutation {
@@ -679,7 +679,7 @@ input PatientFilter {
 }
 
 extend type Query {
-    listPatients(filter: PatientFilter,limit:Int) : PersonList
+    listPatients(filter: PatientFilter,page:Int,limit:Int) : PersonList
 }`, BuiltIn: false},
 	{Name: "graph/schema/user.graphql", Input: `type User {
     id: ID!
@@ -751,14 +751,23 @@ func (ec *executionContext) field_Query_listPatients_args(ctx context.Context, r
 	}
 	args["filter"] = arg0
 	var arg1 *int
-	if tmp, ok := rawArgs["limit"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
 		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["limit"] = arg1
+	args["page"] = arg1
+	var arg2 *int
+	if tmp, ok := rawArgs["limit"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limit"] = arg2
 	return args, nil
 }
 
@@ -1206,11 +1215,14 @@ func (ec *executionContext) _Pagination_currentPage(ctx context.Context, field g
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_prevPage(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {
@@ -1238,11 +1250,14 @@ func (ec *executionContext) _Pagination_prevPage(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_nextPage(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {
@@ -1270,11 +1285,14 @@ func (ec *executionContext) _Pagination_nextPage(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_totalItems(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {
@@ -1302,11 +1320,14 @@ func (ec *executionContext) _Pagination_totalItems(ctx context.Context, field gr
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_itemsPerPage(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {
@@ -1334,11 +1355,14 @@ func (ec *executionContext) _Pagination_itemsPerPage(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_ID(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -1913,7 +1937,7 @@ func (ec *executionContext) _Query_listPatients(ctx context.Context, field graph
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListPatients(rctx, args["filter"].(*models.PatientFilter), args["limit"].(*int))
+		return ec.resolvers.Query().ListPatients(rctx, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4024,6 +4048,9 @@ func (ec *executionContext) _Pagination(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "prevPage":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Pagination_prevPage(ctx, field, obj)
@@ -4031,6 +4058,9 @@ func (ec *executionContext) _Pagination(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "nextPage":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Pagination_nextPage(ctx, field, obj)
@@ -4038,6 +4068,9 @@ func (ec *executionContext) _Pagination(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "totalItems":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Pagination_totalItems(ctx, field, obj)
@@ -4045,6 +4078,9 @@ func (ec *executionContext) _Pagination(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "itemsPerPage":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Pagination_itemsPerPage(ctx, field, obj)
@@ -4052,6 +4088,9 @@ func (ec *executionContext) _Pagination(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

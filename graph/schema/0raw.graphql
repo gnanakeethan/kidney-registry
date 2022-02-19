@@ -4,11 +4,11 @@ type Error {
 }
 
 type Pagination {
-    currentPage: Int
-    prevPage: Int
-    nextPage: Int
-    totalItems: Int
-    itemsPerPage: Int
+    currentPage: Int!
+    prevPage: Int!
+    nextPage: Int!
+    totalItems: Int!
+    itemsPerPage: Int!
 }
 
 type Mutation {

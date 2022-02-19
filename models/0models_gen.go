@@ -43,11 +43,11 @@ type MenuItem struct {
 }
 
 type Pagination struct {
-	CurrentPage  *int `json:"currentPage"`
-	PrevPage     *int `json:"prevPage"`
-	NextPage     *int `json:"nextPage"`
-	TotalItems   *int `json:"totalItems"`
-	ItemsPerPage *int `json:"itemsPerPage"`
+	CurrentPage  int `json:"currentPage"`
+	PrevPage     int `json:"prevPage"`
+	NextPage     int `json:"nextPage"`
+	TotalItems   int `json:"totalItems"`
+	ItemsPerPage int `json:"itemsPerPage"`
 }
 
 type PatientFilter struct {

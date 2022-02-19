@@ -56,7 +56,7 @@ func GetPersonsById(id string) (v *Person, err error) {
 // GetAllPersons retrieves all Person matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersons(query map[string]string, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (ml []*Person, err error) {
+	offset int64, limit int64) (l []*Person, totalItems int64, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Person))
 	// query k=v
@@ -81,7 +81,7 @@ func GetAllPersons(query map[string]string, fields []string, sortby []string, or
 				} else if order[i] == "asc" {
 					orderby = v
 				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
 				sortFields = append(sortFields, orderby)
 			}
@@ -95,25 +95,25 @@ func GetAllPersons(query map[string]string, fields []string, sortby []string, or
 				} else if order[0] == "asc" {
 					orderby = v
 				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
+					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
 				sortFields = append(sortFields, orderby)
 			}
 		} else if len(sortby) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
+			return nil, 0, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
 		}
 	} else {
 		if len(order) != 0 {
-			return nil, errors.New("Error: unused 'order' fields")
+			return nil, 0, errors.New("Error: unused 'order' fields")
 		}
 	}
 	
-	var l []*Person
 	qs = qs.OrderBy(sortFields...)
+	totalItems, _ = qs.Count()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		return l, nil
+		return
 	}
-	return l, err
+	return
 }
 
 // UpdatePersons updates Person by Id and returns error if
