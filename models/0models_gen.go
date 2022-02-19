@@ -113,13 +113,13 @@ type ComparisonType string
 
 const (
 	ComparisonTypeEqual              ComparisonType = "EQUAL"
-	ComparisonTypeNotEqual           ComparisonType = "NOT_EQUAL"
 	ComparisonTypeGreaterThan        ComparisonType = "GREATER_THAN"
 	ComparisonTypeGreaterThanOrEqual ComparisonType = "GREATER_THAN_OR_EQUAL"
 	ComparisonTypeLessThan           ComparisonType = "LESS_THAN"
 	ComparisonTypeLessThanOrEqual    ComparisonType = "LESS_THAN_OR_EQUAL"
 	ComparisonTypeBetween            ComparisonType = "BETWEEN"
 	ComparisonTypeContains           ComparisonType = "CONTAINS"
+	ComparisonTypeIcontains          ComparisonType = "ICONTAINS"
 	ComparisonTypeNotContains        ComparisonType = "NOT_CONTAINS"
 	ComparisonTypeStartsWith         ComparisonType = "STARTS_WITH"
 	ComparisonTypeEndsWith           ComparisonType = "ENDS_WITH"
@@ -127,13 +127,13 @@ const (
 
 var AllComparisonType = []ComparisonType{
 	ComparisonTypeEqual,
-	ComparisonTypeNotEqual,
 	ComparisonTypeGreaterThan,
 	ComparisonTypeGreaterThanOrEqual,
 	ComparisonTypeLessThan,
 	ComparisonTypeLessThanOrEqual,
 	ComparisonTypeBetween,
 	ComparisonTypeContains,
+	ComparisonTypeIcontains,
 	ComparisonTypeNotContains,
 	ComparisonTypeStartsWith,
 	ComparisonTypeEndsWith,
@@ -141,7 +141,7 @@ var AllComparisonType = []ComparisonType{
 
 func (e ComparisonType) IsValid() bool {
 	switch e {
-	case ComparisonTypeEqual, ComparisonTypeNotEqual, ComparisonTypeGreaterThan, ComparisonTypeGreaterThanOrEqual, ComparisonTypeLessThan, ComparisonTypeLessThanOrEqual, ComparisonTypeBetween, ComparisonTypeContains, ComparisonTypeNotContains, ComparisonTypeStartsWith, ComparisonTypeEndsWith:
+	case ComparisonTypeEqual, ComparisonTypeGreaterThan, ComparisonTypeGreaterThanOrEqual, ComparisonTypeLessThan, ComparisonTypeLessThanOrEqual, ComparisonTypeBetween, ComparisonTypeContains, ComparisonTypeIcontains, ComparisonTypeNotContains, ComparisonTypeStartsWith, ComparisonTypeEndsWith:
 		return true
 	}
 	return false

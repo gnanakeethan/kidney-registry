@@ -7,11 +7,10 @@ import (
 	"context"
 	"reflect"
 	"time"
-	
-	"github.com/kr/pretty"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
 )
 
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {
@@ -33,53 +32,54 @@ func (r *queryResolver) ListPatients(ctx context.Context, filter *models.Patient
 			if fieldValInterface != nil {
 				fieldVal := reflect.ValueOf(fieldValInterface).Elem()
 				if fieldVal.IsValid() {
-					comparision := fieldVal.FieldByName("Comparison").Interface().(string)
+					comparision := fieldVal.FieldByName("Comparison").String()
 					switch comparision {
 					case "EQUAL":
-						query[j.Name] = fieldVal.FieldByName("Value").Interface().(string)
+						query[j.Name] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "NOT_EQUAL":
 						// query[j.Name] = fieldVal.FieldByName("Value").Interface().(string)
 						break
 					case "GREATER_THAN":
-						query[j.Name+"__gt"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__gt"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "GREATER_THAN_OR_EQUAL":
-						query[j.Name+"__gte"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__gte"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "LESS_THAN":
-						query[j.Name+"__te"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__te"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "LESS_THAN_OR_EQUAL":
-						query[j.Name+"__lte"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__lte"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "BETWEEN":
-						// query[j.Name+"__between"] = fieldVal.FieldByName("Value").String()
+						// query[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "CONTAINS":
-						query[j.Name+"__contains"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__contains"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "ICONTAINS":
-						query[j.Name+"__icontains"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__icontains"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "STARTS_WITH":
-						query[j.Name+"__startswith"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__startswith"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					case "ENDS_WITH":
-						query[j.Name+"__endswith"] = fieldVal.FieldByName("Value").String()
+						query[j.Name+"__endswith"] = fieldVal.FieldByName("Value").Elem().String()
 						break
 					}
-					pretty.Println(j.Name)
-					pretty.Println(fieldVal.Interface())
+					// pretty.Println(j.Name)
+					// pretty.Println(fieldVal.Interface())
 				}
 			}
 		}
 	}
-	
+	persons, err := models.GetAllPersons(query, nil, nil, nil, 0, 10)
+	pretty.Println(persons, err)
 	return &models.PersonList{
 		Persons: []*models.Person{
 			{
-				Id:                  0,
+				Id:                  "",
 				FirstName:           "",
 				LastName:            "",
 				Address:             "",

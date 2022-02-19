@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"strings"
 	"time"
 	
@@ -11,7 +10,7 @@ import (
 )
 
 type Person struct {
-	Id                  int       `orm:"column(id);pk"`
+	Id                  string    `orm:"column(id);pk"`
 	FirstName           string    `orm:"column(first_name)"`
 	LastName            string    `orm:"column(last_name);null"`
 	Address             string    `orm:"column(address);null"`
@@ -45,7 +44,7 @@ func AddPersons(m *Person) (id int64, err error) {
 
 // GetPersonsById retrieves Person by Id. Returns error if
 // Id doesn't exist
-func GetPersonsById(id int) (v *Person, err error) {
+func GetPersonsById(id string) (v *Person, err error) {
 	o := orm.NewOrm()
 	v = &Person{Id: id}
 	if err = o.Read(v); err == nil {
@@ -57,7 +56,7 @@ func GetPersonsById(id int) (v *Person, err error) {
 // GetAllPersons retrieves all Person matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersons(query map[string]string, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
+	offset int64, limit int64) (ml []*Person, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Person))
 	// query k=v
@@ -109,27 +108,12 @@ func GetAllPersons(query map[string]string, fields []string, sortby []string, or
 		}
 	}
 	
-	var l []Person
+	var l []*Person
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
-			}
-		}
-		return ml, nil
+		return l, nil
 	}
-	return nil, err
+	return l, err
 }
 
 // UpdatePersons updates Person by Id and returns error if
@@ -149,7 +133,7 @@ func UpdatePersonsById(m *Person) (err error) {
 
 // DeletePersons deletes Person by Id and returns error if
 // the record to be deleted doesn't exist
-func DeletePersons(id int) (err error) {
+func DeletePersons(id string) (err error) {
 	o := orm.NewOrm()
 	v := Person{Id: id}
 	// ascertain id exists in the database
