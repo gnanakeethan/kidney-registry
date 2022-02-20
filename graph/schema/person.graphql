@@ -9,12 +9,36 @@ type Person {
     PrimaryRenalDisease    : String
     Weight                 : Float
     Height                 : Float
-    Sex                    : String
-    MaritalStatus          : String
+    Sex                    : Sex
+    MaritalStatus          : MaritalStatus
     ContactNo              : String
-    PersonType             : String
-    Status: String
+    PersonType             : PatientType
+    Status                 : PatientStatus
+    RecordStatus           : RecordStatus
     followUps              : FollowUpList
+}
+enum Sex {
+    MALE
+    FEMALE
+    OTHER
+}
+enum MaritalStatus {
+    SINGLE
+    MARRIED
+    DIVORCED
+}
+enum PatientType {
+    DONOR
+    RECIPIENT
+}
+enum PatientStatus {
+    ACTIVE
+    INACTIVE
+}
+enum RecordStatus {
+    DRAFT
+    PUBLISHED
+    REMOVED
 }
 type FollowUpList {
     followUps: [FollowUp]
@@ -55,6 +79,30 @@ input PatientFilter {
     orNot                  : PatientFilter
 }
 
+input PatientInput {
+    ID                     : ID
+    FirstName              : String
+    LastName               : String
+    Address                : String
+    DateOfBirth            : String
+    Ethnicity              : String
+    Phn                    : String
+    PrimaryRenalDisease    : String
+    Weight                 : Float
+    Height                 : Float
+    Sex                    : Sex
+    MaritalStatus          : MaritalStatus
+    ContactNo              : String
+    PersonType             : PatientType
+    Status                 : PatientStatus
+    RecordStatus           : RecordStatus
+}
+
 extend type Query {
     listPatients(filter: PatientFilter,page:Int,limit:Int) : PersonList
+}
+
+extend type Mutation {
+    newPatient: Person!
+    createPatient(input:PatientInput) : Person!
 }

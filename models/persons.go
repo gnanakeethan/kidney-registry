@@ -24,6 +24,7 @@ type Person struct {
 	ContactNo           string    `orm:"column(contact_no);null"`
 	PersonType          string    `orm:"column(person_type);null"`
 	Status              string    `orm:"column(status);null"`
+	RecordStatus        string    `orm:"column(record_status);null"`
 }
 
 func (t *Person) TableName() string {

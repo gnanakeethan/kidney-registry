@@ -5,13 +5,42 @@ package resolvers
 
 import (
 	"context"
-	
+	"fmt"
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
+func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {
 	return nil, nil
+}
+
+func (r *personResolver) Sex(ctx context.Context, obj *models.Person) (*models.Sex, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *personResolver) MaritalStatus(ctx context.Context, obj *models.Person) (*models.MaritalStatus, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *personResolver) PersonType(ctx context.Context, obj *models.Person) (*models.PatientType, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *personResolver) Status(ctx context.Context, obj *models.Person) (*models.PatientStatus, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *personResolver) RecordStatus(ctx context.Context, obj *models.Person) (*models.RecordStatus, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person) (*models.FollowUpList, error) {

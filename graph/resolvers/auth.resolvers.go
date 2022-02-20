@@ -5,12 +5,15 @@ package resolvers
 
 import (
 	"context"
-
-	"github.com/gnanakeethan/kidney-registry/models"
+	
+	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *mutationResolver) UserLogin(ctx context.Context, userLogin *models.UserLogin) (*models.UserToken, error) {
+func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error) {
+	pretty.Println(userLogin)
 	return &models.UserToken{
 		Token: ksuid.New().String(),
 		Error: nil,

@@ -10,5 +10,5 @@ type UserToken {
 }
 
 extend type Mutation {
-    userLogin(userLogin: UserLogin): UserToken
+    userLogin(userLogin: UserLogin!): UserToken!
 }
