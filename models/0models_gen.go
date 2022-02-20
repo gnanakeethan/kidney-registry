@@ -76,7 +76,7 @@ type PatientFilter struct {
 	PrimaryRenalDisease *StringFilter  `json:"PrimaryRenalDisease"`
 	Weight              *FloatFilter   `json:"Weight"`
 	Height              *FloatFilter   `json:"Height"`
-	Sex                 *StringFilter  `json:"Sex"`
+	Gender              *StringFilter  `json:"Gender"`
 	MaritalStatus       *StringFilter  `json:"MaritalStatus"`
 	ContactNo           *StringFilter  `json:"ContactNo"`
 	PersonType          *StringFilter  `json:"PersonType"`
@@ -97,7 +97,7 @@ type PatientInput struct {
 	PrimaryRenalDisease *string        `json:"PrimaryRenalDisease"`
 	Weight              *float64       `json:"Weight"`
 	Height              *float64       `json:"Height"`
-	Sex                 *Sex           `json:"Sex"`
+	Gender              *Gender        `json:"Gender"`
 	MaritalStatus       *MaritalStatus `json:"MaritalStatus"`
 	ContactNo           *string        `json:"ContactNo"`
 	PersonType          *PatientType   `json:"PersonType"`
@@ -201,6 +201,49 @@ func (e *ComparisonType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e ComparisonType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Gender string
+
+const (
+	GenderMale   Gender = "MALE"
+	GenderFemale Gender = "FEMALE"
+	GenderOther  Gender = "OTHER"
+)
+
+var AllGender = []Gender{
+	GenderMale,
+	GenderFemale,
+	GenderOther,
+}
+
+func (e Gender) IsValid() bool {
+	switch e {
+	case GenderMale, GenderFemale, GenderOther:
+		return true
+	}
+	return false
+}
+
+func (e Gender) String() string {
+	return string(e)
+}
+
+func (e *Gender) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Gender(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Gender", str)
+	}
+	return nil
+}
+
+func (e Gender) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -369,48 +412,5 @@ func (e *RecordStatus) UnmarshalGQL(v interface{}) error {
 }
 
 func (e RecordStatus) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type Sex string
-
-const (
-	SexMale   Sex = "MALE"
-	SexFemale Sex = "FEMALE"
-	SexOther  Sex = "OTHER"
-)
-
-var AllSex = []Sex{
-	SexMale,
-	SexFemale,
-	SexOther,
-}
-
-func (e Sex) IsValid() bool {
-	switch e {
-	case SexMale, SexFemale, SexOther:
-		return true
-	}
-	return false
-}
-
-func (e Sex) String() string {
-	return string(e)
-}
-
-func (e *Sex) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Sex(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Sex", str)
-	}
-	return nil
-}
-
-func (e Sex) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

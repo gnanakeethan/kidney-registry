@@ -102,6 +102,7 @@ type ComplexityRoot struct {
 		Ethnicity           func(childComplexity int) int
 		FirstName           func(childComplexity int) int
 		FollowUps           func(childComplexity int) int
+		Gender              func(childComplexity int) int
 		Height              func(childComplexity int) int
 		Id                  func(childComplexity int) int
 		LastName            func(childComplexity int) int
@@ -110,7 +111,6 @@ type ComplexityRoot struct {
 		Phn                 func(childComplexity int) int
 		PrimaryRenalDisease func(childComplexity int) int
 		RecordStatus        func(childComplexity int) int
-		Sex                 func(childComplexity int) int
 		Status              func(childComplexity int) int
 		Weight              func(childComplexity int) int
 	}
@@ -156,12 +156,6 @@ type MutationResolver interface {
 type PersonResolver interface {
 	DateOfBirth(ctx context.Context, obj *models.Person) (*string, error)
 
-	Sex(ctx context.Context, obj *models.Person) (*models.Sex, error)
-	MaritalStatus(ctx context.Context, obj *models.Person) (*models.MaritalStatus, error)
-
-	PersonType(ctx context.Context, obj *models.Person) (*models.PatientType, error)
-	Status(ctx context.Context, obj *models.Person) (*models.PatientStatus, error)
-	RecordStatus(ctx context.Context, obj *models.Person) (*models.RecordStatus, error)
 	FollowUps(ctx context.Context, obj *models.Person) (*models.FollowUpList, error)
 }
 type QueryResolver interface {
@@ -422,6 +416,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Person.FollowUps(childComplexity), true
 
+	case "Person.Gender":
+		if e.complexity.Person.Gender == nil {
+			break
+		}
+
+		return e.complexity.Person.Gender(childComplexity), true
+
 	case "Person.Height":
 		if e.complexity.Person.Height == nil {
 			break
@@ -477,13 +478,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Person.RecordStatus(childComplexity), true
-
-	case "Person.Sex":
-		if e.complexity.Person.Sex == nil {
-			break
-		}
-
-		return e.complexity.Person.Sex(childComplexity), true
 
 	case "Person.Status":
 		if e.complexity.Person.Status == nil {
@@ -782,7 +776,7 @@ type MenuItem {
     PrimaryRenalDisease    : String
     Weight                 : Float
     Height                 : Float
-    Sex                    : Sex
+    Gender                 : Gender
     MaritalStatus          : MaritalStatus
     ContactNo              : String
     PersonType             : PatientType
@@ -790,7 +784,7 @@ type MenuItem {
     RecordStatus           : RecordStatus
     followUps              : FollowUpList
 }
-enum Sex {
+enum Gender {
     MALE
     FEMALE
     OTHER
@@ -842,7 +836,7 @@ input PatientFilter {
     PrimaryRenalDisease    : StringFilter
     Weight                 : FloatFilter
     Height                 : FloatFilter
-    Sex                    : StringFilter
+    Gender                    : StringFilter
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
@@ -863,7 +857,7 @@ input PatientInput {
     PrimaryRenalDisease    : String
     Weight                 : Float
     Height                 : Float
-    Sex                    : Sex
+    Gender                 : Gender
     MaritalStatus          : MaritalStatus
     ContactNo              : String
     PersonType             : PatientType
@@ -2266,7 +2260,7 @@ func (ec *executionContext) _Person_Height(ctx context.Context, field graphql.Co
 	return ec.marshalOFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Person_Sex(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
+func (ec *executionContext) _Person_Gender(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2277,14 +2271,14 @@ func (ec *executionContext) _Person_Sex(ctx context.Context, field graphql.Colle
 		Object:     "Person",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().Sex(rctx, obj)
+		return obj.Gender, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2293,9 +2287,9 @@ func (ec *executionContext) _Person_Sex(ctx context.Context, field graphql.Colle
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Sex)
+	res := resTmp.(models.Gender)
 	fc.Result = res
-	return ec.marshalOSex2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐSex(ctx, field.Selections, res)
+	return ec.marshalOGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_MaritalStatus(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -2309,14 +2303,14 @@ func (ec *executionContext) _Person_MaritalStatus(ctx context.Context, field gra
 		Object:     "Person",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().MaritalStatus(rctx, obj)
+		return obj.MaritalStatus, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2325,9 +2319,9 @@ func (ec *executionContext) _Person_MaritalStatus(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.MaritalStatus)
+	res := resTmp.(models.MaritalStatus)
 	fc.Result = res
-	return ec.marshalOMaritalStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx, field.Selections, res)
+	return ec.marshalOMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_ContactNo(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -2373,14 +2367,14 @@ func (ec *executionContext) _Person_PersonType(ctx context.Context, field graphq
 		Object:     "Person",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().PersonType(rctx, obj)
+		return obj.PersonType, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2389,9 +2383,9 @@ func (ec *executionContext) _Person_PersonType(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PatientType)
+	res := resTmp.(models.PatientType)
 	fc.Result = res
-	return ec.marshalOPatientType2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx, field.Selections, res)
+	return ec.marshalOPatientType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_Status(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -2405,14 +2399,14 @@ func (ec *executionContext) _Person_Status(ctx context.Context, field graphql.Co
 		Object:     "Person",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().Status(rctx, obj)
+		return obj.Status, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2421,9 +2415,9 @@ func (ec *executionContext) _Person_Status(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PatientStatus)
+	res := resTmp.(models.PatientStatus)
 	fc.Result = res
-	return ec.marshalOPatientStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx, field.Selections, res)
+	return ec.marshalOPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_RecordStatus(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -2437,14 +2431,14 @@ func (ec *executionContext) _Person_RecordStatus(ctx context.Context, field grap
 		Object:     "Person",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().RecordStatus(rctx, obj)
+		return obj.RecordStatus, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2453,9 +2447,9 @@ func (ec *executionContext) _Person_RecordStatus(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.RecordStatus)
+	res := resTmp.(models.RecordStatus)
 	fc.Result = res
-	return ec.marshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx, field.Selections, res)
+	return ec.marshalORecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_followUps(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -4331,11 +4325,11 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			if err != nil {
 				return it, err
 			}
-		case "Sex":
+		case "Gender":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Sex"))
-			it.Sex, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Gender"))
+			it.Gender, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4490,11 +4484,11 @@ func (ec *executionContext) unmarshalInputPatientInput(ctx context.Context, obj 
 			if err != nil {
 				return it, err
 			}
-		case "Sex":
+		case "Gender":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Sex"))
-			it.Sex, err = ec.unmarshalOSex2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐSex(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Gender"))
+			it.Gender, err = ec.unmarshalOGender2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5156,40 +5150,20 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 
 			out.Values[i] = innerFunc(ctx)
 
-		case "Sex":
-			field := field
-
+		case "Gender":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Person_Sex(ctx, field, obj)
-				return res
+				return ec._Person_Gender(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "MaritalStatus":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Person_MaritalStatus(ctx, field, obj)
-				return res
+				return ec._Person_MaritalStatus(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "ContactNo":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Person_ContactNo(ctx, field, obj)
@@ -5198,56 +5172,26 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = innerFunc(ctx)
 
 		case "PersonType":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Person_PersonType(ctx, field, obj)
-				return res
+				return ec._Person_PersonType(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "Status":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Person_Status(ctx, field, obj)
-				return res
+				return ec._Person_Status(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "RecordStatus":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Person_RecordStatus(ctx, field, obj)
-				return res
+				return ec._Person_RecordStatus(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "followUps":
 			field := field
 
@@ -6561,6 +6505,32 @@ func (ec *executionContext) marshalOFollowUpList2ᚖgithubᚗcomᚋgnanakeethan�
 	return ec._FollowUpList(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, v interface{}) (models.Gender, error) {
+	var res models.Gender
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v models.Gender) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOGender2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, v interface{}) (*models.Gender, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.Gender)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOGender2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v *models.Gender) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOID2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -6609,6 +6579,16 @@ func (ec *executionContext) unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethan�
 	}
 	res, err := ec.unmarshalInputIntFilter(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, v interface{}) (models.MaritalStatus, error) {
+	var res models.MaritalStatus
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, sel ast.SelectionSet, v models.MaritalStatus) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalOMaritalStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, v interface{}) (*models.MaritalStatus, error) {
@@ -6705,6 +6685,16 @@ func (ec *executionContext) unmarshalOPatientInput2ᚖgithubᚗcomᚋgnanakeetha
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalOPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, v interface{}) (models.PatientStatus, error) {
+	var res models.PatientStatus
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, sel ast.SelectionSet, v models.PatientStatus) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOPatientStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, v interface{}) (*models.PatientStatus, error) {
 	if v == nil {
 		return nil, nil
@@ -6718,6 +6708,16 @@ func (ec *executionContext) marshalOPatientStatus2ᚖgithubᚗcomᚋgnanakeethan
 	if v == nil {
 		return graphql.Null
 	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOPatientType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx context.Context, v interface{}) (models.PatientType, error) {
+	var res models.PatientType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPatientType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx context.Context, sel ast.SelectionSet, v models.PatientType) graphql.Marshaler {
 	return v
 }
 
@@ -6751,6 +6751,16 @@ func (ec *executionContext) marshalOPersonList2ᚖgithubᚗcomᚋgnanakeethanᚋ
 	return ec._PersonList(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalORecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, v interface{}) (models.RecordStatus, error) {
+	var res models.RecordStatus
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalORecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, sel ast.SelectionSet, v models.RecordStatus) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, v interface{}) (*models.RecordStatus, error) {
 	if v == nil {
 		return nil, nil
@@ -6761,22 +6771,6 @@ func (ec *executionContext) unmarshalORecordStatus2ᚖgithubᚗcomᚋgnanakeetha
 }
 
 func (ec *executionContext) marshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, sel ast.SelectionSet, v *models.RecordStatus) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
-func (ec *executionContext) unmarshalOSex2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐSex(ctx context.Context, v interface{}) (*models.Sex, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(models.Sex)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOSex2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐSex(ctx context.Context, sel ast.SelectionSet, v *models.Sex) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

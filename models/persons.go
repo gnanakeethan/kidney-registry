@@ -9,22 +9,22 @@ import (
 )
 
 type Person struct {
-	Id                  string    `orm:"column(id);pk"`
-	FirstName           string    `orm:"column(first_name)"`
-	LastName            string    `orm:"column(last_name);null"`
-	Address             string    `orm:"column(address);null"`
-	DateOfBirth         time.Time `orm:"column(date_of_birth);type(date);null"`
-	Ethnicity           string    `orm:"column(ethnicity);null"`
-	Phn                 string    `orm:"column(phn)"`
-	PrimaryRenalDisease string    `orm:"column(primary_renal_disease);null"`
-	Weight              float64   `orm:"column(weight);null"`
-	Height              float64   `orm:"column(height);null"`
-	Sex                 string    `orm:"column(sex);null"`
-	MaritalStatus       string    `orm:"column(marital_status)"`
-	ContactNo           string    `orm:"column(contact_no);null"`
-	PersonType          string    `orm:"column(person_type);null"`
-	Status              string    `orm:"column(status);null"`
-	RecordStatus        string    `orm:"column(record_status);null"`
+	Id                  string        `orm:"column(id);pk"`
+	FirstName           string        `orm:"column(first_name)"`
+	LastName            string        `orm:"column(last_name);null"`
+	Address             string        `orm:"column(address);null"`
+	DateOfBirth         time.Time     `orm:"column(date_of_birth);type(date);null"`
+	Ethnicity           string        `orm:"column(ethnicity);null"`
+	Phn                 string        `orm:"column(phn)"`
+	PrimaryRenalDisease string        `orm:"column(primary_renal_disease);null"`
+	Weight              float64       `orm:"column(weight);null"`
+	Height              float64       `orm:"column(height);null"`
+	Gender              Gender        `orm:"column(Gender);null"`
+	MaritalStatus       MaritalStatus `orm:"column(marital_status)"`
+	ContactNo           string        `orm:"column(contact_no);null"`
+	PersonType          PatientType   `orm:"column(person_type);null"`
+	Status              PatientStatus `orm:"column(status);null"`
+	RecordStatus        RecordStatus  `orm:"column(record_status);null"`
 }
 
 func (t *Person) TableName() string {

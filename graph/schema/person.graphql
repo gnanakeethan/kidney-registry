@@ -9,7 +9,7 @@ type Person {
     PrimaryRenalDisease    : String
     Weight                 : Float
     Height                 : Float
-    Sex                    : Sex
+    Gender                 : Gender
     MaritalStatus          : MaritalStatus
     ContactNo              : String
     PersonType             : PatientType
@@ -17,7 +17,7 @@ type Person {
     RecordStatus           : RecordStatus
     followUps              : FollowUpList
 }
-enum Sex {
+enum Gender {
     MALE
     FEMALE
     OTHER
@@ -69,7 +69,7 @@ input PatientFilter {
     PrimaryRenalDisease    : StringFilter
     Weight                 : FloatFilter
     Height                 : FloatFilter
-    Sex                    : StringFilter
+    Gender                    : StringFilter
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
@@ -90,7 +90,7 @@ input PatientInput {
     PrimaryRenalDisease    : String
     Weight                 : Float
     Height                 : Float
-    Sex                    : Sex
+    Gender                 : Gender
     MaritalStatus          : MaritalStatus
     ContactNo              : String
     PersonType             : PatientType
