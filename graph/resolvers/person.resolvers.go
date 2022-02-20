@@ -6,10 +6,11 @@ package resolvers
 import (
 	"context"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -54,13 +55,3 @@ func (r *queryResolver) ListPatients(ctx context.Context, filter *models.Patient
 func (r *Resolver) Person() generated.PersonResolver { return &personResolver{r} }
 
 type personResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) CreatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {
-	return models.UpdatePatient(input)
-}
