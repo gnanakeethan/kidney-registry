@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { onMount } from 'svelte';
-	import { Writable } from 'svelte/store';
 
 	import { preprocessField } from '../lib/helpers';
 	import { validate } from '../Validation/index';
@@ -20,24 +18,20 @@
 
 	// Declar variables;
 	export let fields = [];
-	let isValidForm = true;
-	let values = {};
+	export let isValidForm = true;
+	export let values = {};
 	let itemsField = [];
 	$: listFields = itemsField;
-
-	export let valuesForm: Writable<FormValues>;
 	// Change values.
 	const changeValueHander = async (event) => {
 		values = {
 			...values,
-			[event.detail.name]: event.detail.value,
-			touched: event.detail.name
+			[event.detail.name]: event.detail.value
 		};
-		console.log('EVENT', event);
 		let mylist = await Promise.all(
 			listFields.map(async (field) => {
 				if (field.name == event.detail.name) {
-					field.dirty = true;
+					field.validation.dirty = true;
 					field.value = event.detail.value;
 				} else {
 					return field;
@@ -51,29 +45,35 @@
 				return field;
 			})
 		);
-		console.log(mylist);
 		const dirty = mylist.find((item: { validation: { dirty: boolean } }) => {
 			if (item.validation) {
 				return item.validation.dirty === true;
 			}
 		});
 		isValidForm = !dirty;
-		console.log($valuesForm);
-		valuesForm.set({ values, valid: isValidForm });
-		console.log($valuesForm);
 		itemsField = mylist;
+		console.log(itemsField);
+		console.log(isValidForm);
 	};
 
 	// Lifecycle.
 	onMount(async () => {
 		const mylist = await Promise.all(
 			fields.map(async (field) => {
+				if (
+					values[field.name] !== undefined &&
+					values[field.name] !== null &&
+					values[field.name] !== ''
+				) {
+					field.value = values[field.name];
+				}
 				values = { ...values, [field.name]: field.value };
 				if (field.preprocess) {
 					const fnc = field.preprocess;
 					field = await preprocessField(field, fields, values);
 				}
 				field = await validate(field);
+				console.log(field);
 				values[`${field.name}`] = field.value;
 				return field;
 			})
@@ -84,7 +84,6 @@
 			// }
 		});
 		isValidForm = !dirty;
-		valuesForm.set(<FormValues>{ values, valid: isValidForm });
 		itemsField = mylist;
 	});
 </script>

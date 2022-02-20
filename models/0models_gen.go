@@ -117,11 +117,6 @@ type StringFilter struct {
 	Value      *string        `json:"value"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 type UserList struct {
 	Users      []*User     `json:"users"`
 	Pagination *Pagination `json:"pagination"`

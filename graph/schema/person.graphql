@@ -21,24 +21,29 @@ enum Gender {
     MALE
     FEMALE
     OTHER
+    N_A
 }
 enum MaritalStatus {
     SINGLE
     MARRIED
     DIVORCED
+    N_A
 }
 enum PatientType {
     DONOR
     RECIPIENT
+    N_A
 }
 enum PatientStatus {
     ACTIVE
     INACTIVE
+    N_A
 }
 enum RecordStatus {
     DRAFT
     PUBLISHED
     REMOVED
+    N_A
 }
 type FollowUpList {
     followUps: [FollowUp]
@@ -103,6 +108,6 @@ extend type Query {
 }
 
 extend type Mutation {
-    newPatient: Person!
-    updatePatient(input:PatientInput) : Person!
+    newPatient: Person
+    updatePatient(input:PatientInput) : Person
 }

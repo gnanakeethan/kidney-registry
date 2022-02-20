@@ -17,12 +17,13 @@ func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, erro
 	person := &models.Person{
 		ID:            ksuid.New().String(),
 		DateOfBirth:   time.Time{},
+		FirstName:     "testing",
 		Gender:        "N/A",
 		MaritalStatus: "N/A",
-		PersonType:    "PATIENT",
+		PersonType:    "RECIPIENT",
 		Status:        "INACTIVE",
 		RecordStatus:  "DRAFT",
-		Phn:           time.Now().Format("20060102") + randString(8),
+		Phn:           time.Now().Format("20060102030405") + randString(2),
 	}
 	if _, err := models.AddPersons(person); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
 		return person, nil
@@ -39,7 +40,7 @@ func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*
 	if obj.DateOfBirth.IsZero() {
 		return nil, nil
 	}
-	dob := obj.DateOfBirth.Format("2006-01-01")
+	dob := obj.DateOfBirth.Format("2006-01-02")
 	return &dob, nil
 }
 

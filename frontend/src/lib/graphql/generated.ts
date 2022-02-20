@@ -98,8 +98,8 @@ export type MenuItem = {
 export type Mutation = {
   __typename?: 'Mutation';
   error?: Maybe<Error>;
-  newPatient: Person;
-  updatePatient: Person;
+  newPatient?: Maybe<Person>;
+  updatePatient?: Maybe<Person>;
   userLogin: UserToken;
 };
 
@@ -279,14 +279,14 @@ export type UserLoginMutation = { __typename?: 'Mutation', userLogin: { __typena
 export type NewPatientMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NewPatientMutation = { __typename?: 'Mutation', newPatient: { __typename?: 'Person', ID?: string | null, FirstName?: string | null, LastName?: string | null, Address?: string | null, DateOfBirth?: string | null, Ethnicity?: string | null, Phn?: string | null, PrimaryRenalDisease?: string | null, Weight?: number | null, Height?: number | null, Gender?: Gender | null, MaritalStatus?: MaritalStatus | null, ContactNo?: string | null, PersonType?: PatientType | null, Status?: PatientStatus | null, RecordStatus?: RecordStatus | null } };
+export type NewPatientMutation = { __typename?: 'Mutation', newPatient?: { __typename?: 'Person', ID?: string | null, FirstName?: string | null, LastName?: string | null, Address?: string | null, DateOfBirth?: string | null, Ethnicity?: string | null, Phn?: string | null, PrimaryRenalDisease?: string | null, Weight?: number | null, Height?: number | null, Gender?: Gender | null, MaritalStatus?: MaritalStatus | null, ContactNo?: string | null, PersonType?: PatientType | null, Status?: PatientStatus | null, RecordStatus?: RecordStatus | null } | null };
 
 export type UpdatePatientMutationVariables = Exact<{
   patientInput: PatientInput;
 }>;
 
 
-export type UpdatePatientMutation = { __typename?: 'Mutation', updatePatient: { __typename?: 'Person', ID?: string | null, FirstName?: string | null, LastName?: string | null, Address?: string | null, DateOfBirth?: string | null, Ethnicity?: string | null, Phn?: string | null, PrimaryRenalDisease?: string | null, Weight?: number | null, Height?: number | null, Gender?: Gender | null, MaritalStatus?: MaritalStatus | null, ContactNo?: string | null, PersonType?: PatientType | null, Status?: PatientStatus | null, RecordStatus?: RecordStatus | null } };
+export type UpdatePatientMutation = { __typename?: 'Mutation', updatePatient?: { __typename?: 'Person', ID?: string | null, FirstName?: string | null, LastName?: string | null, Address?: string | null, DateOfBirth?: string | null, Ethnicity?: string | null, Phn?: string | null, PrimaryRenalDisease?: string | null, Weight?: number | null, Height?: number | null, Gender?: Gender | null, MaritalStatus?: MaritalStatus | null, ContactNo?: string | null, PersonType?: PatientType | null, Status?: PatientStatus | null, RecordStatus?: RecordStatus | null } | null };
 
 export type ListUsersQueryVariables = Exact<{
   filter?: InputMaybe<UserListFilter>;

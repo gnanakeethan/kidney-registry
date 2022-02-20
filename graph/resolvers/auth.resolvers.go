@@ -17,9 +17,8 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		Token: ksuid.New().String(),
 		Error: nil,
 		User: &models.User{
-			ID:   ksuid.New().String(),
-			Name: userLogin.Email,
-			// Name: userLogin.Email,
+			ID:       ksuid.New().String(),
+			Username: userLogin.Email,
 		},
 	}, nil
 }

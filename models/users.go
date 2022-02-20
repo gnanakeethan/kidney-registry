@@ -9,45 +9,45 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type Users struct {
-	ID       int    `orm:"column(id);pk"`
+type User struct {
+	ID       string `orm:"column(id);pk"`
 	Username string `orm:"column(username)"`
 	Password string `orm:"column(password)"`
 }
 
-func (t *Users) TableName() string {
+func (t *User) TableName() string {
 	return "users"
 }
 
 func init() {
-	orm.RegisterModel(new(Users))
+	orm.RegisterModel(new(User))
 }
 
-// AddUsers insert a new Users into database and returns
+// AddUsers insert a new User into database and returns
 // last inserted ID on success.
-func AddUsers(m *Users) (id int64, err error) {
+func AddUsers(m *User) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetUsersById retrieves Users by ID. Returns error if
+// GetUsersById retrieves User by ID. Returns error if
 // ID doesn't exist
-func GetUsersById(id int) (v *Users, err error) {
+func GetUsersById(id string) (v *User, err error) {
 	o := orm.NewOrm()
-	v = &Users{ID: id}
+	v = &User{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllUsers retrieves all Users matches certain condition. Returns empty list if
+// GetAllUsers retrieves all User matches certain condition. Returns empty list if
 // no records exist
 func GetAllUsers(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Users))
+	qs := o.QueryTable(new(User))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -97,7 +97,7 @@ func GetAllUsers(query map[string]string, fields []string, sortby []string, orde
 		}
 	}
 	
-	var l []Users
+	var l []User
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -120,11 +120,11 @@ func GetAllUsers(query map[string]string, fields []string, sortby []string, orde
 	return nil, err
 }
 
-// UpdateUsers updates Users by ID and returns error if
+// UpdateUsers updates User by ID and returns error if
 // the record to be updated doesn't exist
-func UpdateUsersById(m *Users) (err error) {
+func UpdateUsersById(m *User) (err error) {
 	o := orm.NewOrm()
-	v := Users{ID: m.ID}
+	v := User{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -135,15 +135,15 @@ func UpdateUsersById(m *Users) (err error) {
 	return
 }
 
-// DeleteUsers deletes Users by ID and returns error if
+// DeleteUsers deletes User by ID and returns error if
 // the record to be deleted doesn't exist
-func DeleteUsers(id int) (err error) {
+func DeleteUsers(id string) (err error) {
 	o := orm.NewOrm()
-	v := Users{ID: id}
+	v := User{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Users{ID: id}); err == nil {
+		if num, err = o.Delete(&User{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
