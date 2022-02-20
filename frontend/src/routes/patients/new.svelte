@@ -4,8 +4,12 @@
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
+	import {mutation} from "@urql/svelte";
+	import {UserLoginDocument, UserLoginMutation} from "lib/graphql/generated";
 	import { get, writable, Writable } from 'svelte/store';
-
+	const loginMutation = mutation<Patient>({
+		query:
+	});
 	const fields = [
 		{
 			type: 'input',
