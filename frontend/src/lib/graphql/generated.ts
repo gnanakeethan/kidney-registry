@@ -47,12 +47,41 @@ export type FloatFilter = {
   value?: InputMaybe<Scalars['Float']>;
 };
 
+export type FollowUp = {
+  __typename?: 'FollowUp';
+  CaseStatus?: Maybe<Scalars['String']>;
+  ClinicNo?: Maybe<Scalars['String']>;
+  Complaints?: Maybe<Scalars['String']>;
+  Description?: Maybe<Scalars['String']>;
+  ID?: Maybe<Scalars['ID']>;
+  Person?: Maybe<Person>;
+  RenalBiopsies?: Maybe<Scalars['String']>;
+};
+
+export type FollowUpList = {
+  __typename?: 'FollowUpList';
+  followUps?: Maybe<Array<Maybe<FollowUp>>>;
+  pagination?: Maybe<Pagination>;
+};
+
+export enum Gender {
+  Female = 'FEMALE',
+  Male = 'MALE',
+  Other = 'OTHER'
+}
+
 export type IntFilter = {
   and?: InputMaybe<IntFilter>;
   comparison: ComparisonType;
   or?: InputMaybe<IntFilter>;
   value?: InputMaybe<Scalars['Int']>;
 };
+
+export enum MaritalStatus {
+  Divorced = 'DIVORCED',
+  Married = 'MARRIED',
+  Single = 'SINGLE'
+}
 
 export type Menu = {
   __typename?: 'Menu';
@@ -69,12 +98,19 @@ export type MenuItem = {
 export type Mutation = {
   __typename?: 'Mutation';
   error?: Maybe<Error>;
-  userLogin?: Maybe<UserToken>;
+  newPatient: Person;
+  updatePatient: Person;
+  userLogin: UserToken;
+};
+
+
+export type MutationUpdatePatientArgs = {
+  input?: InputMaybe<PatientInput>;
 };
 
 
 export type MutationUserLoginArgs = {
-  userLogin?: InputMaybe<UserLogin>;
+  userLogin: UserLogin;
 };
 
 export type Pagination = {
@@ -92,6 +128,7 @@ export type PatientFilter = {
   DateOfBirth?: InputMaybe<StringFilter>;
   Ethnicity?: InputMaybe<StringFilter>;
   FirstName?: InputMaybe<StringFilter>;
+  Gender?: InputMaybe<StringFilter>;
   Height?: InputMaybe<FloatFilter>;
   ID?: InputMaybe<Scalars['ID']>;
   LastName?: InputMaybe<StringFilter>;
@@ -99,13 +136,41 @@ export type PatientFilter = {
   PersonType?: InputMaybe<StringFilter>;
   Phn?: InputMaybe<StringFilter>;
   PrimaryRenalDisease?: InputMaybe<StringFilter>;
-  Sex?: InputMaybe<StringFilter>;
   Weight?: InputMaybe<FloatFilter>;
   and?: InputMaybe<PatientFilter>;
   andNot?: InputMaybe<PatientFilter>;
   or?: InputMaybe<PatientFilter>;
   orNot?: InputMaybe<PatientFilter>;
 };
+
+export type PatientInput = {
+  Address: Scalars['String'];
+  ContactNo: Scalars['String'];
+  DateOfBirth: Scalars['String'];
+  Ethnicity: Scalars['String'];
+  FirstName: Scalars['String'];
+  Gender: Gender;
+  Height: Scalars['Float'];
+  ID: Scalars['ID'];
+  LastName: Scalars['String'];
+  MaritalStatus: MaritalStatus;
+  PersonType: PatientType;
+  Phn: Scalars['String'];
+  PrimaryRenalDisease: Scalars['String'];
+  RecordStatus: RecordStatus;
+  Status: PatientStatus;
+  Weight: Scalars['Float'];
+};
+
+export enum PatientStatus {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE'
+}
+
+export enum PatientType {
+  Donor = 'DONOR',
+  Recipient = 'RECIPIENT'
+}
 
 export type Person = {
   __typename?: 'Person';
@@ -114,15 +179,18 @@ export type Person = {
   DateOfBirth?: Maybe<Scalars['String']>;
   Ethnicity?: Maybe<Scalars['String']>;
   FirstName?: Maybe<Scalars['String']>;
+  Gender?: Maybe<Gender>;
   Height?: Maybe<Scalars['Float']>;
   ID?: Maybe<Scalars['ID']>;
   LastName?: Maybe<Scalars['String']>;
-  MaritalStatus?: Maybe<Scalars['String']>;
-  PersonType?: Maybe<Scalars['String']>;
+  MaritalStatus?: Maybe<MaritalStatus>;
+  PersonType?: Maybe<PatientType>;
   Phn?: Maybe<Scalars['String']>;
   PrimaryRenalDisease?: Maybe<Scalars['String']>;
-  Sex?: Maybe<Scalars['String']>;
+  RecordStatus?: Maybe<RecordStatus>;
+  Status?: Maybe<PatientStatus>;
   Weight?: Maybe<Scalars['Float']>;
+  followUps?: Maybe<FollowUpList>;
 };
 
 export type PersonList = {
@@ -151,6 +219,12 @@ export type QueryUsersArgs = {
   filter?: InputMaybe<UserListFilter>;
   perPage?: InputMaybe<Scalars['Int']>;
 };
+
+export enum RecordStatus {
+  Draft = 'DRAFT',
+  Published = 'PUBLISHED',
+  Removed = 'REMOVED'
+}
 
 export type StringFilter = {
   and?: InputMaybe<StringFilter>;
@@ -219,17 +293,17 @@ export type ListPeopleQueryVariables = Exact<{
 export type ListPeopleQuery = { __typename?: 'Query', users?: { __typename?: 'UserList', users: Array<{ __typename?: 'User', name: string, id: string }>, pagination?: { __typename?: 'Pagination', itemsPerPage: number, totalItems: number } | null } | null };
 
 export type UserLoginMutationVariables = Exact<{
-  userLogin?: InputMaybe<UserLogin>;
+  userLogin: UserLogin;
 }>;
 
 
-export type UserLoginMutation = { __typename?: 'Mutation', userLogin?: { __typename?: 'UserToken', token: string, user?: { __typename: 'User', name: string, id: string } | null, error?: { __typename?: 'Error', status: number, string: string } | null } | null };
+export type UserLoginMutation = { __typename?: 'Mutation', userLogin: { __typename?: 'UserToken', token: string, user?: { __typename: 'User', name: string, id: string } | null, error?: { __typename?: 'Error', status: number, string: string } | null } };
 
 
 export const ListUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserListFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalItems"}}]}}]}}]}}]} as unknown as DocumentNode<ListUsersQuery, ListUsersQueryVariables>;
 export const ListPatientsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListPatients"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listPatients"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalItems"}},{"kind":"Field","name":{"kind":"Name","value":"prevPage"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"persons"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"DateOfBirth"}},{"kind":"Field","name":{"kind":"Name","value":"FirstName"}},{"kind":"Field","name":{"kind":"Name","value":"LastName"}}]}}]}}]}}]} as unknown as DocumentNode<ListPatientsQuery, ListPatientsQueryVariables>;
 export const ListPeopleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListPeople"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserListFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalItems"}}]}}]}}]}}]} as unknown as DocumentNode<ListPeopleQuery, ListPeopleQueryVariables>;
-export const UserLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UserLogin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userLogin"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserLogin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userLogin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userLogin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userLogin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"Field","name":{"kind":"Name","value":"error"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"string"}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<UserLoginMutation, UserLoginMutationVariables>;
+export const UserLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UserLogin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userLogin"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserLogin"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userLogin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userLogin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userLogin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"Field","name":{"kind":"Name","value":"error"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"string"}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<UserLoginMutation, UserLoginMutationVariables>;
 export type ListUsersQueryStore = OperationStore<ListUsersQuery, ListUsersQueryVariables>;
 export type ListPatientsQueryStore = OperationStore<ListPatientsQuery, ListPatientsQueryVariables>;
 export type ListPeopleQueryStore = OperationStore<ListPeopleQuery, ListPeopleQueryVariables>;
