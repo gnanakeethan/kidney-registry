@@ -41,7 +41,7 @@ query ListPeople ($filter: UserListFilter,$perPage: Int) {
     }
 }
 
-mutation UserLogin ($userLogin:UserLogin) {
+mutation UserLogin ($userLogin:UserLogin!) {
     userLogin(userLogin: $userLogin) {
         user {
             name

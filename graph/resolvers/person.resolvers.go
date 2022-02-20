@@ -6,11 +6,10 @@ package resolvers
 import (
 	"context"
 	"time"
-	
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
