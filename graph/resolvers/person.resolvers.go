@@ -6,8 +6,6 @@ package resolvers
 import (
 	"context"
 	
-	"github.com/kr/pretty"
-	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -21,36 +19,7 @@ func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person) (*mo
 }
 
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error) {
-	query := extractFilter(*filter)
-	currentPage := int64(1)
-	perPage := int64(15)
-	preloads := GetPreloads(ctx, models.Person{})
-	if page != nil {
-		currentPage = int64(*page)
-	}
-	if limit != nil {
-		perPage = int64(*limit)
-	}
-	persons, totalItems, err := models.GetAllPersons(query, preloads, nil, nil, (currentPage-1)*perPage, perPage)
-	prevPage := 0
-	if int(totalItems/perPage) > int(currentPage) {
-		prevPage = int(currentPage - 1)
-	}
-	nextPage := 0
-	if int(currentPage+1) <= int(totalItems/perPage) {
-		nextPage = int(currentPage + 1)
-	}
-	pretty.Println(persons, totalItems, err)
-	return &models.PersonList{
-		Persons: persons,
-		Pagination: &models.Pagination{
-			CurrentPage:  int(currentPage),
-			PrevPage:     prevPage,
-			NextPage:     nextPage,
-			TotalItems:   int(totalItems),
-			ItemsPerPage: int(perPage),
-		},
-	}, nil
+	return models.GetListPatients(ctx, filter, page, limit)
 }
 
 // Person returns generated.PersonResolver implementation.

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"errors"
+	"context"
 	"fmt"
 	"time"
 	
@@ -23,6 +23,7 @@ type Person struct {
 	MaritalStatus       string    `orm:"column(marital_status)"`
 	ContactNo           string    `orm:"column(contact_no);null"`
 	PersonType          string    `orm:"column(person_type);null"`
+	Status              string    `orm:"column(status);null"`
 }
 
 func (t *Person) TableName() string {
@@ -50,61 +51,6 @@ func GetPersonsById(id string) (v *Person, err error) {
 		return v, nil
 	}
 	return nil, err
-}
-
-// GetAllPersons retrieves all Person matches certain condition. Returns empty list if
-// no records exist
-func GetAllPersons(query *orm.Condition, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (l []*Person, totalItems int64, err error) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(Person))
-	qs = qs.SetCond(query)
-	// query k=v
-	// order by:
-	var sortFields []string
-	if len(sortby) != 0 {
-		if len(sortby) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortby {
-				orderby := ""
-				if order[i] == "desc" {
-					orderby = "-" + v
-				} else if order[i] == "asc" {
-					orderby = v
-				} else {
-					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortby) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortby {
-				orderby := ""
-				if order[0] == "desc" {
-					orderby = "-" + v
-				} else if order[0] == "asc" {
-					orderby = v
-				} else {
-					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-		} else if len(sortby) != len(order) && len(order) != 1 {
-			return nil, 0, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
-		}
-	} else {
-		if len(order) != 0 {
-			return nil, 0, errors.New("Error: unused 'order' fields")
-		}
-	}
-	
-	qs = qs.OrderBy(sortFields...)
-	totalItems, _ = qs.Count()
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		return
-	}
-	return
 }
 
 // UpdatePersons updates Person by Id and returns error if
@@ -135,4 +81,21 @@ func DeletePersons(id string) (err error) {
 		}
 	}
 	return
+}
+
+func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limit *int) (*PersonList, error) {
+	person, persons := Person{}, []*Person{}
+	query, currentPage, perPage, preloads := extractQuery(ctx, person, *filter, page, limit)
+	qs, totalItems, err := GetAnyAll(person, query, nil, nil, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&persons, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonList{
+		Persons:    persons,
+		Pagination: pagination,
+	}, nil
 }

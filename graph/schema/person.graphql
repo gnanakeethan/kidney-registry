@@ -13,6 +13,7 @@ type Person {
     MaritalStatus          : String
     ContactNo              : String
     PersonType             : String
+    Status: String
     followUps              : FollowUpList
 }
 type FollowUpList {
