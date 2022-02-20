@@ -10,7 +10,7 @@ import (
 )
 
 type PersonFollowUps struct {
-	Id            int                  `orm:"column(id);pk"`
+	ID            int                  `orm:"column(id);pk"`
 	ClinicNo      string               `orm:"column(clinic_no)"`
 	Description   string               `orm:"column(description);null"`
 	Person        *Person              `orm:"column(person_id);rel(fk)"`
@@ -29,18 +29,18 @@ func init() {
 }
 
 // AddPersonFollowUps insert a new PersonFollowUps into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonFollowUps(m *PersonFollowUps) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsById retrieves PersonFollowUps by Id. Returns error if
-// Id doesn't exist
+// GetPersonFollowUpsById retrieves PersonFollowUps by ID. Returns error if
+// ID doesn't exist
 func GetPersonFollowUpsById(id int) (v *PersonFollowUps, err error) {
 	o := orm.NewOrm()
-	v = &PersonFollowUps{Id: id}
+	v = &PersonFollowUps{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -125,11 +125,11 @@ func GetAllPersonFollowUps(query map[string]string, fields []string, sortby []st
 	return nil, err
 }
 
-// UpdatePersonFollowUps updates PersonFollowUps by Id and returns error if
+// UpdatePersonFollowUps updates PersonFollowUps by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonFollowUpsById(m *PersonFollowUps) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUps{Id: m.Id}
+	v := PersonFollowUps{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -140,15 +140,15 @@ func UpdatePersonFollowUpsById(m *PersonFollowUps) (err error) {
 	return
 }
 
-// DeletePersonFollowUps deletes PersonFollowUps by Id and returns error if
+// DeletePersonFollowUps deletes PersonFollowUps by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonFollowUps(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUps{Id: id}
+	v := PersonFollowUps{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonFollowUps{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonFollowUps{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 type PersonSuspensions struct {
-	Id             int            `orm:"column(id);pk"`
+	ID             int            `orm:"column(id);pk"`
 	PersonId       *Person        `orm:"column(person_id);rel(fk)"`
 	WorkupId       *PersonWorkups `orm:"column(workup_id);rel(fk)"`
 	Reason         string         `orm:"column(reason);null"`
@@ -29,18 +29,18 @@ func init() {
 }
 
 // AddPersonSuspensions insert a new PersonSuspensions into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonSuspensions(m *PersonSuspensions) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonSuspensionsById retrieves PersonSuspensions by Id. Returns error if
-// Id doesn't exist
+// GetPersonSuspensionsById retrieves PersonSuspensions by ID. Returns error if
+// ID doesn't exist
 func GetPersonSuspensionsById(id int) (v *PersonSuspensions, err error) {
 	o := orm.NewOrm()
-	v = &PersonSuspensions{Id: id}
+	v = &PersonSuspensions{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -125,11 +125,11 @@ func GetAllPersonSuspensions(query map[string]string, fields []string, sortby []
 	return nil, err
 }
 
-// UpdatePersonSuspensions updates PersonSuspensions by Id and returns error if
+// UpdatePersonSuspensions updates PersonSuspensions by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonSuspensionsById(m *PersonSuspensions) (err error) {
 	o := orm.NewOrm()
-	v := PersonSuspensions{Id: m.Id}
+	v := PersonSuspensions{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -140,15 +140,15 @@ func UpdatePersonSuspensionsById(m *PersonSuspensions) (err error) {
 	return
 }
 
-// DeletePersonSuspensions deletes PersonSuspensions by Id and returns error if
+// DeletePersonSuspensions deletes PersonSuspensions by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonSuspensions(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonSuspensions{Id: id}
+	v := PersonSuspensions{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonSuspensions{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonSuspensions{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Investigations struct {
-	Id        int    `orm:"column(id);pk"`
+	ID        int    `orm:"column(id);pk"`
 	Details   string `orm:"column(details);null"`
 	Procedure string `orm:"column(procedure);null"`
 }
@@ -24,18 +24,18 @@ func init() {
 }
 
 // AddInvestigations insert a new Investigations into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddInvestigations(m *Investigations) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetInvestigationsById retrieves Investigations by Id. Returns error if
-// Id doesn't exist
+// GetInvestigationsById retrieves Investigations by ID. Returns error if
+// ID doesn't exist
 func GetInvestigationsById(id int) (v *Investigations, err error) {
 	o := orm.NewOrm()
-	v = &Investigations{Id: id}
+	v = &Investigations{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -96,7 +96,7 @@ func GetAllInvestigations(query map[string]string, fields []string, sortby []str
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []Investigations
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -120,11 +120,11 @@ func GetAllInvestigations(query map[string]string, fields []string, sortby []str
 	return nil, err
 }
 
-// UpdateInvestigations updates Investigations by Id and returns error if
+// UpdateInvestigations updates Investigations by ID and returns error if
 // the record to be updated doesn't exist
 func UpdateInvestigationsById(m *Investigations) (err error) {
 	o := orm.NewOrm()
-	v := Investigations{Id: m.Id}
+	v := Investigations{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -135,15 +135,15 @@ func UpdateInvestigationsById(m *Investigations) (err error) {
 	return
 }
 
-// DeleteInvestigations deletes Investigations by Id and returns error if
+// DeleteInvestigations deletes Investigations by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteInvestigations(id int) (err error) {
 	o := orm.NewOrm()
-	v := Investigations{Id: id}
+	v := Investigations{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Investigations{Id: id}); err == nil {
+		if num, err = o.Delete(&Investigations{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

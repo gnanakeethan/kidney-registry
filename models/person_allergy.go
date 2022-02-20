@@ -10,7 +10,7 @@ import (
 )
 
 type PersonAllergy struct {
-	Id        int        `orm:"column(id);pk"`
+	ID        int        `orm:"column(id);pk"`
 	PersonId  *Person    `orm:"column(person_id);rel(fk)"`
 	AllergyId *Allergies `orm:"column(allergy_id);rel(fk)"`
 	Note      string     `orm:"column(note);null"`
@@ -25,18 +25,18 @@ func init() {
 }
 
 // AddPersonAllergy insert a new PersonAllergy into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonAllergy(m *PersonAllergy) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonAllergyById retrieves PersonAllergy by Id. Returns error if
-// Id doesn't exist
+// GetPersonAllergyById retrieves PersonAllergy by ID. Returns error if
+// ID doesn't exist
 func GetPersonAllergyById(id int) (v *PersonAllergy, err error) {
 	o := orm.NewOrm()
-	v = &PersonAllergy{Id: id}
+	v = &PersonAllergy{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -121,11 +121,11 @@ func GetAllPersonAllergy(query map[string]string, fields []string, sortby []stri
 	return nil, err
 }
 
-// UpdatePersonAllergy updates PersonAllergy by Id and returns error if
+// UpdatePersonAllergy updates PersonAllergy by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonAllergyById(m *PersonAllergy) (err error) {
 	o := orm.NewOrm()
-	v := PersonAllergy{Id: m.Id}
+	v := PersonAllergy{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -136,15 +136,15 @@ func UpdatePersonAllergyById(m *PersonAllergy) (err error) {
 	return
 }
 
-// DeletePersonAllergy deletes PersonAllergy by Id and returns error if
+// DeletePersonAllergy deletes PersonAllergy by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonAllergy(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonAllergy{Id: id}
+	v := PersonAllergy{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonAllergy{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonAllergy{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

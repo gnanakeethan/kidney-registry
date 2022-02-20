@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Workups struct {
-	Id          int    `orm:"column(id);pk"`
+	ID          int    `orm:"column(id);pk"`
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description);null"`
 	Procedure   string `orm:"column(procedure);null"`
@@ -25,18 +25,18 @@ func init() {
 }
 
 // AddWorkups insert a new Workups into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddWorkups(m *Workups) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetWorkupsById retrieves Workups by Id. Returns error if
-// Id doesn't exist
+// GetWorkupsById retrieves Workups by ID. Returns error if
+// ID doesn't exist
 func GetWorkupsById(id int) (v *Workups, err error) {
 	o := orm.NewOrm()
-	v = &Workups{Id: id}
+	v = &Workups{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -97,7 +97,7 @@ func GetAllWorkups(query map[string]string, fields []string, sortby []string, or
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []Workups
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -121,11 +121,11 @@ func GetAllWorkups(query map[string]string, fields []string, sortby []string, or
 	return nil, err
 }
 
-// UpdateWorkups updates Workups by Id and returns error if
+// UpdateWorkups updates Workups by ID and returns error if
 // the record to be updated doesn't exist
 func UpdateWorkupsById(m *Workups) (err error) {
 	o := orm.NewOrm()
-	v := Workups{Id: m.Id}
+	v := Workups{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -136,15 +136,15 @@ func UpdateWorkupsById(m *Workups) (err error) {
 	return
 }
 
-// DeleteWorkups deletes Workups by Id and returns error if
+// DeleteWorkups deletes Workups by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteWorkups(id int) (err error) {
 	o := orm.NewOrm()
-	v := Workups{Id: id}
+	v := Workups{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Workups{Id: id}); err == nil {
+		if num, err = o.Delete(&Workups{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

@@ -10,7 +10,7 @@ import (
 )
 
 type PersonRelations struct {
-	Id           int     `orm:"column(id);pk"`
+	ID           int     `orm:"column(id);pk"`
 	PatientId    *Person `orm:"column(patient_id);rel(fk)"`
 	RelationId   *Person `orm:"column(relation_id);rel(fk)"`
 	RelationType string  `orm:"column(relation_type)"`
@@ -25,18 +25,18 @@ func init() {
 }
 
 // AddPersonRelations insert a new PersonRelations into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonRelations(m *PersonRelations) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonRelationsById retrieves PersonRelations by Id. Returns error if
-// Id doesn't exist
+// GetPersonRelationsById retrieves PersonRelations by ID. Returns error if
+// ID doesn't exist
 func GetPersonRelationsById(id int) (v *PersonRelations, err error) {
 	o := orm.NewOrm()
-	v = &PersonRelations{Id: id}
+	v = &PersonRelations{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -121,11 +121,11 @@ func GetAllPersonRelations(query map[string]string, fields []string, sortby []st
 	return nil, err
 }
 
-// UpdatePersonRelations updates PersonRelations by Id and returns error if
+// UpdatePersonRelations updates PersonRelations by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonRelationsById(m *PersonRelations) (err error) {
 	o := orm.NewOrm()
-	v := PersonRelations{Id: m.Id}
+	v := PersonRelations{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -136,15 +136,15 @@ func UpdatePersonRelationsById(m *PersonRelations) (err error) {
 	return
 }
 
-// DeletePersonRelations deletes PersonRelations by Id and returns error if
+// DeletePersonRelations deletes PersonRelations by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonRelations(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonRelations{Id: id}
+	v := PersonRelations{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonRelations{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonRelations{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

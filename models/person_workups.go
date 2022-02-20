@@ -11,7 +11,7 @@ import (
 )
 
 type PersonWorkups struct {
-	Id             int       `orm:"column(id);pk"`
+	ID             int       `orm:"column(id);pk"`
 	WorkupId       *Workups  `orm:"column(workup_id);rel(fk)"`
 	PersonId       *Person   `orm:"column(person_id);rel(fk)"`
 	Procedure      string    `orm:"column(procedure)"`
@@ -29,18 +29,18 @@ func init() {
 }
 
 // AddPersonWorkups insert a new PersonWorkups into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonWorkups(m *PersonWorkups) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonWorkupsById retrieves PersonWorkups by Id. Returns error if
-// Id doesn't exist
+// GetPersonWorkupsById retrieves PersonWorkups by ID. Returns error if
+// ID doesn't exist
 func GetPersonWorkupsById(id int) (v *PersonWorkups, err error) {
 	o := orm.NewOrm()
-	v = &PersonWorkups{Id: id}
+	v = &PersonWorkups{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -125,11 +125,11 @@ func GetAllPersonWorkups(query map[string]string, fields []string, sortby []stri
 	return nil, err
 }
 
-// UpdatePersonWorkups updates PersonWorkups by Id and returns error if
+// UpdatePersonWorkups updates PersonWorkups by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonWorkupsById(m *PersonWorkups) (err error) {
 	o := orm.NewOrm()
-	v := PersonWorkups{Id: m.Id}
+	v := PersonWorkups{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -140,15 +140,15 @@ func UpdatePersonWorkupsById(m *PersonWorkups) (err error) {
 	return
 }
 
-// DeletePersonWorkups deletes PersonWorkups by Id and returns error if
+// DeletePersonWorkups deletes PersonWorkups by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonWorkups(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonWorkups{Id: id}
+	v := PersonWorkups{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonWorkups{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonWorkups{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

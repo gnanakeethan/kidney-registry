@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Users struct {
-	Id       int    `orm:"column(id);pk"`
+	ID       int    `orm:"column(id);pk"`
 	Username string `orm:"column(username)"`
 	Password string `orm:"column(password)"`
 }
@@ -24,18 +24,18 @@ func init() {
 }
 
 // AddUsers insert a new Users into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddUsers(m *Users) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetUsersById retrieves Users by Id. Returns error if
-// Id doesn't exist
+// GetUsersById retrieves Users by ID. Returns error if
+// ID doesn't exist
 func GetUsersById(id int) (v *Users, err error) {
 	o := orm.NewOrm()
-	v = &Users{Id: id}
+	v = &Users{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -96,7 +96,7 @@ func GetAllUsers(query map[string]string, fields []string, sortby []string, orde
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []Users
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -120,11 +120,11 @@ func GetAllUsers(query map[string]string, fields []string, sortby []string, orde
 	return nil, err
 }
 
-// UpdateUsers updates Users by Id and returns error if
+// UpdateUsers updates Users by ID and returns error if
 // the record to be updated doesn't exist
 func UpdateUsersById(m *Users) (err error) {
 	o := orm.NewOrm()
-	v := Users{Id: m.Id}
+	v := Users{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -135,15 +135,15 @@ func UpdateUsersById(m *Users) (err error) {
 	return
 }
 
-// DeleteUsers deletes Users by Id and returns error if
+// DeleteUsers deletes Users by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteUsers(id int) (err error) {
 	o := orm.NewOrm()
-	v := Users{Id: id}
+	v := Users{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Users{Id: id}); err == nil {
+		if num, err = o.Delete(&Users{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

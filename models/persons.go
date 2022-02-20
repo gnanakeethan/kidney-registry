@@ -6,10 +6,11 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type Person struct {
-	Id                  string        `orm:"column(id);pk"`
+	ID                  string        `orm:"column(id);pk"`
 	FirstName           string        `orm:"column(first_name)"`
 	LastName            string        `orm:"column(last_name);null"`
 	Address             string        `orm:"column(address);null"`
@@ -19,7 +20,7 @@ type Person struct {
 	PrimaryRenalDisease string        `orm:"column(primary_renal_disease);null"`
 	Weight              float64       `orm:"column(weight);null"`
 	Height              float64       `orm:"column(height);null"`
-	Gender              Gender        `orm:"column(Gender);null"`
+	Gender              Gender        `orm:"column(gender);null"`
 	MaritalStatus       MaritalStatus `orm:"column(marital_status)"`
 	ContactNo           string        `orm:"column(contact_no);null"`
 	PersonType          PatientType   `orm:"column(person_type);null"`
@@ -36,29 +37,29 @@ func init() {
 }
 
 // AddPersons insert a new Person into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersons(m *Person) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonsById retrieves Person by Id. Returns error if
-// Id doesn't exist
+// GetPersonsById retrieves Person by ID. Returns error if
+// ID doesn't exist
 func GetPersonsById(id string) (v *Person, err error) {
 	o := orm.NewOrm()
-	v = &Person{Id: id}
+	v = &Person{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// UpdatePersons updates Person by Id and returns error if
+// UpdatePersons updates Person by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonsById(m *Person) (err error) {
 	o := orm.NewOrm()
-	v := Person{Id: m.Id}
+	v := Person{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -69,15 +70,15 @@ func UpdatePersonsById(m *Person) (err error) {
 	return
 }
 
-// DeletePersons deletes Person by Id and returns error if
+// DeletePersons deletes Person by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersons(id string) (err error) {
 	o := orm.NewOrm()
-	v := Person{Id: id}
+	v := Person{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Person{Id: id}); err == nil {
+		if num, err = o.Delete(&Person{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
@@ -86,7 +87,12 @@ func DeletePersons(id string) (err error) {
 
 func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limit *int) (*PersonList, error) {
 	person, persons := Person{}, []*Person{}
-	query, currentPage, perPage, preloads := extractQuery(ctx, person, *filter, page, limit)
+	filterPtr := PatientFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, person, filterPtr, page, limit)
+	pretty.Println(preloads)
 	qs, totalItems, err := GetAnyAll(person, query, nil, nil, (currentPage-1)*perPage, perPage)
 	if err != nil {
 		return nil, err

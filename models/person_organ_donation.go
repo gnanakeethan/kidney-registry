@@ -11,7 +11,7 @@ import (
 )
 
 type PersonOrganDonation struct {
-	Id             int       `orm:"column(id);pk"`
+	ID             int       `orm:"column(id);pk"`
 	ReceiverId     *Person   `orm:"column(receiver_id);rel(fk)"`
 	DonorId        *Person   `orm:"column(donor_id);rel(fk)"`
 	DonationType   string    `orm:"column(donation_type)"`
@@ -30,18 +30,18 @@ func init() {
 }
 
 // AddPersonOrganDonation insert a new PersonOrganDonation into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonOrganDonation(m *PersonOrganDonation) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonOrganDonationById retrieves PersonOrganDonation by Id. Returns error if
-// Id doesn't exist
+// GetPersonOrganDonationById retrieves PersonOrganDonation by ID. Returns error if
+// ID doesn't exist
 func GetPersonOrganDonationById(id int) (v *PersonOrganDonation, err error) {
 	o := orm.NewOrm()
-	v = &PersonOrganDonation{Id: id}
+	v = &PersonOrganDonation{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -126,11 +126,11 @@ func GetAllPersonOrganDonation(query map[string]string, fields []string, sortby 
 	return nil, err
 }
 
-// UpdatePersonOrganDonation updates PersonOrganDonation by Id and returns error if
+// UpdatePersonOrganDonation updates PersonOrganDonation by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonOrganDonationById(m *PersonOrganDonation) (err error) {
 	o := orm.NewOrm()
-	v := PersonOrganDonation{Id: m.Id}
+	v := PersonOrganDonation{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -141,15 +141,15 @@ func UpdatePersonOrganDonationById(m *PersonOrganDonation) (err error) {
 	return
 }
 
-// DeletePersonOrganDonation deletes PersonOrganDonation by Id and returns error if
+// DeletePersonOrganDonation deletes PersonOrganDonation by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonOrganDonation(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonOrganDonation{Id: id}
+	v := PersonOrganDonation{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonOrganDonation{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonOrganDonation{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Examinations struct {
-	Id        int    `orm:"column(id);pk"`
+	ID        int    `orm:"column(id);pk"`
 	Details   string `orm:"column(details);null"`
 	Procedure string `orm:"column(procedure);null"`
 }
@@ -24,18 +24,18 @@ func init() {
 }
 
 // AddExaminations insert a new Examinations into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddExaminations(m *Examinations) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetExaminationsById retrieves Examinations by Id. Returns error if
-// Id doesn't exist
+// GetExaminationsById retrieves Examinations by ID. Returns error if
+// ID doesn't exist
 func GetExaminationsById(id int) (v *Examinations, err error) {
 	o := orm.NewOrm()
-	v = &Examinations{Id: id}
+	v = &Examinations{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -96,7 +96,7 @@ func GetAllExaminations(query map[string]string, fields []string, sortby []strin
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []Examinations
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -120,11 +120,11 @@ func GetAllExaminations(query map[string]string, fields []string, sortby []strin
 	return nil, err
 }
 
-// UpdateExaminations updates Examinations by Id and returns error if
+// UpdateExaminations updates Examinations by ID and returns error if
 // the record to be updated doesn't exist
 func UpdateExaminationsById(m *Examinations) (err error) {
 	o := orm.NewOrm()
-	v := Examinations{Id: m.Id}
+	v := Examinations{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -135,15 +135,15 @@ func UpdateExaminationsById(m *Examinations) (err error) {
 	return
 }
 
-// DeleteExaminations deletes Examinations by Id and returns error if
+// DeleteExaminations deletes Examinations by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteExaminations(id int) (err error) {
 	o := orm.NewOrm()
-	v := Examinations{Id: id}
+	v := Examinations{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Examinations{Id: id}); err == nil {
+		if num, err = o.Delete(&Examinations{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

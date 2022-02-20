@@ -6,14 +6,31 @@ package resolvers
 import (
 	"context"
 	"fmt"
-	
+	"time"
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
-	
-	panic(fmt.Errorf("not implemented"))
+	person := &models.Person{
+		ID:            ksuid.New().String(),
+		DateOfBirth:   time.Time{},
+		Gender:        "N/A",
+		MaritalStatus: "N/A",
+		PersonType:    "PATIENT",
+		Status:        "INACTIVE",
+		RecordStatus:  "DRAFT",
+		Phn:           ksuid.New().String(),
+	}
+	if _, err := models.AddPersons(person); err == nil {
+		return person, nil
+	} else {
+		return nil, err
+	}
+
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {

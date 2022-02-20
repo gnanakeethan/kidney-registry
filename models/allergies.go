@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Allergies struct {
-	Id               int    `orm:"column(id);pk"`
+	ID               int    `orm:"column(id);pk"`
 	Allergy          string `orm:"column(allergy);null"`
 	Description      string `orm:"column(description);null"`
 	Conditions       string `orm:"column(conditions);null"`
@@ -27,18 +27,18 @@ func init() {
 }
 
 // AddAllergies insert a new Allergies into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddAllergies(m *Allergies) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetAllergiesById retrieves Allergies by Id. Returns error if
-// Id doesn't exist
+// GetAllergiesById retrieves Allergies by ID. Returns error if
+// ID doesn't exist
 func GetAllergiesById(id int) (v *Allergies, err error) {
 	o := orm.NewOrm()
-	v = &Allergies{Id: id}
+	v = &Allergies{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -99,7 +99,7 @@ func GetAllAllergies(query map[string]string, fields []string, sortby []string, 
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []Allergies
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -123,11 +123,11 @@ func GetAllAllergies(query map[string]string, fields []string, sortby []string, 
 	return nil, err
 }
 
-// UpdateAllergies updates Allergies by Id and returns error if
+// UpdateAllergies updates Allergies by ID and returns error if
 // the record to be updated doesn't exist
 func UpdateAllergiesById(m *Allergies) (err error) {
 	o := orm.NewOrm()
-	v := Allergies{Id: m.Id}
+	v := Allergies{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -138,15 +138,15 @@ func UpdateAllergiesById(m *Allergies) (err error) {
 	return
 }
 
-// DeleteAllergies deletes Allergies by Id and returns error if
+// DeleteAllergies deletes Allergies by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteAllergies(id int) (err error) {
 	o := orm.NewOrm()
-	v := Allergies{Id: id}
+	v := Allergies{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Allergies{Id: id}); err == nil {
+		if num, err = o.Delete(&Allergies{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

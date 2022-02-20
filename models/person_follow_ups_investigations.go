@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type PersonFollowUpsInvestigations struct {
-	Id              int              `orm:"column(id);pk"`
+	ID              int              `orm:"column(id);pk"`
 	Description     string           `orm:"column(description)"`
 	Details         string           `orm:"column(details);null"`
 	Results         string           `orm:"column(results);null"`
@@ -28,18 +28,18 @@ func init() {
 }
 
 // AddPersonFollowUpsInvestigations insert a new PersonFollowUpsInvestigations into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddPersonFollowUpsInvestigations(m *PersonFollowUpsInvestigations) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsInvestigationsById retrieves PersonFollowUpsInvestigations by Id. Returns error if
-// Id doesn't exist
+// GetPersonFollowUpsInvestigationsById retrieves PersonFollowUpsInvestigations by ID. Returns error if
+// ID doesn't exist
 func GetPersonFollowUpsInvestigationsById(id int) (v *PersonFollowUpsInvestigations, err error) {
 	o := orm.NewOrm()
-	v = &PersonFollowUpsInvestigations{Id: id}
+	v = &PersonFollowUpsInvestigations{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -100,7 +100,7 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []PersonFollowUpsInvestigations
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -124,11 +124,11 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 	return nil, err
 }
 
-// UpdatePersonFollowUpsInvestigations updates PersonFollowUpsInvestigations by Id and returns error if
+// UpdatePersonFollowUpsInvestigations updates PersonFollowUpsInvestigations by ID and returns error if
 // the record to be updated doesn't exist
 func UpdatePersonFollowUpsInvestigationsById(m *PersonFollowUpsInvestigations) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUpsInvestigations{Id: m.Id}
+	v := PersonFollowUpsInvestigations{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -139,15 +139,15 @@ func UpdatePersonFollowUpsInvestigationsById(m *PersonFollowUpsInvestigations) (
 	return
 }
 
-// DeletePersonFollowUpsInvestigations deletes PersonFollowUpsInvestigations by Id and returns error if
+// DeletePersonFollowUpsInvestigations deletes PersonFollowUpsInvestigations by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonFollowUpsInvestigations(id int) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUpsInvestigations{Id: id}
+	v := PersonFollowUpsInvestigations{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonFollowUpsInvestigations{Id: id}); err == nil {
+		if num, err = o.Delete(&PersonFollowUpsInvestigations{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

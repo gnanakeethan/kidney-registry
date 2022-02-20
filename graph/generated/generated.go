@@ -104,7 +104,7 @@ type ComplexityRoot struct {
 		FollowUps           func(childComplexity int) int
 		Gender              func(childComplexity int) int
 		Height              func(childComplexity int) int
-		Id                  func(childComplexity int) int
+		ID                  func(childComplexity int) int
 		LastName            func(childComplexity int) int
 		MaritalStatus       func(childComplexity int) int
 		PersonType          func(childComplexity int) int
@@ -431,11 +431,11 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		return e.complexity.Person.Height(childComplexity), true
 
 	case "Person.ID":
-		if e.complexity.Person.Id == nil {
+		if e.complexity.Person.ID == nil {
 			break
 		}
 
-		return e.complexity.Person.Id(childComplexity), true
+		return e.complexity.Person.ID(childComplexity), true
 
 	case "Person.LastName":
 		if e.complexity.Person.LastName == nil {
@@ -1958,7 +1958,7 @@ func (ec *executionContext) _Person_ID(ctx context.Context, field graphql.Collec
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Id, nil
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)

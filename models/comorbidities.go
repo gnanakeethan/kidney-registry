@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Comorbidities struct {
-	Id          int    `orm:"column(id);pk"`
+	ID          int    `orm:"column(id);pk"`
 	Comorbidity string `orm:"column(comorbidity);null"`
 	Description string `orm:"column(description);null"`
 }
@@ -24,18 +24,18 @@ func init() {
 }
 
 // AddComorbidities insert a new Comorbidities into database and returns
-// last inserted Id on success.
+// last inserted ID on success.
 func AddComorbidities(m *Comorbidities) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetComorbiditiesById retrieves Comorbidities by Id. Returns error if
-// Id doesn't exist
+// GetComorbiditiesById retrieves Comorbidities by ID. Returns error if
+// ID doesn't exist
 func GetComorbiditiesById(id int) (v *Comorbidities, err error) {
 	o := orm.NewOrm()
-	v = &Comorbidities{Id: id}
+	v = &Comorbidities{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
@@ -96,7 +96,7 @@ func GetAllComorbidities(query map[string]string, fields []string, sortby []stri
 			return nil, errors.New("Error: unused 'order' fields")
 		}
 	}
-
+	
 	var l []Comorbidities
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
@@ -120,11 +120,11 @@ func GetAllComorbidities(query map[string]string, fields []string, sortby []stri
 	return nil, err
 }
 
-// UpdateComorbidities updates Comorbidities by Id and returns error if
+// UpdateComorbidities updates Comorbidities by ID and returns error if
 // the record to be updated doesn't exist
 func UpdateComorbiditiesById(m *Comorbidities) (err error) {
 	o := orm.NewOrm()
-	v := Comorbidities{Id: m.Id}
+	v := Comorbidities{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -135,15 +135,15 @@ func UpdateComorbiditiesById(m *Comorbidities) (err error) {
 	return
 }
 
-// DeleteComorbidities deletes Comorbidities by Id and returns error if
+// DeleteComorbidities deletes Comorbidities by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteComorbidities(id int) (err error) {
 	o := orm.NewOrm()
-	v := Comorbidities{Id: id}
+	v := Comorbidities{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Comorbidities{Id: id}); err == nil {
+		if num, err = o.Delete(&Comorbidities{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
