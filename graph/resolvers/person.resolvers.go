@@ -29,12 +29,10 @@ func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, erro
 	} else {
 		return nil, err
 	}
-	
-	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {
-	return nil, nil
+	return models.UpdatePatient(input)
 }
 
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {

@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
@@ -106,3 +107,40 @@ func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limi
 		Pagination: pagination,
 	}, nil
 }
+
+func UpdatePatient(input *PatientInput) (*Person, error) {
+	dateOfBirth, _ := time.Parse(time.RFC3339, input.DateOfBirth)
+	person := &Person{
+		ID:                  input.ID,
+		DateOfBirth:         dateOfBirth,
+		Gender:              input.Gender,
+		MaritalStatus:       input.MaritalStatus,
+		PersonType:          input.PersonType,
+		Status:              input.Status,
+		RecordStatus:        input.RecordStatus,
+		Phn:                 time.Now().Format("20060102") + randString(8),
+		FirstName:           input.FirstName,
+		LastName:            input.LastName,
+		Address:             input.Address,
+		Ethnicity:           input.Ethnicity,
+		PrimaryRenalDisease: input.PrimaryRenalDisease,
+		Weight:              input.Weight,
+		Height:              input.Height,
+		ContactNo:           input.ContactNo,
+	}
+	if err := UpdatePersonsById(person); err == nil {
+		return person, nil
+	} else {
+		return nil, err
+	}
+}
+
+func randString(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+}
+
+var letterRunes = []rune("1234567890")
