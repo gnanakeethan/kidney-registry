@@ -69,7 +69,7 @@ input PatientFilter {
     PrimaryRenalDisease    : StringFilter
     Weight                 : FloatFilter
     Height                 : FloatFilter
-    Gender                    : StringFilter
+    Gender                 : StringFilter
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
@@ -80,22 +80,22 @@ input PatientFilter {
 }
 
 input PatientInput {
-    ID                     : ID
-    FirstName              : String
-    LastName               : String
-    Address                : String
-    DateOfBirth            : String
-    Ethnicity              : String
-    Phn                    : String
-    PrimaryRenalDisease    : String
-    Weight                 : Float
-    Height                 : Float
-    Gender                 : Gender
-    MaritalStatus          : MaritalStatus
-    ContactNo              : String
-    PersonType             : PatientType
-    Status                 : PatientStatus
-    RecordStatus           : RecordStatus
+    ID                     : ID!
+    FirstName              : String!
+    LastName               : String!
+    Address                : String!
+    DateOfBirth            : String!
+    Ethnicity              : String!
+    Phn                    : String!
+    PrimaryRenalDisease    : String!
+    Weight                 : Float!
+    Height                 : Float!
+    Gender                 : Gender!
+    MaritalStatus          : MaritalStatus!
+    ContactNo              : String!
+    PersonType             : PatientType!
+    Status                 : PatientStatus!
+    RecordStatus           : RecordStatus!
 }
 
 extend type Query {

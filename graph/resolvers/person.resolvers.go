@@ -5,12 +5,12 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -22,19 +22,19 @@ func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, erro
 		PersonType:    "PATIENT",
 		Status:        "INACTIVE",
 		RecordStatus:  "DRAFT",
-		Phn:           ksuid.New().String(),
+		Phn:           time.Now().Format("20060102") + randString(8),
 	}
-	if _, err := models.AddPersons(person); err == nil {
+	if _, err := models.AddPersons(person); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
 		return person, nil
 	} else {
 		return nil, err
 	}
-
+	
 	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {
-	panic(fmt.Errorf("not implemented"))
+	return nil, nil
 }
 
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {

@@ -87,22 +87,22 @@ type PatientFilter struct {
 }
 
 type PatientInput struct {
-	ID                  *string        `json:"ID"`
-	FirstName           *string        `json:"FirstName"`
-	LastName            *string        `json:"LastName"`
-	Address             *string        `json:"Address"`
-	DateOfBirth         *string        `json:"DateOfBirth"`
-	Ethnicity           *string        `json:"Ethnicity"`
-	Phn                 *string        `json:"Phn"`
-	PrimaryRenalDisease *string        `json:"PrimaryRenalDisease"`
-	Weight              *float64       `json:"Weight"`
-	Height              *float64       `json:"Height"`
-	Gender              *Gender        `json:"Gender"`
-	MaritalStatus       *MaritalStatus `json:"MaritalStatus"`
-	ContactNo           *string        `json:"ContactNo"`
-	PersonType          *PatientType   `json:"PersonType"`
-	Status              *PatientStatus `json:"Status"`
-	RecordStatus        *RecordStatus  `json:"RecordStatus"`
+	ID                  string        `json:"ID"`
+	FirstName           string        `json:"FirstName"`
+	LastName            string        `json:"LastName"`
+	Address             string        `json:"Address"`
+	DateOfBirth         string        `json:"DateOfBirth"`
+	Ethnicity           string        `json:"Ethnicity"`
+	Phn                 string        `json:"Phn"`
+	PrimaryRenalDisease string        `json:"PrimaryRenalDisease"`
+	Weight              float64       `json:"Weight"`
+	Height              float64       `json:"Height"`
+	Gender              Gender        `json:"Gender"`
+	MaritalStatus       MaritalStatus `json:"MaritalStatus"`
+	ContactNo           string        `json:"ContactNo"`
+	PersonType          PatientType   `json:"PersonType"`
+	Status              PatientStatus `json:"Status"`
+	RecordStatus        RecordStatus  `json:"RecordStatus"`
 }
 
 type PersonList struct {

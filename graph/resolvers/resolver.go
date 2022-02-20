@@ -18,7 +18,7 @@ type Resolver struct {
 	mu        sync.Mutex
 }
 
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+var letterRunes = []rune("1234567890")
 
 func randString(n int) string {
 	b := make([]rune, n)
