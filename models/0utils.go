@@ -165,7 +165,7 @@ func GetPreloadString(prefix, name string) string {
 	return name
 }
 
-// Gets any type of object and destructures query. 
+// Gets any type of object and destructures query.
 func GetAnyAll(object interface{}, query *orm.Condition, sortby []string, order []string,
 	offset int64, limit int64) (qs orm.QuerySeter, totalItems int64, err error) {
 	o := orm.NewOrm()
