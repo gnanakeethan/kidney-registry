@@ -2,10 +2,13 @@ package resolvers
 
 //go:generate go run github.com/99designs/gqlgen generate
 import (
+	"context"
 	"math/rand"
 	"reflect"
+	"strings"
 	"sync"
 	
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/kr/pretty"
 	
@@ -101,7 +104,6 @@ func extractFilter(filterInterface interface{}) *orm.Condition {
 			}
 		}
 	}
-	pretty.Println(condition)
 	return condition
 }
 
@@ -112,4 +114,44 @@ func StringInSlice(a string, list []string) bool {
 		}
 	}
 	return false
+}
+func GetPreloads(ctx context.Context, object interface{}) []string {
+	fields := GetNestedPreloads(
+		graphql.GetOperationContext(ctx),
+		graphql.CollectFieldsCtx(ctx, nil),
+		"",
+	)
+	fieldsFiltered := []string{}
+	visibleFieldsStructs := reflect.VisibleFields(reflect.TypeOf(object))
+	visibleFields := []string{}
+	for _, i := range visibleFieldsStructs {
+		visibleFields = append(visibleFields, i.Name)
+	}
+	for _, i := range fields {
+		if strings.Count(i, ".") == 1 {
+			i = strings.Split(i, ".")[1]
+			if StringInSlice(i, visibleFields) {
+				fieldsFiltered = append(fieldsFiltered, i)
+			}
+		}
+	}
+	return fieldsFiltered
+}
+
+func GetNestedPreloads(ctx *graphql.OperationContext, fields []graphql.CollectedField, prefix string) (preloads []string) {
+	for _, column := range fields {
+		prefixColumn := GetPreloadString(prefix, column.Name)
+		if !strings.Contains(prefixColumn, "pagination") {
+			preloads = append(preloads, prefixColumn)
+			preloads = append(preloads, GetNestedPreloads(ctx, graphql.CollectFields(ctx, column.Selections, nil), prefixColumn)...)
+		}
+	}
+	return
+}
+
+func GetPreloadString(prefix, name string) string {
+	if len(prefix) > 0 {
+		return prefix + "." + name
+	}
+	return name
 }

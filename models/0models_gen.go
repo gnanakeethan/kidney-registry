@@ -25,6 +25,21 @@ type FloatFilter struct {
 	Value      *float64       `json:"value"`
 }
 
+type FollowUp struct {
+	ID            *string `json:"ID"`
+	ClinicNo      *string `json:"ClinicNo"`
+	Description   *string `json:"Description"`
+	Person        *Person `json:"Person"`
+	Complaints    *string `json:"Complaints"`
+	RenalBiopsies *string `json:"RenalBiopsies"`
+	CaseStatus    *string `json:"CaseStatus"`
+}
+
+type FollowUpList struct {
+	FollowUps  []*FollowUp `json:"followUps"`
+	Pagination *Pagination `json:"pagination"`
+}
+
 type IntFilter struct {
 	Comparison ComparisonType `json:"comparison"`
 	And        *IntFilter     `json:"and"`

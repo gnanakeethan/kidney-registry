@@ -16,17 +16,22 @@ func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*
 	return nil, nil
 }
 
+func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person) (*models.FollowUpList, error) {
+	return nil, nil
+}
+
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error) {
 	query := extractFilter(*filter)
 	currentPage := int64(1)
 	perPage := int64(15)
+	preloads := GetPreloads(ctx, models.Person{})
 	if page != nil {
 		currentPage = int64(*page)
 	}
 	if limit != nil {
 		perPage = int64(*limit)
 	}
-	persons, totalItems, err := models.GetAllPersons(query, nil, nil, nil, (currentPage-1)*perPage, perPage)
+	persons, totalItems, err := models.GetAllPersons(query, preloads, nil, nil, (currentPage-1)*perPage, perPage)
 	prevPage := 0
 	if int(totalItems/perPage) > int(currentPage) {
 		prevPage = int(currentPage - 1)

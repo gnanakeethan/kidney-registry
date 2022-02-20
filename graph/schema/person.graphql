@@ -13,6 +13,20 @@ type Person {
     MaritalStatus          : String
     ContactNo              : String
     PersonType             : String
+    followUps              : FollowUpList
+}
+type FollowUpList {
+    followUps: [FollowUp]
+    pagination: Pagination
+}
+type FollowUp {
+    ID               : ID
+    ClinicNo         : String
+    Description      : String
+    Person           : Person
+    Complaints       : String
+    RenalBiopsies    : String
+    CaseStatus       : String
 }
 type PersonList {
     persons: [Person!]!
