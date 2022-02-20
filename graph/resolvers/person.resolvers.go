@@ -35,6 +35,10 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, input *models.Pati
 	return models.UpdatePatient(input)
 }
 
+func (r *mutationResolver) UpdatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {
+	return models.UpdatePatient(input)
+}
+
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {
 	return nil, nil
 }

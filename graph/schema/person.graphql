@@ -104,6 +104,5 @@ extend type Query {
 
 extend type Mutation {
     newPatient: Person!
-    createPatient(input:PatientInput) : Person!
     updatePatient(input:PatientInput) : Person!
 }
