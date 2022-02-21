@@ -12,6 +12,8 @@ export interface DataSource<T> {
 
 	goToNextPage(filter: object): Promise<OperationResult<T>>;
 
+	gotoPage(filter: object, page: number): Promise<OperationResult<T>>;
+
 	goToPrevPage(filter: object): Promise<OperationResult<T>>;
 
 	goToLastPage(filter: object): Promise<OperationResult<T>>;

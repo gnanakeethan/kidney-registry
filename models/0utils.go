@@ -19,11 +19,11 @@ func PointerToString(medications *string) string {
 }
 func getPagination(currentPage int64, totalItems int64, perPage int64) *Pagination {
 	prevPage := 0
-	if int(totalItems/perPage) > int(currentPage) {
+	if currentPage > 0 {
 		prevPage = int(currentPage - 1)
 	}
 	nextPage := 0
-	if int(currentPage+1) <= int(totalItems/perPage) {
+	if int(currentPage) <= int(totalItems/perPage) {
 		nextPage = int(currentPage + 1)
 	}
 	pagination := &Pagination{

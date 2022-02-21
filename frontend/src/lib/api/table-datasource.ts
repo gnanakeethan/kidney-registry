@@ -10,18 +10,17 @@ export class DataSourceConnector<T> implements DataSource<T> {
 	prevPage: number;
 	totalPages = 2;
 	currentRows: Promise<OperationResult<T>>;
+	pagination = {};
 
 	constructor(private queryRepository: QueryRepository<T>, private query: DocumentNode) {}
 
 	loadCurrentPage(filter: object): Promise<OperationResult<T>> {
-		console.log('LOAD CURRENT PAGE', filter);
 		this.currentRows = this.queryRepository.getItems(
 			this.query,
 			filter,
 			this.currentPage,
 			this.perPage
 		);
-		console.log(this.currentRows);
 		return this.currentRows;
 	}
 
@@ -37,6 +36,13 @@ export class DataSourceConnector<T> implements DataSource<T> {
 			this.totalPages,
 			this.perPage
 		);
+		return this.currentRows;
+	}
+
+	gotoPage(filter: object, page: number): Promise<OperationResult<T>> {
+		this.currentPage = page;
+		console.log(page);
+		this.currentRows = this.queryRepository.getItems(this.query, filter, page, this.perPage);
 		return this.currentRows;
 	}
 

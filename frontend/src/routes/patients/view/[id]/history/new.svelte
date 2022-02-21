@@ -57,14 +57,46 @@
 				},
 				extra: {
 					options: [
-						{ key: 'COMPLAINT', title: 'Complaint' },
-						{ key: 'MEDICAL', title: 'Medical' },
-						{ key: 'SURGICAL', title: 'Surgical' },
-						{ key: 'SOCIAL', title: 'Social' }
+						{ value: 'COMPLAINT', title: 'Complaint' },
+						{ value: 'MEDICAL', title: 'Medical' },
+						{ value: 'SURGICAL', title: 'Surgical' },
+						{ value: 'SOCIAL', title: 'Social' }
 					]
-				}, // optional
-				rules: [] // optional
+				} // optional
 			},
+			{
+				type: 'input',
+				name: 'StartDate',
+				value: '',
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'date',
+					label: 'Date of Birth',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
+			},
+			{
+				type: 'input',
+				name: 'EndDate',
+				value: '',
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'date',
+					label: 'Date of Birth',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
+			},
+
 			{
 				type: 'textarea', // required
 				name: 'Reason', // required

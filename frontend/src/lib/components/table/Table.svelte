@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Pagination } from '$lib/graphql/generated';
 	import { onMount } from 'svelte';
 
 	export let columns = [];
@@ -12,15 +13,22 @@
 	export let rootAccessPath = '';
 	export let currentRows = [];
 	export let loading = true;
+	export let pagination: Pagination = null;
 	export let selectedRows = [];
-	$: {
-		let accessPath = rootAccessPath.split('.');
-		console.log(accessPath);
-		console.log('DTSource', dtSource);
+	let accessPath = rootAccessPath.split('.');
+	console.log(accessPath);
+	console.log('DTSource', dtSource);
+	// loadUp();
+	$: gotoPage(currentPage);
+
+	function loadUp() {
 		dtSource.currentRows.then((data) => {
 			for (let i = 0; i < accessPath.length; i++) {
 				console.log(data);
 				if (data !== undefined && data !== null && data[accessPath[i]] !== undefined) {
+					if (data['pagination'] !== undefined) {
+						pagination = data['pagination'];
+					}
 					data = data[accessPath[i]];
 					currentRows = data;
 				} else {
@@ -30,6 +38,7 @@
 			loading = false;
 		});
 	}
+
 	$: activeColumns = columns.filter((i) => {
 		return displayedColumns.includes(i.key);
 	});
@@ -46,11 +55,12 @@
 		});
 	}
 
-	function nextPage() {
-		//console.log(dtSource);
+	function gotoPage(page: number) {
+		console.log('PAGE', page);
 		if (dtSource !== null) {
 			loading = true;
-			dtSource.goToNextPage();
+			dtSource.gotoPage(filters, page);
+			loadUp();
 		}
 	}
 
@@ -133,5 +143,12 @@
 		{/if}
 	</tbody>
 </table>
-{#if loading}Loading{/if}
-<button on:click={nextPage}>Next</button>
+<!--{JSON.stringify(pagination)}-->
+{#if pagination}
+	{#if pagination.prevPage > 0}
+		<button class="m-4 bg-green-400 p-4" on:click={gotoPage(pagination.prevPage)}>Prev</button>
+	{/if}
+	{#if pagination.nextPage > 0}
+		<button class="m-4 bg-green-400 p-4" on:click={gotoPage(pagination.nextPage)}>Next</button>
+	{/if}
+{/if}
