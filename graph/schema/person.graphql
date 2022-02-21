@@ -22,29 +22,28 @@ enum Gender {
     MALE
     FEMALE
     OTHER
-    N_A
+    NA
 }
 enum MaritalStatus {
     SINGLE
     MARRIED
     DIVORCED
-    N_A
+    NA
 }
 enum PatientType {
     DONOR
     RECIPIENT
-    N_A
+    NA
 }
 enum PatientStatus {
     ACTIVE
     INACTIVE
-    N_A
+    NA
 }
 enum RecordStatus {
     DRAFT
     PUBLISHED
     REMOVED
-    N_A
 }
 type FollowUpList {
     followUps: [FollowUp]

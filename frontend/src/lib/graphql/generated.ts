@@ -67,7 +67,7 @@ export type FollowUpList = {
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
-  NA = 'N_A',
+  Na = 'NA',
   Other = 'OTHER'
 }
 
@@ -81,7 +81,7 @@ export type IntFilter = {
 export enum MaritalStatus {
   Divorced = 'DIVORCED',
   Married = 'MARRIED',
-  NA = 'N_A',
+  Na = 'NA',
   Single = 'SINGLE'
 }
 
@@ -167,12 +167,12 @@ export type PatientInput = {
 export enum PatientStatus {
   Active = 'ACTIVE',
   Inactive = 'INACTIVE',
-  NA = 'N_A'
+  Na = 'NA'
 }
 
 export enum PatientType {
   Donor = 'DONOR',
-  NA = 'N_A',
+  Na = 'NA',
   Recipient = 'RECIPIENT'
 }
 
@@ -233,7 +233,6 @@ export type QueryUsersArgs = {
 
 export enum RecordStatus {
   Draft = 'DRAFT',
-  NA = 'N_A',
   Published = 'PUBLISHED',
   Removed = 'REMOVED'
 }

@@ -205,19 +205,19 @@ const (
 	GenderMale   Gender = "MALE"
 	GenderFemale Gender = "FEMALE"
 	GenderOther  Gender = "OTHER"
-	GenderNA     Gender = "N_A"
+	GenderNa     Gender = "NA"
 )
 
 var AllGender = []Gender{
 	GenderMale,
 	GenderFemale,
 	GenderOther,
-	GenderNA,
+	GenderNa,
 }
 
 func (e Gender) IsValid() bool {
 	switch e {
-	case GenderMale, GenderFemale, GenderOther, GenderNA:
+	case GenderMale, GenderFemale, GenderOther, GenderNa:
 		return true
 	}
 	return false
@@ -250,19 +250,19 @@ const (
 	MaritalStatusSingle   MaritalStatus = "SINGLE"
 	MaritalStatusMarried  MaritalStatus = "MARRIED"
 	MaritalStatusDivorced MaritalStatus = "DIVORCED"
-	MaritalStatusNA       MaritalStatus = "N_A"
+	MaritalStatusNa       MaritalStatus = "NA"
 )
 
 var AllMaritalStatus = []MaritalStatus{
 	MaritalStatusSingle,
 	MaritalStatusMarried,
 	MaritalStatusDivorced,
-	MaritalStatusNA,
+	MaritalStatusNa,
 }
 
 func (e MaritalStatus) IsValid() bool {
 	switch e {
-	case MaritalStatusSingle, MaritalStatusMarried, MaritalStatusDivorced, MaritalStatusNA:
+	case MaritalStatusSingle, MaritalStatusMarried, MaritalStatusDivorced, MaritalStatusNa:
 		return true
 	}
 	return false
@@ -294,18 +294,18 @@ type PatientStatus string
 const (
 	PatientStatusActive   PatientStatus = "ACTIVE"
 	PatientStatusInactive PatientStatus = "INACTIVE"
-	PatientStatusNA       PatientStatus = "N_A"
+	PatientStatusNa       PatientStatus = "NA"
 )
 
 var AllPatientStatus = []PatientStatus{
 	PatientStatusActive,
 	PatientStatusInactive,
-	PatientStatusNA,
+	PatientStatusNa,
 }
 
 func (e PatientStatus) IsValid() bool {
 	switch e {
-	case PatientStatusActive, PatientStatusInactive, PatientStatusNA:
+	case PatientStatusActive, PatientStatusInactive, PatientStatusNa:
 		return true
 	}
 	return false
@@ -337,18 +337,18 @@ type PatientType string
 const (
 	PatientTypeDonor     PatientType = "DONOR"
 	PatientTypeRecipient PatientType = "RECIPIENT"
-	PatientTypeNA        PatientType = "N_A"
+	PatientTypeNa        PatientType = "NA"
 )
 
 var AllPatientType = []PatientType{
 	PatientTypeDonor,
 	PatientTypeRecipient,
-	PatientTypeNA,
+	PatientTypeNa,
 }
 
 func (e PatientType) IsValid() bool {
 	switch e {
-	case PatientTypeDonor, PatientTypeRecipient, PatientTypeNA:
+	case PatientTypeDonor, PatientTypeRecipient, PatientTypeNa:
 		return true
 	}
 	return false
@@ -381,19 +381,17 @@ const (
 	RecordStatusDraft     RecordStatus = "DRAFT"
 	RecordStatusPublished RecordStatus = "PUBLISHED"
 	RecordStatusRemoved   RecordStatus = "REMOVED"
-	RecordStatusNA        RecordStatus = "N_A"
 )
 
 var AllRecordStatus = []RecordStatus{
 	RecordStatusDraft,
 	RecordStatusPublished,
 	RecordStatusRemoved,
-	RecordStatusNA,
 }
 
 func (e RecordStatus) IsValid() bool {
 	switch e {
-	case RecordStatusDraft, RecordStatusPublished, RecordStatusRemoved, RecordStatusNA:
+	case RecordStatusDraft, RecordStatusPublished, RecordStatusRemoved:
 		return true
 	}
 	return false
