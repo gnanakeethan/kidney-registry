@@ -24,25 +24,6 @@ query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int){
         }
     }
 }
-fragment PersonFields on Person {
-    ID
-    FirstName
-    LastName
-    Address
-    DateOfBirth
-    Ethnicity
-    Phn
-    PrimaryRenalDisease
-    Weight
-    Height
-    Gender
-    MaritalStatus
-    ContactNo
-    PersonType
-    Status
-    RecordStatus
-    Age
-}
 
 query GetPatient ($id: ID!){
     getPatient(ID: $id) {
@@ -59,6 +40,17 @@ query ListPeople ($filter: UserListFilter,$perPage: Int) {
         pagination {
             itemsPerPage
             totalItems
+        }
+    }
+}
+
+query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $page: Int, $limit: Int){
+    listPersonMedicalHistories(PersonID: $ID,filter:$filter,page: $page,limit: $limit) {
+        pagination {
+            ...Pagination
+        }
+        histories {
+            ...PersonMedicalHistoryFields
         }
     }
 }

@@ -57,9 +57,12 @@ type PersonList {
     persons: [Person!]!
     pagination: Pagination
 }
-
+input PersonComparison {
+    comparison: ComparisonType!
+    value: String
+}
 input PersonFilter {
-    ID                     : ID
+    ID                     : StringFilter
     FirstName              : StringFilter
     LastName               : StringFilter
     Address                : StringFilter

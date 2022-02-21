@@ -37,7 +37,7 @@ func getPagination(currentPage int64, totalItems int64, perPage int64) *Paginati
 }
 
 func extractQuery(ctx context.Context, object, filter interface{}, page *int, limit *int) (*orm.Condition, int64, int64, []string) {
-	query := extractFilter(filter)
+	query := extractFilter("", filter)
 	currentPage := int64(1)
 	perPage := int64(15)
 	preloads := GetPreloads(ctx, object)
@@ -50,7 +50,7 @@ func extractQuery(ctx context.Context, object, filter interface{}, page *int, li
 	return query, currentPage, perPage, preloads
 }
 
-func extractFilter(filterInterface interface{}) *orm.Condition {
+func extractFilter(prefix string, filterInterface interface{}) *orm.Condition {
 	filter := &filterInterface
 	condition := orm.NewCondition()
 	if filter != nil {
@@ -58,61 +58,69 @@ func extractFilter(filterInterface interface{}) *orm.Condition {
 		v := reflect.ValueOf(*filter)
 		for _, j := range fields {
 			fieldValInterface := v.FieldByName(j.Name).Interface()
+			pretty.Println(j.Name, fieldValInterface)
 			if fieldValInterface != nil {
 				fieldVal := reflect.ValueOf(fieldValInterface).Elem()
 				if fieldVal.IsValid() {
-					comparision := fieldVal.FieldByName("Comparison").String()
-					pretty.Println(j.Name)
+					objectModel := false
+					comparison := "EQUAL"
+					pretty.Println("TYPE", fieldVal.Type().String())
+					pretty.Println("INTERFACE", fieldVal.Interface())
+					fieldValType := fieldVal.Type().String()
+					if StringInSlice(fieldValType, []string{"models.StringFilter", "models.FloatFilter", "models.IntFilter"}) {
+						objectModel = true
+					}
 					if StringInSlice(j.Name, []string{"And", "Or", "AndNot", "OrNot"}) {
-						pretty.Println(fieldVal.Interface())
 						switch j.Name {
 						case "Or":
-							condition = condition.OrCond(extractFilter(fieldVal.Interface()))
+							condition = condition.OrCond(extractFilter("", fieldVal.Interface()))
 						case "OrNot":
-							condition = condition.OrNotCond(extractFilter(fieldVal.Interface()))
+							condition = condition.OrNotCond(extractFilter("", fieldVal.Interface()))
 						case "And":
-							condition = condition.AndCond(extractFilter(fieldVal.Interface()))
+							condition = condition.AndCond(extractFilter("", fieldVal.Interface()))
 						case "AndNot":
-							condition = condition.AndNotCond(extractFilter(fieldVal.Interface()))
+							condition = condition.AndNotCond(extractFilter("", fieldVal.Interface()))
 						}
-					} else {
-						switch comparision {
+						
+					} else if objectModel {
+						switch comparison {
 						case "EQUAL":
-							condition = condition.And(j.Name, fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "NOT_EQUAL":
-							condition = condition.AndNot(j.Name, fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.AndNot(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "GREATER_THAN":
-							condition = condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "GREATER_THAN_OR_EQUAL":
-							condition = condition.And(j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "LESS_THAN":
-							condition = condition.And(j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "LESS_THAN_OR_EQUAL":
-							condition = condition.And(j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "BETWEEN":
-							// condition.And(j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
-							// condition.And(j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
 							// condition[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
 							break
 						case "CONTAINS":
-							condition = condition.And(j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "ICONTAINS":
-							condition = condition.And(j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "STARTS_WITH":
-							condition = condition.And(j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
 							break
 						case "ENDS_WITH":
-							condition = condition.And(j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
+							condition = condition.And(prefix+j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
 							break
 						}
+					} else {
+						pretty.Println("PULLING IN", fieldVal.Interface())
+						condition = condition.AndCond(extractFilter(j.Name+"__", fieldVal.Interface()))
 					}
 				}
 				

@@ -9,14 +9,14 @@ type PersonMedicalHistory {
     Type: HistoryType
 }
 input PersonMedicalHistoryFilter {
-    ID: StringFilter
-    Person: PersonFilter
-    Description: StringFilter
-    Reason: StringFilter
-    StartDate: StringFilter
-    EndDate: StringFilter
-    Medications: StringFilter
-    Type: StringFilter
+    ID                     : StringFilter
+    Person                 : PersonFilter
+    Description            : StringFilter
+    Reason                 : StringFilter
+    StartDate              : StringFilter
+    EndDate                : StringFilter
+    Medications            : StringFilter
+    Type                   : StringFilter
     and                    : PersonMedicalHistoryFilter
     andNot                 : PersonMedicalHistoryFilter
     or                     : PersonMedicalHistoryFilter

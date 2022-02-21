@@ -1254,9 +1254,12 @@ type PersonList {
     persons: [Person!]!
     pagination: Pagination
 }
-
+input PersonComparison {
+    comparison: ComparisonType!
+    value: String
+}
 input PersonFilter {
-    ID                     : ID
+    ID                     : StringFilter
     FirstName              : StringFilter
     LastName               : StringFilter
     Address                : StringFilter
@@ -1352,14 +1355,14 @@ extend type Query {
     Type: HistoryType
 }
 input PersonMedicalHistoryFilter {
-    ID: StringFilter
-    Person: PersonFilter
-    Description: StringFilter
-    Reason: StringFilter
-    StartDate: StringFilter
-    EndDate: StringFilter
-    Medications: StringFilter
-    Type: StringFilter
+    ID                     : StringFilter
+    Person                 : PersonFilter
+    Description            : StringFilter
+    Reason                 : StringFilter
+    StartDate              : StringFilter
+    EndDate                : StringFilter
+    Medications            : StringFilter
+    Type                   : StringFilter
     and                    : PersonMedicalHistoryFilter
     andNot                 : PersonMedicalHistoryFilter
     or                     : PersonMedicalHistoryFilter
@@ -6432,6 +6435,37 @@ func (ec *executionContext) unmarshalInputIntFilter(ctx context.Context, obj int
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputPersonComparison(ctx context.Context, obj interface{}) (models.PersonComparison, error) {
+	var it models.PersonComparison
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "comparison":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comparison"))
+			it.Comparison, err = ec.unmarshalNComparisonType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComparisonType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "value":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			it.Value, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputPersonFilter(ctx context.Context, obj interface{}) (models.PersonFilter, error) {
 	var it models.PersonFilter
 	asMap := map[string]interface{}{}
@@ -6445,7 +6479,7 @@ func (ec *executionContext) unmarshalInputPersonFilter(ctx context.Context, obj 
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			it.ID, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}

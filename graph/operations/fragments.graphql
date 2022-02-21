@@ -1,0 +1,40 @@
+fragment Pagination on Pagination {
+    currentPage
+    prevPage
+    nextPage
+    totalItems
+    itemsPerPage
+}
+
+fragment PersonFields on Person {
+    ID
+    FirstName
+    LastName
+    Address
+    DateOfBirth
+    Ethnicity
+    Phn
+    PrimaryRenalDisease
+    Weight
+    Height
+    Gender
+    MaritalStatus
+    ContactNo
+    PersonType
+    Status
+    RecordStatus
+    Age
+}
+
+fragment PersonMedicalHistoryFields on PersonMedicalHistory {
+    ID
+    Person {
+        ID
+    }
+    Description
+    Reason
+    StartDate
+    EndDate
+    Medications
+    Type
+}

@@ -18,9 +18,12 @@
 		console.log(accessPath);
 		let data = dtSource.currentRows.then((data) => {
 			for (let i = 0; i < accessPath.length; i++) {
-				data = data[accessPath[i]];
-				//console.log(data);
-				currentRows = data;
+				if (data !== undefined && data !== null && data[accessPath[i]] !== undefined) {
+					data = data[accessPath[i]];
+					currentRows = data;
+				} else {
+					break;
+				}
 			}
 			loading = false;
 		});

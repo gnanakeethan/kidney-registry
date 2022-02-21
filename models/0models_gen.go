@@ -60,8 +60,13 @@ type Pagination struct {
 	ItemsPerPage int `json:"itemsPerPage"`
 }
 
+type PersonComparison struct {
+	Comparison ComparisonType `json:"comparison"`
+	Value      *string        `json:"value"`
+}
+
 type PersonFilter struct {
-	ID                  *string       `json:"ID"`
+	ID                  *StringFilter `json:"ID"`
 	FirstName           *StringFilter `json:"FirstName"`
 	LastName            *StringFilter `json:"LastName"`
 	Address             *StringFilter `json:"Address"`

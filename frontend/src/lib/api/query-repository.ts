@@ -11,7 +11,18 @@ export class GraphQLQueryRepository<T> implements QueryRepository<T> {
 		console.log(this.client);
 	}
 
-	getItems(queryString: DocumentNode, page: number, perPage: number): Promise<OperationResult<T>> {
-		return this.client.query(queryString, { currentPage: page }).toPromise();
+	getItems(
+		queryString: DocumentNode,
+		filter: object,
+		page: number,
+		perPage: number
+	): Promise<OperationResult<T>> {
+		const finalVar = { currentPage: page, limit: perPage, ID: '25PJP9EI1WWOWFoIQ9ODc5gbCmT' };
+		for (const filterKey in filter) {
+			finalVar[filterKey] = filter[filterKey];
+			console.log(finalVar);
+		}
+		console.log('FINAL VARIABLES', finalVar);
+		return this.client.query(queryString, finalVar).toPromise();
 	}
 }

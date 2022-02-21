@@ -8,13 +8,13 @@ export interface DataSource<T> {
 	perPage: number;
 	currentRows: Promise<OperationResult<T>>;
 
-	loadCurrentPage(): Promise<OperationResult<T>>;
+	loadCurrentPage(filter: object): Promise<OperationResult<T>>;
 
-	goToNextPage(): Promise<OperationResult<T>>;
+	goToNextPage(filter: object): Promise<OperationResult<T>>;
 
-	goToPrevPage(): Promise<OperationResult<T>>;
+	goToPrevPage(filter: object): Promise<OperationResult<T>>;
 
-	goToLastPage(): Promise<OperationResult<T>>;
+	goToLastPage(filter: object): Promise<OperationResult<T>>;
 
-	goToFirstPage(): Promise<OperationResult<T>>;
+	goToFirstPage(filter: object): Promise<OperationResult<T>>;
 }

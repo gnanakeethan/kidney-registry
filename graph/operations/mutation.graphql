@@ -15,61 +15,19 @@ mutation UserLogin ($userLogin:UserLogin!) {
 
 mutation NewPatient {
     newPatient {
-        ID
-        FirstName
-        LastName
-        Address
-        DateOfBirth
-        Ethnicity
-        Phn
-        PrimaryRenalDisease
-        Weight
-        Height
-        Gender
-        MaritalStatus
-        ContactNo
-        PersonType
-        Status
-        RecordStatus
+        ...PersonFields
     }
 }
 
 mutation UpdatePatient($patientInput: PersonInput!) {
     updatePatient(input: $patientInput) {
-        ID
-        FirstName
-        LastName
-        Address
-        DateOfBirth
-        Ethnicity
-        Phn
-        PrimaryRenalDisease
-        Weight
-        Height
-        Gender
-        MaritalStatus
-        ContactNo
-        PersonType
-        Status
-        RecordStatus
+        ...PersonFields
     }
-
 }
 
-fragment MedicalHistory on PersonMedicalHistory {
-    ID
-    Person {
-        ID
-    }
-    Description
-    Reason
-    StartDate
-    EndDate
-    Medications
-    Type
-}
+
 mutation NewHistory($input: PersonMedicalHistoryInput!) {
     createPersonMedicalHistory(input: $input) {
-        ...MedicalHistory
+        ...PersonMedicalHistoryFields
     }
 }

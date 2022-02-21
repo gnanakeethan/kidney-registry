@@ -13,30 +13,47 @@ export class DataSourceConnector<T> implements DataSource<T> {
 
 	constructor(private queryRepository: QueryRepository<T>, private query: DocumentNode) {}
 
-	loadCurrentPage(): Promise<OperationResult<T>> {
-		this.currentRows = this.queryRepository.getItems(this.query, this.currentPage, this.perPage);
+	loadCurrentPage(filter: object): Promise<OperationResult<T>> {
+		console.log('LOAD CURRENT PAGE', filter);
+		this.currentRows = this.queryRepository.getItems(
+			this.query,
+			filter,
+			this.currentPage,
+			this.perPage
+		);
 		return this.currentRows;
 	}
 
-	goToFirstPage(): Promise<OperationResult<T>> {
-		this.currentRows = this.queryRepository.getItems(this.query, 1, this.perPage);
+	goToFirstPage(filter: object): Promise<OperationResult<T>> {
+		this.currentRows = this.queryRepository.getItems(this.query, filter, 1, this.perPage);
 		return this.currentRows;
 	}
 
-	goToLastPage(): Promise<OperationResult<T>> {
-		this.currentRows = this.queryRepository.getItems(this.query, this.totalPages, this.perPage);
+	goToLastPage(filter: object): Promise<OperationResult<T>> {
+		this.currentRows = this.queryRepository.getItems(
+			this.query,
+			filter,
+			this.totalPages,
+			this.perPage
+		);
 		return this.currentRows;
 	}
 
-	goToNextPage(): Promise<OperationResult<T>> {
-		this.currentRows = this.queryRepository.getItems(this.query, ++this.currentPage, this.perPage);
+	goToNextPage(filter: object): Promise<OperationResult<T>> {
+		this.currentRows = this.queryRepository.getItems(
+			this.query,
+			filter,
+			++this.currentPage,
+			this.perPage
+		);
 		return this.currentRows;
 	}
 
-	goToPrevPage(): Promise<OperationResult<T>> {
+	goToPrevPage(filter: object): Promise<OperationResult<T>> {
 		if (this.currentPage > 1) {
 			this.currentRows = this.queryRepository.getItems(
 				this.query,
+				filter,
 				--this.currentPage,
 				this.perPage
 			);

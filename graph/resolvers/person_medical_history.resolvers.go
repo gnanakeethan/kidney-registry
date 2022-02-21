@@ -5,7 +5,7 @@ package resolvers
 
 import (
 	"context"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -27,7 +27,10 @@ func (r *mutationResolver) DeletePersonMedicalHistory(ctx context.Context, id st
 }
 
 func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
-	filter.Person = &models.PersonFilter{ID: &obj.ID}
+	if filter == nil {
+		filter = &models.PersonMedicalHistoryFilter{}
+	}
+	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
 	return models.GetListMedicalHistory(ctx, filter, page, limit)
 }
 
@@ -46,7 +49,10 @@ func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*m
 }
 
 func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
-	filter.Person = &models.PersonFilter{ID: &personID}
+	if filter == nil {
+		filter = &models.PersonMedicalHistoryFilter{}
+	}
+	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
 	return models.GetListMedicalHistory(ctx, filter, page, limit)
 }
 
