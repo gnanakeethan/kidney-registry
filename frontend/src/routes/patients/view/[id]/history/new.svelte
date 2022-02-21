@@ -56,20 +56,6 @@
 			},
 			{
 				type: 'textarea', // required
-				name: 'Description', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Description', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
 				name: 'Complaints', // required
 				value: '', // optional
 				attributes: {
@@ -171,7 +157,7 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Followup For {$recipient.FirstName}</div>
+			<div class="text-xl font-bold">History Record For {$recipient.FirstName}</div>
 			<Field bind:isValidForm bind:values {fields} />
 			{message}
 			<button

@@ -44,14 +44,14 @@
 		routes: [
 			{ name: 'Patient Details', route: '/patients/view/' + $recipientId, icon: UserIcon },
 			{
-				name: 'Donor Details',
-				route: '/patients/view/' + $recipientId + '/donors',
-				icon: UserIcon
+				name: 'History',
+				route: '/patients/view/' + $recipientId + '/history',
+				icon: SearchIcon
 			},
 			{
-				name: 'New Donor',
-				route: '/patients/view/' + $recipientId + '/donors/new',
-				icon: UserIcon
+				name: 'New Record',
+				route: '/patients/view/' + $recipientId + '/history/new',
+				icon: NewIcon
 			},
 			{
 				name: 'Follow Ups',
@@ -82,6 +82,11 @@
 				name: 'New Examination',
 				route: '/patients/view/' + $recipientId + '/examinations/new',
 				icon: NewIcon
+			},
+			{
+				name: 'Donor Details',
+				route: '/patients/view/' + $recipientId + '/donors',
+				icon: UserIcon
 			}
 		]
 	};

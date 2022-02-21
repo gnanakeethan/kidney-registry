@@ -19,7 +19,7 @@
 	// Declar variables;
 	export let fields = [];
 	export let isValidForm = true;
-	export let values = {};
+	export let values;
 	let itemsField = [];
 	$: listFields = itemsField;
 	// Change values.
