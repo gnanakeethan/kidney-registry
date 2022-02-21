@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -26,11 +27,7 @@ func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, erro
 		RecordStatus:  "DRAFT",
 		Phn:           time.Now().Format("20060102030405") + randString(2),
 	}
-	if _, err := models.AddPersons(person); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return person, nil
-	} else {
-		return nil, err
-	}
+	return person, nil
 }
 
 func (r *mutationResolver) UpdatePatient(ctx context.Context, input *models.PatientInput) (*models.Person, error) {

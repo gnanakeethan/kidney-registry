@@ -39,7 +39,6 @@
 		rootAccessPath="data.listPatients.persons"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">
-			{Patient.ID}
 			<a href="/patients/view/{Patient.ID}">View Patient</a>
 		</svelte:fragment>
 	</Table>

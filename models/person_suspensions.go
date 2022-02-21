@@ -11,7 +11,7 @@ import (
 )
 
 type PersonSuspensions struct {
-	ID             int            `orm:"column(id);pk"`
+	ID             string         `orm:"column(id);pk"`
 	PersonId       *Person        `orm:"column(person_id);rel(fk)"`
 	WorkupId       *PersonWorkups `orm:"column(workup_id);rel(fk)"`
 	Reason         string         `orm:"column(reason);null"`
@@ -38,7 +38,7 @@ func AddPersonSuspensions(m *PersonSuspensions) (id int64, err error) {
 
 // GetPersonSuspensionsById retrieves PersonSuspensions by ID. Returns error if
 // ID doesn't exist
-func GetPersonSuspensionsById(id int) (v *PersonSuspensions, err error) {
+func GetPersonSuspensionsById(id string) (v *PersonSuspensions, err error) {
 	o := orm.NewOrm()
 	v = &PersonSuspensions{ID: id}
 	if err = o.Read(v); err == nil {
@@ -142,7 +142,7 @@ func UpdatePersonSuspensionsById(m *PersonSuspensions) (err error) {
 
 // DeletePersonSuspensions deletes PersonSuspensions by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonSuspensions(id int) (err error) {
+func DeletePersonSuspensions(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonSuspensions{ID: id}
 	// ascertain id exists in the database

@@ -10,7 +10,7 @@ import (
 )
 
 type Investigations struct {
-	ID        int    `orm:"column(id);pk"`
+	ID        string `orm:"column(id);pk"`
 	Details   string `orm:"column(details);null"`
 	Procedure string `orm:"column(procedure);null"`
 }
@@ -33,7 +33,7 @@ func AddInvestigations(m *Investigations) (id int64, err error) {
 
 // GetInvestigationsById retrieves Investigations by ID. Returns error if
 // ID doesn't exist
-func GetInvestigationsById(id int) (v *Investigations, err error) {
+func GetInvestigationsById(id string) (v *Investigations, err error) {
 	o := orm.NewOrm()
 	v = &Investigations{ID: id}
 	if err = o.Read(v); err == nil {
@@ -137,7 +137,7 @@ func UpdateInvestigationsById(m *Investigations) (err error) {
 
 // DeleteInvestigations deletes Investigations by ID and returns error if
 // the record to be deleted doesn't exist
-func DeleteInvestigations(id int) (err error) {
+func DeleteInvestigations(id string) (err error) {
 	o := orm.NewOrm()
 	v := Investigations{ID: id}
 	// ascertain id exists in the database

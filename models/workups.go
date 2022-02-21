@@ -10,7 +10,7 @@ import (
 )
 
 type Workups struct {
-	ID          int    `orm:"column(id);pk"`
+	ID          string `orm:"column(id);pk"`
 	Name        string `orm:"column(name)"`
 	Description string `orm:"column(description);null"`
 	Procedure   string `orm:"column(procedure);null"`
@@ -34,7 +34,7 @@ func AddWorkups(m *Workups) (id int64, err error) {
 
 // GetWorkupsById retrieves Workups by ID. Returns error if
 // ID doesn't exist
-func GetWorkupsById(id int) (v *Workups, err error) {
+func GetWorkupsById(id string) (v *Workups, err error) {
 	o := orm.NewOrm()
 	v = &Workups{ID: id}
 	if err = o.Read(v); err == nil {
@@ -138,7 +138,7 @@ func UpdateWorkupsById(m *Workups) (err error) {
 
 // DeleteWorkups deletes Workups by ID and returns error if
 // the record to be deleted doesn't exist
-func DeleteWorkups(id int) (err error) {
+func DeleteWorkups(id string) (err error) {
 	o := orm.NewOrm()
 	v := Workups{ID: id}
 	// ascertain id exists in the database

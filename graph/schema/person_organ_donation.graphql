@@ -1,0 +1,10 @@
+type PersonOrganDonation{
+    ID: String
+    ClinicNo: String
+    Description: String
+    Person: Person
+    Complaints: String
+    RenalBiopsies: String
+    CaseStatus: String
+    DonationId: PersonOrganDonation
+}

@@ -10,7 +10,7 @@ import (
 )
 
 type PersonAllergy struct {
-	ID        int        `orm:"column(id);pk"`
+	ID        string     `orm:"column(id);pk"`
 	PersonId  *Person    `orm:"column(person_id);rel(fk)"`
 	AllergyId *Allergies `orm:"column(allergy_id);rel(fk)"`
 	Note      string     `orm:"column(note);null"`
@@ -34,7 +34,7 @@ func AddPersonAllergy(m *PersonAllergy) (id int64, err error) {
 
 // GetPersonAllergyById retrieves PersonAllergy by ID. Returns error if
 // ID doesn't exist
-func GetPersonAllergyById(id int) (v *PersonAllergy, err error) {
+func GetPersonAllergyById(id string) (v *PersonAllergy, err error) {
 	o := orm.NewOrm()
 	v = &PersonAllergy{ID: id}
 	if err = o.Read(v); err == nil {
@@ -138,7 +138,7 @@ func UpdatePersonAllergyById(m *PersonAllergy) (err error) {
 
 // DeletePersonAllergy deletes PersonAllergy by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonAllergy(id int) (err error) {
+func DeletePersonAllergy(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonAllergy{ID: id}
 	// ascertain id exists in the database

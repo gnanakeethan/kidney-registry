@@ -11,7 +11,7 @@ import (
 )
 
 type PersonOrganDonation struct {
-	ID             int       `orm:"column(id);pk"`
+	ID             string    `orm:"column(id);pk"`
 	ReceiverId     *Person   `orm:"column(receiver_id);rel(fk)"`
 	DonorId        *Person   `orm:"column(donor_id);rel(fk)"`
 	DonationType   string    `orm:"column(donation_type)"`
@@ -39,7 +39,7 @@ func AddPersonOrganDonation(m *PersonOrganDonation) (id int64, err error) {
 
 // GetPersonOrganDonationById retrieves PersonOrganDonation by ID. Returns error if
 // ID doesn't exist
-func GetPersonOrganDonationById(id int) (v *PersonOrganDonation, err error) {
+func GetPersonOrganDonationById(id string) (v *PersonOrganDonation, err error) {
 	o := orm.NewOrm()
 	v = &PersonOrganDonation{ID: id}
 	if err = o.Read(v); err == nil {
@@ -143,7 +143,7 @@ func UpdatePersonOrganDonationById(m *PersonOrganDonation) (err error) {
 
 // DeletePersonOrganDonation deletes PersonOrganDonation by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonOrganDonation(id int) (err error) {
+func DeletePersonOrganDonation(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonOrganDonation{ID: id}
 	// ascertain id exists in the database

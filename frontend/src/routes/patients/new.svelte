@@ -118,6 +118,10 @@
 			extra: {
 				options: [
 					{
+						value: 'NA',
+						title: 'N/A'
+					},
+					{
 						value: 'SINGLE',
 						title: 'Single'
 					},
@@ -140,6 +144,10 @@
 			},
 			extra: {
 				options: [
+					{
+						value: 'NA',
+						title: 'N/A'
+					},
 					{
 						value: 'MALE',
 						title: 'Male'

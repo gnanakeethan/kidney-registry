@@ -60,13 +60,8 @@ func GetPersonsById(id string) (v *Person, err error) {
 // the record to be updated doesn't exist
 func UpdatePersonsById(m *Person) (err error) {
 	o := orm.NewOrm()
-	v := Person{ID: m.ID}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+	if num, err := o.InsertOrUpdate(m, "ID"); err == nil {
+		fmt.Println("Number of records updated in database:", num)
 	}
 	return
 }
@@ -109,7 +104,7 @@ func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limi
 }
 
 func UpdatePatient(input *PatientInput) (*Person, error) {
-	dateOfBirth, _ := time.Parse(time.RFC3339, input.DateOfBirth)
+	dateOfBirth, _ := time.Parse("2006-01-02", input.DateOfBirth)
 	person := &Person{
 		ID:                  input.ID,
 		DateOfBirth:         dateOfBirth,

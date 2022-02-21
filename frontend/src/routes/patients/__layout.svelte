@@ -7,15 +7,21 @@
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import Topbar from '../../lib/components/topbar/Topbar.svelte';
 
-	$: props = {
+	let props = {
 		activeUrl: activePath,
 		base: '/patients',
 		routes: [
 			{ name: 'Patients', route: '/patients', icon: DashboardIcon },
-			{ name: 'New Patient', route: '/patients/new', icon: NewIcon },
-			{ name: 'View Patient', route: '/patients/view/' + $recipientId, icon: UserIcon }
+			{ name: 'New Patient', route: '/patients/new', icon: NewIcon }
 		]
 	};
+	$: if ($recipientId != '') {
+		props.routes[2] = {
+			name: 'View Patient',
+			route: '/patients/view/' + $recipientId,
+			icon: UserIcon
+		};
+	}
 </script>
 
 <div class="flex flex-col">
