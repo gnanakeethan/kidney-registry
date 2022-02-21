@@ -58,12 +58,6 @@ export type FollowUp = {
   RenalBiopsies?: Maybe<Scalars['String']>;
 };
 
-export type FollowUpList = {
-  __typename?: 'FollowUpList';
-  followUps?: Maybe<Array<Maybe<FollowUp>>>;
-  pagination?: Maybe<Pagination>;
-};
-
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
@@ -194,7 +188,14 @@ export type Person = {
   RecordStatus?: Maybe<RecordStatus>;
   Status?: Maybe<PatientStatus>;
   Weight?: Maybe<Scalars['Float']>;
-  followUps?: Maybe<FollowUpList>;
+  followUps?: Maybe<PersonFollowUpList>;
+};
+
+
+export type PersonFollowUpsArgs = {
+  filter?: InputMaybe<PatientFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 export type PersonFollowUp = {
@@ -217,6 +218,12 @@ export type PersonFollowUpInput = {
   ID: Scalars['String'];
   Person: PersonInput;
   RenalBiopsies?: InputMaybe<Scalars['String']>;
+};
+
+export type PersonFollowUpList = {
+  __typename?: 'PersonFollowUpList';
+  followUps?: Maybe<Array<Maybe<PersonFollowUp>>>;
+  pagination?: Maybe<Pagination>;
 };
 
 export type PersonInput = {
@@ -263,7 +270,7 @@ export type Query = {
   getPatient?: Maybe<Person>;
   listPatients?: Maybe<PersonList>;
   personFollowUp?: Maybe<PersonFollowUp>;
-  personFollowUps?: Maybe<Array<Maybe<PersonFollowUp>>>;
+  personFollowUps?: Maybe<PersonFollowUpList>;
   users?: Maybe<UserList>;
 };
 
@@ -286,7 +293,10 @@ export type QueryPersonFollowUpArgs = {
 
 
 export type QueryPersonFollowUpsArgs = {
-  Person?: InputMaybe<Scalars['ID']>;
+  PersonID: Scalars['ID'];
+  filter?: InputMaybe<PatientFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 
