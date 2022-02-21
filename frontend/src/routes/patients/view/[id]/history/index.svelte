@@ -20,6 +20,7 @@
 		ListPersonMedicalHistoryDocument
 	);
 	let loading = true;
+	$: filters = { ID: $recipientId };
 
 	recipientId.subscribe((id) => {
 		if (id) {
@@ -51,6 +52,7 @@
 		bind:selectedRows
 		{columns}
 		{displayedColumns}
+		{filters}
 		rootAccessPath="data.listPersonMedicalHistories.histories"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">

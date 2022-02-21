@@ -21,6 +21,7 @@ export class DataSourceConnector<T> implements DataSource<T> {
 			this.currentPage,
 			this.perPage
 		);
+		console.log(this.currentRows);
 		return this.currentRows;
 	}
 

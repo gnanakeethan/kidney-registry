@@ -12,7 +12,7 @@
 	const queryRepository = new GraphQLQueryRepository<Person>();
 	let dataSource = new DataSourceConnector<Person>(queryRepository, ListPatientsDocument);
 	let loading = true;
-	dataSource.loadCurrentPage().then((data) => {
+	dataSource.loadCurrentPage({}).then((data) => {
 		console.log(data);
 		loading = false;
 	});

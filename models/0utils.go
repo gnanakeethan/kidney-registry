@@ -62,13 +62,13 @@ func extractFilter(prefix string, filterInterface interface{}) *orm.Condition {
 			if fieldValInterface != nil {
 				fieldVal := reflect.ValueOf(fieldValInterface).Elem()
 				if fieldVal.IsValid() {
-					objectModel := false
+					notCustom := false
 					comparison := "EQUAL"
 					pretty.Println("TYPE", fieldVal.Type().String())
 					pretty.Println("INTERFACE", fieldVal.Interface())
 					fieldValType := fieldVal.Type().String()
 					if StringInSlice(fieldValType, []string{"models.StringFilter", "models.FloatFilter", "models.IntFilter"}) {
-						objectModel = true
+						notCustom = true
 					}
 					if StringInSlice(j.Name, []string{"And", "Or", "AndNot", "OrNot"}) {
 						switch j.Name {
@@ -82,7 +82,7 @@ func extractFilter(prefix string, filterInterface interface{}) *orm.Condition {
 							condition = condition.AndNotCond(extractFilter("", fieldVal.Interface()))
 						}
 						
-					} else if objectModel {
+					} else if notCustom {
 						switch comparison {
 						case "EQUAL":
 							condition = condition.And(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())

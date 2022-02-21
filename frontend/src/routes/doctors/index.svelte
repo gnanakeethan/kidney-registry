@@ -12,7 +12,7 @@
 	const queryRepository = new GraphQLQueryRepository<User>();
 	let dataSource = new DataSourceConnector<User>(queryRepository, ListUsersDocument);
 	let loading = true;
-	dataSource.loadCurrentPage().then((data) => {
+	dataSource.loadCurrentPage({}).then((data) => {
 		console.log(data);
 		loading = false;
 	});

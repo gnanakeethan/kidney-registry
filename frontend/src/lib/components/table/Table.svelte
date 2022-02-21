@@ -8,16 +8,18 @@
 	export let currentPage = 1;
 	export let totalPages: number;
 	export let perPage = 15;
+	export let filters = {};
 	export let rootAccessPath = '';
 	export let currentRows = [];
 	export let loading = true;
 	export let selectedRows = [];
-	$: if (loading) {
+	$: {
 		let accessPath = rootAccessPath.split('.');
-
 		console.log(accessPath);
-		let data = dtSource.currentRows.then((data) => {
+		console.log('DTSource', dtSource);
+		dtSource.currentRows.then((data) => {
 			for (let i = 0; i < accessPath.length; i++) {
+				console.log(data);
 				if (data !== undefined && data !== null && data[accessPath[i]] !== undefined) {
 					data = data[accessPath[i]];
 					currentRows = data;
@@ -28,16 +30,10 @@
 			loading = false;
 		});
 	}
-
-	// $: if (!$currentRowsSubscription.fetching && !$currentRowsSubscription.error) {
-	//
-	// }
 	$: activeColumns = columns.filter((i) => {
 		return displayedColumns.includes(i.key);
 	});
 	$: selectedRows = currentRows.filter((i) => i.__selected);
-	//console.log(activeColumns);
-	// $: console.log(currentRows);
 	let indeterminateSelected = false;
 
 	let selectedAll = false;
@@ -80,8 +76,7 @@
 	}
 
 	onMount(() => {
-		dtSource.loadCurrentPage();
-		// dataSource = new DataSourceConnector<Apple>(queryRepository, ListPeopleDocument);
+		dtSource.loadCurrentPage(filters);
 	});
 </script>
 

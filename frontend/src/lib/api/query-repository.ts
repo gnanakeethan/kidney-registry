@@ -3,6 +3,10 @@ import { Client, OperationResult } from '@urql/svelte/dist/types';
 import { DocumentNode } from 'graphql';
 import { QueryRepository } from 'lib/interfaces/query-repository';
 
+interface FilterContext {
+	ID: string;
+}
+
 export class GraphQLQueryRepository<T> implements QueryRepository<T> {
 	client: Client;
 
@@ -17,10 +21,9 @@ export class GraphQLQueryRepository<T> implements QueryRepository<T> {
 		page: number,
 		perPage: number
 	): Promise<OperationResult<T>> {
-		const finalVar = { currentPage: page, limit: perPage, ID: '25PJP9EI1WWOWFoIQ9ODc5gbCmT' };
+		const finalVar = { currentPage: page, limit: perPage };
 		for (const filterKey in filter) {
 			finalVar[filterKey] = filter[filterKey];
-			console.log(finalVar);
 		}
 		console.log('FINAL VARIABLES', finalVar);
 		return this.client.query(queryString, finalVar).toPromise();
