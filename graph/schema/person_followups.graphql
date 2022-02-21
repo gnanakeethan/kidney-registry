@@ -26,5 +26,5 @@ extend type Mutation {
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(Person: ID): [PersonFollowUp]
+    personFollowUps(PersonID: ID!): [PersonFollowUp]
 }

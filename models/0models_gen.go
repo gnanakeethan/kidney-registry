@@ -88,7 +88,7 @@ type PatientFilter struct {
 
 type PersonFollowUpInput struct {
 	ID            string       `json:"ID"`
-	PersonID      *PersonInput `json:"PersonId"`
+	Person        *PersonInput `json:"Person"`
 	ClinicNo      *string      `json:"ClinicNo"`
 	Description   *string      `json:"Description"`
 	Complaints    *string      `json:"Complaints"`

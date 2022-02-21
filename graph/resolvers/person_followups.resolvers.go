@@ -26,6 +26,6 @@ func (r *queryResolver) PersonFollowUp(ctx context.Context, id string) (*models.
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) PersonFollowUps(ctx context.Context, person *string) ([]*models.PersonFollowUp, error) {
+func (r *queryResolver) PersonFollowUps(ctx context.Context, personID string) ([]*models.PersonFollowUp, error) {
 	panic(fmt.Errorf("not implemented"))
 }

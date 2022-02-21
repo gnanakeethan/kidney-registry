@@ -155,7 +155,7 @@ type ComplexityRoot struct {
 		GetPatient      func(childComplexity int, id string) int
 		ListPatients    func(childComplexity int, filter *models.PatientFilter, page *int, limit *int) int
 		PersonFollowUp  func(childComplexity int, id string) int
-		PersonFollowUps func(childComplexity int, person *string) int
+		PersonFollowUps func(childComplexity int, personID string) int
 		Users           func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
 	}
 
@@ -209,7 +209,7 @@ type QueryResolver interface {
 	ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error)
 	GetPatient(ctx context.Context, id string) (*models.Person, error)
 	PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
-	PersonFollowUps(ctx context.Context, person *string) ([]*models.PersonFollowUp, error)
+	PersonFollowUps(ctx context.Context, personID string) ([]*models.PersonFollowUp, error)
 	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 }
 type SubscriptionResolver interface {
@@ -774,7 +774,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.PersonFollowUps(childComplexity, args["Person"].(*string)), true
+		return e.complexity.Query.PersonFollowUps(childComplexity, args["PersonID"].(string)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -1142,7 +1142,7 @@ extend type Mutation {
 
 input PersonFollowUpInput{
     ID: String!
-    PersonId: PersonInput!
+    Person: PersonInput!
     ClinicNo: String
     Description: String
     Complaints: String
@@ -1157,7 +1157,7 @@ extend type Mutation {
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(Person: ID): [PersonFollowUp]
+    personFollowUps(PersonID: ID!): [PersonFollowUp]
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_organ_donation.graphql", Input: `type PersonOrganDonation{
     ID: String
@@ -1353,15 +1353,15 @@ func (ec *executionContext) field_Query_personFollowUp_args(ctx context.Context,
 func (ec *executionContext) field_Query_personFollowUps_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
-	if tmp, ok := rawArgs["Person"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
-		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+	var arg0 string
+	if tmp, ok := rawArgs["PersonID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("PersonID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["Person"] = arg0
+	args["PersonID"] = arg0
 	return args, nil
 }
 
@@ -3802,7 +3802,7 @@ func (ec *executionContext) _Query_personFollowUps(ctx context.Context, field gr
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PersonFollowUps(rctx, args["Person"].(*string))
+		return ec.resolvers.Query().PersonFollowUps(rctx, args["PersonID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5606,11 +5606,11 @@ func (ec *executionContext) unmarshalInputPersonFollowUpInput(ctx context.Contex
 			if err != nil {
 				return it, err
 			}
-		case "PersonId":
+		case "Person":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("PersonId"))
-			it.PersonID, err = ec.unmarshalNPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalNPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
 			if err != nil {
 				return it, err
 			}

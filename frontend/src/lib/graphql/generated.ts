@@ -215,7 +215,7 @@ export type PersonFollowUpInput = {
   Complaints?: InputMaybe<Scalars['String']>;
   Description?: InputMaybe<Scalars['String']>;
   ID: Scalars['String'];
-  PersonId: PersonInput;
+  Person: PersonInput;
   RenalBiopsies?: InputMaybe<Scalars['String']>;
 };
 
