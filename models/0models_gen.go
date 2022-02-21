@@ -121,14 +121,18 @@ type PersonList struct {
 }
 
 type PersonMedicalHistoryFilter struct {
-	ID          *StringFilter `json:"ID"`
-	Person      *PersonFilter `json:"Person"`
-	Description *string       `json:"Description"`
-	Reason      *string       `json:"Reason"`
-	StartDate   *string       `json:"StartDate"`
-	EndDate     *string       `json:"EndDate"`
-	Medications *string       `json:"Medications"`
-	Type        *HistoryType  `json:"Type"`
+	ID          *StringFilter               `json:"ID"`
+	Person      *PersonFilter               `json:"Person"`
+	Description *StringFilter               `json:"Description"`
+	Reason      *StringFilter               `json:"Reason"`
+	StartDate   *StringFilter               `json:"StartDate"`
+	EndDate     *StringFilter               `json:"EndDate"`
+	Medications *StringFilter               `json:"Medications"`
+	Type        *StringFilter               `json:"Type"`
+	And         *PersonMedicalHistoryFilter `json:"and"`
+	AndNot      *PersonMedicalHistoryFilter `json:"andNot"`
+	Or          *PersonMedicalHistoryFilter `json:"or"`
+	OrNot       *PersonMedicalHistoryFilter `json:"orNot"`
 }
 
 type PersonMedicalHistoryInput struct {

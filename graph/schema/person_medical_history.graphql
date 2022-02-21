@@ -11,12 +11,16 @@ type PersonMedicalHistory {
 input PersonMedicalHistoryFilter {
     ID: StringFilter
     Person: PersonFilter
-    Description: String
-    Reason: String
-    StartDate: String
-    EndDate: String
-    Medications: String
-    Type: HistoryType
+    Description: StringFilter
+    Reason: StringFilter
+    StartDate: StringFilter
+    EndDate: StringFilter
+    Medications: StringFilter
+    Type: StringFilter
+    and                    : PersonMedicalHistoryFilter
+    andNot                 : PersonMedicalHistoryFilter
+    or                     : PersonMedicalHistoryFilter
+    orNot                  : PersonMedicalHistoryFilter
 }
 enum HistoryType {
     COMPLAINT
@@ -36,7 +40,7 @@ input PersonMedicalHistoryInput{
     Type: HistoryType!
 }
 extend type Person {
-    histories(filter: PersonFilter,page:Int,limit:Int)              : PersonMedicalHistoryList
+    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int)              : PersonMedicalHistoryList
 }
 type PersonMedicalHistoryList {
     histories: [PersonMedicalHistory]
@@ -50,5 +54,5 @@ extend type Mutation {
 }
 extend type Query {
     personMedicalHistory(ID: ID!): PersonMedicalHistory
-    personMedicalHistorys(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int): PersonMedicalHistoryList
+    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int): PersonMedicalHistoryList
 }
