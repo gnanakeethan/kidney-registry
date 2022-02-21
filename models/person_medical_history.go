@@ -67,9 +67,10 @@ func GetPersonMedicalHistoryById(id string) (v *PersonMedicalHistory, err error)
 	return nil, err
 }
 
-func GetListMedicalHistory(ctx context.Context, filter *PersonFilter, page *int, limit *int) (*PersonMedicalHistoryList, error) {
-	PersonMedicalHistory, PersonMedicalHistories := PersonMedicalHistory{}, []*PersonMedicalHistory{}
-	filterPtr := PersonFilter{}
+func GetListMedicalHistory(ctx context.Context, filter *PersonMedicalHistoryFilter, page *int, limit *int) (*PersonMedicalHistoryList, error) {
+	var PersonMedicalHistories []*PersonMedicalHistory
+	PersonMedicalHistory := PersonMedicalHistory{}
+	filterPtr := PersonMedicalHistoryFilter{}
 	if filter != nil {
 		filterPtr = *filter
 	}
@@ -86,21 +87,6 @@ func GetListMedicalHistory(ctx context.Context, filter *PersonFilter, page *int,
 		Histories:  PersonMedicalHistories,
 		Pagination: pagination,
 	}, nil
-}
-
-// UpdatePersonMedicalHistory updates PersonMedicalHistory by ID and returns error if
-// the record to be updated doesn't exist
-func UpdatePersonMedicalHistoryById(m *PersonMedicalHistory) (err error) {
-	o := orm.NewOrm()
-	v := PersonMedicalHistory{ID: m.ID}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
-	}
-	return
 }
 
 // DeletePersonMedicalHistory deletes PersonMedicalHistory by ID and returns error if

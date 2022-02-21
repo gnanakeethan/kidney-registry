@@ -5,8 +5,7 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -28,7 +27,8 @@ func (r *mutationResolver) DeletePersonMedicalHistory(ctx context.Context, id st
 }
 
 func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
-	panic(fmt.Errorf("not implemented"))
+	filter.Person = &models.PersonFilter{ID: &obj.ID}
+	return models.GetListMedicalHistory(ctx, filter, page, limit)
 }
 
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
@@ -42,11 +42,12 @@ func (r *personMedicalHistoryResolver) EndDate(ctx context.Context, obj *models.
 }
 
 func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error) {
-	panic(fmt.Errorf("not implemented"))
+	return models.GetPersonMedicalHistoryById(id)
 }
 
 func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
-	panic(fmt.Errorf("not implemented"))
+	filter.Person = &models.PersonFilter{ID: &personID}
+	return models.GetListMedicalHistory(ctx, filter, page, limit)
 }
 
 // PersonMedicalHistory returns generated.PersonMedicalHistoryResolver implementation.
