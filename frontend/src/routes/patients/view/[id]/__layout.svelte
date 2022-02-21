@@ -11,6 +11,7 @@
 </script>
 
 <script lang="ts">
+	import { recipient } from '$lib/state/recipient';
 	import NewIcon from '~icons/ci/file-new';
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
@@ -18,6 +19,25 @@
 	import Topbar from '../../../../lib/components/topbar/Topbar.svelte';
 	import { activePath } from '../../../../lib/state/SidebarStore';
 
+	import { operationStore, query } from '@urql/svelte';
+	// import { Person } from 'lib/graphql/generated';
+	import { GetPatientDocument, GetPatientQuery, Person } from '../../../../lib/graphql/generated';
+
+	query<GetPatientQuery>(
+		operationStore(GetPatientDocument, {
+			id: $recipientId
+		})
+	).subscribe(({ data, error }) => {
+		if (data) {
+			const person = data.getPatient;
+			if (person) {
+				recipient.set(person);
+				console.log($recipient);
+				console.log(person);
+				console.log($recipient);
+			}
+		}
+	});
 	let props = {
 		activeUrl: activePath,
 		base: '/patients/view/' + $recipientId,
