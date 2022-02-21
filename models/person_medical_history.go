@@ -1,10 +1,8 @@
 package models
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"reflect"
-	"strings"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
@@ -69,82 +67,25 @@ func GetPersonMedicalHistoryById(id string) (v *PersonMedicalHistory, err error)
 	return nil, err
 }
 
-// GetAllPersonMedicalHistory retrieves all PersonMedicalHistory matches certain condition. Returns empty list if
-// no records exist
-func GetAllPersonMedicalHistory(query map[string]string, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonMedicalHistory))
-	// query k=v
-	for k, v := range query {
-		// rewrite dot-notation to Object__Attribute
-		k = strings.Replace(k, ".", "__", -1)
-		if strings.Contains(k, "isnull") {
-			qs = qs.Filter(k, v == "true" || v == "1")
-		} else {
-			qs = qs.Filter(k, v)
-		}
+func GetListMedicalHistory(ctx context.Context, filter *PersonFilter, page *int, limit *int) (*PersonMedicalHistoryList, error) {
+	PersonMedicalHistory, PersonMedicalHistories := PersonMedicalHistory{}, []*PersonMedicalHistory{}
+	filterPtr := PersonFilter{}
+	if filter != nil {
+		filterPtr = *filter
 	}
-	// order by:
-	var sortFields []string
-	if len(sortby) != 0 {
-		if len(sortby) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortby {
-				orderby := ""
-				if order[i] == "desc" {
-					orderby = "-" + v
-				} else if order[i] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortby) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortby {
-				orderby := ""
-				if order[0] == "desc" {
-					orderby = "-" + v
-				} else if order[0] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-		} else if len(sortby) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
-		}
-	} else {
-		if len(order) != 0 {
-			return nil, errors.New("Error: unused 'order' fields")
-		}
+	query, currentPage, perPage, preloads := extractQuery(ctx, PersonMedicalHistory, filterPtr, page, limit)
+	qs, totalItems, err := GetAnyAll(PersonMedicalHistory, query, nil, nil, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
 	}
-	
-	var l []PersonMedicalHistory
-	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
-			}
-		}
-		return ml, nil
+	if _, err := qs.All(&PersonMedicalHistories, preloads...); err != nil {
+		return nil, err
 	}
-	return nil, err
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonMedicalHistoryList{
+		Histories:  PersonMedicalHistories,
+		Pagination: pagination,
+	}, nil
 }
 
 // UpdatePersonMedicalHistory updates PersonMedicalHistory by ID and returns error if

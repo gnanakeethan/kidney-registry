@@ -103,7 +103,7 @@ export type Mutation = {
   createPersonFollowUp?: Maybe<PersonFollowUp>;
   createPersonMedicalHistory?: Maybe<PersonMedicalHistory>;
   deletePersonFollowUp?: Maybe<PersonFollowUp>;
-  deletePersonMedicalHistory?: Maybe<PersonMedicalHistory>;
+  deletePersonMedicalHistory?: Maybe<Scalars['ID']>;
   error?: Maybe<Error>;
   newPatient?: Maybe<Person>;
   updatePatient?: Maybe<Person>;

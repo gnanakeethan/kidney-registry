@@ -213,7 +213,7 @@ type MutationResolver interface {
 	DeletePersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
 	CreatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error)
 	UpdatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error)
-	DeletePersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error)
+	DeletePersonMedicalHistory(ctx context.Context, id string) (*string, error)
 }
 type PersonResolver interface {
 	DateOfBirth(ctx context.Context, obj *models.Person) (*string, error)
@@ -1393,7 +1393,7 @@ type PersonMedicalHistoryList {
 extend type Mutation {
     createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
     updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
-    deletePersonMedicalHistory(ID: ID!): PersonMedicalHistory
+    deletePersonMedicalHistory(ID: ID!): ID
 }
 extend type Query {
     personMedicalHistory(ID: ID!): PersonMedicalHistory
@@ -2746,9 +2746,9 @@ func (ec *executionContext) _Mutation_deletePersonMedicalHistory(ctx context.Con
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistory)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_currentPage(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {

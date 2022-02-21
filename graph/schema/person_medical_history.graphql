@@ -50,7 +50,7 @@ type PersonMedicalHistoryList {
 extend type Mutation {
     createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
     updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
-    deletePersonMedicalHistory(ID: ID!): PersonMedicalHistory
+    deletePersonMedicalHistory(ID: ID!): ID
 }
 extend type Query {
     personMedicalHistory(ID: ID!): PersonMedicalHistory
