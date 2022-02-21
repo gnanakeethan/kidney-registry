@@ -34,46 +34,6 @@
 				readonly: true,
 				classes: ['form-input bg-gray-200 rounded w-full']
 			}
-		},
-		{
-			type: 'input',
-			name: 'FirstName',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's First Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'LastName',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'Last Name',
-				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Lastname field is required!',
-				minlen: 'Last name field must have more that 6 characters!'
-			}
 		}
 	];
 	let message = '';

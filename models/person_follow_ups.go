@@ -1,44 +1,43 @@
 package models
 
 import (
-	"errors"
+	"context"
 	"fmt"
-	"reflect"
-	"strings"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type PersonFollowUp struct {
-	ID            string               `orm:"column(id);pk"`
-	ClinicNo      string               `orm:"column(clinic_no)"`
-	Description   string               `orm:"column(description);null"`
-	Person        *Person              `orm:"column(person_id);rel(fk)"`
-	Complaints    string               `orm:"column(complaints);null"`
-	RenalBiopsies string               `orm:"column(renal_biopsies);null"`
-	CaseStatus    string               `orm:"column(case_status);null"`
-	DonationId    *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
+	ID             string               `orm:"column(id);pk"`
+	ClinicNo       string               `orm:"column(clinic_no)"`
+	Description    string               `orm:"column(description);null"`
+	PersonFollowUp *PersonFollowUp      `orm:"column(PersonFollowUp_id);rel(fk)"`
+	Complaints     string               `orm:"column(complaints);null"`
+	RenalBiopsies  string               `orm:"column(renal_biopsies);null"`
+	CaseStatus     string               `orm:"column(case_status);null"`
+	DonationId     *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
 }
 
 func (t *PersonFollowUp) TableName() string {
-	return "person_follow_ups"
+	return "PersonFollowUp_follow_ups"
 }
 
 func init() {
 	orm.RegisterModel(new(PersonFollowUp))
 }
 
-// AddPersonFollowUps insert a new PersonFollowUp into database and returns
+// AddPersonFollowUpFollowUps insert a new PersonFollowUp into database and returns
 // last inserted ID on success.
-func AddPersonFollowUps(m *PersonFollowUp) (id int64, err error) {
+func AddPersonFollowUpFollowUps(m *PersonFollowUp) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsById retrieves PersonFollowUp by ID. Returns error if
+// GetPersonFollowUpFollowUpsById retrieves PersonFollowUp by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
+func GetPersonFollowUpFollowUpsById(id string) (v *PersonFollowUp, err error) {
 	o := orm.NewOrm()
 	v = &PersonFollowUp{ID: id}
 	if err = o.Read(v); err == nil {
@@ -47,87 +46,31 @@ func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
 	return nil, err
 }
 
-// GetAllPersonFollowUps retrieves all PersonFollowUp matches certain condition. Returns empty list if
-// no records exist
-func GetAllPersonFollowUps(query map[string]string, fields []string, sortby []string, order []string,
-	offset int64, limit int64) (ml []interface{}, err error) {
-	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonFollowUp))
-	// query k=v
-	for k, v := range query {
-		// rewrite dot-notation to Object__Attribute
-		k = strings.Replace(k, ".", "__", -1)
-		if strings.Contains(k, "isnull") {
-			qs = qs.Filter(k, v == "true" || v == "1")
-		} else {
-			qs = qs.Filter(k, v)
-		}
+func GetListFollowups(ctx context.Context, filter *PatientFilter, page *int, limit *int) (*PersonFollowUpList, error) {
+	PersonFollowUp, PersonFollowUps := PersonFollowUp{}, []*PersonFollowUp{}
+	filterPtr := PatientFilter{}
+	if filter != nil {
+		filterPtr = *filter
 	}
-	// order by:
-	var sortFields []string
-	if len(sortby) != 0 {
-		if len(sortby) == len(order) {
-			// 1) for each sort field, there is an associated order
-			for i, v := range sortby {
-				orderby := ""
-				if order[i] == "desc" {
-					orderby = "-" + v
-				} else if order[i] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-			qs = qs.OrderBy(sortFields...)
-		} else if len(sortby) != len(order) && len(order) == 1 {
-			// 2) there is exactly one order, all the sorted fields will be sorted by this order
-			for _, v := range sortby {
-				orderby := ""
-				if order[0] == "desc" {
-					orderby = "-" + v
-				} else if order[0] == "asc" {
-					orderby = v
-				} else {
-					return nil, errors.New("Error: Invalid order. Must be either [asc|desc]")
-				}
-				sortFields = append(sortFields, orderby)
-			}
-		} else if len(sortby) != len(order) && len(order) != 1 {
-			return nil, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
-		}
-	} else {
-		if len(order) != 0 {
-			return nil, errors.New("Error: unused 'order' fields")
-		}
+	query, currentPage, perPage, preloads := extractQuery(ctx, PersonFollowUp, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(PersonFollowUp, query, nil, nil, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
 	}
-	
-	var l []PersonFollowUp
-	qs = qs.OrderBy(sortFields...)
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
-		if len(fields) == 0 {
-			for _, v := range l {
-				ml = append(ml, v)
-			}
-		} else {
-			// trim unused fields
-			for _, v := range l {
-				m := make(map[string]interface{})
-				val := reflect.ValueOf(v)
-				for _, fname := range fields {
-					m[fname] = val.FieldByName(fname).Interface()
-				}
-				ml = append(ml, m)
-			}
-		}
-		return ml, nil
+	if _, err := qs.All(&PersonFollowUps, preloads...); err != nil {
+		return nil, err
 	}
-	return nil, err
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonFollowUpList{
+		FollowUps:  PersonFollowUps,
+		Pagination: pagination,
+	}, nil
 }
 
-// UpdatePersonFollowUps updates PersonFollowUp by ID and returns error if
+// UpdatePersonFollowUpFollowUps updates PersonFollowUp by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsById(m *PersonFollowUp) (err error) {
+func UpdatePersonFollowUpFollowUpsById(m *PersonFollowUp) (err error) {
 	o := orm.NewOrm()
 	v := PersonFollowUp{ID: m.ID}
 	// ascertain id exists in the database
@@ -140,9 +83,9 @@ func UpdatePersonFollowUpsById(m *PersonFollowUp) (err error) {
 	return
 }
 
-// DeletePersonFollowUps deletes PersonFollowUp by ID and returns error if
+// DeletePersonFollowUpFollowUps deletes PersonFollowUp by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonFollowUps(id string) (err error) {
+func DeletePersonFollowUpFollowUps(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonFollowUp{ID: id}
 	// ascertain id exists in the database

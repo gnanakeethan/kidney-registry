@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -39,10 +40,6 @@ func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*
 	}
 	dob := obj.DateOfBirth.Format("2006-01-02")
 	return &dob, nil
-}
-
-func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person) (*models.FollowUpList, error) {
-	return nil, nil
 }
 
 func (r *personResolver) Age(ctx context.Context, obj *models.Person) (*string, error) {

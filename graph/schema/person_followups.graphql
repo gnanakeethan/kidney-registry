@@ -1,4 +1,4 @@
-type PersonFollowUp{
+type PersonFollowUp {
     ID: String!
     ClinicNo: String
     Description: String
@@ -18,6 +18,13 @@ input PersonFollowUpInput{
     RenalBiopsies: String
     CaseStatus: String
 }
+extend type Person {
+    followUps(filter: PatientFilter,page:Int,limit:Int)              : PersonFollowUpList
+}
+type PersonFollowUpList {
+    followUps: [PersonFollowUp]
+    pagination: Pagination
+}
 
 extend type Mutation {
     createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
@@ -26,5 +33,5 @@ extend type Mutation {
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(PersonID: ID!): [PersonFollowUp]
+    personFollowUps(PersonID: ID!,filter: PatientFilter,page:Int,limit:Int): PersonFollowUpList
 }

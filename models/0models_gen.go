@@ -35,11 +35,6 @@ type FollowUp struct {
 	CaseStatus    *string `json:"CaseStatus"`
 }
 
-type FollowUpList struct {
-	FollowUps  []*FollowUp `json:"followUps"`
-	Pagination *Pagination `json:"pagination"`
-}
-
 type IntFilter struct {
 	Comparison ComparisonType `json:"comparison"`
 	And        *IntFilter     `json:"and"`
@@ -94,6 +89,11 @@ type PersonFollowUpInput struct {
 	Complaints    *string      `json:"Complaints"`
 	RenalBiopsies *string      `json:"RenalBiopsies"`
 	CaseStatus    *string      `json:"CaseStatus"`
+}
+
+type PersonFollowUpList struct {
+	FollowUps  []*PersonFollowUp `json:"followUps"`
+	Pagination *Pagination       `json:"pagination"`
 }
 
 type PersonInput struct {

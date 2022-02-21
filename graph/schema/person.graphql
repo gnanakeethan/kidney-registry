@@ -15,7 +15,6 @@ type Person {
     PersonType             : PatientType
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
-    followUps              : FollowUpList
     Age                    : String
 }
 enum Gender {
@@ -44,10 +43,6 @@ enum RecordStatus {
     DRAFT
     PUBLISHED
     REMOVED
-}
-type FollowUpList {
-    followUps: [FollowUp]
-    pagination: Pagination
 }
 type FollowUp {
     ID               : ID
