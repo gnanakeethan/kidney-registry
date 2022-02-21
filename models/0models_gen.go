@@ -121,7 +121,7 @@ type PersonList struct {
 }
 
 type PersonMedicalHistoryInput struct {
-	ID          string       `json:"ID"`
+	ID          *string      `json:"ID"`
 	Person      *PersonInput `json:"Person"`
 	Description *string      `json:"Description"`
 	Reason      *string      `json:"Reason"`

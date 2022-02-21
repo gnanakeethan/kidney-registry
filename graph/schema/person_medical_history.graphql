@@ -1,6 +1,6 @@
 type PersonMedicalHistory {
-    ID: String!
-    Person: Person
+    ID: ID
+    Person: Person!
     Description: String
     Reason: String
     StartDate: String
@@ -16,8 +16,8 @@ enum HistoryType {
 }
 
 input PersonMedicalHistoryInput{
-    ID: String!
-    Person: PersonInput!
+    ID: ID
+    Person: PersonInput
     Description: String
     Reason: String
     StartDate: String

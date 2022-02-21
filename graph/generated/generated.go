@@ -38,7 +38,6 @@ type Config struct {
 type ResolverRoot interface {
 	Mutation() MutationResolver
 	Person() PersonResolver
-	PersonFollowUp() PersonFollowUpResolver
 	PersonMedicalHistory() PersonMedicalHistoryResolver
 	PersonOrganDonation() PersonOrganDonationResolver
 	Query() QueryResolver
@@ -223,17 +222,9 @@ type PersonResolver interface {
 	FollowUps(ctx context.Context, obj *models.Person, filter *models.PatientFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
 	Histories(ctx context.Context, obj *models.Person, filter *models.PatientFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
 }
-type PersonFollowUpResolver interface {
-	Person(ctx context.Context, obj *models.PersonFollowUp) (*models.Person, error)
-}
 type PersonMedicalHistoryResolver interface {
-	Person(ctx context.Context, obj *models.PersonMedicalHistory) (*models.Person, error)
-	Description(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
-	Reason(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
 	StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
 	EndDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
-
-	Type(ctx context.Context, obj *models.PersonMedicalHistory) (*models.HistoryType, error)
 }
 type PersonOrganDonationResolver interface {
 	Donor(ctx context.Context, obj *models.PersonOrganDonation) (*models.Person, error)
@@ -1205,7 +1196,7 @@ type MenuItem {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/person.graphql", Input: `type Person {
-    ID                     : ID
+    ID                     : ID!
     FirstName              : String
     LastName               : String
     Address                : String
@@ -1351,8 +1342,8 @@ extend type Query {
     personFollowUps(PersonID: ID!,filter: PatientFilter,page:Int,limit:Int): PersonFollowUpList
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_medical_history.graphql", Input: `type PersonMedicalHistory {
-    ID: String!
-    Person: Person
+    ID: ID
+    Person: Person!
     Description: String
     Reason: String
     StartDate: String
@@ -1368,8 +1359,8 @@ enum HistoryType {
 }
 
 input PersonMedicalHistoryInput{
-    ID: String!
-    Person: PersonInput!
+    ID: ID
+    Person: PersonInput
     Description: String
     Reason: String
     StartDate: String
@@ -2946,11 +2937,14 @@ func (ec *executionContext) _Person_ID(ctx context.Context, field graphql.Collec
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOID2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_FirstName(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -3653,14 +3647,14 @@ func (ec *executionContext) _PersonFollowUp_Person(ctx context.Context, field gr
 		Object:     "PersonFollowUp",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonFollowUp().Person(rctx, obj)
+		return obj.Person, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3958,14 +3952,11 @@ func (ec *executionContext) _PersonMedicalHistory_ID(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistory_Person(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
@@ -3979,25 +3970,28 @@ func (ec *executionContext) _PersonMedicalHistory_Person(ctx context.Context, fi
 		Object:     "PersonMedicalHistory",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonMedicalHistory().Person(rctx, obj)
+		return obj.Person, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*models.Person)
 	fc.Result = res
-	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
+	return ec.marshalNPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistory_Description(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
@@ -4011,14 +4005,14 @@ func (ec *executionContext) _PersonMedicalHistory_Description(ctx context.Contex
 		Object:     "PersonMedicalHistory",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonMedicalHistory().Description(rctx, obj)
+		return obj.Description, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4027,9 +4021,9 @@ func (ec *executionContext) _PersonMedicalHistory_Description(ctx context.Contex
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistory_Reason(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
@@ -4043,14 +4037,14 @@ func (ec *executionContext) _PersonMedicalHistory_Reason(ctx context.Context, fi
 		Object:     "PersonMedicalHistory",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonMedicalHistory().Reason(rctx, obj)
+		return obj.Reason, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4059,9 +4053,9 @@ func (ec *executionContext) _PersonMedicalHistory_Reason(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistory_StartDate(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
@@ -4171,14 +4165,14 @@ func (ec *executionContext) _PersonMedicalHistory_Type(ctx context.Context, fiel
 		Object:     "PersonMedicalHistory",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonMedicalHistory().Type(rctx, obj)
+		return obj.Type, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4187,9 +4181,9 @@ func (ec *executionContext) _PersonMedicalHistory_Type(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.HistoryType)
+	res := resTmp.(models.HistoryType)
 	fc.Result = res
-	return ec.marshalOHistoryType2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx, field.Selections, res)
+	return ec.marshalOHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistoryList_histories(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistoryList) (ret graphql.Marshaler) {
@@ -6810,7 +6804,7 @@ func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6818,7 +6812,7 @@ func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
-			it.Person, err = ec.unmarshalNPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
+			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7416,6 +7410,9 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "FirstName":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Person_FirstName(ctx, field, obj)
@@ -7611,7 +7608,7 @@ func (ec *executionContext) _PersonFollowUp(ctx context.Context, sel ast.Selecti
 			out.Values[i] = innerFunc(ctx)
 
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "ClinicNo":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -7628,22 +7625,12 @@ func (ec *executionContext) _PersonFollowUp(ctx context.Context, sel ast.Selecti
 			out.Values[i] = innerFunc(ctx)
 
 		case "Person":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonFollowUp_Person(ctx, field, obj)
-				return res
+				return ec._PersonFollowUp_Person(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "Complaints":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._PersonFollowUp_Complaints(ctx, field, obj)
@@ -7773,60 +7760,30 @@ func (ec *executionContext) _PersonMedicalHistory(ctx context.Context, sel ast.S
 
 			out.Values[i] = innerFunc(ctx)
 
+		case "Person":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonMedicalHistory_Person(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "Person":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonMedicalHistory_Person(ctx, field, obj)
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "Description":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonMedicalHistory_Description(ctx, field, obj)
-				return res
+				return ec._PersonMedicalHistory_Description(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "Reason":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonMedicalHistory_Reason(ctx, field, obj)
-				return res
+				return ec._PersonMedicalHistory_Reason(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "StartDate":
 			field := field
 
@@ -7869,22 +7826,12 @@ func (ec *executionContext) _PersonMedicalHistory(ctx context.Context, sel ast.S
 			out.Values[i] = innerFunc(ctx)
 
 		case "Type":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonMedicalHistory_Type(ctx, field, obj)
-				return res
+				return ec._PersonMedicalHistory_Type(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9508,6 +9455,16 @@ func (ec *executionContext) unmarshalOGender2githubᚗcomᚋgnanakeethanᚋkidne
 }
 
 func (ec *executionContext) marshalOGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v models.Gender) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx context.Context, v interface{}) (models.HistoryType, error) {
+	var res models.HistoryType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx context.Context, sel ast.SelectionSet, v models.HistoryType) graphql.Marshaler {
 	return v
 }
 

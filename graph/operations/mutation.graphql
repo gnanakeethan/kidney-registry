@@ -55,3 +55,21 @@ mutation UpdatePatient($patientInput: PersonInput!) {
     }
 
 }
+
+fragment MedicalHistory on PersonMedicalHistory {
+    ID
+    Person {
+        ID
+    }
+    Description
+    Reason
+    StartDate
+    EndDate
+    Medications
+    Type
+}
+mutation NewHistory($input: PersonMedicalHistoryInput!) {
+    createPersonMedicalHistory(input: $input) {
+        ...MedicalHistory
+    }
+}

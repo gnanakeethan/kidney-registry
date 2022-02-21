@@ -6,7 +6,7 @@ package resolvers
 import (
 	"context"
 	"fmt"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -27,27 +27,11 @@ func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filt
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personMedicalHistoryResolver) Person(ctx context.Context, obj *models.PersonMedicalHistory) (*models.Person, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *personMedicalHistoryResolver) Description(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *personMedicalHistoryResolver) Reason(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *personMedicalHistoryResolver) EndDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *personMedicalHistoryResolver) Type(ctx context.Context, obj *models.PersonMedicalHistory) (*models.HistoryType, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

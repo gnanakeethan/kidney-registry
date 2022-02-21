@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
+	import { NewHistoryDocument, NewHistoryMutation } from '$lib/graphql/generated';
 	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
+	import { mutation } from '@urql/svelte';
 
+	const newHistory = mutation<NewHistoryMutation>({
+		query: NewHistoryDocument
+	});
 	let fields = [];
 	let message = '';
 	let values = {};
@@ -41,6 +46,40 @@
 				}
 			},
 			{
+				type: 'select', // required
+				name: 'Type', // required
+				value: 'COMPLAINT', // required
+				attributes: {
+					id: 'Type', // required
+					classes: ['form-input rounded w-full'], // optional
+					label: 'Type', // optional
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{ key: 'COMPLAINT', title: 'Complaint' },
+						{ key: 'MEDICAL', title: 'Medical' },
+						{ key: 'SURGICAL', title: 'Surgical' },
+						{ key: 'SOCIAL', title: 'Social' }
+					]
+				}, // optional
+				rules: [] // optional
+			},
+			{
+				type: 'textarea', // required
+				name: 'Reason', // required
+				value: '', // optional
+				attributes: {
+					id: 'id-field', // required
+					classes: 'form-textarea rounded w-full my-3', // optional
+					label: 'Reason', // optional
+					disabled: false, // optional
+					readonly: false, // optional
+					rows: null, // optional
+					cols: null // optional
+				}
+			},
+			{
 				type: 'textarea', // required
 				name: 'Description', // required
 				value: '', // optional
@@ -48,48 +87,6 @@
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-3', // optional
 					label: 'Description', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Complaints', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Complaints', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'RenalBiopsies', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Renal Biopsies', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'CaseStatus', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Case Status', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: null, // optional
@@ -122,7 +119,10 @@
 		if (isValidForm) {
 			values = deepen(values);
 			console.log(values);
-			message = 'Saving Data....';
+			newHistory({ input: values }).then((result) => {
+				console.log(result);
+			});
+			// message = 'Saving Data....';
 		} else {
 			message = 'Please fill all the required fields';
 		}
@@ -164,7 +164,7 @@
 				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
 				type="submit"
 			>
-				Add Followup
+				Add History
 			</button>
 		</form>
 	{:else}

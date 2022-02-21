@@ -8,17 +8,18 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/segmentio/ksuid"
 )
 
 type PersonMedicalHistory struct {
-	ID          string
-	Person      *Person      `orm:"column(person_id);rel(fk)"`
-	Description string       `orm:"column(description);null"`
-	Reason      string       `orm:"column(reason);null"`
-	StartDate   time.Time    `orm:"column(start_date);null"`
-	EndDate     time.Time    `orm:"column(end_date);null"`
-	Medications string       `orm:"column(medications);null"`
-	Type        *HistoryType `orm:"column(type);null"`
+	ID          string      `orm:"column(id);pk"`
+	Person      *Person     `orm:"column(person_id);rel(fk)"`
+	Description string      `orm:"column(description);null"`
+	Reason      string      `orm:"column(reason);null"`
+	StartDate   time.Time   `orm:"column(start_date);null"`
+	EndDate     time.Time   `orm:"column(end_date);null"`
+	Medications string      `orm:"column(medications);null"`
+	Type        HistoryType `orm:"column(type);null"`
 }
 
 func (t *PersonMedicalHistory) TableName() string {
@@ -33,17 +34,23 @@ func init() {
 // last inserted ID on success.
 func AddPersonMedicalHistory(m *PersonMedicalHistoryInput) (id int64, err error) {
 	o := orm.NewOrm()
+	startDate, _ := time.Parse("2006-01-02", *m.StartDate)
+	endDate, _ := time.Parse("2006-01-02", *m.EndDate)
+	idString := *m.ID
+	if idString == "" {
+		idString = ksuid.New().String()
+	}
 	personMedicalHistory := &PersonMedicalHistory{
-		ID:          m.ID,
+		ID:          idString,
 		Person:      &Person{ID: m.Person.ID},
 		Description: *m.Description,
 		Reason:      *m.Reason,
-		StartDate:   *m.StartDate,
-		EndDate:     *m.EndDate,
+		StartDate:   startDate,
+		EndDate:     endDate,
 		Medications: *m.Medications,
-		Type:        m.Type,
+		Type:        *m.Type,
 	}
-	id, err = o.Insert(m)
+	id, err = o.Insert(personMedicalHistory)
 	return
 }
 
