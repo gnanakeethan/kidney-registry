@@ -2,28 +2,39 @@
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
-	import { recipientId } from '$lib/state/recipient';
+	import { recipient, recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { get, writable, Writable } from 'svelte/store';
 
 	const fields = [
 		{
 			type: 'input',
-			name: 'patient_identifier',
+			name: 'Person.ID',
 			value: $recipientId,
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
-				label: 'Recipient ID',
+				label: 'Recipient PHN',
 				id: 'recipient_id',
+				readonly: true,
 				classes: ['form-input bg-gray-200 rounded w-full']
+			}
+		},
+		{
+			type: 'input',
+			name: 'Person.Phn',
+			value: $recipient.Phn,
+			prefix: {
+				classes: [' hidden flex flex-col items-center justify-between w-full py-2']
 			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
+			attributes: {
+				type: 'text',
+				label: 'Recipient PHN',
+				id: 'recipient_id',
+				readonly: true,
+				classes: ['form-input bg-gray-200 rounded w-full']
 			}
 		},
 		{
@@ -109,7 +120,7 @@
 		on:submit|preventDefault={onSubmit}
 	>
 		<div class="text-xl font-bold">New Followup</div>
-		<Field {fields} {valuesForm} />
+		<Field bind:values bind:valuesForm {fields} />
 		<button class=" m-8 rounded bg-green-400 py-2 px-4 text-lg uppercase" type="submit">
 			Save
 		</button>

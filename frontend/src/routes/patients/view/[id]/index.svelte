@@ -2,7 +2,7 @@
 	import { operationStore, query } from '@urql/svelte';
 	import type { GetPatientQuery, Person } from '../../../../lib/graphql/generated';
 	import { GetPatientDocument } from '../../../../lib/graphql/generated';
-	import { recipientId } from '../../../../lib/state/recipient';
+	import { recipient, recipientId } from '../../../../lib/state/recipient';
 
 	const patientQuery = query<GetPatientQuery>(
 		operationStore(GetPatientDocument, {
@@ -12,6 +12,7 @@
 	let patient: Person;
 	$: if ($patientQuery.data) {
 		patient = $patientQuery.data.getPatient;
+		recipient.set(patient);
 	}
 </script>
 

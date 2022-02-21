@@ -11,7 +11,7 @@ type PersonFollowUp{
 
 input PersonFollowUpInput{
     ID: String!
-    PersonId: PersonInput!
+    Person: PersonInput!
     ClinicNo: String
     Description: String
     Complaints: String
