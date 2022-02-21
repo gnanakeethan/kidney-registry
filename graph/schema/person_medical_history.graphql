@@ -1,0 +1,44 @@
+type PersonMedicalHistory {
+    ID: String!
+    Person: Person
+    Description: String
+    Reason: String
+    StartDate: String
+    EndDate: String
+    Medications: String
+    Type: HistoryType
+}
+enum HistoryType {
+    COMPLAINT
+    MEDICAL
+    SURGICAL
+    SOCIAL
+}
+
+input PersonMedicalHistoryInput{
+    ID: String!
+    Person: PersonInput!
+    Description: String
+    Reason: String
+    StartDate: String
+    EndDate: String
+    Medications: String
+    Type: HistoryType
+}
+extend type Person {
+    histories(filter: PatientFilter,page:Int,limit:Int)              : PersonMedicalHistoryList
+}
+type PersonMedicalHistoryList {
+    histories: [PersonMedicalHistory]
+    pagination: Pagination
+}
+
+extend type Mutation {
+    createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
+    updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
+    deletePersonMedicalHistory(ID: ID!): PersonMedicalHistory
+}
+extend type Query {
+    personMedicalHistory(ID: ID!): PersonMedicalHistory
+    personMedicalHistorys(PersonID: ID!,filter: PatientFilter,page:Int,limit:Int): PersonMedicalHistoryList
+}

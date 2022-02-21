@@ -120,6 +120,22 @@ type PersonList struct {
 	Pagination *Pagination `json:"pagination"`
 }
 
+type PersonMedicalHistoryInput struct {
+	ID          string       `json:"ID"`
+	Person      *PersonInput `json:"Person"`
+	Description *string      `json:"Description"`
+	Reason      *string      `json:"Reason"`
+	StartDate   *string      `json:"StartDate"`
+	EndDate     *string      `json:"EndDate"`
+	Medications *string      `json:"Medications"`
+	Type        *HistoryType `json:"Type"`
+}
+
+type PersonMedicalHistoryList struct {
+	Histories  []*PersonMedicalHistory `json:"histories"`
+	Pagination *Pagination             `json:"pagination"`
+}
+
 type StringFilter struct {
 	Comparison ComparisonType `json:"comparison"`
 	And        *StringFilter  `json:"and"`
@@ -251,6 +267,51 @@ func (e *Gender) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Gender) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type HistoryType string
+
+const (
+	HistoryTypeComplaint HistoryType = "COMPLAINT"
+	HistoryTypeMedical   HistoryType = "MEDICAL"
+	HistoryTypeSurgical  HistoryType = "SURGICAL"
+	HistoryTypeSocial    HistoryType = "SOCIAL"
+)
+
+var AllHistoryType = []HistoryType{
+	HistoryTypeComplaint,
+	HistoryTypeMedical,
+	HistoryTypeSurgical,
+	HistoryTypeSocial,
+}
+
+func (e HistoryType) IsValid() bool {
+	switch e {
+	case HistoryTypeComplaint, HistoryTypeMedical, HistoryTypeSurgical, HistoryTypeSocial:
+		return true
+	}
+	return false
+}
+
+func (e HistoryType) String() string {
+	return string(e)
+}
+
+func (e *HistoryType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = HistoryType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid HistoryType", str)
+	}
+	return nil
+}
+
+func (e HistoryType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

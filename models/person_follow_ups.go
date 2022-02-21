@@ -9,14 +9,14 @@ import (
 )
 
 type PersonFollowUp struct {
-	ID             string               `orm:"column(id);pk"`
-	ClinicNo       string               `orm:"column(clinic_no)"`
-	Description    string               `orm:"column(description);null"`
-	PersonFollowUp *PersonFollowUp      `orm:"column(person_id);rel(fk)"`
-	Complaints     string               `orm:"column(complaints);null"`
-	RenalBiopsies  string               `orm:"column(renal_biopsies);null"`
-	CaseStatus     string               `orm:"column(case_status);null"`
-	DonationId     *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
+	ID            string               `orm:"column(id);pk"`
+	ClinicNo      string               `orm:"column(clinic_no)"`
+	Description   string               `orm:"column(description);null"`
+	Person        *Person              `orm:"column(person_id);rel(fk)"`
+	Complaints    string               `orm:"column(complaints);null"`
+	RenalBiopsies string               `orm:"column(renal_biopsies);null"`
+	CaseStatus    string               `orm:"column(case_status);null"`
+	DonationId    *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
 }
 
 func (t *PersonFollowUp) TableName() string {
@@ -33,6 +33,7 @@ func AddPersonFollowUps(m PersonFollowUpInput) (id int64, err error) {
 	o := orm.NewOrm()
 	v := PersonFollowUp{
 		ID:            m.ID,
+		Person:        &Person{ID: m.Person.ID},
 		ClinicNo:      *m.ClinicNo,
 		Description:   *m.Description,
 		Complaints:    *m.Complaints,

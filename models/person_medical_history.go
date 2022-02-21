@@ -5,16 +5,20 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type PersonMedicalHistory struct {
-	ID          string  `orm:"column(id);pk"`
-	Duration    string  `orm:"column(duration)"`
-	Disease     string  `orm:"column(disease)"`
-	Medications string  `orm:"column(medications);null"`
-	PersonId    *Person `orm:"column(person_id);rel(fk)"`
+	ID          string
+	Person      *Person      `orm:"column(person_id);rel(fk)"`
+	Description string       `orm:"column(description);null"`
+	Reason      string       `orm:"column(reason);null"`
+	StartDate   time.Time    `orm:"column(start_date);null"`
+	EndDate     time.Time    `orm:"column(end_date);null"`
+	Medications string       `orm:"column(medications);null"`
+	Type        *HistoryType `orm:"column(type);null"`
 }
 
 func (t *PersonMedicalHistory) TableName() string {
@@ -27,8 +31,18 @@ func init() {
 
 // AddPersonMedicalHistory insert a new PersonMedicalHistory into database and returns
 // last inserted ID on success.
-func AddPersonMedicalHistory(m *PersonMedicalHistory) (id int64, err error) {
+func AddPersonMedicalHistory(m *PersonMedicalHistoryInput) (id int64, err error) {
 	o := orm.NewOrm()
+	personMedicalHistory := &PersonMedicalHistory{
+		ID:          m.ID,
+		Person:      &Person{ID: m.Person.ID},
+		Description: *m.Description,
+		Reason:      *m.Reason,
+		StartDate:   *m.StartDate,
+		EndDate:     *m.EndDate,
+		Medications: *m.Medications,
+		Type:        m.Type,
+	}
 	id, err = o.Insert(m)
 	return
 }
