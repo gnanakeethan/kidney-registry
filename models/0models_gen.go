@@ -86,7 +86,17 @@ type PatientFilter struct {
 	OrNot               *PatientFilter `json:"orNot"`
 }
 
-type PatientInput struct {
+type PersonFollowUpInput struct {
+	ID            string       `json:"ID"`
+	PersonID      *PersonInput `json:"PersonId"`
+	ClinicNo      *string      `json:"ClinicNo"`
+	Description   *string      `json:"Description"`
+	Complaints    *string      `json:"Complaints"`
+	RenalBiopsies *string      `json:"RenalBiopsies"`
+	CaseStatus    *string      `json:"CaseStatus"`
+}
+
+type PersonInput struct {
 	ID                  string        `json:"ID"`
 	FirstName           string        `json:"FirstName"`
 	LastName            string        `json:"LastName"`

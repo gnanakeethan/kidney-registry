@@ -1,5 +1,5 @@
-type PersonFollowUps{
-    ID: String
+type PersonFollowUp{
+    ID: String!
     ClinicNo: String
     Description: String
     Person: Person
@@ -7,4 +7,24 @@ type PersonFollowUps{
     RenalBiopsies: String
     CaseStatus: String
     DonationId: PersonOrganDonation
+}
+
+input PersonFollowUpInput{
+    ID: String!
+    PersonId: PersonInput!
+    ClinicNo: String
+    Description: String
+    Complaints: String
+    RenalBiopsies: String
+    CaseStatus: String
+}
+
+extend type Mutation {
+    createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    deletePersonFollowUp(ID: ID!): PersonFollowUp
+}
+extend type Query {
+    personFollowUp(ID: ID!): PersonFollowUp
+    personFollowUps(Person: ID): [PersonFollowUp]
 }

@@ -103,7 +103,7 @@ func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limi
 	}, nil
 }
 
-func UpdatePatient(input *PatientInput) (*Person, error) {
+func UpdatePatient(input *PersonInput) (*Person, error) {
 	dateOfBirth, _ := time.Parse("2006-01-02", input.DateOfBirth)
 	person := &Person{
 		ID:                  input.ID,

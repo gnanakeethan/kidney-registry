@@ -10,12 +10,12 @@ import (
 )
 
 type PersonFollowUpsMedicines struct {
-	ID           string           `orm:"column(id);pk"`
-	MedicineCode string           `orm:"column(medicine_code)"`
-	Description  string           `orm:"column(description);null"`
-	Reason       string           `orm:"column(reason);null"`
-	CaseStatus   string           `orm:"column(case_status);null"`
-	FollowUpId   *PersonFollowUps `orm:"column(follow_up_id);rel(fk)"`
+	ID           string          `orm:"column(id);pk"`
+	MedicineCode string          `orm:"column(medicine_code)"`
+	Description  string          `orm:"column(description);null"`
+	Reason       string          `orm:"column(reason);null"`
+	CaseStatus   string          `orm:"column(case_status);null"`
+	FollowUpId   *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
 }
 
 func (t *PersonFollowUpsMedicines) TableName() string {

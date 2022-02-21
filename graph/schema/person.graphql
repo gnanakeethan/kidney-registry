@@ -84,7 +84,7 @@ input PatientFilter {
     orNot                  : PatientFilter
 }
 
-input PatientInput {
+input PersonInput {
     ID                     : ID!
     FirstName              : String!
     LastName               : String!
@@ -110,5 +110,5 @@ extend type Query {
 
 extend type Mutation {
     newPatient: Person
-    updatePatient(input:PatientInput) : Person
+    updatePatient(input:PersonInput) : Person
 }

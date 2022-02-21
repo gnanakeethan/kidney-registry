@@ -34,7 +34,7 @@ mutation NewPatient {
     }
 }
 
-mutation UpdatePatient($patientInput: PatientInput!) {
+mutation UpdatePatient($patientInput: PersonInput!) {
     updatePatient(input: $patientInput) {
         ID
         FirstName

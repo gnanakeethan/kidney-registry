@@ -9,7 +9,7 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type PersonFollowUps struct {
+type PersonFollowUp struct {
 	ID            string               `orm:"column(id);pk"`
 	ClinicNo      string               `orm:"column(clinic_no)"`
 	Description   string               `orm:"column(description);null"`
@@ -20,39 +20,39 @@ type PersonFollowUps struct {
 	DonationId    *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
 }
 
-func (t *PersonFollowUps) TableName() string {
+func (t *PersonFollowUp) TableName() string {
 	return "person_follow_ups"
 }
 
 func init() {
-	orm.RegisterModel(new(PersonFollowUps))
+	orm.RegisterModel(new(PersonFollowUp))
 }
 
-// AddPersonFollowUps insert a new PersonFollowUps into database and returns
+// AddPersonFollowUps insert a new PersonFollowUp into database and returns
 // last inserted ID on success.
-func AddPersonFollowUps(m *PersonFollowUps) (id int64, err error) {
+func AddPersonFollowUps(m *PersonFollowUp) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsById retrieves PersonFollowUps by ID. Returns error if
+// GetPersonFollowUpsById retrieves PersonFollowUp by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsById(id string) (v *PersonFollowUps, err error) {
+func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
 	o := orm.NewOrm()
-	v = &PersonFollowUps{ID: id}
+	v = &PersonFollowUp{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllPersonFollowUps retrieves all PersonFollowUps matches certain condition. Returns empty list if
+// GetAllPersonFollowUps retrieves all PersonFollowUp matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersonFollowUps(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonFollowUps))
+	qs := o.QueryTable(new(PersonFollowUp))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -102,7 +102,7 @@ func GetAllPersonFollowUps(query map[string]string, fields []string, sortby []st
 		}
 	}
 	
-	var l []PersonFollowUps
+	var l []PersonFollowUp
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -125,11 +125,11 @@ func GetAllPersonFollowUps(query map[string]string, fields []string, sortby []st
 	return nil, err
 }
 
-// UpdatePersonFollowUps updates PersonFollowUps by ID and returns error if
+// UpdatePersonFollowUps updates PersonFollowUp by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsById(m *PersonFollowUps) (err error) {
+func UpdatePersonFollowUpsById(m *PersonFollowUp) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUps{ID: m.ID}
+	v := PersonFollowUp{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -140,15 +140,15 @@ func UpdatePersonFollowUpsById(m *PersonFollowUps) (err error) {
 	return
 }
 
-// DeletePersonFollowUps deletes PersonFollowUps by ID and returns error if
+// DeletePersonFollowUps deletes PersonFollowUp by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonFollowUps(id string) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUps{ID: id}
+	v := PersonFollowUp{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonFollowUps{ID: id}); err == nil {
+		if num, err = o.Delete(&PersonFollowUp{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
