@@ -7,6 +7,8 @@ import (
 	"context"
 	"time"
 	
+	"github.com/mergestat/timediff"
+	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
 	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
@@ -48,8 +50,21 @@ func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person) (*mo
 	return nil, nil
 }
 
+func (r *personResolver) Age(ctx context.Context, obj *models.Person) (*string, error) {
+	if obj.DateOfBirth.IsZero() {
+		return nil, nil
+	}
+	locale.Register("en-US", englishUnitedStates)
+	diff := timediff.TimeDiff(obj.DateOfBirth)
+	return &diff, nil
+}
+
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error) {
 	return models.GetListPatients(ctx, filter, page, limit)
+}
+
+func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.Person, error) {
+	return models.GetPersonsById(id)
 }
 
 // Person returns generated.PersonResolver implementation.

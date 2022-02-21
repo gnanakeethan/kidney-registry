@@ -1,7 +1,14 @@
 <script lang="ts">
+	import { operationStore, query } from '@urql/svelte';
+	import type { GetPatientQuery } from '../../../../lib/graphql/generated';
+	import { GetPatientDocument } from '../../../../lib/graphql/generated';
 	import { recipientId } from '../../../../lib/state/recipient';
 
-	recipientId.set('25DZi7TRDfmVDEgDBjuRRsLfWzy');
+	const newPatient = query<GetPatientQuery>(
+		operationStore(GetPatientDocument, {
+			id: $recipientId
+		})
+	);
 </script>
 
 <div class="h-full bg-gradient-to-b from-blue-100 to-stone-100 p-2">

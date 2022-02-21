@@ -11,8 +11,8 @@ query ListUsers ($filter: UserListFilter,$perPage: Int){
     }
 }
 
-query ListPatients ($limit: Int){
-    listPatients(limit: $limit) {
+query ListPatients ($filter: PatientFilter, $page: Int, $limit: Int){
+    listPatients(filter:$filter,page: $page,limit: $limit) {
         pagination {
             totalItems
             prevPage
@@ -20,11 +20,33 @@ query ListPatients ($limit: Int){
             itemsPerPage
         }
         persons {
-            ID
-            DateOfBirth
-            FirstName
-            LastName
+            ...PersonFields
         }
+    }
+}
+fragment PersonFields on Person {
+    ID
+    FirstName
+    LastName
+    Address
+    DateOfBirth
+    Ethnicity
+    Phn
+    PrimaryRenalDisease
+    Weight
+    Height
+    Gender
+    MaritalStatus
+    ContactNo
+    PersonType
+    Status
+    RecordStatus
+    Age
+}
+
+query GetPatient ($id: ID!){
+    getPatient(ID: $id) {
+        ...PersonFields
     }
 }
 

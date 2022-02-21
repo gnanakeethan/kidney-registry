@@ -107,43 +107,50 @@
 			}
 		},
 		{
-			type: 'input',
-			name: 'Gender',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
+			type: 'select', // required
+			name: 'MaritalStatus', //required
 			attributes: {
-				type: 'text',
-				label: 'Gender',
-				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
+				id: 'MaritalStatus', // required
+				classes: ['form-input rounded w-full'], // optional
+				label: 'Marital Status', // optional
+				disabled: false // optional
 			},
-			rules: ['required'],
-			messages: {
-				required: 'Lastname field is required!',
-				minlen: 'Last name field must have more that 6 characters!'
-			}
+			extra: {
+				options: [
+					{
+						value: 'SINGLE',
+						title: 'Single'
+					},
+					{
+						value: 'MARRIED',
+						title: 'Married'
+					}
+				]
+			}, // optional
+			rules: [] // optional
 		},
 		{
-			type: 'input',
-			name: 'MaritalStatus',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
+			type: 'select', // required
+			name: 'Gender', // required
 			attributes: {
-				type: 'text',
-				label: 'Marital Status',
-				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
+				id: 'Gender', // required
+				classes: ['form-input rounded w-full'], // optional
+				label: 'Gender', // optional
+				disabled: false // optional
 			},
-			rules: ['required'],
-			messages: {
-				required: 'Lastname field is required!'
-			}
+			extra: {
+				options: [
+					{
+						value: 'MALE',
+						title: 'Male'
+					},
+					{
+						value: 'FEMALE',
+						title: 'Female'
+					}
+				]
+			}, // optional
+			rules: [] // optional
 		},
 		{
 			type: 'input',
