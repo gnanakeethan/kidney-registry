@@ -81,9 +81,9 @@ func DeletePersons(id string) (err error) {
 	return
 }
 
-func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limit *int) (*PersonList, error) {
+func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit *int) (*PersonList, error) {
 	person, persons := Person{}, []*Person{}
-	filterPtr := PatientFilter{}
+	filterPtr := PersonFilter{}
 	if filter != nil {
 		filterPtr = *filter
 	}
@@ -104,24 +104,24 @@ func GetListPatients(ctx context.Context, filter *PatientFilter, page *int, limi
 }
 
 func UpdatePatient(input *PersonInput) (*Person, error) {
-	dateOfBirth, _ := time.Parse("2006-01-02", input.DateOfBirth)
+	dateOfBirth, _ := time.Parse("2006-01-02", *input.DateOfBirth)
 	person := &Person{
 		ID:                  input.ID,
 		DateOfBirth:         dateOfBirth,
-		Gender:              input.Gender,
-		MaritalStatus:       input.MaritalStatus,
-		PersonType:          input.PersonType,
-		Status:              input.Status,
-		RecordStatus:        input.RecordStatus,
+		Gender:              *input.Gender,
+		MaritalStatus:       *input.MaritalStatus,
+		PersonType:          *input.PersonType,
+		Status:              *input.Status,
+		RecordStatus:        *input.RecordStatus,
 		Phn:                 time.Now().Format("20060102") + randString(8),
-		FirstName:           input.FirstName,
-		LastName:            input.LastName,
-		Address:             input.Address,
-		Ethnicity:           input.Ethnicity,
-		PrimaryRenalDisease: input.PrimaryRenalDisease,
-		Weight:              input.Weight,
-		Height:              input.Height,
-		ContactNo:           input.ContactNo,
+		FirstName:           *input.FirstName,
+		LastName:            *input.LastName,
+		Address:             *input.Address,
+		Ethnicity:           *input.Ethnicity,
+		PrimaryRenalDisease: *input.PrimaryRenalDisease,
+		Weight:              *input.Weight,
+		Height:              *input.Height,
+		ContactNo:           *input.ContactNo,
 	}
 	if err := UpdatePersonsById(person); err == nil {
 		return person, nil

@@ -11,7 +11,7 @@ query ListUsers ($filter: UserListFilter,$perPage: Int){
     }
 }
 
-query ListPatients ($filter: PatientFilter, $page: Int, $limit: Int){
+query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int){
     listPatients(filter:$filter,page: $page,limit: $limit) {
         pagination {
             totalItems

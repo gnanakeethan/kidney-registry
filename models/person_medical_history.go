@@ -32,26 +32,30 @@ func init() {
 
 // AddPersonMedicalHistory insert a new PersonMedicalHistory into database and returns
 // last inserted ID on success.
-func AddPersonMedicalHistory(m *PersonMedicalHistoryInput) (id int64, err error) {
+func AddPersonMedicalHistory(m PersonMedicalHistoryInput) (personMedicalHistory *PersonMedicalHistory, err error) {
 	o := orm.NewOrm()
-	startDate, _ := time.Parse("2006-01-02", *m.StartDate)
-	endDate, _ := time.Parse("2006-01-02", *m.EndDate)
-	idString := *m.ID
-	if idString == "" {
-		idString = ksuid.New().String()
+	startDate, _ := time.Parse("2006-01-02", PointerToString(m.StartDate))
+	endDate, _ := time.Parse("2006-01-02", PointerToString(m.EndDate))
+	idString := ksuid.New().String()
+	if m.ID != nil {
+		idString = *m.ID
 	}
-	personMedicalHistory := &PersonMedicalHistory{
+	personMedicalHistory = &PersonMedicalHistory{
 		ID:          idString,
 		Person:      &Person{ID: m.Person.ID},
-		Description: *m.Description,
-		Reason:      *m.Reason,
+		Description: PointerToString(m.Description),
+		Reason:      PointerToString(m.Reason),
 		StartDate:   startDate,
 		EndDate:     endDate,
-		Medications: *m.Medications,
-		Type:        *m.Type,
+		Medications: PointerToString(m.Medications),
+		Type:        m.Type,
 	}
-	id, err = o.Insert(personMedicalHistory)
-	return
+	if _, err = o.InsertOrUpdate(personMedicalHistory, "ID"); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
+		return personMedicalHistory, nil
+	} else {
+		return personMedicalHistory, err
+	}
+	
 }
 
 // GetPersonMedicalHistoryById retrieves PersonMedicalHistory by ID. Returns error if

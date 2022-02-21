@@ -12,7 +12,7 @@ import (
 )
 
 func (r *mutationResolver) CreatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error) {
-	panic(fmt.Errorf("not implemented"))
+	return models.AddPersonMedicalHistory(input)
 }
 
 func (r *mutationResolver) UpdatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error) {
@@ -23,23 +23,25 @@ func (r *mutationResolver) DeletePersonMedicalHistory(ctx context.Context, id st
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PatientFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
+func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	date := obj.StartDate.Format("2006-01-01")
+	return &date, nil
 }
 
 func (r *personMedicalHistoryResolver) EndDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	date := obj.EndDate.Format("2006-01-01")
+	return &date, nil
 }
 
 func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) PersonMedicalHistorys(ctx context.Context, personID string, filter *models.PatientFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
+func (r *queryResolver) PersonMedicalHistorys(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

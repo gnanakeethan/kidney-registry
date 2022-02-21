@@ -60,25 +60,25 @@ type Pagination struct {
 	ItemsPerPage int `json:"itemsPerPage"`
 }
 
-type PatientFilter struct {
-	ID                  *string        `json:"ID"`
-	FirstName           *StringFilter  `json:"FirstName"`
-	LastName            *StringFilter  `json:"LastName"`
-	Address             *StringFilter  `json:"Address"`
-	DateOfBirth         *StringFilter  `json:"DateOfBirth"`
-	Ethnicity           *StringFilter  `json:"Ethnicity"`
-	Phn                 *StringFilter  `json:"Phn"`
-	PrimaryRenalDisease *StringFilter  `json:"PrimaryRenalDisease"`
-	Weight              *FloatFilter   `json:"Weight"`
-	Height              *FloatFilter   `json:"Height"`
-	Gender              *StringFilter  `json:"Gender"`
-	MaritalStatus       *StringFilter  `json:"MaritalStatus"`
-	ContactNo           *StringFilter  `json:"ContactNo"`
-	PersonType          *StringFilter  `json:"PersonType"`
-	And                 *PatientFilter `json:"and"`
-	AndNot              *PatientFilter `json:"andNot"`
-	Or                  *PatientFilter `json:"or"`
-	OrNot               *PatientFilter `json:"orNot"`
+type PersonFilter struct {
+	ID                  *string       `json:"ID"`
+	FirstName           *StringFilter `json:"FirstName"`
+	LastName            *StringFilter `json:"LastName"`
+	Address             *StringFilter `json:"Address"`
+	DateOfBirth         *StringFilter `json:"DateOfBirth"`
+	Ethnicity           *StringFilter `json:"Ethnicity"`
+	Phn                 *StringFilter `json:"Phn"`
+	PrimaryRenalDisease *StringFilter `json:"PrimaryRenalDisease"`
+	Weight              *FloatFilter  `json:"Weight"`
+	Height              *FloatFilter  `json:"Height"`
+	Gender              *StringFilter `json:"Gender"`
+	MaritalStatus       *StringFilter `json:"MaritalStatus"`
+	ContactNo           *StringFilter `json:"ContactNo"`
+	PersonType          *StringFilter `json:"PersonType"`
+	And                 *PersonFilter `json:"and"`
+	AndNot              *PersonFilter `json:"andNot"`
+	Or                  *PersonFilter `json:"or"`
+	OrNot               *PersonFilter `json:"orNot"`
 }
 
 type PersonFollowUpInput struct {
@@ -97,27 +97,38 @@ type PersonFollowUpList struct {
 }
 
 type PersonInput struct {
-	ID                  string        `json:"ID"`
-	FirstName           string        `json:"FirstName"`
-	LastName            string        `json:"LastName"`
-	Address             string        `json:"Address"`
-	DateOfBirth         string        `json:"DateOfBirth"`
-	Ethnicity           string        `json:"Ethnicity"`
-	Phn                 string        `json:"Phn"`
-	PrimaryRenalDisease string        `json:"PrimaryRenalDisease"`
-	Weight              float64       `json:"Weight"`
-	Height              float64       `json:"Height"`
-	Gender              Gender        `json:"Gender"`
-	MaritalStatus       MaritalStatus `json:"MaritalStatus"`
-	ContactNo           string        `json:"ContactNo"`
-	PersonType          PatientType   `json:"PersonType"`
-	Status              PatientStatus `json:"Status"`
-	RecordStatus        RecordStatus  `json:"RecordStatus"`
+	ID                  string         `json:"ID"`
+	FirstName           *string        `json:"FirstName"`
+	LastName            *string        `json:"LastName"`
+	Address             *string        `json:"Address"`
+	DateOfBirth         *string        `json:"DateOfBirth"`
+	Ethnicity           *string        `json:"Ethnicity"`
+	Phn                 *string        `json:"Phn"`
+	PrimaryRenalDisease *string        `json:"PrimaryRenalDisease"`
+	Weight              *float64       `json:"Weight"`
+	Height              *float64       `json:"Height"`
+	Gender              *Gender        `json:"Gender"`
+	MaritalStatus       *MaritalStatus `json:"MaritalStatus"`
+	ContactNo           *string        `json:"ContactNo"`
+	PersonType          *PatientType   `json:"PersonType"`
+	Status              *PatientStatus `json:"Status"`
+	RecordStatus        *RecordStatus  `json:"RecordStatus"`
 }
 
 type PersonList struct {
 	Persons    []*Person   `json:"persons"`
 	Pagination *Pagination `json:"pagination"`
+}
+
+type PersonMedicalHistoryFilter struct {
+	ID          *StringFilter `json:"ID"`
+	Person      *PersonFilter `json:"Person"`
+	Description *string       `json:"Description"`
+	Reason      *string       `json:"Reason"`
+	StartDate   *string       `json:"StartDate"`
+	EndDate     *string       `json:"EndDate"`
+	Medications *string       `json:"Medications"`
+	Type        *HistoryType  `json:"Type"`
 }
 
 type PersonMedicalHistoryInput struct {
@@ -128,7 +139,7 @@ type PersonMedicalHistoryInput struct {
 	StartDate   *string      `json:"StartDate"`
 	EndDate     *string      `json:"EndDate"`
 	Medications *string      `json:"Medications"`
-	Type        *HistoryType `json:"Type"`
+	Type        HistoryType  `json:"Type"`
 }
 
 type PersonMedicalHistoryList struct {

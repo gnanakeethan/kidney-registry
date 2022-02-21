@@ -58,7 +58,7 @@ type PersonList {
     pagination: Pagination
 }
 
-input PatientFilter {
+input PersonFilter {
     ID                     : ID
     FirstName              : StringFilter
     LastName               : StringFilter
@@ -73,33 +73,33 @@ input PatientFilter {
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
-    and                    : PatientFilter
-    andNot                 : PatientFilter
-    or                     : PatientFilter
-    orNot                  : PatientFilter
+    and                    : PersonFilter
+    andNot                 : PersonFilter
+    or                     : PersonFilter
+    orNot                  : PersonFilter
 }
 
 input PersonInput {
     ID                     : ID!
-    FirstName              : String!
-    LastName               : String!
-    Address                : String!
-    DateOfBirth            : String!
-    Ethnicity              : String!
-    Phn                    : String!
-    PrimaryRenalDisease    : String!
-    Weight                 : Float!
-    Height                 : Float!
-    Gender                 : Gender!
-    MaritalStatus          : MaritalStatus!
-    ContactNo              : String!
-    PersonType             : PatientType!
-    Status                 : PatientStatus!
-    RecordStatus           : RecordStatus!
+    FirstName              : String
+    LastName               : String
+    Address                : String
+    DateOfBirth            : String
+    Ethnicity              : String
+    Phn                    : String
+    PrimaryRenalDisease    : String
+    Weight                 : Float
+    Height                 : Float
+    Gender                 : Gender
+    MaritalStatus          : MaritalStatus
+    ContactNo              : String
+    PersonType             : PatientType
+    Status                 : PatientStatus
+    RecordStatus           : RecordStatus
 }
 
 extend type Query {
-    listPatients(filter: PatientFilter,page:Int,limit:Int) : PersonList
+    listPatients(filter: PersonFilter,page:Int,limit:Int) : PersonList
     getPatient(ID: ID!) : Person
 }
 

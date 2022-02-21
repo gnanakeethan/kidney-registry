@@ -107,10 +107,10 @@ type ComplexityRoot struct {
 		DateOfBirth         func(childComplexity int) int
 		Ethnicity           func(childComplexity int) int
 		FirstName           func(childComplexity int) int
-		FollowUps           func(childComplexity int, filter *models.PatientFilter, page *int, limit *int) int
+		FollowUps           func(childComplexity int, filter *models.PersonFilter, page *int, limit *int) int
 		Gender              func(childComplexity int) int
 		Height              func(childComplexity int) int
-		Histories           func(childComplexity int, filter *models.PatientFilter, page *int, limit *int) int
+		Histories           func(childComplexity int, filter *models.PersonFilter, page *int, limit *int) int
 		ID                  func(childComplexity int) int
 		LastName            func(childComplexity int) int
 		MaritalStatus       func(childComplexity int) int
@@ -174,11 +174,11 @@ type ComplexityRoot struct {
 	Query struct {
 		Error                 func(childComplexity int) int
 		GetPatient            func(childComplexity int, id string) int
-		ListPatients          func(childComplexity int, filter *models.PatientFilter, page *int, limit *int) int
+		ListPatients          func(childComplexity int, filter *models.PersonFilter, page *int, limit *int) int
 		PersonFollowUp        func(childComplexity int, id string) int
-		PersonFollowUps       func(childComplexity int, personID string, filter *models.PatientFilter, page *int, limit *int) int
+		PersonFollowUps       func(childComplexity int, personID string, filter *models.PersonFilter, page *int, limit *int) int
 		PersonMedicalHistory  func(childComplexity int, id string) int
-		PersonMedicalHistorys func(childComplexity int, personID string, filter *models.PatientFilter, page *int, limit *int) int
+		PersonMedicalHistorys func(childComplexity int, personID string, filter *models.PersonFilter, page *int, limit *int) int
 		Users                 func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
 	}
 
@@ -219,8 +219,8 @@ type PersonResolver interface {
 	DateOfBirth(ctx context.Context, obj *models.Person) (*string, error)
 
 	Age(ctx context.Context, obj *models.Person) (*string, error)
-	FollowUps(ctx context.Context, obj *models.Person, filter *models.PatientFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
-	Histories(ctx context.Context, obj *models.Person, filter *models.PatientFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
+	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
+	Histories(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
 }
 type PersonMedicalHistoryResolver interface {
 	StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
@@ -237,12 +237,12 @@ type PersonOrganDonationResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	ListPatients(ctx context.Context, filter *models.PatientFilter, page *int, limit *int) (*models.PersonList, error)
+	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int) (*models.PersonList, error)
 	GetPatient(ctx context.Context, id string) (*models.Person, error)
 	PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
-	PersonFollowUps(ctx context.Context, personID string, filter *models.PatientFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
+	PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
 	PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error)
-	PersonMedicalHistorys(ctx context.Context, personID string, filter *models.PatientFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
+	PersonMedicalHistorys(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
 	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 }
 type SubscriptionResolver interface {
@@ -569,7 +569,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Person.FollowUps(childComplexity, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Person.FollowUps(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
 
 	case "Person.Gender":
 		if e.complexity.Person.Gender == nil {
@@ -595,7 +595,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Person.Histories(childComplexity, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Person.Histories(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
 
 	case "Person.ID":
 		if e.complexity.Person.ID == nil {
@@ -906,7 +906,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ListPatients(childComplexity, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Query.ListPatients(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
 
 	case "Query.personFollowUp":
 		if e.complexity.Query.PersonFollowUp == nil {
@@ -930,7 +930,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.PersonFollowUps(childComplexity, args["PersonID"].(string), args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Query.PersonFollowUps(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
 
 	case "Query.personMedicalHistory":
 		if e.complexity.Query.PersonMedicalHistory == nil {
@@ -954,7 +954,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.PersonMedicalHistorys(childComplexity, args["PersonID"].(string), args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Query.PersonMedicalHistorys(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -1255,7 +1255,7 @@ type PersonList {
     pagination: Pagination
 }
 
-input PatientFilter {
+input PersonFilter {
     ID                     : ID
     FirstName              : StringFilter
     LastName               : StringFilter
@@ -1270,33 +1270,33 @@ input PatientFilter {
     MaritalStatus          : StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
-    and                    : PatientFilter
-    andNot                 : PatientFilter
-    or                     : PatientFilter
-    orNot                  : PatientFilter
+    and                    : PersonFilter
+    andNot                 : PersonFilter
+    or                     : PersonFilter
+    orNot                  : PersonFilter
 }
 
 input PersonInput {
     ID                     : ID!
-    FirstName              : String!
-    LastName               : String!
-    Address                : String!
-    DateOfBirth            : String!
-    Ethnicity              : String!
-    Phn                    : String!
-    PrimaryRenalDisease    : String!
-    Weight                 : Float!
-    Height                 : Float!
-    Gender                 : Gender!
-    MaritalStatus          : MaritalStatus!
-    ContactNo              : String!
-    PersonType             : PatientType!
-    Status                 : PatientStatus!
-    RecordStatus           : RecordStatus!
+    FirstName              : String
+    LastName               : String
+    Address                : String
+    DateOfBirth            : String
+    Ethnicity              : String
+    Phn                    : String
+    PrimaryRenalDisease    : String
+    Weight                 : Float
+    Height                 : Float
+    Gender                 : Gender
+    MaritalStatus          : MaritalStatus
+    ContactNo              : String
+    PersonType             : PatientType
+    Status                 : PatientStatus
+    RecordStatus           : RecordStatus
 }
 
 extend type Query {
-    listPatients(filter: PatientFilter,page:Int,limit:Int) : PersonList
+    listPatients(filter: PersonFilter,page:Int,limit:Int) : PersonList
     getPatient(ID: ID!) : Person
 }
 
@@ -1325,7 +1325,7 @@ input PersonFollowUpInput{
     CaseStatus: String
 }
 extend type Person {
-    followUps(filter: PatientFilter,page:Int,limit:Int)              : PersonFollowUpList
+    followUps(filter: PersonFilter,page:Int,limit:Int)              : PersonFollowUpList
 }
 type PersonFollowUpList {
     followUps: [PersonFollowUp]
@@ -1339,11 +1339,21 @@ extend type Mutation {
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(PersonID: ID!,filter: PatientFilter,page:Int,limit:Int): PersonFollowUpList
+    personFollowUps(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int): PersonFollowUpList
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_medical_history.graphql", Input: `type PersonMedicalHistory {
     ID: ID
     Person: Person!
+    Description: String
+    Reason: String
+    StartDate: String
+    EndDate: String
+    Medications: String
+    Type: HistoryType
+}
+input PersonMedicalHistoryFilter {
+    ID: StringFilter
+    Person: PersonFilter
     Description: String
     Reason: String
     StartDate: String
@@ -1360,16 +1370,16 @@ enum HistoryType {
 
 input PersonMedicalHistoryInput{
     ID: ID
-    Person: PersonInput
+    Person: PersonInput!
     Description: String
     Reason: String
     StartDate: String
     EndDate: String
     Medications: String
-    Type: HistoryType
+    Type: HistoryType!
 }
 extend type Person {
-    histories(filter: PatientFilter,page:Int,limit:Int)              : PersonMedicalHistoryList
+    histories(filter: PersonFilter,page:Int,limit:Int)              : PersonMedicalHistoryList
 }
 type PersonMedicalHistoryList {
     histories: [PersonMedicalHistory]
@@ -1383,7 +1393,7 @@ extend type Mutation {
 }
 extend type Query {
     personMedicalHistory(ID: ID!): PersonMedicalHistory
-    personMedicalHistorys(PersonID: ID!,filter: PatientFilter,page:Int,limit:Int): PersonMedicalHistoryList
+    personMedicalHistorys(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int): PersonMedicalHistoryList
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_organ_donation.graphql", Input: `type PersonOrganDonation{
     ID: String
@@ -1546,10 +1556,10 @@ func (ec *executionContext) field_Mutation_userLogin_args(ctx context.Context, r
 func (ec *executionContext) field_Person_followUps_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *models.PatientFilter
+	var arg0 *models.PersonFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, tmp)
+		arg0, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1579,10 +1589,10 @@ func (ec *executionContext) field_Person_followUps_args(ctx context.Context, raw
 func (ec *executionContext) field_Person_histories_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *models.PatientFilter
+	var arg0 *models.PersonFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, tmp)
+		arg0, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1642,10 +1652,10 @@ func (ec *executionContext) field_Query_getPatient_args(ctx context.Context, raw
 func (ec *executionContext) field_Query_listPatients_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *models.PatientFilter
+	var arg0 *models.PersonFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, tmp)
+		arg0, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1699,10 +1709,10 @@ func (ec *executionContext) field_Query_personFollowUps_args(ctx context.Context
 		}
 	}
 	args["PersonID"] = arg0
-	var arg1 *models.PatientFilter
+	var arg1 *models.PersonFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg1, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, tmp)
+		arg1, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1756,10 +1766,10 @@ func (ec *executionContext) field_Query_personMedicalHistorys_args(ctx context.C
 		}
 	}
 	args["PersonID"] = arg0
-	var arg1 *models.PatientFilter
+	var arg1 *models.PersonFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg1, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, tmp)
+		arg1, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3484,7 +3494,7 @@ func (ec *executionContext) _Person_followUps(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().FollowUps(rctx, obj, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Person().FollowUps(rctx, obj, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3523,7 +3533,7 @@ func (ec *executionContext) _Person_histories(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().Histories(rctx, obj, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Person().Histories(rctx, obj, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4595,7 +4605,7 @@ func (ec *executionContext) _Query_listPatients(ctx context.Context, field graph
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListPatients(rctx, args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Query().ListPatients(rctx, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4712,7 +4722,7 @@ func (ec *executionContext) _Query_personFollowUps(ctx context.Context, field gr
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PersonFollowUps(rctx, args["PersonID"].(string), args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Query().PersonFollowUps(rctx, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4790,7 +4800,7 @@ func (ec *executionContext) _Query_personMedicalHistorys(ctx context.Context, fi
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PersonMedicalHistorys(rctx, args["PersonID"].(string), args["filter"].(*models.PatientFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Query().PersonMedicalHistorys(rctx, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6418,8 +6428,8 @@ func (ec *executionContext) unmarshalInputIntFilter(ctx context.Context, obj int
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj interface{}) (models.PatientFilter, error) {
-	var it models.PatientFilter
+func (ec *executionContext) unmarshalInputPersonFilter(ctx context.Context, obj interface{}) (models.PersonFilter, error) {
+	var it models.PersonFilter
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -6543,7 +6553,7 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
+			it.And, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6551,7 +6561,7 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("andNot"))
-			it.AndNot, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
+			it.AndNot, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6559,7 +6569,7 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
+			it.Or, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6567,7 +6577,7 @@ func (ec *executionContext) unmarshalInputPatientFilter(ctx context.Context, obj
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orNot"))
-			it.OrNot, err = ec.unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx, v)
+			it.OrNot, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6669,7 +6679,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("FirstName"))
-			it.FirstName, err = ec.unmarshalNString2string(ctx, v)
+			it.FirstName, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6677,7 +6687,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("LastName"))
-			it.LastName, err = ec.unmarshalNString2string(ctx, v)
+			it.LastName, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6685,7 +6695,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Address"))
-			it.Address, err = ec.unmarshalNString2string(ctx, v)
+			it.Address, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6693,7 +6703,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("DateOfBirth"))
-			it.DateOfBirth, err = ec.unmarshalNString2string(ctx, v)
+			it.DateOfBirth, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6701,7 +6711,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Ethnicity"))
-			it.Ethnicity, err = ec.unmarshalNString2string(ctx, v)
+			it.Ethnicity, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6709,7 +6719,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Phn"))
-			it.Phn, err = ec.unmarshalNString2string(ctx, v)
+			it.Phn, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6717,7 +6727,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("PrimaryRenalDisease"))
-			it.PrimaryRenalDisease, err = ec.unmarshalNString2string(ctx, v)
+			it.PrimaryRenalDisease, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6725,7 +6735,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Weight"))
-			it.Weight, err = ec.unmarshalNFloat2float64(ctx, v)
+			it.Weight, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6733,7 +6743,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Height"))
-			it.Height, err = ec.unmarshalNFloat2float64(ctx, v)
+			it.Height, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6741,7 +6751,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Gender"))
-			it.Gender, err = ec.unmarshalNGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx, v)
+			it.Gender, err = ec.unmarshalOGender2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6749,7 +6759,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("MaritalStatus"))
-			it.MaritalStatus, err = ec.unmarshalNMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx, v)
+			it.MaritalStatus, err = ec.unmarshalOMaritalStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6757,7 +6767,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ContactNo"))
-			it.ContactNo, err = ec.unmarshalNString2string(ctx, v)
+			it.ContactNo, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6765,7 +6775,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("PersonType"))
-			it.PersonType, err = ec.unmarshalNPatientType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx, v)
+			it.PersonType, err = ec.unmarshalOPatientType2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6773,7 +6783,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Status"))
-			it.Status, err = ec.unmarshalNPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx, v)
+			it.Status, err = ec.unmarshalOPatientStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6781,7 +6791,7 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("RecordStatus"))
-			it.RecordStatus, err = ec.unmarshalNRecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx, v)
+			it.RecordStatus, err = ec.unmarshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6791,8 +6801,8 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.Context, obj interface{}) (models.PersonMedicalHistoryInput, error) {
-	var it models.PersonMedicalHistoryInput
+func (ec *executionContext) unmarshalInputPersonMedicalHistoryFilter(ctx context.Context, obj interface{}) (models.PersonMedicalHistoryFilter, error) {
+	var it models.PersonMedicalHistoryFilter
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -6804,7 +6814,7 @@ func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			it.ID, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6812,7 +6822,7 @@ func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
-			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
+			it.Person, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6861,6 +6871,85 @@ func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Type"))
 			it.Type, err = ec.unmarshalOHistoryType2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputPersonMedicalHistoryInput(ctx context.Context, obj interface{}) (models.PersonMedicalHistoryInput, error) {
+	var it models.PersonMedicalHistoryInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "ID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Person":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalNPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Description"))
+			it.Description, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Reason":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Reason"))
+			it.Reason, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "StartDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("StartDate"))
+			it.StartDate, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "EndDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("EndDate"))
+			it.EndDate, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Medications":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Medications"))
+			it.Medications, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Type"))
+			it.Type, err = ec.unmarshalNHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8828,28 +8917,13 @@ func (ec *executionContext) marshalNError2ᚖgithubᚗcomᚋgnanakeethanᚋkidne
 	return ec._Error(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
-	res, err := graphql.UnmarshalFloatContext(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
-	res := graphql.MarshalFloatContext(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return graphql.WrapContextMarshaler(ctx, res)
-}
-
-func (ec *executionContext) unmarshalNGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, v interface{}) (models.Gender, error) {
-	var res models.Gender
+func (ec *executionContext) unmarshalNHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx context.Context, v interface{}) (models.HistoryType, error) {
+	var res models.HistoryType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGender2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v models.Gender) graphql.Marshaler {
+func (ec *executionContext) marshalNHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx context.Context, sel ast.SelectionSet, v models.HistoryType) graphql.Marshaler {
 	return v
 }
 
@@ -8881,36 +8955,6 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) unmarshalNMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, v interface{}) (models.MaritalStatus, error) {
-	var res models.MaritalStatus
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, sel ast.SelectionSet, v models.MaritalStatus) graphql.Marshaler {
-	return v
-}
-
-func (ec *executionContext) unmarshalNPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, v interface{}) (models.PatientStatus, error) {
-	var res models.PatientStatus
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, sel ast.SelectionSet, v models.PatientStatus) graphql.Marshaler {
-	return v
-}
-
-func (ec *executionContext) unmarshalNPatientType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx context.Context, v interface{}) (models.PatientType, error) {
-	var res models.PatientType
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNPatientType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx context.Context, sel ast.SelectionSet, v models.PatientType) graphql.Marshaler {
-	return v
 }
 
 func (ec *executionContext) marshalNPerson2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Person) graphql.Marshaler {
@@ -8980,16 +9024,6 @@ func (ec *executionContext) unmarshalNPersonInput2ᚖgithubᚗcomᚋgnanakeethan
 func (ec *executionContext) unmarshalNPersonMedicalHistoryInput2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryInput(ctx context.Context, v interface{}) (models.PersonMedicalHistoryInput, error) {
 	res, err := ec.unmarshalInputPersonMedicalHistoryInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNRecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, v interface{}) (models.RecordStatus, error) {
-	var res models.RecordStatus
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNRecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, sel ast.SelectionSet, v models.RecordStatus) graphql.Marshaler {
-	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -9458,6 +9492,22 @@ func (ec *executionContext) marshalOGender2githubᚗcomᚋgnanakeethanᚋkidney�
 	return v
 }
 
+func (ec *executionContext) unmarshalOGender2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, v interface{}) (*models.Gender, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.Gender)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOGender2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v *models.Gender) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx context.Context, v interface{}) (models.HistoryType, error) {
 	var res models.HistoryType
 	err := res.UnmarshalGQL(v)
@@ -9544,6 +9594,22 @@ func (ec *executionContext) marshalOMaritalStatus2githubᚗcomᚋgnanakeethanᚋ
 	return v
 }
 
+func (ec *executionContext) unmarshalOMaritalStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, v interface{}) (*models.MaritalStatus, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.MaritalStatus)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOMaritalStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, sel ast.SelectionSet, v *models.MaritalStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) marshalOMenu2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMenu(ctx context.Context, sel ast.SelectionSet, v *models.Menu) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -9606,14 +9672,6 @@ func (ec *executionContext) marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋ
 	return ec._Pagination(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPatientFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientFilter(ctx context.Context, v interface{}) (*models.PatientFilter, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputPatientFilter(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalOPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, v interface{}) (models.PatientStatus, error) {
 	var res models.PatientStatus
 	err := res.UnmarshalGQL(v)
@@ -9621,6 +9679,22 @@ func (ec *executionContext) unmarshalOPatientStatus2githubᚗcomᚋgnanakeethan�
 }
 
 func (ec *executionContext) marshalOPatientStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, sel ast.SelectionSet, v models.PatientStatus) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOPatientStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, v interface{}) (*models.PatientStatus, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.PatientStatus)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPatientStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientStatus(ctx context.Context, sel ast.SelectionSet, v *models.PatientStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
 	return v
 }
 
@@ -9634,11 +9708,35 @@ func (ec *executionContext) marshalOPatientType2githubᚗcomᚋgnanakeethanᚋki
 	return v
 }
 
+func (ec *executionContext) unmarshalOPatientType2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx context.Context, v interface{}) (*models.PatientType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.PatientType)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPatientType2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPatientType(ctx context.Context, sel ast.SelectionSet, v *models.PatientType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx context.Context, sel ast.SelectionSet, v *models.Person) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Person(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx context.Context, v interface{}) (*models.PersonFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputPersonFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOPersonFollowUp2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx context.Context, sel ast.SelectionSet, v []*models.PersonFollowUp) graphql.Marshaler {
@@ -9780,6 +9878,22 @@ func (ec *executionContext) unmarshalORecordStatus2githubᚗcomᚋgnanakeethan�
 }
 
 func (ec *executionContext) marshalORecordStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, sel ast.SelectionSet, v models.RecordStatus) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, v interface{}) (*models.RecordStatus, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.RecordStatus)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx context.Context, sel ast.SelectionSet, v *models.RecordStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
 	return v
 }
 

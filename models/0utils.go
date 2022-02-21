@@ -11,6 +11,12 @@ import (
 	"github.com/kr/pretty"
 )
 
+func PointerToString(medications *string) string {
+	if medications != nil {
+		return *medications
+	}
+	return ""
+}
 func getPagination(currentPage int64, totalItems int64, perPage int64) *Pagination {
 	prevPage := 0
 	if int(totalItems/perPage) > int(currentPage) {

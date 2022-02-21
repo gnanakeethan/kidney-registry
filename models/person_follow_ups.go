@@ -55,9 +55,9 @@ func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
 	return nil, err
 }
 
-func GetListFollowups(ctx context.Context, filter *PatientFilter, page *int, limit *int) (*PersonFollowUpList, error) {
+func GetListFollowups(ctx context.Context, filter *PersonFilter, page *int, limit *int) (*PersonFollowUpList, error) {
 	PersonFollowUp, PersonFollowUps := PersonFollowUp{}, []*PersonFollowUp{}
-	filterPtr := PatientFilter{}
+	filterPtr := PersonFilter{}
 	if filter != nil {
 		filterPtr = *filter
 	}
