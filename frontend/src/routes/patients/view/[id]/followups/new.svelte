@@ -34,6 +34,76 @@
 				readonly: true,
 				classes: ['form-input bg-gray-200 rounded w-full']
 			}
+		},
+		{
+			type: 'textarea', // required
+			name: 'ClinicNo', // required
+			value: '', // optional
+			attributes: {
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-3', // optional
+				label: 'Clinic No', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: null, // optional
+				cols: null // optional
+			}
+		},
+		{
+			type: 'textarea', // required
+			name: 'Description', // required
+			value: '', // optional
+			attributes: {
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-3', // optional
+				label: 'Description', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: null, // optional
+				cols: null // optional
+			}
+		},
+		{
+			type: 'textarea', // required
+			name: 'Complaints', // required
+			value: '', // optional
+			attributes: {
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-3', // optional
+				label: 'Complaints', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: null, // optional
+				cols: null // optional
+			}
+		},
+		{
+			type: 'textarea', // required
+			name: 'RenalBiopsies', // required
+			value: '', // optional
+			attributes: {
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-3', // optional
+				label: 'Renal Biopsies', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: null, // optional
+				cols: null // optional
+			}
+		},
+		{
+			type: 'textarea', // required
+			name: 'CaseStatus', // required
+			value: '', // optional
+			attributes: {
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-3', // optional
+				label: 'Case Status', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: null, // optional
+				cols: null // optional
+			}
 		}
 	];
 	let message = '';
@@ -102,7 +172,7 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Patient</div>
+			<div class="text-xl font-bold">New Followup For {$recipient.FirstName}</div>
 			<Field bind:isValidForm bind:values {fields} />
 			{message}
 			<button

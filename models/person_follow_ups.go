@@ -12,7 +12,7 @@ type PersonFollowUp struct {
 	ID             string               `orm:"column(id);pk"`
 	ClinicNo       string               `orm:"column(clinic_no)"`
 	Description    string               `orm:"column(description);null"`
-	PersonFollowUp *PersonFollowUp      `orm:"column(PersonFollowUp_id);rel(fk)"`
+	PersonFollowUp *PersonFollowUp      `orm:"column(person_id);rel(fk)"`
 	Complaints     string               `orm:"column(complaints);null"`
 	RenalBiopsies  string               `orm:"column(renal_biopsies);null"`
 	CaseStatus     string               `orm:"column(case_status);null"`
@@ -20,24 +20,32 @@ type PersonFollowUp struct {
 }
 
 func (t *PersonFollowUp) TableName() string {
-	return "PersonFollowUp_follow_ups"
+	return "person_follow_ups"
 }
 
 func init() {
 	orm.RegisterModel(new(PersonFollowUp))
 }
 
-// AddPersonFollowUpFollowUps insert a new PersonFollowUp into database and returns
+// AddPersonFollowUps insert a new PersonFollowUp into database and returns
 // last inserted ID on success.
-func AddPersonFollowUpFollowUps(m *PersonFollowUp) (id int64, err error) {
+func AddPersonFollowUps(m PersonFollowUpInput) (id int64, err error) {
 	o := orm.NewOrm()
-	id, err = o.Insert(m)
+	v := PersonFollowUp{
+		ID:            m.ID,
+		ClinicNo:      *m.ClinicNo,
+		Description:   *m.Description,
+		Complaints:    *m.Complaints,
+		RenalBiopsies: *m.RenalBiopsies,
+		CaseStatus:    *m.CaseStatus,
+	}
+	id, err = o.Insert(v)
 	return
 }
 
-// GetPersonFollowUpFollowUpsById retrieves PersonFollowUp by ID. Returns error if
+// GetPersonFollowUpsById retrieves PersonFollowUp by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpFollowUpsById(id string) (v *PersonFollowUp, err error) {
+func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
 	o := orm.NewOrm()
 	v = &PersonFollowUp{ID: id}
 	if err = o.Read(v); err == nil {
@@ -68,9 +76,9 @@ func GetListFollowups(ctx context.Context, filter *PatientFilter, page *int, lim
 	}, nil
 }
 
-// UpdatePersonFollowUpFollowUps updates PersonFollowUp by ID and returns error if
+// UpdatePersonFollowUps updates PersonFollowUp by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpFollowUpsById(m *PersonFollowUp) (err error) {
+func UpdatePersonFollowUpsById(m *PersonFollowUp) (err error) {
 	o := orm.NewOrm()
 	v := PersonFollowUp{ID: m.ID}
 	// ascertain id exists in the database
@@ -83,9 +91,9 @@ func UpdatePersonFollowUpFollowUpsById(m *PersonFollowUp) (err error) {
 	return
 }
 
-// DeletePersonFollowUpFollowUps deletes PersonFollowUp by ID and returns error if
+// DeletePersonFollowUps deletes PersonFollowUp by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonFollowUpFollowUps(id string) (err error) {
+func DeletePersonFollowUps(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonFollowUp{ID: id}
 	// ascertain id exists in the database
