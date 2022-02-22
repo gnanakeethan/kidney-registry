@@ -1237,7 +1237,7 @@ type MenuItem {
     route: String
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/person.graphql", Input: `type Person {
+	{Name: "graph/schema/person.graphql", Input: `type Person  {
     ID                     : ID!
     FirstName              : String
     LastName               : String
@@ -1341,6 +1341,8 @@ input PersonInput {
     PersonType             : PatientType
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
+    CreatedAt              : String
+    UpdatedAt              : String
 }
 
 extend type Query {
@@ -7103,6 +7105,22 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("RecordStatus"))
 			it.RecordStatus, err = ec.unmarshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "CreatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("CreatedAt"))
+			it.CreatedAt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "UpdatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("UpdatedAt"))
+			it.UpdatedAt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

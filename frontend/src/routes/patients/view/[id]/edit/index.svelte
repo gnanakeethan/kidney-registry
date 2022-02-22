@@ -5,7 +5,6 @@
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation } from '@urql/svelte';
-	import { onMount } from 'svelte';
 	// import { Person } from 'lib/graphql/generated';
 	import {
 		UpdatePatientDocument,
@@ -21,7 +20,7 @@
 		{
 			type: 'input',
 			name: 'ID',
-			value: '',
+			value: $recipient.ID,
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
@@ -40,7 +39,7 @@
 		{
 			type: 'input',
 			name: 'Phn',
-			value: '',
+			value: $recipient.Phn,
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
@@ -59,7 +58,7 @@
 		{
 			type: 'input',
 			name: 'FirstName',
-			value: '',
+			value: $recipient.FirstName,
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
@@ -79,7 +78,7 @@
 		{
 			type: 'input',
 			name: 'LastName',
-			value: '',
+			value: $recipient.LastName,
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
@@ -99,6 +98,7 @@
 		{
 			type: 'select', // required
 			name: 'MaritalStatus', //required
+			value: $recipient.MaritalStatus,
 			attributes: {
 				id: 'MaritalStatus', // required
 				classes: ['form-input rounded w-full'], // optional
@@ -126,6 +126,7 @@
 		{
 			type: 'select', // required
 			name: 'Gender', // required
+			value: $recipient.Gender,
 			attributes: {
 				id: 'Gender', // required
 				classes: ['form-input rounded w-full'], // optional
@@ -153,7 +154,7 @@
 		{
 			type: 'input',
 			name: 'DateOfBirth',
-			value: '',
+			value: $recipient.DateOfBirth,
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
 			},
@@ -209,11 +210,8 @@
 		}
 	}
 
-	recipient.subscribe((result) => {
-		values = result;
-		formSet = values.ID !== '';
-	});
-	onMount(() => {});
+	values = $recipient;
+	formSet = $recipient.ID !== '';
 </script>
 
 <div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">

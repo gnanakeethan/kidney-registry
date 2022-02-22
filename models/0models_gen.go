@@ -119,6 +119,8 @@ type PersonInput struct {
 	PersonType          *PatientType   `json:"PersonType"`
 	Status              *PatientStatus `json:"Status"`
 	RecordStatus        *RecordStatus  `json:"RecordStatus"`
+	CreatedAt           *string        `json:"CreatedAt"`
+	UpdatedAt           *string        `json:"UpdatedAt"`
 }
 
 type PersonList struct {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
@@ -15,7 +16,7 @@ type Person struct {
 	FirstName           string        `orm:"column(first_name)"`
 	LastName            string        `orm:"column(last_name);null"`
 	Address             string        `orm:"column(address);null"`
-	DateOfBirth         time.Time     `orm:"column(date_of_birth);type(date);null"`
+	DateOfBirth         time.Time     `orm:"column(date_of_birth);type(timestamp without time zone);null"`
 	Ethnicity           string        `orm:"column(ethnicity);null"`
 	Phn                 string        `orm:"column(phn)"`
 	PrimaryRenalDisease string        `orm:"column(primary_renal_disease);null"`
@@ -27,8 +28,8 @@ type Person struct {
 	PersonType          PatientType   `orm:"column(person_type);null"`
 	Status              PatientStatus `orm:"column(status);null"`
 	RecordStatus        RecordStatus  `orm:"column(record_status);null"`
-	CreatedAt           time.Time     `orm:"column(created_at);type(datetime);auto_now_add;null"`
-	UpdatedAt           time.Time     `orm:"column(updated_at);type(datetime);auto_now;null"`
+	CreatedAt           time.Time     `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt           time.Time     `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
 	DeletedAt           time.Time     `orm:"column(deleted_at);null"`
 }
 
@@ -63,9 +64,29 @@ func GetPersonsById(id string) (v *Person, err error) {
 // the record to be updated doesn't exist
 func UpdatePersonsById(m *Person) (err error) {
 	o := orm.NewOrm()
-	if num, err := o.InsertOrUpdate(m, "ID"); err == nil {
+	v := &Person{ID: m.ID}
+	if err = o.Read(v); err == nil {
+		v1 := reflect.ValueOf(*v)
+		v2 := reflect.ValueOf(*m)
+		t := reflect.TypeOf(*v)
+		updatedFields := []string{}
+		for i := 0; i < v1.NumField(); i++ {
+			if v2.Field(i).Interface() != v1.Field(i).Interface() {
+				fmt.Printf("%v ", t.Field(i).Name)
+				updatedFields = append(updatedFields, t.Field(i).Name)
+				fmt.Printf("old: %v ", v1.Field(i))
+				fmt.Printf("new: %v ", v2.Field(i))
+				fmt.Println("")
+			}
+		}
+		if num, err2 := o.Update(m, updatedFields...); err2 == nil {
+			fmt.Println("Number of records updated in database:", num)
+			return err2
+		}
+	} else if num, err := o.Insert(m); err == nil {
 		fmt.Println("Number of records updated in database:", num)
 	}
+	
 	return
 }
 
@@ -107,7 +128,9 @@ func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit
 }
 
 func UpdatePatient(input *PersonInput) (*Person, error) {
-	dateOfBirth, _ := time.Parse("2006-01-02", *input.DateOfBirth)
+	location, _ := time.LoadLocation("Asia/Colombo")
+	dateOfBirth, _ := time.ParseInLocation("2006-01-02", *input.DateOfBirth, location)
+	pretty.Println(input)
 	person := &Person{
 		ID:                  input.ID,
 		DateOfBirth:         dateOfBirth,
@@ -116,7 +139,6 @@ func UpdatePatient(input *PersonInput) (*Person, error) {
 		PersonType:          *input.PersonType,
 		Status:              *input.Status,
 		RecordStatus:        *input.RecordStatus,
-		Phn:                 time.Now().Format("20060102") + randString(8),
 		FirstName:           *input.FirstName,
 		LastName:            *input.LastName,
 		Address:             *input.Address,
@@ -126,6 +148,7 @@ func UpdatePatient(input *PersonInput) (*Person, error) {
 		Height:              *input.Height,
 		ContactNo:           *input.ContactNo,
 	}
+	pretty.Println(person)
 	if err := UpdatePersonsById(person); err == nil {
 		return person, nil
 	} else {

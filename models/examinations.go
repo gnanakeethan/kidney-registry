@@ -14,8 +14,8 @@ type Examinations struct {
 	ID        string    `orm:"column(id);pk"`
 	Details   string    `orm:"column(details);null"`
 	Procedure string    `orm:"column(procedure);null"`
-	CreatedAt time.Time `orm:"column(created_at);type(datetime);auto_now_add;null"`
-	UpdatedAt time.Time `orm:"column(updated_at);type(datetime);auto_now;null"`
+	CreatedAt time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
 	DeletedAt time.Time `orm:"column(deleted_at);null"`
 }
 

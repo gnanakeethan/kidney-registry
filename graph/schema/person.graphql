@@ -1,8 +1,4 @@
-interface Modification {
-    CreatedAt: String
-    UpdatedAt: String
-}
-type Person implements Modification {
+type Person  {
     ID                     : ID!
     FirstName              : String
     LastName               : String
@@ -106,6 +102,8 @@ input PersonInput {
     PersonType             : PatientType
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
+    CreatedAt              : String
+    UpdatedAt              : String
 }
 
 extend type Query {
