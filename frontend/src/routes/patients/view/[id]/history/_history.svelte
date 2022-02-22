@@ -27,21 +27,21 @@
 				},
 				attributes: {
 					type: 'text',
-					label: 'ID',
+					label: i === 0 ? 'ID' : '',
 					id: 'recipient_id',
 					readonly: true,
-					classes: ['form-input bg-gray-200 rounded my-2']
+					classes: ['form-input bg-gray-200 rounded']
 				}
 			},
 			{
 				type: 'input', // required
 				name: 'Type', // required
 				value: 'COMPLAINT', // required
-				prefix: { classes: ['mx-2'] },
+				prefix: { classes: ['mx-2 my-2'] },
 				attributes: {
 					id: 'Type', // required
 					classes: ['form-input rounded w-full readonly my-2'], // optional
-					label: 'Type', // optional
+					label: i === 0 ? 'Type' : '', // optional
 					disabled: false, // optional
 					readonly: true
 				}
@@ -51,12 +51,11 @@
 				type: 'textarea', // required
 				name: 'Reason', // required
 				value: '', // optional
-
-				prefix: { classes: ['mx-2'] },
+				prefix: { classes: ['mx-2 flex-grow'] },
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-2', // optional
-					label: 'Reason', // optional
+					label: i === 0 ? 'Presenting Complaint' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: 1, // optional
@@ -64,60 +63,21 @@
 				},
 				rules: ['required'],
 				messages: { required: 'Field must be filled' }
-			}, // {
-			// 	type: 'input', // required
-			// 	name: 'Reason', // required
-			// 	attributes: {
-			// 		id: 'id-field', // required
-			// 		classes: ['form-input w-full my-2'], // optional
-			// 		labelClasses: ['py-2 px-4 bg-gray-400 rounded'],
-			// 		fieldName: '', // optional
-			// 		label: 'Other Reasons' // optional
-			// 	}
-			// },
-
+			},
 			{
 				type: 'textarea', // required
 				name: 'Description', // required
 				value: '', // optional
 
-				prefix: { classes: ['mx-2'] },
+				prefix: { classes: ['mx-2 flex-grow'] },
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-2', // optional
-					label: 'Description', // optional
+					label: i === 0 ? 'History of Presenting Complaint' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: 1, // optional
 					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Medications', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-2', // optional
-					label: 'Medications', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: 1, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'input',
-				name: 'StartDate',
-				value: '',
-				prefix: { classes: ['mx-2'] },
-				attributes: {
-					type: 'date',
-					label: 'Surgery Date',
-					id: 'dob',
-					max: new Date().toISOString().split('T')[0],
-					min: '1900-01-01',
-					classes: ['form-input rounded w-full']
 				}
 			}
 		];
@@ -185,12 +145,9 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap p-2">
+<div class="flex h-full flex-wrap">
 	{#if formSet}
-		<form
-			class="mx-auto my-auto rounded border border-neutral-300 p-4"
-			on:submit|preventDefault={onSubmit}
-		>
+		<form class="mx-auto my-auto w-full rounded" on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
 				<div class="text-xl font-bold capitalize">
 					{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
@@ -198,12 +155,10 @@
 			{/if}
 			<div class="flex flex-row items-center justify-between">
 				<Field bind:isValidForm bind:values {fields} />
-				{message}
 				<button
-					class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
+					class="mx-4 h-10 w-20 rounded bg-green-400 py-2 px-4 uppercase text-white"
 					type="submit"
-				>
-					Save
+					>Save
 				</button>
 			</div>
 		</form>

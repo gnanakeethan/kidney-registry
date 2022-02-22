@@ -36,7 +36,7 @@
 			{
 				type: 'input', // required
 				name: 'Type', // required
-				value: 'SURGICAL', // required
+				value: 'FAMILY', // required
 
 				prefix: { classes: ['mx-2'] },
 				attributes: {
@@ -91,34 +91,6 @@
 					readonly: false, // optional
 					rows: 1, // optional
 					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Medications', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-2', // optional
-					label: 'Medications', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: 1, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'input',
-				name: 'StartDate',
-				value: '',
-				prefix: { classes: ['mx-2'] },
-				attributes: {
-					type: 'date',
-					label: 'Surgery Date',
-					id: 'dob',
-					max: new Date().toISOString().split('T')[0],
-					min: '1900-01-01',
-					classes: ['form-input rounded w-full']
 				}
 			}
 		];
@@ -200,8 +172,11 @@
 			<div class="flex flex-row items-center justify-between">
 				<Field bind:isValidForm bind:values {fields} />
 				{message}
-				<button class="rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
-					>Save
+				<button
+					class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
+					type="submit"
+				>
+					Save
 				</button>
 			</div>
 		</form>
