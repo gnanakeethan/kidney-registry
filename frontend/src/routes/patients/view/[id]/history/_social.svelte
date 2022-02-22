@@ -38,10 +38,10 @@
 				name: 'Type', // required
 				value: 'SOCIAL', // required
 
-				prefix: { classes: ['mx-2'] },
+				prefix: { classes: ['mx-2 hidden'] },
 				attributes: {
 					id: 'Type', // required
-					classes: ['form-input rounded w-full readonly my-2'], // optional
+					classes: ['hidden form-input rounded w-full readonly my-2'], // optional
 					label: 'Type', // optional
 					disabled: false, // optional
 					readonly: true
@@ -49,44 +49,83 @@
 			},
 
 			{
-				type: 'textarea', // required
+				type: 'autocomplete', // required
 				name: 'Reason', // required
 				value: '', // optional
-
 				prefix: { classes: ['mx-2'] },
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-2', // optional
-					label: 'Reason', // optional
+					label: i === 0 ? 'Reason' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: 1, // optional
 					cols: null // optional
 				},
+				extra: {
+					multiple: false, // optional
+					loadItemes: [
+						// list items with id and title attributes.
+						{
+							value: 1,
+							title: 'item 1'
+						},
+						{
+							value: '2',
+							title: 'item 2'
+						},
+						{
+							value: 3,
+							title: 'item 3'
+						},
+						{
+							value: 4,
+							title: 'item 4'
+						}
+					]
+				},
 				rules: ['required'],
 				messages: { required: 'Field must be filled' }
-			}, // {
-			// 	type: 'input', // required
-			// 	name: 'Reason', // required
-			// 	attributes: {
-			// 		id: 'id-field', // required
-			// 		classes: ['form-input w-full my-2'], // optional
-			// 		labelClasses: ['py-2 px-4 bg-gray-400 rounded'],
-			// 		fieldName: '', // optional
-			// 		label: 'Other Reasons' // optional
-			// 	}
-			// },
+			},
 
+			{
+				type: 'input',
+				name: 'StartDate',
+				value: '',
+				prefix: { classes: ['mx-2'] },
+				attributes: {
+					type: 'date',
+					label: i === 0 ? 'Start Date' : '',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
+			},
+			{
+				type: 'input',
+				name: 'EndDate',
+				value: '',
+				prefix: { classes: ['mx-2'] },
+				attributes: {
+					type: 'date',
+					label: i === 0 ? 'End Date' : '',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
+			},
 			{
 				type: 'textarea', // required
 				name: 'Description', // required
 				value: '', // optional
 
-				prefix: { classes: ['mx-2'] },
+				prefix: { classes: ['mx-2 flex-grow'] },
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-2', // optional
-					label: 'Description', // optional
+					label: i === 0 ? 'Description' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: 1, // optional
@@ -160,10 +199,7 @@
 
 <div class="flex h-full flex-wrap p-2">
 	{#if formSet}
-		<form
-			class="mx-auto my-auto rounded border border-neutral-300 p-4"
-			on:submit|preventDefault={onSubmit}
-		>
+		<form class="my-auto w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
 				<div class="text-xl font-bold capitalize">
 					{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
