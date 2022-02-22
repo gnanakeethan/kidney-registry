@@ -24,7 +24,7 @@
 
 	let columns = [
 		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'StartDate', name: 'Started Date (if any)' },
+		{ key: 'StartDate', name: 'Occurance Date (if any)' },
 		{ key: 'ID', name: 'ID' },
 		{ key: 'Type', name: 'Type' },
 		{ key: 'Reason', name: 'Reason' },

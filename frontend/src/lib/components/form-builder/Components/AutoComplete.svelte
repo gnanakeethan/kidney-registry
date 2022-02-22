@@ -14,13 +14,13 @@
 	field.attributes = { ...defaultAttributes, ...fieldAttributes };
 
 	const defaultExtra = {
-		loadItemes: [],
+		loadItems: [],
 		multiple: false
 	};
 	const fieldExtra = field.extra ? field.extra : {};
 	field.extra = { ...defaultExtra, ...fieldExtra };
 
-	let items = field.extra.loadItemes;
+	let items = field.extra.loadItems;
 	let itemsFiltered = [];
 	let itemsSelected = [];
 	let hideListItems = true;
@@ -71,7 +71,7 @@
 	// Clear all items selected.
 	function clearAll() {
 		itemsSelected = [];
-		items = field.extra.loadItemes;
+		items = field.extra.loadItems;
 		if (useFilter) {
 			itemsFiltered = items;
 		}
@@ -93,6 +93,7 @@
 		});
 		if (keyword.length >= 1) {
 			hideListItems = false;
+			console.log(items);
 			const filtered = items.filter((entry) => {
 				return Object.values(entry).some(
 					(val) => typeof val === 'string' && val.toLowerCase().includes(keyword.toLowerCase())

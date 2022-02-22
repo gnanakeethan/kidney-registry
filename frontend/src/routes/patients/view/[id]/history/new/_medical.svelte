@@ -64,7 +64,7 @@
 				},
 				extra: {
 					multiple: false, // optional
-					loadItemes: [
+					loadItems: [
 						{ title: 'Diabetes mellitus', value: 'Diabetes mellitus' },
 						{ title: 'Dyslipidemia', value: 'Dyslipidemia' },
 						{ title: 'Hypertension', value: 'Hypertension' },

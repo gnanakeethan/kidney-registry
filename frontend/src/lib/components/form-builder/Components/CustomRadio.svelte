@@ -19,14 +19,12 @@
 	// Change value.
 	function onChangeValue(event) {
 		if (values.length > 0) {
-			values.map((item, index) => {
-				if (item.name === event.target.name) {
-					values[index].checked = event.target.checked;
-				}
+			values.filter((item, index) => {
+				return event.target.value === item.value;
 			});
 			dispatch('changeValue', {
 				name: field.name,
-				value: values
+				value: values[0].value
 			});
 		}
 	}
@@ -39,8 +37,7 @@
 					...values,
 					{
 						name: i.name,
-						value: i.value,
-						checked: i.checked ? i.checked : false
+						value: i.value
 					}
 				];
 			});
@@ -66,25 +63,25 @@
 			class="p-4"
 		>
 			<input
-				type="checkbox"
+				type="radio"
 				class={classes}
 				value={item.value}
 				name={item.name}
-				id={item.name}
-				checked={item.checked ? item.checked : false}
+				id={item.id}
+				checked={item.value === field.value}
 				on:input={onChangeValue}
 			/>
-			<label class={labelClasses} for={item.name}>{item.title}</label>
+			<label class={labelClasses} for={item.id}>{item.title}</label>
 		</div>
 	{/each}
 </div>
 
 <style>
-	input[type='checkbox'] {
+	input[type='radio'] {
 		display: none;
 	}
 
-	input[type='checkbox']:checked + label {
+	input[type='radio']:checked + label {
 		@apply rounded border-green-400 bg-green-500 text-white;
 	}
 </style>

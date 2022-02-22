@@ -6,6 +6,7 @@
 	import AutoComplete from './AutoComplete.svelte';
 	import Checkbox from './Checkbox.svelte';
 	import CustomCheckbox from './CustomCheckbox.svelte';
+	import CustomRadio from './CustomRadio.svelte';
 	import File from './File.svelte';
 	import Input from './Input.svelte';
 	import Message from './Message.svelte';
@@ -118,6 +119,8 @@
 						<Radio {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'checkbox'}
 						<Checkbox {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'customradio'}
+						<CustomRadio {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'customcheckbox'}
 						<CustomCheckbox {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'file'}

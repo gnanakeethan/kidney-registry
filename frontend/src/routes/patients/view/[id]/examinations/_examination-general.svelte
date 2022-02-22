@@ -9,15 +9,78 @@
 	const newHistory = mutation<NewHistoryMutation>({
 		query: NewHistoryDocument
 	});
-	let fields = [];
+	let examinationDetail: {
+		details: {
+			name: string;
+			description: string;
+		};
+		procedure: object;
+		order: number;
+	} = {
+		details: {
+			name: 'General Examination',
+			description: 'Description'
+		},
+		procedure: {
+			fields: [
+				{
+					type: 'customradio', // required
+					name: 'name-field', // required
+					attributes: {
+						id: 'id-field', // required
+						classes: [], // optional
+						label: '', // optional
+						labelClasses: 'px-4 py-2',
+						fieldName: 'Body Build'
+					},
+					extra: {
+						items: [
+							{ value: 'Lean', id: 'Lean', name: 'BUILD', title: 'Lean' },
+							{ value: 'Average', id: 'Average', name: 'BUILD', title: 'Average' },
+							{ value: 'Obese', id: 'Obese', name: 'BUILD', title: 'Obese' }
+						]
+					},
+					rules: [], // optional
+					preprocess: (field, fields, values) => {
+						// Hook to alter current field
+						return field;
+					}
+				},
+				{
+					type: 'autocomplete', // required
+					name: 'Reason2', // required
+					value: '', // optional
+					prefix: { classes: ['mx-2'] },
+					attributes: {
+						id: 'id-field', // required
+						classes: 'form-textarea rounded w-full my-2', // optional
+						label: 'Reason2', // optional
+						disabled: false, // optional
+						readonly: false, // optional
+						rows: 1, // optional
+						cols: null // optional
+					},
+					extra: {
+						multiple: false, // optional
+						loadItems: []
+					},
+					rules: ['required'],
+					messages: { required: 'Field must be filled' }
+				}
+			]
+		},
+		order: 0
+	};
 	let message = '';
 	let values = {};
-	export let i = 1;
+	export let i = 0;
 	export let others = 1;
 	$: formSet = !!$recipient.ID;
+	let baseFields = [];
+	$: fields = [...baseFields, ...examinationDetail.procedure.fields];
 
 	$: if (formSet) {
-		fields = [
+		baseFields = [
 			{
 				type: 'input',
 				name: 'Person.ID',
@@ -31,105 +94,6 @@
 					id: 'recipient_id',
 					readonly: true,
 					classes: ['form-input bg-gray-200 rounded my-2']
-				}
-			},
-			{
-				type: 'input', // required
-				name: 'Type', // required
-				value: 'SOCIAL', // required
-
-				prefix: { classes: ['mx-2 hidden'] },
-				attributes: {
-					id: 'Type', // required
-					classes: ['hidden form-input rounded w-full readonly my-2'], // optional
-					label: 'Type', // optional
-					disabled: false, // optional
-					readonly: true
-				}
-			},
-
-			{
-				type: 'autocomplete', // required
-				name: 'Reason', // required
-				value: '', // optional
-				prefix: { classes: ['mx-2'] },
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-2', // optional
-					label: i === 0 ? 'Reason' : '', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: 1, // optional
-					cols: null // optional
-				},
-				extra: {
-					multiple: false, // optional
-					loadItems: [
-						// list items with id and title attributes.
-						{
-							value: 1,
-							title: 'item 1'
-						},
-						{
-							value: '2',
-							title: 'item 2'
-						},
-						{
-							value: 3,
-							title: 'item 3'
-						},
-						{
-							value: 4,
-							title: 'item 4'
-						}
-					]
-				},
-				rules: ['required'],
-				messages: { required: 'Field must be filled' }
-			},
-
-			{
-				type: 'input',
-				name: 'StartDate',
-				value: '',
-				prefix: { classes: ['mx-2'] },
-				attributes: {
-					type: 'date',
-					label: i === 0 ? 'Start Date' : '',
-					id: 'dob',
-					max: new Date().toISOString().split('T')[0],
-					min: '1900-01-01',
-					classes: ['form-input rounded w-full']
-				}
-			},
-			{
-				type: 'input',
-				name: 'EndDate',
-				value: '',
-				prefix: { classes: ['mx-2'] },
-				attributes: {
-					type: 'date',
-					label: i === 0 ? 'End Date' : '',
-					id: 'dob',
-					max: new Date().toISOString().split('T')[0],
-					min: '1900-01-01',
-					classes: ['form-input rounded w-full']
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Description', // required
-				value: '', // optional
-
-				prefix: { classes: ['mx-2 flex-grow'] },
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-2', // optional
-					label: i === 0 ? 'Description' : '', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: 1, // optional
-					cols: null // optional
 				}
 			}
 		];
@@ -199,13 +163,13 @@
 
 <div class="flex h-full flex-wrap p-2">
 	{#if formSet}
-		<form class="my-auto w-full rounded " on:submit|preventDefault={onSubmit}>
+		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
 				<div class="text-xl font-bold capitalize">
-					{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
+					{examinationDetail.details.name.toString().toLowerCase()} For {$recipient.FirstName}
 				</div>
 			{/if}
-			<div class="flex flex-row items-center justify-between">
+			<div class="flex flex-col items-center justify-between">
 				<Field bind:isValidForm bind:values {fields} />
 				{message}
 				<button class="rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
