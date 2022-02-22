@@ -20,7 +20,7 @@
 		ListPersonMedicalHistoryDocument
 	);
 	let loading = true;
-	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
+	$: filters = { ID: $recipientId, orderBy: ['desc', 'desc'], sortBy: ['StartDate', 'CreatedAt'] };
 
 	let columns = [
 		{ key: 'ID', name: 'ID' },

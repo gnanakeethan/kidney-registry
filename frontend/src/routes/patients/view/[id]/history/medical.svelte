@@ -55,50 +55,8 @@
 					label: 'Type', // optional
 					disabled: false, // optional
 					readonly: true
-				},
-				extra: {
-					options: [
-						{ value: 'COMPLAINT', title: 'Complaint' },
-						{ value: 'MEDICAL', title: 'Medical' },
-						{ value: 'SURGICAL', title: 'Surgical' },
-						{ value: 'SOCIAL', title: 'Social' }
-					]
-				} // optional
+				}
 			},
-
-			// {
-			// 	type: 'input',
-			// 	name: 'StartDate',
-			// 	value: '',
-			// 	prefix: {
-			// 		classes: ['flex flex-col items-center justify-between w-full py-2']
-			// 	},
-			// 	attributes: {
-			// 		type: 'date',
-			// 		label: 'Start Date',
-			// 		id: 'dob',
-			// 		max: new Date().toISOString().split('T')[0],
-			// 		min: '1900-01-01',
-			// 		classes: ['form-input rounded w-full']
-			// 	}
-			// },
-			// {
-			// 	type: 'input',
-			// 	name: 'EndDate',
-			// 	value: '',
-			// 	prefix: {
-			// 		classes: ['flex flex-col items-center justify-between w-full py-2']
-			// 	},
-			// 	attributes: {
-			// 		type: 'date',
-			// 		label: 'End Date',
-			// 		id: 'dob',
-			// 		max: new Date().toISOString().split('T')[0],
-			// 		min: '1900-01-01',
-			// 		classes: ['form-input rounded w-full']
-			// 	}
-			// },
-
 			{
 				type: 'customcheckbox', // required
 				name: 'Reason', // required
@@ -130,6 +88,49 @@
 				}
 			},
 			{
+				type: 'input', // required
+				name: 'Reason.[2]', // required
+				attributes: {
+					id: 'id-field', // required
+					classes: ['form-input w-full my-2'], // optional
+					labelClasses: ['py-2 px-4 bg-gray-400 rounded'],
+					fieldName: '', // optional
+					label: 'Other Reasons' // optional
+				}
+			},
+			{
+				type: 'input',
+				name: 'StartDate',
+				value: '',
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'date',
+					label: 'Start Date',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
+			},
+			{
+				type: 'input',
+				name: 'EndDate',
+				value: '',
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'date',
+					label: 'End Date',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
+			},
+			{
 				type: 'textarea', // required
 				name: 'Description', // required
 				value: '', // optional
@@ -137,6 +138,20 @@
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-3', // optional
 					label: 'Description', // optional
+					disabled: false, // optional
+					readonly: false, // optional
+					rows: null, // optional
+					cols: null // optional
+				}
+			},
+			{
+				type: 'textarea', // required
+				name: 'Medications', // required
+				value: '', // optional
+				attributes: {
+					id: 'id-field', // required
+					classes: 'form-textarea rounded w-full my-3', // optional
+					label: 'Medications', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: null, // optional
@@ -184,9 +199,11 @@
 		if (isValidForm) {
 			const valuesRef: { Reason: any } = deepen(values);
 			console.log(valuesRef);
-			valuesRef.Reason = valuesRef.Reason.map((reason: { value: string }) => {
-				return reason.value;
-			}).join(',');
+			valuesRef.Reason = valuesRef.Reason.filter((reason) => reason.checked)
+				.map((reason: { value: string }) => {
+					return reason.value;
+				})
+				.join(',');
 
 			newHistory({ input: valuesRef }).then((result) => {
 				console.log(result);

@@ -23,13 +23,23 @@
 		base: '/patients/view/' + $recipientId + '/history',
 		routes: [
 			{
-				name: 'New History',
+				name: 'New Complaint',
 				route: '/patients/view/' + $recipientId + '/history/history',
 				icon: UserIcon
 			},
 			{
-				name: 'New History',
+				name: 'Add Medical History',
 				route: '/patients/view/' + $recipientId + '/history/medical',
+				icon: UserIcon
+			},
+			{
+				name: 'Add Surgical History',
+				route: '/patients/view/' + $recipientId + '/history/surgical',
+				icon: UserIcon
+			},
+			{
+				name: 'Add Social History',
+				route: '/patients/view/' + $recipientId + '/history/social',
 				icon: UserIcon
 			},
 			{

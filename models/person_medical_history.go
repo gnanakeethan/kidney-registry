@@ -78,7 +78,7 @@ func GetListMedicalHistory(ctx context.Context, filter *PersonMedicalHistoryFilt
 		filterPtr = *filter
 	}
 	query, currentPage, perPage, preloads := extractQuery(ctx, PersonMedicalHistory, filterPtr, page, limit)
-	qs, totalItems, err := GetAnyAll(PersonMedicalHistory, query, nil, nil, (currentPage-1)*perPage, perPage)
+	qs, totalItems, err := GetAnyAll(PersonMedicalHistory, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
 	if err != nil {
 		return nil, err
 	}
