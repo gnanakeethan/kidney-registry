@@ -72,16 +72,22 @@ func UpdatePersonsById(m *Person) (err error) {
 		updatedFields := []string{}
 		for i := 0; i < v1.NumField(); i++ {
 			if v2.Field(i).Interface() != v1.Field(i).Interface() {
-				fmt.Printf("%v ", t.Field(i).Name)
-				updatedFields = append(updatedFields, t.Field(i).Name)
-				fmt.Printf("old: %v ", v1.Field(i))
-				fmt.Printf("new: %v ", v2.Field(i))
-				fmt.Println("")
+				name := t.Field(i).Name
+				if !StringInSlice(name, []string{"Phn"}) {
+					updatedFields = append(updatedFields, name)
+					fmt.Printf("%v ", t.Field(i).Name)
+					fmt.Printf("old: %v ", v1.Field(i))
+					fmt.Printf("new: %v ", v2.Field(i))
+					fmt.Println("")
+				}
 			}
 		}
-		if num, err2 := o.Update(m, updatedFields...); err2 == nil {
-			fmt.Println("Number of records updated in database:", num)
-			return err2
+		pretty.Println(updatedFields)
+		if len(updatedFields) > 0 {
+			if num, err2 := o.Update(m, updatedFields...); err2 == nil {
+				fmt.Println("Number of records updated in database:", num)
+				return err2
+			}
 		}
 	} else if num, err := o.Insert(m); err == nil {
 		fmt.Println("Number of records updated in database:", num)
