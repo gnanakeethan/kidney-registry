@@ -64,38 +64,38 @@
 					]
 				} // optional
 			},
-			{
-				type: 'input',
-				name: 'StartDate',
-				value: '',
-				prefix: {
-					classes: ['flex flex-col items-center justify-between w-full py-2']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Date of Birth',
-					id: 'dob',
-					max: new Date().toISOString().split('T')[0],
-					min: '1900-01-01',
-					classes: ['form-input rounded w-full']
-				}
-			},
-			{
-				type: 'input',
-				name: 'EndDate',
-				value: '',
-				prefix: {
-					classes: ['flex flex-col items-center justify-between w-full py-2']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Date of Birth',
-					id: 'dob',
-					max: new Date().toISOString().split('T')[0],
-					min: '1900-01-01',
-					classes: ['form-input rounded w-full']
-				}
-			},
+			// {
+			// 	type: 'input',
+			// 	name: 'StartDate',
+			// 	value: '',
+			// 	prefix: {
+			// 		classes: ['flex flex-col items-center justify-between w-full py-2']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'Start Date',
+			// 		id: 'dob',
+			// 		max: new Date().toISOString().split('T')[0],
+			// 		min: '1900-01-01',
+			// 		classes: ['form-input rounded w-full']
+			// 	}
+			// },
+			// {
+			// 	type: 'input',
+			// 	name: 'EndDate',
+			// 	value: '',
+			// 	prefix: {
+			// 		classes: ['flex flex-col items-center justify-between w-full py-2']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'End Date',
+			// 		id: 'dob',
+			// 		max: new Date().toISOString().split('T')[0],
+			// 		min: '1900-01-01',
+			// 		classes: ['form-input rounded w-full']
+			// 	}
+			// },
 
 			{
 				type: 'textarea', // required
@@ -110,21 +110,21 @@
 					rows: null, // optional
 					cols: null // optional
 				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Description', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Description', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
 			}
+			// {
+			// 	type: 'textarea', // required
+			// 	name: 'Description', // required
+			// 	value: '', // optional
+			// 	attributes: {
+			// 		id: 'id-field', // required
+			// 		classes: 'form-textarea rounded w-full my-3', // optional
+			// 		label: 'Description', // optional
+			// 		disabled: false, // optional
+			// 		readonly: false, // optional
+			// 		rows: null, // optional
+			// 		cols: null // optional
+			// 	}
+			// }
 		];
 	}
 	let isValidForm = false;
@@ -189,7 +189,9 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">History Record For {$recipient.FirstName}</div>
+			<div class="text-xl font-bold capitalize">
+				{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
+			</div>
 			<Field bind:isValidForm bind:values {fields} />
 			{message}
 			<button

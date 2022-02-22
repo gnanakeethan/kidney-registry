@@ -28,6 +28,11 @@
 				icon: UserIcon
 			},
 			{
+				name: 'New History',
+				route: '/patients/view/' + $recipientId + '/history/med',
+				icon: UserIcon
+			},
+			{
 				name: 'Previous Records',
 				route: '/patients/view/' + $recipientId + '/history',
 				icon: UserIcon
@@ -45,7 +50,7 @@
 	<Topbar {...props} />
 	<div
 		class="h-full max-h-full w-full overflow-scroll border-r border-dashed border-neutral-500"
-		style="height:calc(100vh - 5.7rem);min-height:fit-content;"
+		style="height:calc(100vh - 22rem);min-height:fit-content;"
 	>
 		<slot />
 	</div>

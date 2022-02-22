@@ -13,6 +13,8 @@
 <script lang="ts">
 	import { recipient } from '$lib/state/recipient';
 	import NewIcon from '~icons/ci/file-new';
+	import FemaleIcon from '~icons/foundation/torso-female';
+	import MaleIcon from '~icons/fontisto/male';
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
 	import RecurringIcon from '~icons/ic/round-event-repeat';
@@ -92,11 +94,26 @@
 	};
 </script>
 
-<div class="flex flex-col">
+<div class="? flex flex-col">
+	<div class="flex flex-row border-b border-dashed p-3 text-lg">
+		<div class="h-20 w-20">
+			{#if $recipient.Gender === 'FEMALE'}
+				<FemaleIcon class="h-20 text-6xl" />
+			{:else}
+				<MaleIcon class="text-6xl" />
+			{/if}
+		</div>
+		<div>
+			Patient Name: {$recipient.FirstName}
+			{$recipient.LastName} <br />
+			Date of Birth : {$recipient.DateOfBirth} ({$recipient.Age})<br />
+			Phn : {$recipient.Age} <br />
+		</div>
+	</div>
 	<Topbar {...props} />
 	<div
 		class="h-full max-h-full w-full overflow-scroll border-r border-dashed border-neutral-500"
-		style="height:calc(100vh - 5.7rem);min-height:fit-content;"
+		style="height:calc(100vh - 18rem);min-height:fit-content;"
 	>
 		<slot />
 	</div>

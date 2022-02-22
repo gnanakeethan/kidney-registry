@@ -35,12 +35,16 @@
 
 	let columns = [
 		{ key: 'ID', name: 'ID' },
-		{ key: 'Type', name: 'Type' }
+		{ key: 'Type', name: 'Type' },
+		{ key: 'Reason', name: 'Reason' },
+		{ key: 'Description', name: 'Description' },
+		{ key: 'CreatedAt', name: 'Created On' },
+		{ key: 'UpdatedAt', name: 'Updated On' }
 		// { key: 'FirstName', name: 'First Name' },
 		// { key: 'LastName', name: 'Last Name' },
 		// { key: 'Phn', name: 'Phn' }
 	];
-	let displayedColumns = ['ID', 'Type'];
+	let displayedColumns = ['ID', 'Type', 'Reason', 'Description', 'CreatedAt', 'UpdatedAt'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);

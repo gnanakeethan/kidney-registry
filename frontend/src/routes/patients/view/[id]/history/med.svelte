@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
+	import { NewHistoryDocument, NewHistoryMutation } from '$lib/graphql/generated';
 	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
+	import { mutation } from '@urql/svelte';
 
+	const newHistory = mutation<NewHistoryMutation>({
+		query: NewHistoryDocument
+	});
 	let fields = [];
 	let message = '';
 	let values = {};
@@ -41,61 +46,89 @@
 				}
 			},
 			{
-				type: 'textarea', // required
-				name: 'Description', // required
-				value: '', // optional
+				type: 'input', // required
+				name: 'Type', // required
+				value: 'MEDICAL', // required
 				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Description', // optional
+					id: 'Type', // required
+					classes: ['form-input rounded w-full readonly my-2'], // optional
+					label: 'Type', // optional
 					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
+					readonly: true
+				},
+				extra: {
+					options: [
+						{ value: 'COMPLAINT', title: 'Complaint' },
+						{ value: 'MEDICAL', title: 'Medical' },
+						{ value: 'SURGICAL', title: 'Surgical' },
+						{ value: 'SOCIAL', title: 'Social' }
+					]
+				} // optional
 			},
+			// {
+			// 	type: 'input',
+			// 	name: 'StartDate',
+			// 	value: '',
+			// 	prefix: {
+			// 		classes: ['flex flex-col items-center justify-between w-full py-2']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'Start Date',
+			// 		id: 'dob',
+			// 		max: new Date().toISOString().split('T')[0],
+			// 		min: '1900-01-01',
+			// 		classes: ['form-input rounded w-full']
+			// 	}
+			// },
+			// {
+			// 	type: 'input',
+			// 	name: 'EndDate',
+			// 	value: '',
+			// 	prefix: {
+			// 		classes: ['flex flex-col items-center justify-between w-full py-2']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'End Date',
+			// 		id: 'dob',
+			// 		max: new Date().toISOString().split('T')[0],
+			// 		min: '1900-01-01',
+			// 		classes: ['form-input rounded w-full']
+			// 	}
+			// },
+
 			{
-				type: 'textarea', // required
-				name: 'Complaints', // required
-				value: '', // optional
+				type: 'select', // required
+				name: 'Reason', // required
+				value: 'NA', // required
 				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Complaints', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'RenalBiopsies', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Renal Biopsies', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'CaseStatus', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Case Status', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
+					id: 'Type', // required
+					classes: ['form-input rounded w-full'], // optional
+					label: 'Reason', // optional
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{ value: 'Diabetic', title: 'Diabetic' },
+						{ value: 'Cancer', title: 'Cancer' }
+					]
+				} // optional
 			}
+			// {
+			// 	type: 'textarea', // required
+			// 	name: 'Description', // required
+			// 	value: '', // optional
+			// 	attributes: {
+			// 		id: 'id-field', // required
+			// 		classes: 'form-textarea rounded w-full my-3', // optional
+			// 		label: 'Description', // optional
+			// 		disabled: false, // optional
+			// 		readonly: false, // optional
+			// 		rows: null, // optional
+			// 		cols: null // optional
+			// 	}
+			// }
 		];
 	}
 	let isValidForm = false;
@@ -122,7 +155,10 @@
 		if (isValidForm) {
 			values = deepen(values);
 			console.log(values);
-			message = 'Saving Data....';
+			newHistory({ input: values }).then((result) => {
+				console.log(result);
+			});
+			// message = 'Saving Data....';
 		} else {
 			message = 'Please fill all the required fields';
 		}
@@ -157,14 +193,16 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Followup For {$recipient.FirstName}</div>
+			<div class="text-xl font-bold capitalize">
+				{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
+			</div>
 			<Field bind:isValidForm bind:values {fields} />
 			{message}
 			<button
 				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
 				type="submit"
 			>
-				Add Followup
+				Add History
 			</button>
 		</form>
 	{:else}

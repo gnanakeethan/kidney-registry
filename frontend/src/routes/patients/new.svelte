@@ -161,37 +161,6 @@
 			rules: [] // optional
 		},
 		{
-			type: 'customcheckbox', // required
-			name: 'name-field', // required
-			prefix: {
-				classes: 'px-2'
-			},
-			attributes: {
-				id: 'id-field', // required
-				labelClasses: 'p-2', // optional
-				fieldName: 'Select Patient' // optional
-			},
-			extra: {
-				items: [
-					{
-						value: 1,
-						name: 'checkbox-1',
-						title: 'checkbox 1'
-					},
-					{
-						value: 2,
-						name: 'checkbox-2',
-						title: 'checkbox 2'
-					}
-				]
-			},
-			rules: [], // optional
-			preprocess: (field, fields, values) => {
-				// Hook to alter current field
-				return field;
-			}
-		},
-		{
 			type: 'input',
 			name: 'DateOfBirth',
 			value: '',
@@ -237,6 +206,8 @@
 		if (isValidForm) {
 			message = 'Saving Data....';
 			updatePatient({ patientInput: values }).then((result) => {
+				console.log(result);
+				alert('SAved');
 				goto('/patients/view/' + result.data.updatePatient.ID);
 			});
 		} else {
