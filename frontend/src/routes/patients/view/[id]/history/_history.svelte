@@ -36,7 +36,7 @@
 			{
 				type: 'input', // required
 				name: 'Type', // required
-				value: 'MEDICAL', // required
+				value: 'COMPLAINT', // required
 				prefix: { classes: ['mx-2'] },
 				attributes: {
 					id: 'Type', // required

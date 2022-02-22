@@ -104,6 +104,7 @@ type ComplexityRoot struct {
 		Address             func(childComplexity int) int
 		Age                 func(childComplexity int) int
 		ContactNo           func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
 		DateOfBirth         func(childComplexity int) int
 		Ethnicity           func(childComplexity int) int
 		FirstName           func(childComplexity int) int
@@ -119,6 +120,7 @@ type ComplexityRoot struct {
 		PrimaryRenalDisease func(childComplexity int) int
 		RecordStatus        func(childComplexity int) int
 		Status              func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
 		Weight              func(childComplexity int) int
 	}
 
@@ -221,6 +223,8 @@ type PersonResolver interface {
 	DateOfBirth(ctx context.Context, obj *models.Person) (*string, error)
 
 	Age(ctx context.Context, obj *models.Person) (*string, error)
+	CreatedAt(ctx context.Context, obj *models.Person) (*string, error)
+	UpdatedAt(ctx context.Context, obj *models.Person) (*string, error)
 	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
 	Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
 }
@@ -543,6 +547,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Person.ContactNo(childComplexity), true
 
+	case "Person.CreatedAt":
+		if e.complexity.Person.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Person.CreatedAt(childComplexity), true
+
 	case "Person.DateOfBirth":
 		if e.complexity.Person.DateOfBirth == nil {
 			break
@@ -657,6 +668,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Person.Status(childComplexity), true
+
+	case "Person.UpdatedAt":
+		if e.complexity.Person.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Person.UpdatedAt(childComplexity), true
 
 	case "Person.Weight":
 		if e.complexity.Person.Weight == nil {
@@ -1237,6 +1255,8 @@ type MenuItem {
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
     Age                    : String
+    CreatedAt              : String
+    UpdatedAt              : String
 }
 enum Gender {
     MALE
@@ -3580,6 +3600,70 @@ func (ec *executionContext) _Person_Age(ctx context.Context, field graphql.Colle
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Person().Age(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Person_CreatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Person",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Person().CreatedAt(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Person_UpdatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Person",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Person().UpdatedAt(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7886,6 +7970,40 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 					}
 				}()
 				res = ec._Person_Age(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "CreatedAt":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Person_CreatedAt(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "UpdatedAt":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Person_UpdatedAt(ctx, field, obj)
 				return res
 			}
 

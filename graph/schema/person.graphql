@@ -1,4 +1,8 @@
-type Person {
+interface Modification {
+    CreatedAt: String
+    UpdatedAt: String
+}
+type Person implements Modification {
     ID                     : ID!
     FirstName              : String
     LastName               : String
@@ -16,6 +20,8 @@ type Person {
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
     Age                    : String
+    CreatedAt              : String
+    UpdatedAt              : String
 }
 enum Gender {
     MALE

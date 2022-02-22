@@ -21,6 +21,10 @@ query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int, $sortBy: [St
         }
         persons {
             ...PersonFields
+            ... on Modification {
+                CreatedAt
+                UpdatedAt
+            }
             Age
         }
     }

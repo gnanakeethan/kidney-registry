@@ -17,9 +17,9 @@
 
 <div class="w-full">
 	{#each socialList as _, i}
-		<Social id="Social{i}" others={socialList.length} bind:this={socialList[i]} />
+		<Social {i} id="Social{i}" others={socialList.length} bind:this={socialList[i]} />
 	{/each}
-	<div class="mx-auto w-1/2 ">
+	<div class="mx-auto w-full ">
 		<button class="float-right m-4 bg-green-400 p-4" on:click={Save}>Save All</button>
 		<button class="float-right m-4 bg-green-400 p-4" on:click={add}>Add</button>
 	</div>

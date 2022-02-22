@@ -12,6 +12,7 @@
 	let fields = [];
 	let message = '';
 	let values = {};
+	export let i = 1;
 	export let others = 1;
 	$: formSet = !!$recipient.ID;
 
@@ -22,35 +23,22 @@
 				name: 'Person.ID',
 				value: $recipient.ID,
 				prefix: {
-					classes: ['hidden flex flex-col items-center justify-between w-full py-2']
+					classes: ['hidden flex flex-col items-center justify-between']
 				},
 				attributes: {
 					type: 'text',
-					label: 'Recipient PHN',
+					label: 'ID',
 					id: 'recipient_id',
 					readonly: true,
-					classes: ['form-input bg-gray-200 rounded w-full']
-				}
-			},
-			{
-				type: 'input',
-				name: 'Person.Phn',
-				value: $recipient.Phn,
-				prefix: {
-					classes: ['flex flex-col items-center justify-between w-full py-2']
-				},
-				attributes: {
-					type: 'text',
-					label: 'Recipient PHN',
-					id: 'recipient_idd',
-					readonly: true,
-					classes: ['form-input bg-gray-200 rounded w-full']
+					classes: ['form-input bg-gray-200 rounded my-2']
 				}
 			},
 			{
 				type: 'input', // required
 				name: 'Type', // required
 				value: 'SURGICAL', // required
+
+				prefix: { classes: ['mx-2'] },
 				attributes: {
 					id: 'Type', // required
 					classes: ['form-input rounded w-full readonly my-2'], // optional
@@ -64,13 +52,15 @@
 				type: 'textarea', // required
 				name: 'Reason', // required
 				value: '', // optional
+
+				prefix: { classes: ['mx-2'] },
 				attributes: {
 					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
+					classes: 'form-textarea rounded w-full my-2', // optional
 					label: 'Reason', // optional
 					disabled: false, // optional
 					readonly: false, // optional
-					rows: null, // optional
+					rows: 1, // optional
 					cols: null // optional
 				},
 				rules: ['required'],
@@ -91,13 +81,15 @@
 				type: 'textarea', // required
 				name: 'Description', // required
 				value: '', // optional
+
+				prefix: { classes: ['mx-2'] },
 				attributes: {
 					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
+					classes: 'form-textarea rounded w-full my-2', // optional
 					label: 'Description', // optional
 					disabled: false, // optional
 					readonly: false, // optional
-					rows: null, // optional
+					rows: 1, // optional
 					cols: null // optional
 				}
 			},
@@ -107,11 +99,11 @@
 				value: '', // optional
 				attributes: {
 					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
+					classes: 'form-textarea rounded w-full my-2', // optional
 					label: 'Medications', // optional
 					disabled: false, // optional
 					readonly: false, // optional
-					rows: null, // optional
+					rows: 1, // optional
 					cols: null // optional
 				}
 			},
@@ -119,9 +111,7 @@
 				type: 'input',
 				name: 'StartDate',
 				value: '',
-				prefix: {
-					classes: ['flex flex-col items-center justify-between w-full py-2']
-				},
+				prefix: { classes: ['mx-2'] },
 				attributes: {
 					type: 'date',
 					label: 'Surgery Date',
@@ -131,20 +121,6 @@
 					classes: ['form-input rounded w-full']
 				}
 			}
-			// {
-			// 	type: 'textarea', // required
-			// 	name: 'Description', // required
-			// 	value: '', // optional
-			// 	attributes: {
-			// 		id: 'id-field', // required
-			// 		classes: 'form-textarea rounded w-full my-3', // optional
-			// 		label: 'Description', // optional
-			// 		disabled: false, // optional
-			// 		readonly: false, // optional
-			// 		rows: null, // optional
-			// 		cols: null // optional
-			// 	}
-			// }
 		];
 	}
 	let isValidForm = false;
@@ -213,20 +189,24 @@
 <div class="flex h-full flex-wrap p-2">
 	{#if formSet}
 		<form
-			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
+			class="mx-auto my-auto rounded border border-neutral-300 p-4"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold capitalize">
-				{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
+			{#if i === 0}
+				<div class="text-xl font-bold capitalize">
+					{values.Type?.toString().toLowerCase()} History Record For {$recipient.FirstName}
+				</div>
+			{/if}
+			<div class="flex flex-row items-center justify-between">
+				<Field bind:isValidForm bind:values {fields} />
+				{message}
+				<button
+					class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
+					type="submit"
+				>
+					Save
+				</button>
 			</div>
-			<Field bind:isValidForm bind:values {fields} />
-			{message}
-			<button
-				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
-				type="submit"
-			>
-				Save
-			</button>
 		</form>
 	{:else}
 		Loading...

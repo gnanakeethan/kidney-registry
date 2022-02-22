@@ -17,9 +17,9 @@
 
 <div class="w-full">
 	{#each surgicalList as _, i}
-		<Surgical id="Surgical{i}" others={surgicalList.length} bind:this={surgicalList[i]} />
+		<Surgical {i} id="Surgical{i}" others={surgicalList.length} bind:this={surgicalList[i]} />
 	{/each}
-	<div class="mx-auto w-1/2 ">
+	<div class="mx-auto w-full ">
 		<button class="float-right m-4 bg-green-400 p-4" on:click={Save}>Save All</button>
 		<button class="float-right m-4 bg-green-400 p-4" on:click={add}>Add</button>
 	</div>

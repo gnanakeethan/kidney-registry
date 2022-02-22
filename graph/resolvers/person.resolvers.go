@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -48,6 +49,22 @@ func (r *personResolver) Age(ctx context.Context, obj *models.Person) (*string, 
 	locale.Register("en-US", englishUnitedStates)
 	diff := timediff.TimeDiff(obj.DateOfBirth)
 	return &diff, nil
+}
+
+func (r *personResolver) CreatedAt(ctx context.Context, obj *models.Person) (*string, error) {
+	if obj.CreatedAt.IsZero() {
+		return nil, nil
+	}
+	dob := obj.CreatedAt.Format("2006-01-02")
+	return &dob, nil
+}
+
+func (r *personResolver) UpdatedAt(ctx context.Context, obj *models.Person) (*string, error) {
+	if obj.UpdatedAt.IsZero() {
+		return nil, nil
+	}
+	dob := obj.UpdatedAt.Format("2006-01-02")
+	return &dob, nil
 }
 
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error) {

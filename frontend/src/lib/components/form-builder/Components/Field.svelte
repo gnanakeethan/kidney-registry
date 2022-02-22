@@ -98,12 +98,14 @@
 			: 'form-group'}
 	>
 		<!-- Label -->
-		<div class="flex w-full flex-row items-center justify-between">
+		<div class="flex w-full flex-col items-center justify-between">
 			{#if field.attributes}
 				{#if field.attributes.label}
-					<label for={field.id} class="label w-1/4">{field.attributes.label}</label>
+					<label for={field.id} class="label text-md mt-2 w-full font-bold"
+						>{field.attributes.label}</label
+					>
 				{/if}
-				<div class="w-3/4">
+				<div class="w-full">
 					{#if field.type === 'input'}
 						<Input {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'textarea'}
