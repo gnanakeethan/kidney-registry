@@ -37,7 +37,7 @@
 				type: 'input', // required
 				name: 'Type', // required
 				value: 'COMPLAINT', // required
-				prefix: { classes: ['mx-2 my-2'] },
+				prefix: { classes: ['hidden mx-2 my-2'] },
 				attributes: {
 					id: 'Type', // required
 					classes: ['form-input rounded w-full readonly my-2'], // optional

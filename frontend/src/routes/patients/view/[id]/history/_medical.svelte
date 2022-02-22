@@ -37,7 +37,7 @@
 				type: 'input', // required
 				name: 'Type', // required
 				value: 'MEDICAL', // required
-				prefix: { classes: ['mx-2'] },
+				prefix: { classes: ['mx-2 hidden'] },
 				attributes: {
 					id: 'Type', // required
 					classes: ['form-input rounded w-full readonly my-2'], // optional
@@ -48,7 +48,7 @@
 			},
 
 			{
-				type: 'textarea', // required
+				type: 'autocomplete', // required
 				name: 'Reason', // required
 				value: '', // optional
 
@@ -56,15 +56,52 @@
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-2', // optional
-					label: i === 0 ? 'Reason' : '', // optional
+					label: i === 0 ? 'Disease' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: 1, // optional
 					cols: null // optional
 				},
+				extra: {
+					multiple: false, // optional
+					loadItemes: [
+						// list items with id and title attributes.
+						{
+							value: 1,
+							title: 'item 1'
+						},
+						{
+							value: '2',
+							title: 'item 2'
+						},
+						{
+							value: 3,
+							title: 'item 3'
+						},
+						{
+							value: 4,
+							title: 'item 4'
+						}
+					]
+				},
 				rules: ['required'],
 				messages: { required: 'Field must be filled' }
-			}, // {
+			},
+			{
+				type: 'input',
+				name: 'StartDate',
+				value: '',
+				prefix: { classes: ['mx-2'] },
+				attributes: {
+					type: 'date',
+					label: i === 0 ? 'Diagnosed Date' : '',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full my-2']
+				}
+			},
+			// {
 			// 	type: 'input', // required
 			// 	name: 'Reason', // required
 			// 	attributes: {
@@ -85,7 +122,7 @@
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-2', // optional
-					label: i === 0 ? 'Description' : '', // optional
+					label: i === 0 ? 'Description / Duration' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: 1, // optional
