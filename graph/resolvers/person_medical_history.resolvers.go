@@ -5,7 +5,7 @@ package resolvers
 
 import (
 	"context"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -35,23 +35,39 @@ func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filt
 }
 
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	date := obj.StartDate.Format("2006-01-01")
+	if obj.StartDate.IsZero() {
+		return StringPointer(""), nil
+	}
+	date := obj.StartDate.Format("2006-01-02")
 	return &date, nil
 }
 
 func (r *personMedicalHistoryResolver) EndDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
-	date := obj.EndDate.Format("2006-01-01")
+	if obj.EndDate.IsZero() {
+		return StringPointer(""), nil
+	}
+	date := obj.EndDate.Format("2006-01-02")
 	return &date, nil
 }
 
 func (r *personMedicalHistoryResolver) CreatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
+	if obj.CreatedAt.IsZero() {
+		return StringPointer(""), nil
+	}
 	date := obj.CreatedAt.Format("2006-01-02")
 	return &date, nil
 }
 
 func (r *personMedicalHistoryResolver) UpdatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
+	if obj.UpdatedAt.IsZero() {
+		return StringPointer(""), nil
+	}
 	date := obj.UpdatedAt.Format("2006-01-02")
 	return &date, nil
+}
+
+func StringPointer(s string) *string {
+	return &s
 }
 
 func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error) {

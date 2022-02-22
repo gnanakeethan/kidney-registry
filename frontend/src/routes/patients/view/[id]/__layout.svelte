@@ -122,7 +122,9 @@
 		</div>
 	</div>
 	<div class="flex-grow">
-		<Topbar {...props} />
+		<div class="bg-yellow-100">
+			<Topbar {...props} />
+		</div>
 		<div
 			class="h-full w-full overflow-scroll border-r border-l border-dashed border-neutral-500"
 			style="height:calc(100vh - 7.8rem);min-height:fit-content;"

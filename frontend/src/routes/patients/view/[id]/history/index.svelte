@@ -23,23 +23,23 @@
 	$: filters = { ID: $recipientId, orderBy: ['desc', 'desc'], sortBy: ['StartDate', 'CreatedAt'] };
 
 	let columns = [
+		{ key: 'CreatedAt', name: 'Recorded On' },
+		{ key: 'StartDate', name: 'Started Date (if any)' },
 		{ key: 'ID', name: 'ID' },
 		{ key: 'Type', name: 'Type' },
 		{ key: 'Reason', name: 'Reason' },
-		{ key: 'Description', name: 'Description' },
-		{ key: 'StartDate', name: 'Recorded Date (if any)' },
-		{ key: 'CreatedAt', name: 'Created On' },
-		{ key: 'UpdatedAt', name: 'Updated On' }
+		{ key: 'Description', name: 'Description' }
+		// { key: 'UpdatedAt', name: 'Updated On' }
 		// { key: 'FirstName', name: 'First Name' },
 		// { key: 'LastName', name: 'Last Name' },
 		// { key: 'Phn', name: 'Phn' }
 	];
 	let displayedColumns = [
-		'ID',
+		// 'ID',
+		'StartDate',
 		'Type',
 		'Reason',
 		'Description',
-		'StartDate',
 		'CreatedAt',
 		'UpdatedAt'
 	];
@@ -59,7 +59,7 @@
 		rootAccessPath="data.listPersonMedicalHistories.histories"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">
-			<a href="/patients/view/{Patient.ID}">View Patient</a>
+			<!--			<a href="/patients/view/{Patient.ID}">View Patient</a>-->
 		</svelte:fragment>
 	</Table>
 </div>

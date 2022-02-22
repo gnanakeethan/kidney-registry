@@ -104,7 +104,9 @@
 			{#each activeColumns as i}
 				<th class="border border-neutral-600 bg-zinc-200/75 p-2">{i.name}</th>
 			{/each}
-			<th class="border border-neutral-600 bg-zinc-200/75 p-2">actions</th>
+			{#if $$slots.actions}
+				<th class="border border-neutral-600 bg-zinc-200/75 p-2">actions</th>
+			{/if}
 		</tr>
 	</thead>
 	<tbody>
@@ -135,9 +137,11 @@
 					{#each activeColumns as i}
 						<td class="border border-neutral-600 bg-zinc-200/75 p-2">{element[i.key]}</td>
 					{/each}
-					<td class="border border-neutral-600 bg-zinc-200/75 p-2">
-						<slot name="actions" {element} />
-					</td>
+					{#if $$slots.actions}
+						<td class="border border-neutral-600 bg-zinc-200/75 p-2">
+							<slot name="actions" {element} />
+						</td>
+					{/if}
 				</tr>
 			{/each}
 		{/if}
