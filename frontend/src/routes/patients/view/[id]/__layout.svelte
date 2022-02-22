@@ -35,9 +35,9 @@
 			const person = data.getPatient;
 			if (person) {
 				recipient.set(person);
-				console.log($recipient);
-				console.log(person);
-				console.log($recipient);
+				// console.log($recipient);
+				// console.log(person);
+				// console.log($recipient);
 			}
 		}
 	});
@@ -100,8 +100,10 @@
 </script>
 
 <div class="flex flex-row">
-	<div class="flex flex-col border-b border-dashed p-3 transition-all">
-		<div class="h-20 w-20">
+	<div
+		class="flex max-w-[140px] flex-col break-words border-b border-dashed bg-yellow-100 p-3 transition-all"
+	>
+		<div class="mx-auto h-20 w-20">
 			{#if $recipient.Gender === 'FEMALE'}
 				<FemaleIcon class="h-20 text-6xl" />
 			{:else}
@@ -110,9 +112,11 @@
 		</div>
 		<div>
 			<span class="text-gray-700">Patient Name: <br /></span>
-			<span class="font-bold">{$recipient.FirstName} {$recipient.LastName}</span> <br />
+			<span class="text-wrap font-bold">{$recipient.FirstName} {$recipient.LastName}</span>
+			<br />
+			<br />
 			<span class="text-gray-800">Date of Birth : <br /></span>
-			<span class="font-bold">{$recipient.DateOfBirth} ({$recipient.Age})</span><br />
+			<span class="font-bold">{$recipient.DateOfBirth} <br /> ({$recipient.Age})</span><br /> <br />
 			<span class="text-gray-800">Phn : <br /></span>
 			<span class="font-bold">{$recipient.Phn}</span> <br />
 		</div>

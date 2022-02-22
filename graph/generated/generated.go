@@ -1305,6 +1305,7 @@ input PersonFilter {
 
 input PersonInput {
     ID                     : ID!
+    Age                    : String
     FirstName              : String
     LastName               : String
     Address                : String
@@ -6890,6 +6891,14 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
 			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Age":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Age"))
+			it.Age, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

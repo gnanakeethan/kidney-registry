@@ -103,6 +103,7 @@ type PersonFollowUpList struct {
 
 type PersonInput struct {
 	ID                  string         `json:"ID"`
+	Age                 *string        `json:"Age"`
 	FirstName           *string        `json:"FirstName"`
 	LastName            *string        `json:"LastName"`
 	Address             *string        `json:"Address"`
