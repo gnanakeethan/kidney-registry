@@ -65,23 +65,25 @@
 				extra: {
 					multiple: false, // optional
 					loadItemes: [
-						// list items with id and title attributes.
-						{
-							value: 1,
-							title: 'item 1'
-						},
-						{
-							value: '2',
-							title: 'item 2'
-						},
-						{
-							value: 3,
-							title: 'item 3'
-						},
-						{
-							value: 4,
-							title: 'item 4'
-						}
+						{ title: 'Diabetes mellitus', value: 'Diabetes mellitus' },
+						{ title: 'Dyslipidemia', value: 'Dyslipidemia' },
+						{ title: 'Hypertension', value: 'Hypertension' },
+						{ title: 'Cerebrovascular Disease', value: 'Cerebrovascular Disease' },
+						{ title: 'Heart disease', value: 'Heart disease' },
+						{ title: 'Bronchial Asthma', value: 'Bronchial Asthma' },
+						{ title: 'Lung disease', value: 'Lung disease' },
+						{ title: 'Anemia', value: 'Anemia' },
+						{ title: 'Hyperthyroidism', value: 'Hyperthyroidism' },
+						{ title: 'Hypothyroidism', value: 'Hypothyroidism' },
+						{ title: 'Chronic Kidney Disease', value: 'Chronic Kidney Disease' },
+						{ title: 'Renal Failure', value: 'Renal Failure' },
+						{ title: 'End Stage Renal Disease', value: 'End Stage Renal Disease' },
+						{ title: 'Acute Kidney Injury', value: 'Acute Kidney Injury' },
+						{ title: 'Depression', value: 'Depression' },
+						{ title: 'Osteoporosis', value: 'Osteoporosis' },
+						{ title: 'Arthritis', value: 'Arthritis' },
+						{ title: 'Dengue Fever', value: 'Dengue Fever' },
+						{ title: 'Covid 19 Infection', value: 'Covid 19 Infection' }
 					]
 				},
 				rules: ['required'],

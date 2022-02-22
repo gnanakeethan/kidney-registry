@@ -47,12 +47,12 @@
 		routes: [
 			{
 				name: 'History',
-				route: '/patients/view/' + $recipientId + '/history',
+				route: '/patients/view/' + $recipientId + '/history/',
 				icon: SearchIcon
 			},
 			{
 				name: 'New Record',
-				route: '/patients/view/' + $recipientId + '/history/history',
+				route: '/patients/view/' + $recipientId + '/history/new',
 				icon: NewIcon
 			},
 			{

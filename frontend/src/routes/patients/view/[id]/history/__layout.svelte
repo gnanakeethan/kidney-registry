@@ -20,38 +20,33 @@
 
 	let props = {
 		activeUrl: activePath,
-		base: '/patients/view/' + $recipientId + '/history',
+		base: '/patients/view/' + $recipientId + '/history/',
 		routes: [
 			{
 				name: 'Previous Records',
-				route: '/patients/view/' + $recipientId + '/history',
+				route: '/patients/view/' + $recipientId + '/history/',
 				icon: UserIcon
 			},
 			{
 				name: 'New Complaint',
-				route: '/patients/view/' + $recipientId + '/history/history',
+				route: '/patients/view/' + $recipientId + '/history/new/history',
 				icon: UserIcon
 			},
 			{
 				name: 'Add Medical History',
-				route: '/patients/view/' + $recipientId + '/history/medical',
+				route: '/patients/view/' + $recipientId + '/history/new/medical',
 				icon: UserIcon
 			},
 			{
 				name: 'Add Surgical History',
-				route: '/patients/view/' + $recipientId + '/history/surgical',
+				route: '/patients/view/' + $recipientId + '/history/new/surgical',
 				icon: UserIcon
 			},
 			{
 				name: 'Add Social History',
-				route: '/patients/view/' + $recipientId + '/history/social',
+				route: '/patients/view/' + $recipientId + '/history/new/social',
 				icon: UserIcon
 			}
-			// {
-			// 	name: 'View History',
-			// 	route: '/patients/view/' + $recipientId + '/history/2',
-			// 	icon: UserIcon
-			// }
 		]
 	};
 </script>

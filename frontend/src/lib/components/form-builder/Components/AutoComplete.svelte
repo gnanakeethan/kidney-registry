@@ -91,10 +91,12 @@
 			name: field.name,
 			value: e.target.value
 		});
-		if (keyword.length > 2) {
+		if (keyword.length >= 1) {
 			hideListItems = false;
 			const filtered = items.filter((entry) => {
-				return Object.values(entry).some((val) => typeof val === 'string' && val.includes(keyword));
+				return Object.values(entry).some(
+					(val) => typeof val === 'string' && val.toLowerCase().includes(keyword.toLowerCase())
+				);
 			});
 			if (filtered.length > 0) {
 				itemsFiltered = filtered;

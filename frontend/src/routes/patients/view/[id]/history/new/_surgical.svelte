@@ -48,7 +48,7 @@
 			},
 
 			{
-				type: 'textarea', // required
+				type: 'autocomplete', // required
 				name: 'Reason', // required
 				value: '', // optional
 
@@ -63,7 +63,21 @@
 					cols: null // optional
 				},
 				rules: ['required'],
-				messages: { required: 'Field must be filled' }
+				messages: { required: 'Field must be filled' },
+				extra: {
+					multiple: false,
+					loadItems: [
+						{ title: 'Hernial Repair', value: 'Hernial Repair' },
+						{ title: 'Lump removal', value: 'Lump removal' },
+						{ title: 'Appendicectomy', value: 'Appendicectomy' },
+						{ title: 'Thyroidectomy', value: 'Thyroidectomy' },
+						{ title: 'Mastectomy', value: 'Mastectomy' },
+						{ title: 'Road Traffic Accident', value: 'Road Traffic Accident' },
+						{ title: 'Suturing', value: 'Suturing' },
+						{ title: 'Kidney Transplant', value: 'Kidney Transplant' },
+						{ title: 'AVF Creation', value: 'AVF Creation' }
+					]
+				}
 			},
 			{
 				type: 'textarea', // required
