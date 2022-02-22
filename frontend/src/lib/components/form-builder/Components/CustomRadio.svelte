@@ -11,7 +11,7 @@
 	let classes = '';
 	let labelClasses = '';
 	let defaultClasses = '';
-	let fieldLabelClasses = 'font-extrabold uppercase tracking-wide';
+	let fieldLabelClasses = 'font-extrabold tracking-wide';
 
 	// Dispatch.
 	const dispatch = createEventDispatcher();
@@ -19,12 +19,14 @@
 	// Change value.
 	function onChangeValue(event) {
 		if (values.length > 0) {
-			values.filter((item, index) => {
+			const valuesRef = values.filter((item, index) => {
 				return event.target.value === item.value;
 			});
+			console.log(valuesRef);
+
 			dispatch('changeValue', {
 				name: field.name,
-				value: values[0].value
+				value: valuesRef[0]?.value
 			});
 		}
 	}
@@ -54,13 +56,13 @@
 	});
 </script>
 
-<div class="flex flex-row items-center ">
+<div class="my-2 flex flex-row items-center">
 	<div class={fieldLabelClasses}>{field.attributes.fieldName}</div>
 	{#each field.extra.items as item, i}
 		<div
 			class:form-check-inline={field.extra.aligned === 'inline'}
 			class:form-check={field.extra.aligned !== 'inline'}
-			class="p-4"
+			class="inline p-4"
 		>
 			<input
 				type="radio"
@@ -77,11 +79,7 @@
 </div>
 
 <style>
-	input[type='radio'] {
-		display: none;
-	}
-
-	input[type='radio']:checked + label {
-		@apply rounded border-green-400 bg-green-500 text-white;
+	input[type='radio']:checked + label.labelStyle {
+		@apply bg-green-500 text-white;
 	}
 </style>

@@ -55,7 +55,7 @@
 				prefix: { classes: ['mx-2 flex-grow'] },
 				attributes: {
 					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-2', // optional
+					classes: 'form-input rounded w-full my-2', // optional
 					label: i === 0 ? 'Surgery' : '', // optional
 					disabled: false, // optional
 					readonly: false, // optional

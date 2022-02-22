@@ -11,7 +11,7 @@
 	let classes = '';
 	let labelClasses = '';
 	let defaultClasses = '';
-	let fieldLabelClasses = 'font-extrabold uppercase tracking-wide';
+	let fieldLabelClasses = 'font-extrabold tracking-wide';
 
 	// Dispatch.
 	const dispatch = createEventDispatcher();
@@ -85,6 +85,6 @@
 	}
 
 	input[type='checkbox']:checked + label {
-		@apply rounded border-green-400 bg-green-500 text-white;
+		@apply bg-green-500 text-white;
 	}
 </style>
