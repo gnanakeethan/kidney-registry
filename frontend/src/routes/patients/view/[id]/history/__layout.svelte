@@ -24,24 +24,24 @@
 		routes: [
 			{
 				name: 'New History',
-				route: '/patients/view/' + $recipientId + '/history/new',
+				route: '/patients/view/' + $recipientId + '/history/history',
 				icon: UserIcon
 			},
 			{
 				name: 'New History',
-				route: '/patients/view/' + $recipientId + '/history/med',
+				route: '/patients/view/' + $recipientId + '/history/medical',
 				icon: UserIcon
 			},
 			{
 				name: 'Previous Records',
 				route: '/patients/view/' + $recipientId + '/history',
 				icon: UserIcon
-			},
-			{
-				name: 'View History',
-				route: '/patients/view/' + $recipientId + '/history/2',
-				icon: UserIcon
 			}
+			// {
+			// 	name: 'View History',
+			// 	route: '/patients/view/' + $recipientId + '/history/2',
+			// 	icon: UserIcon
+			// }
 		]
 	};
 </script>

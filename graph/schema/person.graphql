@@ -102,7 +102,7 @@ input PersonInput {
 }
 
 extend type Query {
-    listPatients(filter: PersonFilter,page:Int,limit:Int) : PersonList
+    listPatients(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]) : PersonList
     getPatient(ID: ID!) : Person
 }
 

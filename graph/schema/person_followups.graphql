@@ -19,7 +19,7 @@ input PersonFollowUpInput{
     CaseStatus: String
 }
 extend type Person {
-    followUps(filter: PersonFilter,page:Int,limit:Int)              : PersonFollowUpList
+    followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
 }
 type PersonFollowUpList {
     followUps: [PersonFollowUp]
@@ -33,5 +33,5 @@ extend type Mutation {
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int): PersonFollowUpList
+    personFollowUps(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
 }

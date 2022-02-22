@@ -46,14 +46,15 @@
 				}
 			},
 			{
-				type: 'select', // required
+				type: 'input', // required
 				name: 'Type', // required
-				value: 'COMPLAINT', // required
+				value: 'MEDICAL', // required
 				attributes: {
 					id: 'Type', // required
-					classes: ['form-input rounded w-full'], // optional
+					classes: ['form-input rounded w-full readonly my-2'], // optional
 					label: 'Type', // optional
-					disabled: false // optional
+					disabled: false, // optional
+					readonly: true
 				},
 				extra: {
 					options: [
@@ -98,18 +99,21 @@
 			// },
 
 			{
-				type: 'textarea', // required
+				type: 'select', // required
 				name: 'Reason', // required
-				value: '', // optional
+				value: 'NA', // required
 				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
+					id: 'Type', // required
+					classes: ['form-input rounded w-full'], // optional
 					label: 'Reason', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{ value: 'Diabetic', title: 'Diabetic' },
+						{ value: 'Cancer', title: 'Cancer' }
+					]
+				} // optional
 			}
 			// {
 			// 	type: 'textarea', // required
