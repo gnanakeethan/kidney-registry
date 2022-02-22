@@ -144,6 +144,7 @@ type ComplexityRoot struct {
 	}
 
 	PersonMedicalHistory struct {
+		CreatedAt   func(childComplexity int) int
 		Description func(childComplexity int) int
 		EndDate     func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -152,6 +153,7 @@ type ComplexityRoot struct {
 		Reason      func(childComplexity int) int
 		StartDate   func(childComplexity int) int
 		Type        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
 	}
 
 	PersonMedicalHistoryList struct {
@@ -225,6 +227,9 @@ type PersonResolver interface {
 type PersonMedicalHistoryResolver interface {
 	StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
 	EndDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
+
+	CreatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
+	UpdatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
 }
 type PersonOrganDonationResolver interface {
 	Donor(ctx context.Context, obj *models.PersonOrganDonation) (*models.Person, error)
@@ -744,6 +749,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonList.Persons(childComplexity), true
 
+	case "PersonMedicalHistory.CreatedAt":
+		if e.complexity.PersonMedicalHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.PersonMedicalHistory.CreatedAt(childComplexity), true
+
 	case "PersonMedicalHistory.Description":
 		if e.complexity.PersonMedicalHistory.Description == nil {
 			break
@@ -799,6 +811,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonMedicalHistory.Type(childComplexity), true
+
+	case "PersonMedicalHistory.UpdatedAt":
+		if e.complexity.PersonMedicalHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.PersonMedicalHistory.UpdatedAt(childComplexity), true
 
 	case "PersonMedicalHistoryList.histories":
 		if e.complexity.PersonMedicalHistoryList.Histories == nil {
@@ -1353,6 +1372,8 @@ extend type Query {
     EndDate: String
     Medications: String
     Type: HistoryType
+    CreatedAt: String
+    UpdatedAt: String
 }
 input PersonMedicalHistoryFilter {
     ID                     : StringFilter
@@ -4201,6 +4222,70 @@ func (ec *executionContext) _PersonMedicalHistory_Type(ctx context.Context, fiel
 	res := resTmp.(models.HistoryType)
 	fc.Result = res
 	return ec.marshalOHistoryType2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐHistoryType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonMedicalHistory_CreatedAt(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonMedicalHistory",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.PersonMedicalHistory().CreatedAt(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonMedicalHistory_UpdatedAt(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonMedicalHistory",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.PersonMedicalHistory().UpdatedAt(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistoryList_histories(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistoryList) (ret graphql.Marshaler) {
@@ -7991,6 +8076,40 @@ func (ec *executionContext) _PersonMedicalHistory(ctx context.Context, sel ast.S
 
 			out.Values[i] = innerFunc(ctx)
 
+		case "CreatedAt":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._PersonMedicalHistory_CreatedAt(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "UpdatedAt":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._PersonMedicalHistory_UpdatedAt(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

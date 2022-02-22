@@ -23,7 +23,6 @@ fragment PersonFields on Person {
     PersonType
     Status
     RecordStatus
-    Age
 }
 
 fragment PersonMedicalHistoryFields on PersonMedicalHistory {
@@ -37,4 +36,6 @@ fragment PersonMedicalHistoryFields on PersonMedicalHistory {
     EndDate
     Medications
     Type
+    CreatedAt
+    UpdatedAt
 }

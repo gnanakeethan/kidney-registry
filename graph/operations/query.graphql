@@ -21,6 +21,7 @@ query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int){
         }
         persons {
             ...PersonFields
+            Age
         }
     }
 }
@@ -28,6 +29,7 @@ query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int){
 query GetPatient ($id: ID!){
     getPatient(ID: $id) {
         ...PersonFields
+        Age
     }
 }
 

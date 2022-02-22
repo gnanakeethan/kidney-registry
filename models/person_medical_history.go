@@ -15,6 +15,8 @@ type PersonMedicalHistory struct {
 	Description string      `orm:"column(description);null"`
 	Reason      string      `orm:"column(reason);null"`
 	StartDate   time.Time   `orm:"column(start_date);null"`
+	CreatedAt   time.Time   `orm:"column(created_at);null"`
+	UpdatedAt   time.Time   `orm:"column(updated_at);null"`
 	EndDate     time.Time   `orm:"column(end_date);null"`
 	Medications string      `orm:"column(medications);null"`
 	Type        HistoryType `orm:"column(type);null"`

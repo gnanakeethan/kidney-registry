@@ -44,6 +44,16 @@ func (r *personMedicalHistoryResolver) EndDate(ctx context.Context, obj *models.
 	return &date, nil
 }
 
+func (r *personMedicalHistoryResolver) CreatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
+	date := obj.CreatedAt.Format("2006-01-02")
+	return &date, nil
+}
+
+func (r *personMedicalHistoryResolver) UpdatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
+	date := obj.UpdatedAt.Format("2006-01-02")
+	return &date, nil
+}
+
 func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error) {
 	return models.GetPersonMedicalHistoryById(id)
 }

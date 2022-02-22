@@ -7,6 +7,8 @@ type PersonMedicalHistory {
     EndDate: String
     Medications: String
     Type: HistoryType
+    CreatedAt: String
+    UpdatedAt: String
 }
 input PersonMedicalHistoryFilter {
     ID                     : StringFilter
