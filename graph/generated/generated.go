@@ -107,10 +107,10 @@ type ComplexityRoot struct {
 		DateOfBirth         func(childComplexity int) int
 		Ethnicity           func(childComplexity int) int
 		FirstName           func(childComplexity int) int
-		FollowUps           func(childComplexity int, filter *models.PersonFilter, page *int, limit *int) int
+		FollowUps           func(childComplexity int, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		Gender              func(childComplexity int) int
 		Height              func(childComplexity int) int
-		Histories           func(childComplexity int, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) int
+		Histories           func(childComplexity int, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ID                  func(childComplexity int) int
 		LastName            func(childComplexity int) int
 		MaritalStatus       func(childComplexity int) int
@@ -176,10 +176,10 @@ type ComplexityRoot struct {
 	Query struct {
 		Error                      func(childComplexity int) int
 		GetPatient                 func(childComplexity int, id string) int
-		ListPatients               func(childComplexity int, filter *models.PersonFilter, page *int, limit *int) int
-		ListPersonMedicalHistories func(childComplexity int, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) int
+		ListPatients               func(childComplexity int, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
+		ListPersonMedicalHistories func(childComplexity int, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		PersonFollowUp             func(childComplexity int, id string) int
-		PersonFollowUps            func(childComplexity int, personID string, filter *models.PersonFilter, page *int, limit *int) int
+		PersonFollowUps            func(childComplexity int, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		PersonMedicalHistory       func(childComplexity int, id string) int
 		Users                      func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
 	}
@@ -221,8 +221,8 @@ type PersonResolver interface {
 	DateOfBirth(ctx context.Context, obj *models.Person) (*string, error)
 
 	Age(ctx context.Context, obj *models.Person) (*string, error)
-	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
-	Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
+	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
+	Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
 }
 type PersonMedicalHistoryResolver interface {
 	StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
@@ -242,12 +242,12 @@ type PersonOrganDonationResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int) (*models.PersonList, error)
+	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error)
 	GetPatient(ctx context.Context, id string) (*models.Person, error)
 	PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
-	PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int) (*models.PersonFollowUpList, error)
+	PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
 	PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error)
-	ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error)
+	ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
 	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 }
 type SubscriptionResolver interface {
@@ -574,7 +574,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Person.FollowUps(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Person.FollowUps(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
 	case "Person.Gender":
 		if e.complexity.Person.Gender == nil {
@@ -600,7 +600,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Person.Histories(childComplexity, args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Person.Histories(childComplexity, args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
 	case "Person.ID":
 		if e.complexity.Person.ID == nil {
@@ -925,7 +925,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ListPatients(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Query.ListPatients(childComplexity, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
 	case "Query.listPersonMedicalHistories":
 		if e.complexity.Query.ListPersonMedicalHistories == nil {
@@ -937,7 +937,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ListPersonMedicalHistories(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Query.ListPersonMedicalHistories(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
 	case "Query.personFollowUp":
 		if e.complexity.Query.PersonFollowUp == nil {
@@ -961,7 +961,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.PersonFollowUps(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int)), true
+		return e.complexity.Query.PersonFollowUps(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
 	case "Query.personMedicalHistory":
 		if e.complexity.Query.PersonMedicalHistory == nil {
@@ -1127,6 +1127,11 @@ var sources = []*ast.Source{
 	{Name: "graph/schema/0raw.graphql", Input: `type Error {
     string: String!
     status: Int!
+}
+
+enum OrderBy {
+    asc
+    desc
 }
 
 type Pagination {
@@ -1318,7 +1323,7 @@ input PersonInput {
 }
 
 extend type Query {
-    listPatients(filter: PersonFilter,page:Int,limit:Int) : PersonList
+    listPatients(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]) : PersonList
     getPatient(ID: ID!) : Person
 }
 
@@ -1347,7 +1352,7 @@ input PersonFollowUpInput{
     CaseStatus: String
 }
 extend type Person {
-    followUps(filter: PersonFilter,page:Int,limit:Int)              : PersonFollowUpList
+    followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
 }
 type PersonFollowUpList {
     followUps: [PersonFollowUp]
@@ -1361,7 +1366,7 @@ extend type Mutation {
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int): PersonFollowUpList
+    personFollowUps(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_medical_history.graphql", Input: `type PersonMedicalHistory {
     ID: ID
@@ -1407,7 +1412,7 @@ input PersonMedicalHistoryInput{
     Type: HistoryType!
 }
 extend type Person {
-    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int)              : PersonMedicalHistoryList
+    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonMedicalHistoryList
 }
 type PersonMedicalHistoryList {
     histories: [PersonMedicalHistory]
@@ -1421,7 +1426,7 @@ extend type Mutation {
 }
 extend type Query {
     personMedicalHistory(ID: ID!): PersonMedicalHistory
-    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int): PersonMedicalHistoryList
+    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_organ_donation.graphql", Input: `type PersonOrganDonation{
     ID: String
@@ -1611,6 +1616,24 @@ func (ec *executionContext) field_Person_followUps_args(ctx context.Context, raw
 		}
 	}
 	args["limit"] = arg2
+	var arg3 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg3, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg3
+	var arg4 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
 	return args, nil
 }
 
@@ -1644,6 +1667,24 @@ func (ec *executionContext) field_Person_histories_args(ctx context.Context, raw
 		}
 	}
 	args["limit"] = arg2
+	var arg3 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg3, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg3
+	var arg4 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
 	return args, nil
 }
 
@@ -1707,6 +1748,24 @@ func (ec *executionContext) field_Query_listPatients_args(ctx context.Context, r
 		}
 	}
 	args["limit"] = arg2
+	var arg3 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg3, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg3
+	var arg4 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
 	return args, nil
 }
 
@@ -1749,6 +1808,24 @@ func (ec *executionContext) field_Query_listPersonMedicalHistories_args(ctx cont
 		}
 	}
 	args["limit"] = arg3
+	var arg4 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg4, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg4
+	var arg5 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg5, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg5
 	return args, nil
 }
 
@@ -1806,6 +1883,24 @@ func (ec *executionContext) field_Query_personFollowUps_args(ctx context.Context
 		}
 	}
 	args["limit"] = arg3
+	var arg4 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg4, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg4
+	var arg5 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg5, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg5
 	return args, nil
 }
 
@@ -3522,7 +3617,7 @@ func (ec *executionContext) _Person_followUps(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().FollowUps(rctx, obj, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Person().FollowUps(rctx, obj, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3561,7 +3656,7 @@ func (ec *executionContext) _Person_histories(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Person().Histories(rctx, obj, args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Person().Histories(rctx, obj, args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4697,7 +4792,7 @@ func (ec *executionContext) _Query_listPatients(ctx context.Context, field graph
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListPatients(rctx, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Query().ListPatients(rctx, args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4814,7 +4909,7 @@ func (ec *executionContext) _Query_personFollowUps(ctx context.Context, field gr
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PersonFollowUps(rctx, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Query().PersonFollowUps(rctx, args["PersonID"].(string), args["filter"].(*models.PersonFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4892,7 +4987,7 @@ func (ec *executionContext) _Query_listPersonMedicalHistories(ctx context.Contex
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListPersonMedicalHistories(rctx, args["PersonID"].(string), args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int))
+		return ec.resolvers.Query().ListPersonMedicalHistories(rctx, args["PersonID"].(string), args["filter"].(*models.PersonMedicalHistoryFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9838,6 +9933,83 @@ func (ec *executionContext) marshalOMenuItem2ᚖgithubᚗcomᚋgnanakeethanᚋki
 	return ec._MenuItem(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx context.Context, v interface{}) ([]*models.OrderBy, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*models.OrderBy, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOOrderBy2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx context.Context, sel ast.SelectionSet, v []*models.OrderBy) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOOrderBy2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOOrderBy2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx context.Context, v interface{}) (*models.OrderBy, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.OrderBy)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOrderBy2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx context.Context, sel ast.SelectionSet, v *models.OrderBy) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx context.Context, sel ast.SelectionSet, v *models.Pagination) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -10086,6 +10258,38 @@ func (ec *executionContext) unmarshalOString2string(ctx context.Context, v inter
 func (ec *executionContext) marshalOString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalString(v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOString2ᚕᚖstring(ctx context.Context, v interface{}) ([]*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOString2ᚖstring(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕᚖstring(ctx context.Context, sel ast.SelectionSet, v []*string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalOString2ᚖstring(ctx, sel, v[i])
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

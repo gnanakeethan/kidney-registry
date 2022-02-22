@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 )
@@ -16,6 +17,10 @@ type Allergies struct {
 	Conditions       string `orm:"column(conditions);null"`
 	AssociatedCauses string `orm:"column(associated_causes);null"`
 	Type             string `orm:"column(type);null"`
+	
+	CreatedAt time.Time `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt time.Time `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt time.Time `orm:"column(deleted_at);null"`
 }
 
 func (t *Allergies) TableName() string {

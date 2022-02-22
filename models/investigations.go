@@ -5,14 +5,18 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Investigations struct {
-	ID        string `orm:"column(id);pk"`
-	Details   string `orm:"column(details);null"`
-	Procedure string `orm:"column(procedure);null"`
+	ID        string    `orm:"column(id);pk"`
+	Details   string    `orm:"column(details);null"`
+	Procedure string    `orm:"column(procedure);null"`
+	CreatedAt time.Time `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt time.Time `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt time.Time `orm:"column(deleted_at);null"`
 }
 
 func (t *Investigations) TableName() string {

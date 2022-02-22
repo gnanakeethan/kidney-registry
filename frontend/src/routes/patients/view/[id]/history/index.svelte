@@ -20,18 +20,7 @@
 		ListPersonMedicalHistoryDocument
 	);
 	let loading = true;
-	$: filters = { ID: $recipientId };
-
-	recipientId.subscribe((id) => {
-		if (id) {
-			console.log(id);
-			dataSource.loadCurrentPage({ ID: id }).then((data) => {
-				console.log(data);
-				loading = false;
-			});
-			loading = false;
-		}
-	}, {});
+	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
 		{ key: 'ID', name: 'ID' },

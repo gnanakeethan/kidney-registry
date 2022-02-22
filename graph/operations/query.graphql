@@ -11,8 +11,8 @@ query ListUsers ($filter: UserListFilter,$perPage: Int){
     }
 }
 
-query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int){
-    listPatients(filter:$filter,page: $page,limit: $limit) {
+query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPatients(filter:$filter,page: $page,limit: $limit          ,sortBy: $sortBy,orderBy: $orderBy) {
         pagination {
             totalItems
             prevPage
@@ -46,8 +46,8 @@ query ListPeople ($filter: UserListFilter,$perPage: Int) {
     }
 }
 
-query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $page: Int, $limit: Int){
-    listPersonMedicalHistories(PersonID: $ID,filter:$filter,page: $page,limit: $limit) {
+query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPersonMedicalHistories(PersonID: $ID,filter:$filter,page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
         pagination {
             ...Pagination
         }

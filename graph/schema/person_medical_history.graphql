@@ -42,7 +42,7 @@ input PersonMedicalHistoryInput{
     Type: HistoryType!
 }
 extend type Person {
-    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int)              : PersonMedicalHistoryList
+    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonMedicalHistoryList
 }
 type PersonMedicalHistoryList {
     histories: [PersonMedicalHistory]

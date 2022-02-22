@@ -50,8 +50,8 @@ func (r *personResolver) Age(ctx context.Context, obj *models.Person) (*string, 
 	return &diff, nil
 }
 
-func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int) (*models.PersonList, error) {
-	return models.GetListPatients(ctx, filter, page, limit)
+func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error) {
+	return models.GetListPatients(ctx, filter, page, limit, sortBy, orderBy)
 }
 
 func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.Person, error) {

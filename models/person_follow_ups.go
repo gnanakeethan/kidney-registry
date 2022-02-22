@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"fmt"
+	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/kr/pretty"
@@ -17,6 +18,9 @@ type PersonFollowUp struct {
 	RenalBiopsies string               `orm:"column(renal_biopsies);null"`
 	CaseStatus    string               `orm:"column(case_status);null"`
 	DonationId    *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
+	CreatedAt     time.Time            `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt     time.Time            `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt     time.Time            `orm:"column(deleted_at);null"`
 }
 
 func (t *PersonFollowUp) TableName() string {

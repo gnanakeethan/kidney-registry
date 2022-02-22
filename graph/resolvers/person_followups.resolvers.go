@@ -22,7 +22,7 @@ func (r *mutationResolver) DeletePersonFollowUp(ctx context.Context, id string) 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int) (*models.PersonFollowUpList, error) {
+func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
 	return nil, nil
 }
 
@@ -30,6 +30,6 @@ func (r *queryResolver) PersonFollowUp(ctx context.Context, id string) (*models.
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int) (*models.PersonFollowUpList, error) {
+func (r *queryResolver) PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
 	panic(fmt.Errorf("not implemented"))
 }

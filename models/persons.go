@@ -27,6 +27,9 @@ type Person struct {
 	PersonType          PatientType   `orm:"column(person_type);null"`
 	Status              PatientStatus `orm:"column(status);null"`
 	RecordStatus        RecordStatus  `orm:"column(record_status);null"`
+	CreatedAt           time.Time     `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt           time.Time     `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt           time.Time     `orm:"column(deleted_at);null"`
 }
 
 func (t *Person) TableName() string {
@@ -81,7 +84,7 @@ func DeletePersons(id string) (err error) {
 	return
 }
 
-func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit *int) (*PersonList, error) {
+func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonList, error) {
 	person, persons := Person{}, []*Person{}
 	filterPtr := PersonFilter{}
 	if filter != nil {
@@ -89,7 +92,7 @@ func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit
 	}
 	query, currentPage, perPage, preloads := extractQuery(ctx, person, filterPtr, page, limit)
 	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(person, query, nil, nil, (currentPage-1)*perPage, perPage)
+	qs, totalItems, err := GetAnyAll(person, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
 	if err != nil {
 		return nil, err
 	}

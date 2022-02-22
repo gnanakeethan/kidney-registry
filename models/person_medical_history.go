@@ -15,8 +15,9 @@ type PersonMedicalHistory struct {
 	Description string      `orm:"column(description);null"`
 	Reason      string      `orm:"column(reason);null"`
 	StartDate   time.Time   `orm:"column(start_date);null"`
-	CreatedAt   time.Time   `orm:"column(created_at);null"`
-	UpdatedAt   time.Time   `orm:"column(updated_at);null"`
+	CreatedAt   time.Time   `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt   time.Time   `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt   time.Time   `orm:"column(deleted_at);null"`
 	EndDate     time.Time   `orm:"column(end_date);null"`
 	Medications string      `orm:"column(medications);null"`
 	Type        HistoryType `orm:"column(type);null"`
@@ -69,7 +70,7 @@ func GetPersonMedicalHistoryById(id string) (v *PersonMedicalHistory, err error)
 	return nil, err
 }
 
-func GetListMedicalHistory(ctx context.Context, filter *PersonMedicalHistoryFilter, page *int, limit *int) (*PersonMedicalHistoryList, error) {
+func GetListMedicalHistory(ctx context.Context, filter *PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonMedicalHistoryList, error) {
 	var PersonMedicalHistories []*PersonMedicalHistory
 	PersonMedicalHistory := PersonMedicalHistory{}
 	filterPtr := PersonMedicalHistoryFilter{}

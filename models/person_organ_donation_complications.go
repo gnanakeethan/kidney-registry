@@ -14,9 +14,10 @@ type PersonOrganDonationComplications struct {
 	ID          string               `orm:"column(id);pk"`
 	DonationId  *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
 	Description string               `orm:"column(description);null"`
-	CreatedAt   time.Time            `orm:"column(created_at);type(timestamp without time zone);null"`
-	UpdatedAt   time.Time            `orm:"column(updated_at);type(timestamp without time zone);null"`
 	Type        string               `orm:"column(type)"`
+	CreatedAt   time.Time            `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt   time.Time            `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt   time.Time            `orm:"column(deleted_at);null"`
 }
 
 func (t *PersonOrganDonationComplications) TableName() string {

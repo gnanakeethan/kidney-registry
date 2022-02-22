@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 )
@@ -13,6 +14,9 @@ type PersonComorbidities struct {
 	ID            string         `orm:"column(id);pk"`
 	ComorbidityId *Comorbidities `orm:"column(comorbidity_id);rel(fk)"`
 	PersonId      *Person        `orm:"column(person_id);rel(fk)"`
+	CreatedAt     time.Time      `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt     time.Time      `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt     time.Time      `orm:"column(deleted_at);null"`
 }
 
 func (t *PersonComorbidities) TableName() string {

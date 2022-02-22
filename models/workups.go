@@ -5,15 +5,19 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Workups struct {
-	ID          string `orm:"column(id);pk"`
-	Name        string `orm:"column(name)"`
-	Description string `orm:"column(description);null"`
-	Procedure   string `orm:"column(procedure);null"`
+	ID          string    `orm:"column(id);pk"`
+	Name        string    `orm:"column(name)"`
+	Description string    `orm:"column(description);null"`
+	Procedure   string    `orm:"column(procedure);null"`
+	CreatedAt   time.Time `orm:"column(created_at);type(datetime);auto_now_add;null"`
+	UpdatedAt   time.Time `orm:"column(updated_at);type(datetime);auto_now;null"`
+	DeletedAt   time.Time `orm:"column(deleted_at);null"`
 }
 
 func (t *Workups) TableName() string {

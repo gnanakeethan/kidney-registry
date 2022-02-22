@@ -180,7 +180,7 @@ func GetPreloadString(prefix, name string) string {
 }
 
 // Gets any type of object and destructures query.
-func GetAnyAll(object interface{}, query *orm.Condition, sortby []string, order []string,
+func GetAnyAll(object interface{}, query *orm.Condition, sortby []*string, order []*OrderBy,
 	offset int64, limit int64) (qs orm.QuerySeter, totalItems int64, err error) {
 	o := orm.NewOrm()
 	typeOf := reflect.TypeOf(object)
@@ -192,10 +192,10 @@ func GetAnyAll(object interface{}, query *orm.Condition, sortby []string, order 
 			// 1) for each sort field, there is an associated order
 			for i, v := range sortby {
 				orderby := ""
-				if order[i] == "desc" {
-					orderby = "-" + v
-				} else if order[i] == "asc" {
-					orderby = v
+				if *order[i] == "desc" {
+					orderby = "-" + *v
+				} else if *order[i] == "asc" {
+					orderby = *v
 				} else {
 					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}
@@ -206,10 +206,10 @@ func GetAnyAll(object interface{}, query *orm.Condition, sortby []string, order 
 			// 2) there is exactly one order, all the sorted fields will be sorted by this order
 			for _, v := range sortby {
 				orderby := ""
-				if order[0] == "desc" {
-					orderby = "-" + v
-				} else if order[0] == "asc" {
-					orderby = v
+				if *order[0] == "desc" {
+					orderby = "-" + *v
+				} else if *order[0] == "asc" {
+					orderby = *v
 				} else {
 					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
 				}

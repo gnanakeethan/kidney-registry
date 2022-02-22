@@ -26,12 +26,12 @@ func (r *mutationResolver) DeletePersonMedicalHistory(ctx context.Context, id st
 	}
 }
 
-func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
+func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error) {
 	if filter == nil {
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.GetListMedicalHistory(ctx, filter, page, limit)
+	return models.GetListMedicalHistory(ctx, filter, page, limit, sortBy, orderBy)
 }
 
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
@@ -58,12 +58,12 @@ func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*m
 	return models.GetPersonMedicalHistoryById(id)
 }
 
-func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int) (*models.PersonMedicalHistoryList, error) {
+func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error) {
 	if filter == nil {
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.GetListMedicalHistory(ctx, filter, page, limit)
+	return models.GetListMedicalHistory(ctx, filter, page, limit, sortBy, orderBy)
 }
 
 // PersonMedicalHistory returns generated.PersonMedicalHistoryResolver implementation.
