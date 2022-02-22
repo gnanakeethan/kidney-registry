@@ -27,13 +27,22 @@
 		{ key: 'Type', name: 'Type' },
 		{ key: 'Reason', name: 'Reason' },
 		{ key: 'Description', name: 'Description' },
+		{ key: 'StartDate', name: 'Recorded Date (if any)' },
 		{ key: 'CreatedAt', name: 'Created On' },
 		{ key: 'UpdatedAt', name: 'Updated On' }
 		// { key: 'FirstName', name: 'First Name' },
 		// { key: 'LastName', name: 'Last Name' },
 		// { key: 'Phn', name: 'Phn' }
 	];
-	let displayedColumns = ['ID', 'Type', 'Reason', 'Description', 'CreatedAt', 'UpdatedAt'];
+	let displayedColumns = [
+		'ID',
+		'Type',
+		'Reason',
+		'Description',
+		'StartDate',
+		'CreatedAt',
+		'UpdatedAt'
+	];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);

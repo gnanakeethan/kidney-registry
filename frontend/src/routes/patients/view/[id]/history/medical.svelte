@@ -89,7 +89,7 @@
 			},
 			{
 				type: 'input', // required
-				name: 'Reason.[2]', // required
+				name: 'Reason.2', // required
 				attributes: {
 					id: 'id-field', // required
 					classes: ['form-input w-full my-2'], // optional
@@ -237,7 +237,7 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class="flex h-full flex-wrap p-2">
 	{#if formSet}
 		<form
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"

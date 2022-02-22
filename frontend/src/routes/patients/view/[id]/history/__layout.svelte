@@ -23,6 +23,11 @@
 		base: '/patients/view/' + $recipientId + '/history',
 		routes: [
 			{
+				name: 'Previous Records',
+				route: '/patients/view/' + $recipientId + '/history',
+				icon: UserIcon
+			},
+			{
 				name: 'New Complaint',
 				route: '/patients/view/' + $recipientId + '/history/history',
 				icon: UserIcon
@@ -41,11 +46,6 @@
 				name: 'Add Social History',
 				route: '/patients/view/' + $recipientId + '/history/social',
 				icon: UserIcon
-			},
-			{
-				name: 'Previous Records',
-				route: '/patients/view/' + $recipientId + '/history',
-				icon: UserIcon
 			}
 			// {
 			// 	name: 'View History',
@@ -59,8 +59,8 @@
 <div class="flex flex-col">
 	<Topbar {...props} />
 	<div
-		class="h-full max-h-full w-full overflow-scroll border-r border-dashed border-neutral-500"
-		style="height:calc(100vh - 22rem);min-height:fit-content;"
+		class=" h-full w-full overflow-scroll border-dashed border-neutral-500"
+		style="height:calc(100vh - 10.2rem);min-height:fit-content;"
 	>
 		<slot />
 	</div>

@@ -104,7 +104,22 @@
 				attributes: {
 					id: 'id-field', // required
 					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Reason', // optional
+					label: 'Complaint', // optional
+					disabled: false, // optional
+					readonly: false, // optional
+					rows: null, // optional
+					cols: null // optional
+				}
+			},
+
+			{
+				type: 'textarea', // required
+				name: 'Description', // required
+				value: '', // optional
+				attributes: {
+					id: 'id-field', // required
+					classes: 'form-textarea rounded w-full my-3', // optional
+					label: 'Presenting Complaint', // optional
 					disabled: false, // optional
 					readonly: false, // optional
 					rows: null, // optional
@@ -169,7 +184,7 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class="flex h-full flex-wrap p-2">
 	{#if formSet}
 		<form
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"

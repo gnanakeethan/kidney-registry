@@ -14,6 +14,7 @@
 	import { recipient } from '$lib/state/recipient';
 	import NewIcon from '~icons/ci/file-new';
 	import FemaleIcon from '~icons/foundation/torso-female';
+	import EditIcon from '~icons/carbon/edit';
 	import MaleIcon from '~icons/fontisto/male';
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
@@ -44,7 +45,6 @@
 		activeUrl: activePath,
 		base: '/patients/view/' + $recipientId,
 		routes: [
-			{ name: 'Patient Details', route: '/patients/view/' + $recipientId, icon: UserIcon },
 			{
 				name: 'History',
 				route: '/patients/view/' + $recipientId + '/history',
@@ -52,7 +52,7 @@
 			},
 			{
 				name: 'New Record',
-				route: '/patients/view/' + $recipientId + '/history/new',
+				route: '/patients/view/' + $recipientId + '/history/history',
 				icon: NewIcon
 			},
 			{
@@ -89,13 +89,18 @@
 				name: 'Donor Details',
 				route: '/patients/view/' + $recipientId + '/donors',
 				icon: UserIcon
+			},
+			{
+				name: 'Edit',
+				route: '/patients/view/' + $recipientId + '/edit',
+				icon: EditIcon
 			}
 		]
 	};
 </script>
 
-<div class="? flex flex-col">
-	<div class="flex flex-row border-b border-dashed p-3 text-lg">
+<div class="flex flex-row">
+	<div class="flex flex-col border-b border-dashed p-3 transition-all">
 		<div class="h-20 w-20">
 			{#if $recipient.Gender === 'FEMALE'}
 				<FemaleIcon class="h-20 text-6xl" />
@@ -104,17 +109,21 @@
 			{/if}
 		</div>
 		<div>
-			Patient Name: {$recipient.FirstName}
-			{$recipient.LastName} <br />
-			Date of Birth : {$recipient.DateOfBirth} ({$recipient.Age})<br />
-			Phn : {$recipient.Age} <br />
+			<span class="text-gray-700">Patient Name: <br /></span>
+			<span class="font-bold">{$recipient.FirstName} {$recipient.LastName}</span> <br />
+			<span class="text-gray-800">Date of Birth : <br /></span>
+			<span class="font-bold">{$recipient.DateOfBirth} ({$recipient.Age})</span><br />
+			<span class="text-gray-800">Phn : <br /></span>
+			<span class="font-bold">{$recipient.Phn}</span> <br />
 		</div>
 	</div>
-	<Topbar {...props} />
-	<div
-		class="h-full max-h-full w-full overflow-scroll border-r border-dashed border-neutral-500"
-		style="height:calc(100vh - 18rem);min-height:fit-content;"
-	>
-		<slot />
+	<div class="flex-grow">
+		<Topbar {...props} />
+		<div
+			class="h-full w-full overflow-scroll border-r border-l border-dashed border-neutral-500"
+			style="height:calc(100vh - 7.8rem);min-height:fit-content;"
+		>
+			<slot />
+		</div>
 	</div>
 </div>
