@@ -49,15 +49,17 @@
 		};
 	}
 
-	let x,
-		y = 0;
-	let items: Item[] = [];
+	let x = 0;
+	let y = 0;
+	let items = [];
+	$: console.log(items);
 
 	function mouseHandler(e) {
 		const rect = e.currentTarget.getBoundingClientRect();
 		x = e.clientX - rect.x;
 		y = e.clientY - rect.y;
-		items = [
+		console.log(items);
+		let itemItems = [
 			...items,
 			{
 				x: x,
@@ -65,37 +67,24 @@
 				data: {
 					description: ''
 				}
-			}
+			} as Item
 		];
+		items = itemItems;
+		console.log(items);
+		console.log(itemItems);
 	}
 
 	function removeItem(i: number) {
 		items.splice(i, 1);
+		items = items;
 	}
 </script>
 
-<input
-	autocomplete={field.attributes.autocomplete}
-	class={clsx(field.attributes.classes)}
-	class:border-red-400={field.validation.dirty}
-	disabled={field.attributes.disabled}
-	id={field.attributes.id}
-	max={field.attributes.max}
-	min={field.attributes.min}
-	name={field.name}
-	on:input={onChangerValue}
-	placeholder={field.attributes.placeholder}
-	readonly={field.attributes.readonly}
-	required={isRequired(field)}
-	step={field.attributes.step}
-	type={field.attributes.type}
-	value={field.value}
-/>
 <div>
 	<div class="relative cursor-crosshair">
-		<img on:click={mouseHandler} class="grayscale" src={field.attributes.image} alt="Svelte" />
+		<img alt="Svelte" class="grayscale" on:click={mouseHandler} src={field.attributes.image} />
 		{#each items as item, i}
-			<div class="? absolute p-2 text-white" style="top:{item.y}px;left:{item.x}px">
+			<div class=" absolute text-white" style="top:{item.y}px;left:{item.x}px">
 				<div class="relative flex h-3 w-3">
 					<div class="relative inline-flex h-1  w-1 rounded-full bg-red-700" />
 					<div
@@ -103,7 +92,7 @@
 					/>
 				</div>
 				<button
-					on:click={removeItem(i)}
+					on:click={() => removeItem(i)}
 					class="absolute -top-1 -right-2 h-4 w-4 rounded-full bg-red-500 text-center text-xs text-white"
 					>X</button
 				>
@@ -119,11 +108,16 @@
 			</div>
 		{/each}
 	</div>
-	<div>
-		X : {x}
-		<br /> Y : {y}
+
+	<div class="flex flex-col">
+		{#each items as item, i}
+			<div class="m-1 flex flex-row justify-between rounded border border-gray-300 p-2">
+				<div class="w-11/12">{i + 1}: {item.data.description}</div>
+				<button
+					on:click={() => removeItem(i)}
+					class=" h-4 w-4 rounded-full bg-red-500 text-center text-xs text-white">X</button
+				>
+			</div>
+		{/each}
 	</div>
-	{#each items as item}
-		<div>Test{item.x} {item.y} {item.data.description}</div>
-	{/each}
 </div>
