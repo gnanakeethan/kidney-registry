@@ -5,38 +5,45 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
+	"time"
 
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *examinationResolver) Details(ctx context.Context, obj *models.Examination) (*models.ExaminationDetails, error) {
-	panic(fmt.Errorf("not implemented"))
+	detailString := obj.Details.String()
+	detail := models.ExaminationDetails{}
+	json.Unmarshal([]byte(detailString), &detail)
+	return &detail, nil
 }
 
 func (r *examinationResolver) Procedure(ctx context.Context, obj *models.Examination) (*models.ExaminationProcedure, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *examinationResolver) Order(ctx context.Context, obj *models.Examination) (*int, error) {
-	panic(fmt.Errorf("not implemented"))
+	procedureString := obj.Procedure.String()
+	procedure := models.ExaminationProcedure{}
+	json.Unmarshal([]byte(procedureString), &procedure)
+	return &procedure, nil
 }
 
 func (r *examinationResolver) CreatedAt(ctx context.Context, obj *models.Examination) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return StringPointer(obj.CreatedAt.Format(time.RFC3339)), nil
 }
 
 func (r *examinationResolver) UpdatedAt(ctx context.Context, obj *models.Examination) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return StringPointer(obj.UpdatedAt.Format(time.RFC3339)), nil
 }
 
 func (r *examinationResolver) DeletedAt(ctx context.Context, obj *models.Examination) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
+}
+
+func (r *queryResolver) GetExamination(ctx context.Context, id string) (*models.Examination, error) {
+	return models.GetExaminationsById(id)
 }
 
 func (r *queryResolver) ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error) {
-	panic(fmt.Errorf("not implemented"))
+	return models.ListExaminations(ctx, filter, page, limit, sortBy, orderBy)
 }
 
 // Examination returns generated.ExaminationResolver implementation.

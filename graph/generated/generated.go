@@ -52,14 +52,16 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Attributes struct {
-		Classes  func(childComplexity int) int
-		Disabled func(childComplexity int) int
-		ID       func(childComplexity int) int
-		Label    func(childComplexity int) int
-		Max      func(childComplexity int) int
-		Min      func(childComplexity int) int
-		Step     func(childComplexity int) int
-		Type     func(childComplexity int) int
+		Classes      func(childComplexity int) int
+		Disabled     func(childComplexity int) int
+		FieldName    func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Label        func(childComplexity int) int
+		LabelClasses func(childComplexity int) int
+		Max          func(childComplexity int) int
+		Min          func(childComplexity int) int
+		Step         func(childComplexity int) int
+		Type         func(childComplexity int) int
 	}
 
 	DashboardMenus struct {
@@ -259,6 +261,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Error                      func(childComplexity int) int
+		GetExamination             func(childComplexity int, id string) int
 		GetPatient                 func(childComplexity int, id string) int
 		ListExaminations           func(childComplexity int, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListPatients               func(childComplexity int, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
@@ -294,7 +297,7 @@ type ComplexityRoot struct {
 type ExaminationResolver interface {
 	Details(ctx context.Context, obj *models.Examination) (*models.ExaminationDetails, error)
 	Procedure(ctx context.Context, obj *models.Examination) (*models.ExaminationProcedure, error)
-	Order(ctx context.Context, obj *models.Examination) (*int, error)
+
 	CreatedAt(ctx context.Context, obj *models.Examination) (*string, error)
 	UpdatedAt(ctx context.Context, obj *models.Examination) (*string, error)
 	DeletedAt(ctx context.Context, obj *models.Examination) (*string, error)
@@ -351,6 +354,7 @@ type PersonOrganDonationResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
+	GetExamination(ctx context.Context, id string) (*models.Examination, error)
 	ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error)
 	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error)
 	GetPatient(ctx context.Context, id string) (*models.Person, error)
@@ -397,6 +401,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Attributes.Disabled(childComplexity), true
 
+	case "Attributes.fieldName":
+		if e.complexity.Attributes.FieldName == nil {
+			break
+		}
+
+		return e.complexity.Attributes.FieldName(childComplexity), true
+
 	case "Attributes.id":
 		if e.complexity.Attributes.ID == nil {
 			break
@@ -410,6 +421,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Attributes.Label(childComplexity), true
+
+	case "Attributes.labelClasses":
+		if e.complexity.Attributes.LabelClasses == nil {
+			break
+		}
+
+		return e.complexity.Attributes.LabelClasses(childComplexity), true
 
 	case "Attributes.max":
 		if e.complexity.Attributes.Max == nil {
@@ -1372,6 +1390,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Error(childComplexity), true
 
+	case "Query.getExamination":
+		if e.complexity.Query.GetExamination == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getExamination_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetExamination(childComplexity, args["id"].(string)), true
+
 	case "Query.getPatient":
 		if e.complexity.Query.GetPatient == nil {
 			break
@@ -1723,6 +1753,8 @@ type Attributes {
     label: String
     disabled: Boolean
     classes: [String]
+    labelClasses: [String]
+    fieldName: String
 }
 input AttributesInput {
     id: String
@@ -1792,6 +1824,7 @@ type ExaminationList {
 }
 
 extend type Query {
+    getExamination(id: ID!): Examination
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
 }`, BuiltIn: false},
@@ -2383,6 +2416,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getExamination_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -3055,6 +3103,70 @@ func (ec *executionContext) _Attributes_classes(ctx context.Context, field graph
 	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Attributes_labelClasses(ctx context.Context, field graphql.CollectedField, obj *models.Attributes) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Attributes",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LabelClasses, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Attributes_fieldName(ctx context.Context, field graphql.CollectedField, obj *models.Attributes) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Attributes",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FieldName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _DashboardMenus_sidebarTop(ctx context.Context, field graphql.CollectedField, obj *models.DashboardMenus) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3299,14 +3411,14 @@ func (ec *executionContext) _Examination_Order(ctx context.Context, field graphq
 		Object:     "Examination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Examination().Order(rctx, obj)
+		return obj.Order, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3315,9 +3427,9 @@ func (ec *executionContext) _Examination_Order(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalOInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Examination_CreatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Examination) (ret graphql.Marshaler) {
@@ -7159,6 +7271,45 @@ func (ec *executionContext) _Query_error(ctx context.Context, field graphql.Coll
 	return ec.marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query_getExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_getExamination_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetExamination(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Examination)
+	fc.Result = res
+	return ec.marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_listExaminations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10324,6 +10475,20 @@ func (ec *executionContext) _Attributes(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+		case "labelClasses":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Attributes_labelClasses(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "fieldName":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Attributes_fieldName(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -10466,22 +10631,12 @@ func (ec *executionContext) _Examination(ctx context.Context, sel ast.SelectionS
 
 			})
 		case "Order":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Examination_Order(ctx, field, obj)
-				return res
+				return ec._Examination_Order(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "CreatedAt":
 			field := field
 
@@ -12083,6 +12238,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_error(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "getExamination":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getExamination(ctx, field)
 				return res
 			}
 
@@ -13728,6 +13903,16 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 	res := graphql.MarshalID(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
 	return res
 }
 

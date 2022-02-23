@@ -9,14 +9,16 @@ import (
 )
 
 type Attributes struct {
-	ID       *string   `json:"id"`
-	Max      *int      `json:"max"`
-	Min      *int      `json:"min"`
-	Step     *int      `json:"step"`
-	Type     *string   `json:"type"`
-	Label    *string   `json:"label"`
-	Disabled *bool     `json:"disabled"`
-	Classes  []*string `json:"classes"`
+	ID           *string   `json:"id"`
+	Max          *int      `json:"max"`
+	Min          *int      `json:"min"`
+	Step         *int      `json:"step"`
+	Type         *string   `json:"type"`
+	Label        *string   `json:"label"`
+	Disabled     *bool     `json:"disabled"`
+	Classes      []*string `json:"classes"`
+	LabelClasses []*string `json:"labelClasses"`
+	FieldName    *string   `json:"fieldName"`
 }
 
 type AttributesInput struct {

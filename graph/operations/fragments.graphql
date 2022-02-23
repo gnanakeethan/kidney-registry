@@ -6,6 +6,40 @@ fragment Pagination on Pagination {
     itemsPerPage
 }
 
+fragment Procedure on Examination {
+    Procedure {
+        fields {
+            name
+            type
+            value
+            prefix {
+                classes
+            }
+            attributes {
+                classes
+                id
+                max
+                min
+                step
+
+                type
+                label
+                labelClasses
+                fieldName
+            }
+            extra {
+                items {
+                    id
+                    title
+                    value
+                    name
+                }
+            }
+        }
+
+    }
+}
+
 fragment PersonFields on Person {
     ID
     FirstName

@@ -24,6 +24,8 @@ type Attributes {
     label: String
     disabled: Boolean
     classes: [String]
+    labelClasses: [String]
+    fieldName: String
 }
 input AttributesInput {
     id: String

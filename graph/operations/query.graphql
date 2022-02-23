@@ -58,3 +58,14 @@ query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $p
         }
     }
 }
+
+query ListExaminations {
+    listExaminations {
+        items {
+            ID
+            Details {
+                Name
+            }
+        }
+    }
+}
