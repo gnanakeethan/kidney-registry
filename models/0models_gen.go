@@ -334,7 +334,7 @@ type PersonWorkupInput struct {
 	Results     ResultsModel `json:"Results"`
 	WorkupID    string       `json:"WorkupId"`
 	Workup      *WorkupInput `json:"Workup"`
-	FollowUpID  *string      `json:"FollowUpId"`
+	Person      *PersonInput `json:"Person"`
 }
 
 type PersonWorkupList struct {

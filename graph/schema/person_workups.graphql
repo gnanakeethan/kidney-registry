@@ -16,7 +16,7 @@ input PersonWorkupInput {
     Results: WorkupResults
     WorkupId : ID!
     Workup: WorkupInput
-    FollowUpId: ID
+    Person: PersonInput
 }
 
 scalar WorkupResults

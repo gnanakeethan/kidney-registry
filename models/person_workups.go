@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -8,6 +9,7 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type PersonWorkup struct {
@@ -52,6 +54,28 @@ func GetPersonWorkupsById(id string) (v *PersonWorkup, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+func ListPersonWorkups(ctx context.Context, filter *PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonWorkupList, error) {
+	personWorkup, personWorkups := PersonWorkup{}, []*PersonWorkup{}
+	filterPtr := PersonWorkupFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, personWorkup, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(personWorkup, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&personWorkups, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonWorkupList{
+		Items:      personWorkups,
+		Pagination: pagination,
+	}, nil
 }
 
 // GetAllPersonWorkups retrieves all PersonWorkup matches certain condition. Returns empty list if
@@ -134,14 +158,16 @@ func GetAllPersonWorkups(query map[string]string, fields []string, sortby []stri
 
 // UpdatePersonWorkups updates PersonWorkup by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonWorkupsById(m *PersonWorkup) (err error) {
+func UpdatePersonWorkupById(m *PersonWorkup) (err error) {
 	o := orm.NewOrm()
-	v := PersonWorkup{ID: m.ID}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
+	v := &PersonWorkup{ID: m.ID}
+	if err = o.Read(v); err == nil {
+		updatedFields := getUpdatedFields(*m, *v)
+		if len(updatedFields) > 0 {
+			if num, err2 := o.Update(m, updatedFields...); err2 == nil {
+				fmt.Println("Number of records updated in database:", num)
+				return err2
+			}
 		}
 	}
 	return

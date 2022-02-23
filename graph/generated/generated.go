@@ -2865,7 +2865,7 @@ input PersonWorkupInput {
     Results: WorkupResults
     WorkupId : ID!
     Workup: WorkupInput
-    FollowUpId: ID
+    Person: PersonInput
 }
 
 scalar WorkupResults
@@ -13896,11 +13896,11 @@ func (ec *executionContext) unmarshalInputPersonWorkupInput(ctx context.Context,
 			if err != nil {
 				return it, err
 			}
-		case "FollowUpId":
+		case "Person":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("FollowUpId"))
-			it.FollowUpID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
