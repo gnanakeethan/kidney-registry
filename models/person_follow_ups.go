@@ -52,24 +52,24 @@ func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
 	return nil, err
 }
 
-func GetListFollowups(ctx context.Context, filter *PersonFilter, page *int, limit *int) (*PersonFollowUpList, error) {
-	PersonFollowUp, PersonFollowUps := PersonFollowUp{}, []*PersonFollowUp{}
-	filterPtr := PersonFilter{}
+func ListPersonFollowUps(ctx context.Context, filter *PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonFollowUpList, error) {
+	personFollowUp, personFollowUps := PersonFollowUp{}, []*PersonFollowUp{}
+	filterPtr := PersonFollowUpFilter{}
 	if filter != nil {
 		filterPtr = *filter
 	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, PersonFollowUp, filterPtr, page, limit)
+	query, currentPage, perPage, preloads := extractQuery(ctx, personFollowUp, filterPtr, page, limit)
 	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(PersonFollowUp, query, nil, nil, (currentPage-1)*perPage, perPage)
+	qs, totalItems, err := GetAnyAll(personFollowUp, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
 	if err != nil {
 		return nil, err
 	}
-	if _, err := qs.All(&PersonFollowUps, preloads...); err != nil {
+	if _, err := qs.All(&personFollowUps, preloads...); err != nil {
 		return nil, err
 	}
 	pagination := getPagination(currentPage, totalItems, perPage)
 	return &PersonFollowUpList{
-		FollowUps:  PersonFollowUps,
+		Items:      personFollowUps,
 		Pagination: pagination,
 	}, nil
 }

@@ -112,16 +112,6 @@ type FloatFilter struct {
 	Value      *float64       `json:"value"`
 }
 
-type FollowUp struct {
-	ID            *string `json:"ID"`
-	ClinicNo      *string `json:"ClinicNo"`
-	Description   *string `json:"Description"`
-	Person        *Person `json:"Person"`
-	Complaints    *string `json:"Complaints"`
-	RenalBiopsies *string `json:"RenalBiopsies"`
-	CaseStatus    *string `json:"CaseStatus"`
-}
-
 type FormDetails struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
@@ -198,11 +188,12 @@ type PersonComparison struct {
 }
 
 type PersonExaminationFilter struct {
-	ExaminationID *StringFilter `json:"ExaminationId"`
-	FollowUpID    *StringFilter `json:"FollowUpId"`
-	CreatedAt     *StringFilter `json:"CreatedAt"`
-	UpdatedAt     *StringFilter `json:"UpdatedAt"`
-	DeletedAt     *StringFilter `json:"DeletedAt"`
+	Examination *ExaminationFilter `json:"Examination"`
+	Person      *PersonFilter      `json:"Person"`
+	FollowUpID  *StringFilter      `json:"FollowUpId"`
+	CreatedAt   *StringFilter      `json:"CreatedAt"`
+	UpdatedAt   *StringFilter      `json:"UpdatedAt"`
+	DeletedAt   *StringFilter      `json:"DeletedAt"`
 }
 
 type PersonExaminationInput struct {
@@ -239,11 +230,22 @@ type PersonFilter struct {
 	OrNot               *PersonFilter `json:"orNot"`
 }
 
+type PersonFollowUpFilter struct {
+	ID                *StringFilter             `json:"ID"`
+	Description       *StringFilter             `json:"Description"`
+	Complaints        *StringFilter             `json:"Complaints"`
+	CaseStatus        *StringFilter             `json:"CaseStatus"`
+	OtherFindings     *StringFilter             `json:"OtherFindings"`
+	Referrals         *StringFilter             `json:"Referrals"`
+	ConsultantOpinion *StringFilter             `json:"ConsultantOpinion"`
+	Person            *PersonInput              `json:"Person"`
+	Donation          *PersonOrganDonationInput `json:"Donation"`
+}
+
 type PersonFollowUpInput struct {
 	ID                string                         `json:"ID"`
 	Description       *string                        `json:"Description"`
 	Complaints        *string                        `json:"Complaints"`
-	RenalBiopsies     *string                        `json:"RenalBiopsies"`
 	CaseStatus        *string                        `json:"CaseStatus"`
 	DialysisPlan      *DialysisPlanInput             `json:"DialysisPlan"`
 	OtherFindings     *string                        `json:"OtherFindings"`
@@ -255,7 +257,7 @@ type PersonFollowUpInput struct {
 }
 
 type PersonFollowUpList struct {
-	FollowUps  []*PersonFollowUp `json:"followUps"`
+	Items      []*PersonFollowUp `json:"items"`
 	Pagination *Pagination       `json:"pagination"`
 }
 

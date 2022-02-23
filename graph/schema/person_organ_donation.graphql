@@ -2,7 +2,7 @@ type PersonOrganDonation{
     ID: ID!
     Donor: Person
     Recipient: Person
-    FollowUps: [FollowUp]
+    FollowUps: [PersonFollowUp]
     DonationType: String
     PlannedDate: String
     PerformedDate: String

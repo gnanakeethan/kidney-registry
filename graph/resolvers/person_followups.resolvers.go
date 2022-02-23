@@ -8,12 +8,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-	
-	"github.com/kr/pretty"
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
@@ -34,7 +33,7 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	if input.Donation != nil && input.Donation.ID != "" {
 		personFollowUp.Donation = &models.PersonOrganDonation{ID: input.Donation.ID}
 	}
-	
+
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}
@@ -42,13 +41,19 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 		for _, medicineInput := range input.Medicines {
 			startDate, _ := time.Parse("2006-01-01", PointerString(medicineInput.StartDate))
 			endDate, _ := time.Parse("2006-01-01", PointerString(medicineInput.EndDate))
+			frequency := PointerString(medicineInput.Frequency)
+			dosage := PointerString(medicineInput.Dosage)
+			name := PointerString(medicineInput.Name)
+			if name == "" || frequency == "" || dosage == "" {
+				continue
+			}
 			medicine := models.PersonFollowUpsMedicine{
 				ID:           ksuid.New().String(),
-				MedicineCode: *medicineInput.MedicineCode,
-				Name:         *medicineInput.Name,
-				Dosage:       *medicineInput.Dosage,
-				Frequency:    *medicineInput.Frequency,
-				Duration:     *medicineInput.Duration,
+				MedicineCode: PointerString(medicineInput.MedicineCode),
+				Name:         name,
+				Dosage:       dosage,
+				Frequency:    frequency,
+				Duration:     PointerString(medicineInput.Duration),
 				StartDate:    startDate,
 				EndDate:      endDate,
 				FollowUpId:   personFollowUp,
@@ -69,10 +74,6 @@ func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filt
 	return nil, nil
 }
 
-func (r *personFollowUpResolver) RenalBiopsies(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *personFollowUpResolver) DialysisPlan(ctx context.Context, obj *models.PersonFollowUp) (*models.DialysisPlan, error) {
 	dialysisString := obj.DialysisPlan.String()
 	dialysisPlan := models.DialysisPlan{}
@@ -80,12 +81,12 @@ func (r *personFollowUpResolver) DialysisPlan(ctx context.Context, obj *models.P
 	return &dialysisPlan, nil
 }
 
-func (r *queryResolver) PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
+func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
+	return models.ListPersonFollowUps(ctx, filter, page, limit, sortBy, orderBy)
 }
 
 // PersonFollowUp returns generated.PersonFollowUpResolver implementation.
@@ -101,6 +102,15 @@ type personFollowUpResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *personFollowUpResolver) RenalBiopsies(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+func (r *queryResolver) PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+func (r *queryResolver) PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
+	panic(fmt.Errorf("not implemented"))
+}
 func (r *mutationResolver) DeletePersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
 	panic(fmt.Errorf("not implemented"))
 }

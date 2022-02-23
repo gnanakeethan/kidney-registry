@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { recipientId } from '$lib/state/recipient';
@@ -7,6 +7,7 @@
 	import { deepen } from '$lib/utils';
 	import { defULID } from '@thi.ng/ksuid';
 	import { mutation } from '@urql/svelte';
+
 	// import { Person } from 'lib/graphql/generated';
 	import {
 		NewPersonFollowUpDocument,
@@ -87,7 +88,7 @@
 			},
 			attributes: {
 				type: 'text',
-				label: 'Type',
+				label: 'Name',
 				id: 'recipient_id',
 				classes: ['form-input rounded w-full readonly']
 			}
@@ -101,7 +102,7 @@
 			},
 			attributes: {
 				type: 'text',
-				label: 'Dosage',
+				label: 'Dosage/Strength',
 				id: 'recipient_id',
 				classes: ['form-input rounded w-full readonly']
 			}
@@ -157,16 +158,22 @@
 		{
 			type: 'select', // required
 			name: 'CaseStatus', // required
-			prefix: { classes: ['mb-2 w-full'] },
+			prefix: { classes: ['mx-2 mb-2 w-full'] },
 
 			attributes: {
 				id: 'id-field', // required
-				classes: ['form-select'], // optional
+				classes: ['form-select rounded w-full'], // optional
 				label: 'Case Status', // optional
+				required: true,
 				disabled: false // optional
+			},
+			rules: ['required'],
+			messages: {
+				required: 'Field is required'
 			},
 			extra: {
 				options: [
+					{ value: '', title: '' },
 					{ value: 'WORKING_UP', title: 'Working Up' },
 					{ value: 'ACTIVE', title: 'Active' },
 					{ value: 'SUSPENDED', title: 'Suspended' },
@@ -278,6 +285,7 @@
 			newPersonFollowUp({ input: values }).then((result) => {
 				console.log(result);
 				alert('Saved =>' + result.data.createPersonFollowUp.ID);
+				goto('/patients/view/' + $recipientId + '/followups');
 			});
 		} else {
 			message =
@@ -288,9 +296,13 @@
 					.join(' ,');
 		}
 	}
+
+	function addMedicine() {
+		medicines = [...medicines, {}];
+	}
 </script>
 
-<div class="flex h-full flex-wrap bg-gradient-to-b from-teal-50 to-stone-50 p-2">
+<div class="flex h-full flex-wrap overflow-scroll bg-gradient-to-b from-teal-50 to-stone-50 p-2">
 	{#if formSet}
 		<form
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
@@ -304,6 +316,12 @@
 						<Field fields={medicineFields} bind:values={medicine} bind:isValidForm />
 					</div>
 				{/each}
+				<button
+					on:click={() => addMedicine()}
+					class="m-2 w-20 self-end rounded bg-green-400 p-2 uppercase text-white"
+				>
+					ADD
+				</button>
 			</fieldset>
 			<fieldset class="my-4 w-full rounded border border-black  p-2">
 				<legend>Dialysis Plan</legend>
@@ -321,7 +339,7 @@
 				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
 				type="submit"
 			>
-				Register Patient
+				Record Followup
 			</button>
 		</form>
 	{/if}

@@ -21,7 +21,8 @@ input PersonExaminationInput {
 scalar ExaminationResults
 
 input PersonExaminationFilter {
-    ExaminationId: StringFilter
+    Examination : ExaminationFilter
+    Person: PersonFilter
     FollowUpId: StringFilter
     CreatedAt: StringFilter
     UpdatedAt: StringFilter

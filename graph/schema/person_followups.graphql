@@ -2,7 +2,6 @@ type PersonFollowUp {
     ID: String!
     Description: String
     Complaints: String
-    RenalBiopsies: String
     CaseStatus: String
     DialysisPlan: DialysisPlan
     OtherFindings: String
@@ -10,6 +9,17 @@ type PersonFollowUp {
     ConsultantOpinion: String
     Person: Person
     Donation: PersonOrganDonation
+}
+input PersonFollowUpFilter {
+    ID: StringFilter
+    Description: StringFilter
+    Complaints: StringFilter
+    CaseStatus: StringFilter
+    OtherFindings: StringFilter
+    Referrals: StringFilter
+    ConsultantOpinion: StringFilter
+    Person: PersonInput
+    Donation: PersonOrganDonationInput
 }
 input DialysisPlanInput {
     Type: String
@@ -27,7 +37,6 @@ input PersonFollowUpInput{
     ID: String!
     Description: String
     Complaints: String
-    RenalBiopsies: String
     CaseStatus: String
     DialysisPlan: DialysisPlanInput
     OtherFindings: String
@@ -62,7 +71,7 @@ extend type Person {
     followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
 }
 type PersonFollowUpList {
-    followUps: [PersonFollowUp]
+    items: [PersonFollowUp]
     pagination: Pagination
 }
 
@@ -72,6 +81,6 @@ extend type Mutation {
     #    deletePersonFollowUp(ID: ID!): PersonFollowUp
 }
 extend type Query {
-    personFollowUp(ID: ID!): PersonFollowUp
-    personFollowUps(PersonID: ID!,filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
+    getPersonFollowUp(ID: ID!): PersonFollowUp
+    listPersonFollowUps(PersonID: ID!,filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
 }

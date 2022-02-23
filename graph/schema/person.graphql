@@ -46,15 +46,6 @@ enum RecordStatus {
     PUBLISHED
     REMOVED
 }
-type FollowUp {
-    ID               : ID
-    ClinicNo         : String
-    Description      : String
-    Person           : Person
-    Complaints       : String
-    RenalBiopsies    : String
-    CaseStatus       : String
-}
 type PersonList {
     persons: [Person!]!
     pagination: Pagination

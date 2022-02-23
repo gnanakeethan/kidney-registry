@@ -95,6 +95,10 @@ func (r *queryResolver) GetPersonExamination(ctx context.Context, id string) (*m
 }
 
 func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
+	if filter == nil {
+		filter = &models.PersonExaminationFilter{}
+	}
+	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
 	return models.ListPersonExaminations(ctx, filter, page, limit, sortBy, orderBy)
 }
 

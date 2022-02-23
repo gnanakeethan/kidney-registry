@@ -32,6 +32,7 @@
 	let fields = [];
 
 	function loadFields() {
+		values = $recipient;
 		fields = [
 			{
 				type: 'input',
@@ -227,8 +228,6 @@
 					.join(' ,');
 		}
 	}
-
-	values = $recipient;
 </script>
 
 <div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">

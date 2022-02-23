@@ -19,7 +19,7 @@ func (r *personOrganDonationResolver) Recipient(ctx context.Context, obj *models
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personOrganDonationResolver) FollowUps(ctx context.Context, obj *models.PersonOrganDonation) ([]*models.FollowUp, error) {
+func (r *personOrganDonationResolver) FollowUps(ctx context.Context, obj *models.PersonOrganDonation) ([]*models.PersonFollowUp, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
