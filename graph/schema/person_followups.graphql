@@ -1,6 +1,5 @@
 type PersonFollowUp {
     ID: String!
-    ClinicNo: String
     Description: String
     Complaints: String
     RenalBiopsies: String
@@ -26,7 +25,6 @@ type DialysisPlan {
 
 input PersonFollowUpInput{
     ID: String!
-    ClinicNo: String
     Description: String
     Complaints: String
     RenalBiopsies: String
@@ -70,7 +68,7 @@ type PersonFollowUpList {
 
 extend type Mutation {
     createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
-    #    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
     #    deletePersonFollowUp(ID: ID!): PersonFollowUp
 }
 extend type Query {

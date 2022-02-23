@@ -8,10 +8,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
@@ -31,7 +32,7 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	if input.Donation != nil && input.Donation.ID != "" {
 		personFollowUp.Donation = &models.PersonOrganDonation{ID: input.Donation.ID}
 	}
-
+	
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}
@@ -56,6 +57,10 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	} else {
 		return nil, err
 	}
+}
+
+func (r *mutationResolver) UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
@@ -94,9 +99,6 @@ type personFollowUpResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
-	panic(fmt.Errorf("not implemented"))
-}
 func (r *mutationResolver) DeletePersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
 	panic(fmt.Errorf("not implemented"))
 }

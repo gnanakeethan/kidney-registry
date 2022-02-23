@@ -179,6 +179,7 @@ type ComplexityRoot struct {
 		NewPatient                 func(childComplexity int) int
 		UpdatePatient              func(childComplexity int, input *models.PersonInput) int
 		UpdatePersonExamination    func(childComplexity int, input models.PersonExaminationInput) int
+		UpdatePersonFollowUp       func(childComplexity int, input models.PersonFollowUpInput) int
 		UpdatePersonInvestigation  func(childComplexity int, input models.PersonInvestigationInput) int
 		UpdatePersonMedicalHistory func(childComplexity int, input models.PersonMedicalHistoryInput) int
 		UpdatePersonWorkup         func(childComplexity int, input models.PersonWorkupInput) int
@@ -237,7 +238,6 @@ type ComplexityRoot struct {
 
 	PersonFollowUp struct {
 		CaseStatus        func(childComplexity int) int
-		ClinicNo          func(childComplexity int) int
 		Complaints        func(childComplexity int) int
 		ConsultantOpinion func(childComplexity int) int
 		Description       func(childComplexity int) int
@@ -430,6 +430,7 @@ type MutationResolver interface {
 	UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error)
 	DeletePersonExamination(ctx context.Context, id string) (*string, error)
 	CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error)
+	UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error)
 	CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error)
 	UpdatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error)
 	DeletePersonInvestigation(ctx context.Context, id string) (*string, error)
@@ -1139,6 +1140,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdatePersonExamination(childComplexity, args["input"].(models.PersonExaminationInput)), true
 
+	case "Mutation.updatePersonFollowUp":
+		if e.complexity.Mutation.UpdatePersonFollowUp == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePersonFollowUp_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePersonFollowUp(childComplexity, args["input"].(models.PersonFollowUpInput)), true
+
 	case "Mutation.updatePersonInvestigation":
 		if e.complexity.Mutation.UpdatePersonInvestigation == nil {
 			break
@@ -1469,13 +1482,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonFollowUp.CaseStatus(childComplexity), true
-
-	case "PersonFollowUp.ClinicNo":
-		if e.complexity.PersonFollowUp.ClinicNo == nil {
-			break
-		}
-
-		return e.complexity.PersonFollowUp.ClinicNo(childComplexity), true
 
 	case "PersonFollowUp.Complaints":
 		if e.complexity.PersonFollowUp.Complaints == nil {
@@ -2802,7 +2808,6 @@ extend type Query {
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_followups.graphql", Input: `type PersonFollowUp {
     ID: String!
-    ClinicNo: String
     Description: String
     Complaints: String
     RenalBiopsies: String
@@ -2828,7 +2833,6 @@ type DialysisPlan {
 
 input PersonFollowUpInput{
     ID: String!
-    ClinicNo: String
     Description: String
     Complaints: String
     RenalBiopsies: String
@@ -2872,7 +2876,7 @@ type PersonFollowUpList {
 
 extend type Mutation {
     createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
-    #    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
     #    deletePersonFollowUp(ID: ID!): PersonFollowUp
 }
 extend type Query {
@@ -3277,6 +3281,21 @@ func (ec *executionContext) field_Mutation_updatePersonExamination_args(ctx cont
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNPersonExaminationInput2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePersonFollowUp_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 models.PersonFollowUpInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNPersonFollowUpInput2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6523,6 +6542,45 @@ func (ec *executionContext) _Mutation_createPersonFollowUp(ctx context.Context, 
 	return ec.marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation_updatePersonFollowUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_updatePersonFollowUp_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePersonFollowUp(rctx, args["input"].(models.PersonFollowUpInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonFollowUp)
+	fc.Result = res
+	return ec.marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Mutation_createPersonInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -8158,38 +8216,6 @@ func (ec *executionContext) _PersonFollowUp_ID(ctx context.Context, field graphq
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _PersonFollowUp_ClinicNo(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUp) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "PersonFollowUp",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ClinicNo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonFollowUp_Description(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUp) (ret graphql.Marshaler) {
@@ -13852,14 +13878,6 @@ func (ec *executionContext) unmarshalInputPersonFollowUpInput(ctx context.Contex
 			if err != nil {
 				return it, err
 			}
-		case "ClinicNo":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ClinicNo"))
-			it.ClinicNo, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "Description":
 			var err error
 
@@ -15959,6 +15977,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
 
+		case "updatePersonFollowUp":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePersonFollowUp(ctx, field)
+			}
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
+
 		case "createPersonInvestigation":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createPersonInvestigation(ctx, field)
@@ -16544,13 +16569,6 @@ func (ec *executionContext) _PersonFollowUp(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "ClinicNo":
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._PersonFollowUp_ClinicNo(ctx, field, obj)
-			}
-
-			out.Values[i] = innerFunc(ctx)
-
 		case "Description":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._PersonFollowUp_Description(ctx, field, obj)

@@ -11,7 +11,6 @@ import (
 
 type PersonFollowUp struct {
 	ID                string               `orm:"column(id);pk"`
-	ClinicNo          string               `orm:"column(clinic_no)"`
 	Description       string               `orm:"column(description);null"`
 	Complaints        string               `orm:"column(complaints);null"`
 	CaseStatus        string               `orm:"column(case_status);null"`

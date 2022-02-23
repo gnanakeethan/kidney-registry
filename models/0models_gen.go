@@ -241,7 +241,6 @@ type PersonFilter struct {
 
 type PersonFollowUpInput struct {
 	ID                string                         `json:"ID"`
-	ClinicNo          *string                        `json:"ClinicNo"`
 	Description       *string                        `json:"Description"`
 	Complaints        *string                        `json:"Complaints"`
 	RenalBiopsies     *string                        `json:"RenalBiopsies"`
