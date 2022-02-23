@@ -1,8 +1,18 @@
 type PersonOrganDonation{
-    ID: String
+    ID: ID!
     Donor: Person
     Recipient: Person
     FollowUps: [FollowUp]
+    DonationType: String
+    PlannedDate: String
+    PerformedDate: String
+    DischargedDate: String
+    AcuteRejection: Boolean
+}
+input PersonOrganDonationInput{
+    ID: ID!
+    Donor: PersonInput
+    Recipient: PersonInput
     DonationType: String
     PlannedDate: String
     PerformedDate: String

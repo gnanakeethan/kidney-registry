@@ -5,22 +5,38 @@ type PersonFollowUp {
     Complaints: String
     RenalBiopsies: String
     CaseStatus: String
-    DialysisPlan: String
+    DialysisPlan: DialysisPlan
     OtherFindings: String
     Referrals: String
     ConsultantOpinion: String
     Person: Person
     Donation: PersonOrganDonation
 }
+input DialysisPlanInput {
+    Type: String
+    Plan: String
+    Frequency: String
+}
+type DialysisPlan {
+    Type: String
+    Plan: String
+    Frequency: String
+
+}
 
 input PersonFollowUpInput{
     ID: String!
-    Person: PersonInput!
     ClinicNo: String
     Description: String
     Complaints: String
     RenalBiopsies: String
     CaseStatus: String
+    DialysisPlan: DialysisPlanInput
+    OtherFindings: String
+    Referrals: String
+    ConsultantOpinion: String
+    Person: PersonInput!
+    Donation: PersonOrganDonationInput!
 }
 extend type Person {
     followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
