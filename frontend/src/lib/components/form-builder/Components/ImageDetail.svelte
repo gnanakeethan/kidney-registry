@@ -93,28 +93,27 @@
 />
 <div>
 	<div class="relative cursor-crosshair">
-		<img on:click={mouseHandler} class="z-5 grayscale" src={field.attributes.image} alt="Svelte" />
+		<img on:click={mouseHandler} class="grayscale" src={field.attributes.image} alt="Svelte" />
 		{#each items as item, i}
-			<div class="absolute z-10 m-4 text-white" style="top:{item.y}px;left:{item.x}px">
+			<div class="? absolute p-2 text-white" style="top:{item.y}px;left:{item.x}px">
 				<div class="relative flex h-3 w-3">
 					<div class="relative inline-flex h-1  w-1 rounded-full bg-red-700" />
 					<div
 						class="absolute -left-1 -top-1 h-3 w-3 animate-ping rounded-full bg-red-400 opacity-75"
 					/>
 				</div>
-				<div class="absolute left-2 top-2">
+				<button
+					on:click={removeItem(i)}
+					class="absolute -top-1 -right-2 h-4 w-4 rounded-full bg-red-500 text-center text-xs text-white"
+					>X</button
+				>
+				<div class="left-2 top-2">
 					<div>
 						<textarea
 							placeholder="Type here ..."
 							class="relative mx-auto rounded border-2   indent-2 text-sm text-black"
 							bind:value={item.data.description}
 						/>
-						<div
-							on:click={removeItem(i)}
-							class="absolute -top-1 -right-2 h-4 w-4 rounded-full bg-red-500 text-center text-xs text-white"
-						>
-							X
-						</div>
 					</div>
 				</div>
 			</div>
