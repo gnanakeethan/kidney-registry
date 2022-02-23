@@ -2,11 +2,15 @@ type PersonFollowUp {
     ID: String!
     ClinicNo: String
     Description: String
-    Person: Person
     Complaints: String
     RenalBiopsies: String
     CaseStatus: String
-    DonationId: PersonOrganDonation
+    DialysisPlan: String
+    OtherFindings: String
+    Referrals: String
+    ConsultantOpinion: String
+    Person: Person
+    Donation: PersonOrganDonation
 }
 
 input PersonFollowUpInput{
