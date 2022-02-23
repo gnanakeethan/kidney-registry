@@ -4,7 +4,7 @@
 	import Social from './_social.svelte';
 
 	function GoToNext() {
-		goto('/patients/view/' + recipientId + '/examinations/new');
+		goto('/patients/view/' + $recipientId + '/examinations/new');
 	}
 
 	let socialList = [null];

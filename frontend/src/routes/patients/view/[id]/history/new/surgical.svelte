@@ -4,7 +4,7 @@
 	import Surgical from './_surgical.svelte';
 
 	function GoToNext() {
-		goto('/patients/view/' + recipientId + '/history/new/social');
+		goto('/patients/view/' + $recipientId + '/history/new/social');
 	}
 
 	let surgicalList = [null];

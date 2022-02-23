@@ -37,7 +37,7 @@
 	<button on:click={() => Clear()}>Clear Selection</button>
 {/if}
 {#if examinationId}
-	<div class="w-full">
+	<div class="w-full px-8">
 		<GenericExamination bind:examinationId />
 	</div>
 {/if}

@@ -4,7 +4,7 @@
 	import History from './_history.svelte';
 
 	function GoToNext() {
-		goto('/patients/view/' + recipientId + '/history/new/medical');
+		goto('/patients/view/' + $recipientId + '/history/new/medical');
 	}
 
 	let historyList = [null];

@@ -4,7 +4,7 @@
 	import Medical from './_medical.svelte';
 
 	function GoToNext() {
-		goto('/patients/view/' + recipientId + '/history/new/surgical');
+		goto('/patients/view/' + $recipientId + '/history/new/surgical');
 	}
 
 	let medicalList = [null];

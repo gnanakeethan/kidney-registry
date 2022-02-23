@@ -208,7 +208,7 @@
 			addPatient({ patientInput: values }).then((result) => {
 				console.log(result);
 				alert('Saved');
-				goto('/patients/view/' + result.data.addPatient.ID);
+				goto('/patients/view/' + result.data.addPatient.ID + '/history/new/history');
 			});
 		} else {
 			message =

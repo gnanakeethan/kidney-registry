@@ -49,12 +49,12 @@
 	id={field.attributes.id}
 	max={field.attributes.max}
 	min={field.attributes.min}
-	minlength="10"
 	name={field.name}
 	on:input={onChangerValue}
 	placeholder={field.attributes.placeholder}
 	readonly={field.attributes.readonly}
 	required={isRequired(field)}
+	size="10"
 	step={field.attributes.step}
 	type={field.attributes.type}
 	value={field.value}
