@@ -8,14 +8,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error) {
+	workup, _ := models.GetWorkupsById(input.Workup.ID)
 	personWorkup := &models.PersonWorkup{
 		Person:    &models.Person{ID: input.Person.ID},
+		Procedure: workup.Procedure,
+		Details:   workup.Details,
 		Workup:    &models.Workup{ID: input.Workup.ID},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),

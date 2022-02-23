@@ -11,13 +11,14 @@ import (
 )
 
 type Workup struct {
-	ID          string    `orm:"column(id);pk"`
-	Name        string    `orm:"column(name)"`
-	Description string    `orm:"column(description);null"`
-	Procedure   string    `orm:"column(procedure);null"`
-	CreatedAt   time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt   time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt   time.Time `orm:"column(deleted_at);null"`
+	ID          string         `orm:"column(id);pk"`
+	Name        string         `orm:"column(name)"`
+	Description string         `orm:"column(description);null"`
+	Procedure   orm.JsonbField `orm:"column(procedure);null"`
+	Details     orm.JsonbField `orm:"column(details);null"`
+	CreatedAt   time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt   time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt   time.Time      `orm:"column(deleted_at);null"`
 }
 
 func (Workup) IsDynamicFormInterface() {}

@@ -7,14 +7,17 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
+	examination, _ := models.GetExaminationsById(input.Examination.ID)
 	personExamination := &models.PersonExamination{
 		Person:      &models.Person{ID: input.Person.ID},
+		Procedure:   examination.Procedure,
+		Details:     examination.Details,
 		Examination: &models.Examination{ID: input.Examination.ID},
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
