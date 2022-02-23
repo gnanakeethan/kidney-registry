@@ -13,6 +13,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   ExaminationResults: any;
+  InvestigationResults: any;
 };
 
 export type Attributes = {
@@ -31,7 +32,7 @@ export type Attributes = {
 };
 
 export type AttributesInput = {
-  classes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  classes?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   label?: InputMaybe<Scalars['String']>;
@@ -151,6 +152,12 @@ export type FormDetails = {
   Name?: Maybe<Scalars['String']>;
 };
 
+export type FormDetailsInput = {
+  Description?: InputMaybe<Scalars['String']>;
+  Inline?: InputMaybe<Scalars['Boolean']>;
+  Name?: InputMaybe<Scalars['String']>;
+};
+
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
@@ -185,6 +192,16 @@ export type Investigation = DynamicFormInterface & {
 
 export type InvestigationFilter = {
   Order?: InputMaybe<IntFilter>;
+};
+
+export type InvestigationInput = {
+  CreatedAt?: InputMaybe<Scalars['String']>;
+  DeletedAt?: InputMaybe<Scalars['String']>;
+  Details?: InputMaybe<FormDetailsInput>;
+  ID: Scalars['ID'];
+  Order?: InputMaybe<Scalars['Int']>;
+  Procedure?: InputMaybe<ProcedureInput>;
+  UpdatedAt?: InputMaybe<Scalars['String']>;
 };
 
 export type InvestigationList = {
@@ -232,15 +249,18 @@ export type Mutation = {
   addPatient?: Maybe<Person>;
   createPersonExamination?: Maybe<PersonExamination>;
   createPersonFollowUp?: Maybe<PersonFollowUp>;
+  createPersonInvestigation?: Maybe<PersonInvestigation>;
   createPersonMedicalHistory?: Maybe<PersonMedicalHistory>;
   deletePersonExamination?: Maybe<Scalars['ID']>;
   deletePersonFollowUp?: Maybe<PersonFollowUp>;
+  deletePersonInvestigation?: Maybe<Scalars['ID']>;
   deletePersonMedicalHistory?: Maybe<Scalars['ID']>;
   error?: Maybe<Error>;
   newPatient?: Maybe<Person>;
   updatePatient?: Maybe<Person>;
   updatePersonExamination?: Maybe<PersonExamination>;
   updatePersonFollowUp?: Maybe<PersonFollowUp>;
+  updatePersonInvestigation?: Maybe<PersonInvestigation>;
   updatePersonMedicalHistory?: Maybe<PersonMedicalHistory>;
   userLogin: UserToken;
 };
@@ -261,6 +281,11 @@ export type MutationCreatePersonFollowUpArgs = {
 };
 
 
+export type MutationCreatePersonInvestigationArgs = {
+  input: PersonInvestigationInput;
+};
+
+
 export type MutationCreatePersonMedicalHistoryArgs = {
   input: PersonMedicalHistoryInput;
 };
@@ -272,6 +297,11 @@ export type MutationDeletePersonExaminationArgs = {
 
 
 export type MutationDeletePersonFollowUpArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type MutationDeletePersonInvestigationArgs = {
   ID: Scalars['ID'];
 };
 
@@ -293,6 +323,11 @@ export type MutationUpdatePersonExaminationArgs = {
 
 export type MutationUpdatePersonFollowUpArgs = {
   input: PersonFollowUpInput;
+};
+
+
+export type MutationUpdatePersonInvestigationArgs = {
+  input: PersonInvestigationInput;
 };
 
 
@@ -379,15 +414,15 @@ export type PersonComparison = {
   value?: InputMaybe<Scalars['String']>;
 };
 
-export type PersonExamination = {
+export type PersonExamination = DynamicFormInterface & {
   __typename?: 'PersonExamination';
   CreatedAt?: Maybe<Scalars['String']>;
   DeletedAt?: Maybe<Scalars['String']>;
   Description?: Maybe<Scalars['String']>;
   Details?: Maybe<FormDetails>;
-  ExaminationId: Scalars['ID'];
-  FollowUpId?: Maybe<Scalars['ID']>;
+  Examination?: Maybe<Examination>;
   ID: Scalars['ID'];
+  Person?: Maybe<Person>;
   Procedure?: Maybe<Procedure>;
   Results?: Maybe<Scalars['ExaminationResults']>;
   UpdatedAt?: Maybe<Scalars['String']>;
@@ -486,6 +521,42 @@ export type PersonInput = {
   Weight?: InputMaybe<Scalars['Float']>;
 };
 
+export type PersonInvestigation = DynamicFormInterface & {
+  __typename?: 'PersonInvestigation';
+  CreatedAt?: Maybe<Scalars['String']>;
+  DeletedAt?: Maybe<Scalars['String']>;
+  Description?: Maybe<Scalars['String']>;
+  Details?: Maybe<FormDetails>;
+  ID: Scalars['ID'];
+  Investigation?: Maybe<Investigation>;
+  Person?: Maybe<Person>;
+  Procedure?: Maybe<Procedure>;
+  Results?: Maybe<Scalars['InvestigationResults']>;
+  UpdatedAt?: Maybe<Scalars['String']>;
+};
+
+export type PersonInvestigationFilter = {
+  CreatedAt?: InputMaybe<StringFilter>;
+  DeletedAt?: InputMaybe<StringFilter>;
+  InvestigationId?: InputMaybe<StringFilter>;
+  UpdatedAt?: InputMaybe<StringFilter>;
+};
+
+export type PersonInvestigationInput = {
+  Description?: InputMaybe<Scalars['String']>;
+  FollowUpId?: InputMaybe<Scalars['ID']>;
+  ID: Scalars['ID'];
+  Investigation?: InputMaybe<InvestigationInput>;
+  InvestigationId: Scalars['ID'];
+  Results?: InputMaybe<Scalars['InvestigationResults']>;
+};
+
+export type PersonInvestigationList = {
+  __typename?: 'PersonInvestigationList';
+  items?: Maybe<Array<Maybe<PersonInvestigation>>>;
+  pagination?: Maybe<Pagination>;
+};
+
 export type PersonList = {
   __typename?: 'PersonList';
   pagination?: Maybe<Pagination>;
@@ -553,11 +624,11 @@ export type PersonOrganDonation = {
 
 export type Prefix = {
   __typename?: 'Prefix';
-  classes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  classes?: Maybe<Scalars['String']>;
 };
 
 export type PrefixInput = {
-  classes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  classes?: InputMaybe<Scalars['String']>;
 };
 
 export type Procedure = {
@@ -579,6 +650,7 @@ export type Query = {
   listInvestigations?: Maybe<InvestigationList>;
   listPatients?: Maybe<PersonList>;
   listPersonExaminations?: Maybe<PersonExaminationList>;
+  listPersonInvestigations?: Maybe<PersonInvestigationList>;
   listPersonMedicalHistories?: Maybe<PersonMedicalHistoryList>;
   personFollowUp?: Maybe<PersonFollowUp>;
   personFollowUps?: Maybe<PersonFollowUpList>;
@@ -632,6 +704,16 @@ export type QueryListPatientsArgs = {
 export type QueryListPersonExaminationsArgs = {
   PersonID: Scalars['ID'];
   filter?: InputMaybe<PersonExaminationFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
+  page?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryListPersonInvestigationsArgs = {
+  PersonID: Scalars['ID'];
+  filter?: InputMaybe<PersonInvestigationFilter>;
   limit?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
   page?: InputMaybe<Scalars['Int']>;
@@ -726,11 +808,15 @@ export type UserToken = {
 
 export type PaginationFragment = { __typename?: 'Pagination', currentPage: number, prevPage: number, nextPage: number, totalItems: number, itemsPerPage: number };
 
-type Procedure_Examination_Fragment = { __typename?: 'Examination', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: Array<string | null> | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
+type Procedure_Examination_Fragment = { __typename?: 'Examination', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
 
-type Procedure_Investigation_Fragment = { __typename?: 'Investigation', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: Array<string | null> | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
+type Procedure_Investigation_Fragment = { __typename?: 'Investigation', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
 
-export type ProcedureFragment = Procedure_Examination_Fragment | Procedure_Investigation_Fragment;
+type Procedure_PersonExamination_Fragment = { __typename?: 'PersonExamination', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
+
+type Procedure_PersonInvestigation_Fragment = { __typename?: 'PersonInvestigation', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
+
+export type ProcedureFragment = Procedure_Examination_Fragment | Procedure_Investigation_Fragment | Procedure_PersonExamination_Fragment | Procedure_PersonInvestigation_Fragment;
 
 export type PersonFieldsFragment = { __typename?: 'Person', ID: string, FirstName?: string | null, LastName?: string | null, Address?: string | null, DateOfBirth?: string | null, Ethnicity?: string | null, Phn?: string | null, PrimaryRenalDisease?: string | null, Weight?: number | null, Height?: number | null, Gender?: Gender | null, MaritalStatus?: MaritalStatus | null, ContactNo?: string | null, PersonType?: PatientType | null, Status?: PatientStatus | null, RecordStatus?: RecordStatus | null };
 
@@ -825,7 +911,7 @@ export type GetExaminationQueryVariables = Exact<{
 }>;
 
 
-export type GetExaminationQuery = { __typename?: 'Query', getExamination?: { __typename?: 'Examination', ID: string, Details?: { __typename?: 'FormDetails', Name?: string | null, Inline?: boolean | null, Description?: string | null } | null, Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: Array<string | null> | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type GetExaminationQuery = { __typename?: 'Query', getExamination?: { __typename?: 'Examination', ID: string, Details?: { __typename?: 'FormDetails', Name?: string | null, Inline?: boolean | null, Description?: string | null } | null, Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export type ListInvestigationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -837,7 +923,7 @@ export type GetInvestigationQueryVariables = Exact<{
 }>;
 
 
-export type GetInvestigationQuery = { __typename?: 'Query', getInvestigation?: { __typename?: 'Investigation', ID: string, Details?: { __typename?: 'FormDetails', Name?: string | null, Inline?: boolean | null, Description?: string | null } | null, Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: Array<string | null> | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+export type GetInvestigationQuery = { __typename?: 'Query', getInvestigation?: { __typename?: 'Investigation', ID: string, Details?: { __typename?: 'FormDetails', Name?: string | null, Inline?: boolean | null, Description?: string | null } | null, Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export const PaginationFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Pagination"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Pagination"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"prevPage"}},{"kind":"Field","name":{"kind":"Name","value":"nextPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalItems"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}}]}}]} as unknown as DocumentNode<PaginationFragment, unknown>;
 export const ProcedureFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Procedure"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"DynamicFormInterface"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Procedure"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"prefix"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"classes"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"classes"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"max"}},{"kind":"Field","name":{"kind":"Name","value":"min"}},{"kind":"Field","name":{"kind":"Name","value":"step"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"labelClasses"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"image"}}]}},{"kind":"Field","name":{"kind":"Name","value":"extra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"options"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<ProcedureFragment, unknown>;
