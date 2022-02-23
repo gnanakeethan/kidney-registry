@@ -7,10 +7,14 @@ type Examination implements DynamicFormInterface {
     UpdatedAt: String
     DeletedAt: String
 }
-
-input ExaminationDetailsInput {
-    Name: String
-    Description:String
+input ExaminationInput{
+    ID          : ID!
+    Details   : FormDetailsInput
+    Procedure : ProcedureInput
+    Order: Int
+    CreatedAt: String
+    UpdatedAt: String
+    DeletedAt: String
 }
 
 input ExaminationFilter {

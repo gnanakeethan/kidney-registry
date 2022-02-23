@@ -16,7 +16,7 @@ input PersonInvestigationInput {
     Results: InvestigationResults
     InvestigationId : ID!
     Investigation: InvestigationInput
-    FollowUpId: ID
+    Person: PersonInput
 }
 
 scalar InvestigationResults

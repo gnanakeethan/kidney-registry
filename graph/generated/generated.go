@@ -2465,10 +2465,14 @@ extend type Mutation {
     UpdatedAt: String
     DeletedAt: String
 }
-
-input ExaminationDetailsInput {
-    Name: String
-    Description:String
+input ExaminationInput{
+    ID          : ID!
+    Details   : FormDetailsInput
+    Procedure : ProcedureInput
+    Order: Int
+    CreatedAt: String
+    UpdatedAt: String
+    DeletedAt: String
 }
 
 input ExaminationFilter {
@@ -2665,8 +2669,8 @@ input PersonExaminationInput {
     ID : ID!
     Description: String
     Results: ExaminationResults
-    ExaminationId : ID!
-    FollowUpId: ID
+    Examination : ExaminationInput
+    Person: PersonInput
 }
 
 scalar ExaminationResults
@@ -2747,7 +2751,7 @@ input PersonInvestigationInput {
     Results: InvestigationResults
     InvestigationId : ID!
     Investigation: InvestigationInput
-    FollowUpId: ID
+    Person: PersonInput
 }
 
 scalar InvestigationResults
@@ -12504,37 +12508,6 @@ func (ec *executionContext) unmarshalInputAttributesInput(ctx context.Context, o
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputExaminationDetailsInput(ctx context.Context, obj interface{}) (models.ExaminationDetailsInput, error) {
-	var it models.ExaminationDetailsInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	for k, v := range asMap {
-		switch k {
-		case "Name":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Name"))
-			it.Name, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "Description":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Description"))
-			it.Description, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 func (ec *executionContext) unmarshalInputExaminationFilter(ctx context.Context, obj interface{}) (models.ExaminationFilter, error) {
 	var it models.ExaminationFilter
 	asMap := map[string]interface{}{}
@@ -12549,6 +12522,77 @@ func (ec *executionContext) unmarshalInputExaminationFilter(ctx context.Context,
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Order"))
 			it.Order, err = ec.unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐIntFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputExaminationInput(ctx context.Context, obj interface{}) (models.ExaminationInput, error) {
+	var it models.ExaminationInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "ID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Details":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Details"))
+			it.Details, err = ec.unmarshalOFormDetailsInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐFormDetailsInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Procedure":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Procedure"))
+			it.Procedure, err = ec.unmarshalOProcedureInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐProcedureInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Order":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Order"))
+			it.Order, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "CreatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("CreatedAt"))
+			it.CreatedAt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "UpdatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("UpdatedAt"))
+			it.UpdatedAt, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "DeletedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("DeletedAt"))
+			it.DeletedAt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13037,19 +13081,19 @@ func (ec *executionContext) unmarshalInputPersonExaminationInput(ctx context.Con
 			if err != nil {
 				return it, err
 			}
-		case "ExaminationId":
+		case "Examination":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ExaminationId"))
-			it.ExaminationID, err = ec.unmarshalNID2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Examination"))
+			it.Examination, err = ec.unmarshalOExaminationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "FollowUpId":
+		case "Person":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("FollowUpId"))
-			it.FollowUpID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13552,11 +13596,11 @@ func (ec *executionContext) unmarshalInputPersonInvestigationInput(ctx context.C
 			if err != nil {
 				return it, err
 			}
-		case "FollowUpId":
+		case "Person":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("FollowUpId"))
-			it.FollowUpID, err = ec.unmarshalOID2ᚖstring(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -18363,6 +18407,14 @@ func (ec *executionContext) unmarshalOExaminationFilter2ᚖgithubᚗcomᚋgnanak
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputExaminationFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOExaminationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationInput(ctx context.Context, v interface{}) (*models.ExaminationInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputExaminationInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

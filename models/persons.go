@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
-	"reflect"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
@@ -66,22 +65,7 @@ func UpdatePersonsById(m *Person) (err error) {
 	o := orm.NewOrm()
 	v := &Person{ID: m.ID}
 	if err = o.Read(v); err == nil {
-		v1 := reflect.ValueOf(*v)
-		v2 := reflect.ValueOf(*m)
-		t := reflect.TypeOf(*v)
-		updatedFields := []string{}
-		for i := 0; i < v1.NumField(); i++ {
-			if v2.Field(i).Interface() != v1.Field(i).Interface() {
-				name := t.Field(i).Name
-				if !StringInSlice(name, []string{"Phn"}) {
-					updatedFields = append(updatedFields, name)
-					fmt.Printf("%v ", t.Field(i).Name)
-					fmt.Printf("old: %v ", v1.Field(i))
-					fmt.Printf("new: %v ", v2.Field(i))
-					fmt.Println("")
-				}
-			}
-		}
+		updatedFields := getUpdatedFields(*m, *v)
 		pretty.Println(updatedFields)
 		if len(updatedFields) > 0 {
 			if num, err2 := o.Update(m, updatedFields...); err2 == nil {

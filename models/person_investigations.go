@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -8,14 +9,15 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type PersonInvestigation struct {
 	ID            string         `orm:"column(id);pk"`
 	Description   string         `orm:"column(description)"`
-	Details       string         `orm:"column(details);null"`
-	Procedure     string         `orm:"column(procedure);null"`
-	Results       string         `orm:"column(results);null"`
+	Details       orm.JsonbField `orm:"column(details);null"`
+	Procedure     orm.JsonbField `orm:"column(procedure);null"`
+	Results       orm.JsonbField `orm:"column(results);null"`
 	Investigation *Investigation `orm:"column(investigation_id);rel(fk)"`
 	Person        *Person        `orm:"column(person_id);rel(fk)"`
 	ValidDays     int            `orm:"column(valid_days);null"`
@@ -36,17 +38,17 @@ func init() {
 	orm.RegisterModel(new(PersonInvestigation))
 }
 
-// AddPersonFollowUpsInvestigations insert a new PersonInvestigation into database and returns
+// AddPersonInvestigations insert a new PersonInvestigation into database and returns
 // last inserted ID on success.
-func AddPersonFollowUpsInvestigations(m *PersonInvestigation) (id int64, err error) {
+func AddPersonInvestigations(m *PersonInvestigation) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsInvestigationsById retrieves PersonInvestigation by ID. Returns error if
+// GetPersonInvestigationsById retrieves PersonInvestigation by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsInvestigationsById(id string) (v *PersonInvestigation, err error) {
+func GetPersonInvestigationsById(id string) (v *PersonInvestigation, err error) {
 	o := orm.NewOrm()
 	v = &PersonInvestigation{ID: id}
 	if err = o.Read(v); err == nil {
@@ -55,9 +57,31 @@ func GetPersonFollowUpsInvestigationsById(id string) (v *PersonInvestigation, er
 	return nil, err
 }
 
-// GetAllPersonFollowUpsInvestigations retrieves all PersonInvestigation matches certain condition. Returns empty list if
+func ListPersonInvestigations(ctx context.Context, filter *PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonInvestigationList, error) {
+	personInvestigation, personInvestigations := PersonInvestigation{}, []*PersonInvestigation{}
+	filterPtr := PersonInvestigationFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, personInvestigation, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(personInvestigation, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&personInvestigations, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonInvestigationList{
+		Items:      personInvestigations,
+		Pagination: pagination,
+	}, nil
+}
+
+// GetAllPersonInvestigations retrieves all PersonInvestigation matches certain condition. Returns empty list if
 // no records exist
-func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllPersonInvestigations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(PersonInvestigation))
@@ -133,24 +157,26 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 	return nil, err
 }
 
-// UpdatePersonFollowUpsInvestigations updates PersonInvestigation by ID and returns error if
+// UpdatePersonInvestigations updates PersonInvestigation by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsInvestigationsById(m *PersonInvestigation) (err error) {
+func UpdatePersonInvestigationById(m *PersonInvestigation) (err error) {
 	o := orm.NewOrm()
-	v := PersonInvestigation{ID: m.ID}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
+	v := &PersonInvestigation{ID: m.ID}
+	if err = o.Read(v); err == nil {
+		updatedFields := getUpdatedFields(*m, *v)
+		if len(updatedFields) > 0 {
+			if num, err2 := o.Update(m, updatedFields...); err2 == nil {
+				fmt.Println("Number of records updated in database:", num)
+				return err2
+			}
 		}
 	}
 	return
 }
 
-// DeletePersonFollowUpsInvestigations deletes PersonInvestigation by ID and returns error if
+// DeletePersonInvestigations deletes PersonInvestigation by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonFollowUpsInvestigations(id string) (err error) {
+func DeletePersonInvestigations(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonInvestigation{ID: id}
 	// ascertain id exists in the database

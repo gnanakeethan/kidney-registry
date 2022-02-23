@@ -14,8 +14,8 @@ input PersonExaminationInput {
     ID : ID!
     Description: String
     Results: ExaminationResults
-    ExaminationId : ID!
-    FollowUpId: ID
+    Examination : ExaminationInput
+    Person: PersonInput
 }
 
 scalar ExaminationResults

@@ -156,14 +156,16 @@ func GetAllPersonExaminations(query map[string]string, fields []string, sortby [
 
 // UpdatePersonExaminations updates PersonExamination by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonExaminationsById(m *PersonExamination) (err error) {
+func UpdatePersonExaminationById(m *PersonExamination) (err error) {
 	o := orm.NewOrm()
-	v := PersonExamination{ID: m.ID}
-	// ascertain id exists in the database
-	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
+	v := &PersonExamination{ID: m.ID}
+	if err = o.Read(v); err == nil {
+		updatedFields := getUpdatedFields(*m, *v)
+		if len(updatedFields) > 0 {
+			if num, err2 := o.Update(m, updatedFields...); err2 == nil {
+				fmt.Println("Number of records updated in database:", num)
+				return err2
+			}
 		}
 	}
 	return

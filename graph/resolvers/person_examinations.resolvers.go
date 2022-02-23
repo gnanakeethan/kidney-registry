@@ -6,23 +6,52 @@ package resolvers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"time"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
-	panic(fmt.Errorf("not implemented"))
+	personExamination := &models.PersonExamination{
+		Person:      &models.Person{ID: input.Person.ID},
+		Examination: &models.Examination{ID: input.Examination.ID},
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+	if results, err := json.Marshal(input.Results); err == nil {
+		personExamination.Results.Set(string(results))
+	}
+	if _, err := models.AddPersonExaminations(personExamination); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
+		return personExamination, nil
+	} else {
+		return nil, err
+	}
 }
 
 func (r *mutationResolver) UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
-	panic(fmt.Errorf("not implemented"))
+	personExamination := &models.PersonExamination{
+		ID:          input.ID,
+		Person:      &models.Person{ID: input.Person.ID},
+		Examination: &models.Examination{ID: input.Examination.ID},
+		UpdatedAt:   time.Now(),
+	}
+	if results, err := json.Marshal(input.Results); err == nil {
+		personExamination.Results.Set(string(results))
+	}
+	if err := models.UpdatePersonExaminationById(personExamination); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
+		return personExamination, nil
+	} else {
+		return nil, err
+	}
 }
 
 func (r *mutationResolver) DeletePersonExamination(ctx context.Context, id string) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	if err := models.DeletePersonExaminations(id); err == nil {
+		return &id, nil
+	} else {
+		return nil, err
+	}
 }
 
 func (r *personExaminationResolver) Details(ctx context.Context, obj *models.PersonExamination) (*models.FormDetails, error) {

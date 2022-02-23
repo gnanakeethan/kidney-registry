@@ -47,13 +47,18 @@ type Error struct {
 	Status int    `json:"status"`
 }
 
-type ExaminationDetailsInput struct {
-	Name        *string `json:"Name"`
-	Description *string `json:"Description"`
-}
-
 type ExaminationFilter struct {
 	Order *IntFilter `json:"Order"`
+}
+
+type ExaminationInput struct {
+	ID        string            `json:"ID"`
+	Details   *FormDetailsInput `json:"Details"`
+	Procedure *ProcedureInput   `json:"Procedure"`
+	Order     *int              `json:"Order"`
+	CreatedAt *string           `json:"CreatedAt"`
+	UpdatedAt *string           `json:"UpdatedAt"`
+	DeletedAt *string           `json:"DeletedAt"`
 }
 
 type ExaminationList struct {
@@ -189,11 +194,11 @@ type PersonExaminationFilter struct {
 }
 
 type PersonExaminationInput struct {
-	ID            string       `json:"ID"`
-	Description   *string      `json:"Description"`
-	Results       ResultsModel `json:"Results"`
-	ExaminationID string       `json:"ExaminationId"`
-	FollowUpID    *string      `json:"FollowUpId"`
+	ID          string            `json:"ID"`
+	Description *string           `json:"Description"`
+	Results     ResultsModel      `json:"Results"`
+	Examination *ExaminationInput `json:"Examination"`
+	Person      *PersonInput      `json:"Person"`
 }
 
 type PersonExaminationList struct {
@@ -272,7 +277,7 @@ type PersonInvestigationInput struct {
 	Results         ResultsModel        `json:"Results"`
 	InvestigationID string              `json:"InvestigationId"`
 	Investigation   *InvestigationInput `json:"Investigation"`
-	FollowUpID      *string             `json:"FollowUpId"`
+	Person          *PersonInput        `json:"Person"`
 }
 
 type PersonInvestigationList struct {

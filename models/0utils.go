@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	
@@ -228,4 +229,24 @@ func GetAnyAll(object interface{}, query *orm.Condition, sortby []*string, order
 	totalItems, _ = qs.Count()
 	qs = qs.Limit(limit, offset)
 	return
+}
+
+func getUpdatedFields(m interface{}, v interface{}) []string {
+	v1 := reflect.ValueOf(v)
+	v2 := reflect.ValueOf(m)
+	t := reflect.TypeOf(v)
+	updatedFields := []string{}
+	for i := 0; i < v1.NumField(); i++ {
+		if v2.Field(i).Interface() != v1.Field(i).Interface() {
+			name := t.Field(i).Name
+			if !StringInSlice(name, []string{"Phn"}) {
+				updatedFields = append(updatedFields, name)
+				fmt.Printf("%v ", t.Field(i).Name)
+				fmt.Printf("old: %v ", v1.Field(i))
+				fmt.Printf("new: %v ", v2.Field(i))
+				fmt.Println("")
+			}
+		}
+	}
+	return updatedFields
 }
