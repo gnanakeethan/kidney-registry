@@ -18,80 +18,68 @@
 		order: number;
 	} = {
 		details: {
-			name: 'General Examination',
+			name: 'Cardiovascular Examination',
 			description: 'Description'
 		},
 		procedure: {
 			fields: [
 				{
-					type: 'customradio', // required
-					name: 'Build', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'px-4 py-2 border	 border-gray-400 rounded-xl labelStyle',
-						fieldName: 'Build: '
-					},
-					extra: {
-						items: [
-							{ value: 'Lean', id: 'Lean', name: 'BUILD', title: 'Lean' },
-							{ value: 'Average', id: 'Average', name: 'BUILD', title: 'Average' },
-							{ value: 'Obese', id: 'Obese', name: 'BUILD', title: 'Obese' }
-						]
-					}
-				},
-				{
 					type: 'input', // required
-					name: 'BuildComments', // required
-					value: '', // required
-					prefix: { classes: [' w-full'] },
-					attributes: {
-						id: 'Type', // required
-						classes: ['form-input rounded w-full'], // optional
-						label: 'Build Comments:', // optional
-						disabled: false // optional
-					}
-				},
-				{
-					type: 'customradio', // required
-					name: 'Temperature', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'px-4 py-2 border	 border-gray-400 rounded-xl labelStyle',
-						fieldName: 'Temperature: '
-					},
-					extra: {
-						items: [
-							{ value: 'Febrile', id: 'Febrile', name: 'Temp', title: 'Febrile' },
-							{ value: 'Afebrile', id: 'Afebrile', name: 'Temp', title: 'Afebrile' }
-						]
-					}
-				},
-				{
-					type: 'input', // required
-					name: 'TemperatureIfFebrile', // required
-					value: '37.5', // required
+					name: 'PulseRate', // required
+					value: '72', // required
 					prefix: { classes: ['mb-2 w-full'] },
 					attributes: {
 						id: 'Type', // required
 						classes: ['form-input rounded'], // optional
-						label: 'Body Temperature If Febrile:', // optional
+						label: 'Pulse Rate:', // optional
 						disabled: false, // optional
 						type: 'number',
 						min: 20,
-						step: 0.1,
-						max: 45
+						step: 1,
+						max: 250
 					}
 				},
+				{
+					type: 'input', // required
+					name: 'PulseVolume', // required
+					value: '', // required
+					prefix: { classes: ['mb-2 w-full'] },
+					attributes: {
+						id: 'Type', // required
+						classes: ['form-input rounded'], // optional
+						label: 'Pulse Volume:', // optional
+						disabled: false, // optional
+						type: 'number',
+						min: 20,
+						step: 1,
+						max: 250
+					}
+				},
+				{
+					type: 'input', // required
+					name: 'Blood Pressure', // required
+					value: '', // required
+					prefix: { classes: ['mb-2 w-full'] },
+					attributes: {
+						id: 'Type', // required
+						classes: ['form-input rounded'], // optional
+						label: 'Blood Pressure:', // optional
+						disabled: false // optional
+					}
+				},
+				{
+					type: 'input', // required
+					name: 'Pulse Pressure', // required
+					value: '', // required
+					prefix: { classes: ['mb-2 w-full'] },
+					attributes: {
+						id: 'Type', // required
+						classes: ['form-input rounded'], // optional
+						label: 'Pulse Pressure:', // optional
+						disabled: false // optional
+					}
+				},
+
 				{
 					type: 'customcheckbox', // required
 					name: 'General', // required
@@ -102,8 +90,7 @@
 						id: 'id-field', // required
 						classes: ['hidden'], // optional
 						label: '', // optional
-						labelClasses:
-							'px-4 py-2 border border-gray-400 rounded-xl labelStyle whitespace-nowrap',
+						labelClasses: 'px-4 py-2 border border-black rounded-xl labelStyle whitespace-nowrap',
 						fieldName: 'General: '
 					},
 					extra: {
@@ -119,7 +106,7 @@
 
 				{
 					type: 'customradio', // required
-					name: 'Extremities', // required
+					name: 'JVP', // required
 					prefix: {
 						classes: 'w-full'
 					},
@@ -127,25 +114,19 @@
 						id: 'id-field', // required
 						classes: ['hidden'], // optional
 						label: '', // optional
-						labelClasses: 'px-4 py-2 border	 border-gray-400 rounded-xl labelStyle',
-						fieldName: 'Extremities: '
+						labelClasses: 'px-4 py-2 border	 border-black rounded-xl labelStyle',
+						fieldName: 'JVP: '
 					},
 					extra: {
 						items: [
-							{ value: 'Warm', id: 'Warm', name: 'Extremities', title: 'Warm' },
-							{
-								value: 'Cold & Clammy',
-								id: 'Cold & Clammy',
-								name: 'Extremities',
-								title: 'Cold & Clammy'
-							}
+							{ value: 'Normal', id: 'Normal', name: 'JVP', title: 'Normal' },
+							{ value: 'Elevated', id: 'Elevated', name: 'JVP', title: 'Elevated' }
 						]
 					}
 				},
-
 				{
 					type: 'customradio', // required
-					name: 'Dehydration', // required
+					name: 'CarotidBruit', // required
 					prefix: {
 						classes: 'w-full'
 					},
@@ -153,73 +134,27 @@
 						id: 'id-field', // required
 						classes: ['hidden'], // optional
 						label: '', // optional
-						labelClasses: 'px-4 py-2 border	 border-gray-400 rounded-xl labelStyle',
-						fieldName: 'Dehydration: '
+						labelClasses: 'px-4 py-2 border	 border-black rounded-xl labelStyle',
+						fieldName: 'Carotid Bruit: '
 					},
 					extra: {
 						items: [
-							{ value: 'Good', id: 'Good', name: 'Good', title: 'Good' },
-							{ value: 'Dehydrated', id: 'Dehydrated', name: 'Dehydrated', title: 'Dehydrated' }
-						]
-					}
-				},
-
-				{
-					type: 'customcheckbox', // required
-					name: 'Skin', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses:
-							'px-4 py-2 border border-gray-400 rounded-xl labelStyle whitespace-nowrap',
-						fieldName: 'Skin: '
-					},
-					extra: {
-						items: [
-							{ value: 'Rashes', name: 'Rashes', title: 'Rashes' },
-							{ value: 'Wounds', name: 'Wounds', title: 'Wounds' },
-							{ value: 'Tattoos', name: 'Tattoos', title: 'Tattoos' },
-							{ value: 'Scars', name: 'Scars', title: 'Scars' }
-						]
-					}
-				},
-
-				{
-					type: 'customcheckbox', // required
-					name: 'Dental', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses:
-							'px-4 py-2 border border-gray-400 rounded-xl labelStyle whitespace-nowrap',
-						fieldName: 'Dental: '
-					},
-					extra: {
-						items: [
-							{ value: 'Carius Teeth', name: 'Carius Teeth', title: 'Carius Teeth' },
-							{ value: 'Oral Ulcers', name: 'Oral Ulcers', title: 'Oral Ulcers' }
+							{ value: 'Yes', id: 'Yes', name: 'CarotidBruit', title: 'Yes' },
+							{ value: 'No', id: 'No', name: 'CarotidBruit', title: 'No' }
 						]
 					}
 				},
 
 				{
 					type: 'textarea', // required
-					name: 'OtherComments', // required
+					name: 'Auscultation', // required
 					value: '', // optional
 
 					prefix: { classes: ['mx-2 flex-grow w-full'] },
 					attributes: {
 						id: 'id-field', // required
 						classes: 'form-textarea rounded w-full my-2', // optional
-						label: 'Other Comments', // optional
+						label: 'Auscultation', // optional
 						disabled: false, // optional
 						readonly: false, // optional
 						rows: 1, // optional
@@ -228,45 +163,33 @@
 				},
 
 				{
-					type: 'customradio', // required
-					name: 'PainScale', // required
-					prefix: {
-						classes: 'w-full'
-					},
+					type: 'textarea', // required
+					name: 'OtherFindings', // required
+					value: '', // optional
+
+					prefix: { classes: ['mx-2 flex-grow w-full'] },
 					attributes: {
 						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'py-1 px-2 border	border-gray-400 rounded-full labelStyle',
-						fieldName: 'Pain Scale: '
-					},
-					extra: {
-						items: [
-							{ value: '1', id: '1', name: 'pain_scale', title: '1' },
-							{ value: '2', id: '2', name: 'pain_scale', title: '2' },
-							{ value: '3', id: '3', name: 'pain_scale', title: '3' },
-							{ value: '4', id: '4', name: 'pain_scale', title: '4' },
-							{ value: '5', id: '5', name: 'pain_scale', title: '5' },
-							{ value: '6', id: '6', name: 'pain_scale', title: '6' },
-							{ value: '7', id: '7', name: 'pain_scale', title: '7' },
-							{ value: '8', id: '8', name: 'pain_scale', title: '8' },
-							{ value: '9', id: '9', name: 'pain_scale', title: '9' },
-							{ value: '10', id: '10', name: 'pain_scale', title: '10' }
-						]
+						classes: 'form-textarea rounded w-full my-2', // optional
+						label: 'Other Findings', // optional
+						disabled: false, // optional
+						readonly: false, // optional
+						rows: 1, // optional
+						cols: null // optional
 					}
 				}
+				//old
 			]
 		},
 		order: 0
 	};
+	console.log(JSON.stringify(examinationDetail));
 	let message = '';
 	let values = {};
 	export let i = 0;
 	export let others = 1;
 	$: formSet = !!$recipient.ID;
 	let baseFields = [];
-	console.log(JSON.stringify(examinationDetail));
-
 	$: fields = [...baseFields, ...examinationDetail.procedure.fields];
 
 	$: if (formSet) {
@@ -309,7 +232,7 @@
 	export function onSubmit() {
 		if (isValidForm) {
 			try {
-				const valuesRef: { Reason: any } = deepen(values);
+				const valuesRef = values;
 
 				newHistory({ input: valuesRef }).then((result) => {
 					console.log(result);
@@ -360,7 +283,7 @@
 				</div>
 			{/if}
 			<div class="flex w-full flex-col items-center justify-between">
-				<Field bind:isValidForm bind:values {fields} />
+				<Field inline={true} bind:isValidForm bind:values {fields} />
 				{message}
 				<button class="rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
 					>Save

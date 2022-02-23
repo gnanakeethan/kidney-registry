@@ -8,6 +8,7 @@
 	import CustomCheckbox from './CustomCheckbox.svelte';
 	import CustomRadio from './CustomRadio.svelte';
 	import File from './File.svelte';
+	import ImageDetail from './ImageDetail.svelte';
 	import Input from './Input.svelte';
 	import Message from './Message.svelte';
 	import Radio from './Radio.svelte';
@@ -21,6 +22,7 @@
 	export let fields = [];
 	export let isValidForm = true;
 	export let values;
+	export let inline = false;
 	let itemsField = [];
 	$: listFields = itemsField;
 	// Change values.
@@ -99,7 +101,11 @@
 			: 'form-group'}
 	>
 		<!-- Label -->
-		<div class="flex w-full flex-col items-center justify-between">
+		<div
+			class="flex w-full items-center justify-between"
+			class:flex-row={inline}
+			class:flex-col={!inline}
+		>
 			{#if field.attributes}
 				{#if field.attributes.label}
 					<label for={field.id} class="label text-md mt-2 w-full font-bold"
@@ -109,6 +115,8 @@
 				<div class="w-full">
 					{#if field.type === 'input'}
 						<Input {field} on:changeValue={changeValueHander} />
+					{:else if field.type === 'imagedetail'}
+						<ImageDetail {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'textarea'}
 						<Textarea {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'select'}
