@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -8,19 +9,20 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type PersonExamination struct {
-	ID            string          `orm:"column(id);pk"`
-	Description   string          `orm:"column(description)"`
-	Details       orm.JsonbField  `orm:"column(details);null"`
-	Results       orm.JsonbField  `orm:"column(results);null"`
-	ExaminationId *Examination    `orm:"column(examination_id);rel(fk)"`
-	Procedure     orm.JsonbField  `orm:"column(procedure);null"`
-	FollowUpId    *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
-	CreatedAt     time.Time       `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt     time.Time       `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt     time.Time       `orm:"column(deleted_at);null"`
+	ID          string         `orm:"column(id);pk"`
+	Description string         `orm:"column(description)"`
+	Details     orm.JsonbField `orm:"column(details);null"`
+	Results     orm.JsonbField `orm:"column(results);null"`
+	Examination *Examination   `orm:"column(examination_id);rel(fk)"`
+	Person      *Person        `orm:"column(person_id);rel(fk)"`
+	Procedure   orm.JsonbField `orm:"column(procedure);null"`
+	CreatedAt   time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt   time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt   time.Time      `orm:"column(deleted_at);null"`
 }
 
 func (PersonExamination) IsDynamicFormInterface() {}
@@ -33,17 +35,17 @@ func init() {
 	orm.RegisterModel(new(PersonExamination))
 }
 
-// AddPersonFollowUpsExaminations insert a new PersonExamination into database and returns
+// AddPersonExaminations insert a new PersonExamination into database and returns
 // last inserted ID on success.
-func AddPersonFollowUpsExaminations(m *PersonExamination) (id int64, err error) {
+func AddPersonExaminations(m *PersonExamination) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsExaminationsById retrieves PersonExamination by ID. Returns error if
+// GetPersonExaminationsById retrieves PersonExamination by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsExaminationsById(id string) (v *PersonExamination, err error) {
+func GetPersonExaminationsById(id string) (v *PersonExamination, err error) {
 	o := orm.NewOrm()
 	v = &PersonExamination{ID: id}
 	if err = o.Read(v); err == nil {
@@ -52,9 +54,31 @@ func GetPersonFollowUpsExaminationsById(id string) (v *PersonExamination, err er
 	return nil, err
 }
 
-// GetAllPersonFollowUpsExaminations retrieves all PersonExamination matches certain condition. Returns empty list if
+func ListPersonExaminations(ctx context.Context, filter *PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonExaminationList, error) {
+	personExamination, personExaminations := PersonExamination{}, []*PersonExamination{}
+	filterPtr := PersonExaminationFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, personExamination, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(personExamination, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&personExaminations, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonExaminationList{
+		Items:      personExaminations,
+		Pagination: pagination,
+	}, nil
+}
+
+// GetAllPersonExaminations retrieves all PersonExamination matches certain condition. Returns empty list if
 // no records exist
-func GetAllPersonFollowUpsExaminations(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllPersonExaminations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(PersonExamination))
@@ -130,9 +154,9 @@ func GetAllPersonFollowUpsExaminations(query map[string]string, fields []string,
 	return nil, err
 }
 
-// UpdatePersonFollowUpsExaminations updates PersonExamination by ID and returns error if
+// UpdatePersonExaminations updates PersonExamination by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsExaminationsById(m *PersonExamination) (err error) {
+func UpdatePersonExaminationsById(m *PersonExamination) (err error) {
 	o := orm.NewOrm()
 	v := PersonExamination{ID: m.ID}
 	// ascertain id exists in the database
@@ -145,9 +169,9 @@ func UpdatePersonFollowUpsExaminationsById(m *PersonExamination) (err error) {
 	return
 }
 
-// DeletePersonFollowUpsExaminations deletes PersonExamination by ID and returns error if
+// DeletePersonExaminations deletes PersonExamination by ID and returns error if
 // the record to be deleted doesn't exist
-func DeletePersonFollowUpsExaminations(id string) (err error) {
+func DeletePersonExaminations(id string) (err error) {
 	o := orm.NewOrm()
 	v := PersonExamination{ID: id}
 	// ascertain id exists in the database

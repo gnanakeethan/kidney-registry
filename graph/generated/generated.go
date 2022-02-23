@@ -429,9 +429,6 @@ type PersonResolver interface {
 	Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
 }
 type PersonExaminationResolver interface {
-	Examination(ctx context.Context, obj *models.PersonExamination) (*models.Examination, error)
-	Person(ctx context.Context, obj *models.PersonExamination) (*models.Person, error)
-
 	Details(ctx context.Context, obj *models.PersonExamination) (*models.FormDetails, error)
 	Results(ctx context.Context, obj *models.PersonExamination) (models.ResultsModel, error)
 	Procedure(ctx context.Context, obj *models.PersonExamination) (*models.Procedure, error)
@@ -7549,14 +7546,14 @@ func (ec *executionContext) _PersonExamination_Examination(ctx context.Context, 
 		Object:     "PersonExamination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonExamination().Examination(rctx, obj)
+		return obj.Examination, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7581,14 +7578,14 @@ func (ec *executionContext) _PersonExamination_Person(ctx context.Context, field
 		Object:     "PersonExamination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonExamination().Person(rctx, obj)
+		return obj.Person, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15301,39 +15298,19 @@ func (ec *executionContext) _PersonExamination(ctx context.Context, sel ast.Sele
 				atomic.AddUint32(&invalids, 1)
 			}
 		case "Examination":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonExamination_Examination(ctx, field, obj)
-				return res
+				return ec._PersonExamination_Examination(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "Person":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonExamination_Person(ctx, field, obj)
-				return res
+				return ec._PersonExamination_Person(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "Description":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._PersonExamination_Description(ctx, field, obj)
