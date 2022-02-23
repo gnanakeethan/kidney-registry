@@ -18,133 +18,61 @@
 		order: number;
 	} = {
 		details: {
-			name: 'Cardiovascular Examination',
+			name: 'Respiratory Examination',
 			description: 'Description'
 		},
 		procedure: {
 			fields: [
 				{
 					type: 'input', // required
-					name: 'PulseRate', // required
-					value: '72', // required
+					name: 'RespiratoryRate', // required
+					value: '30', // required
 					prefix: { classes: ['mb-2 w-full'] },
 					attributes: {
 						id: 'Type', // required
 						classes: ['form-input rounded'], // optional
-						label: 'Pulse Rate:', // optional
+						label: 'Respiratory Rate:', // optional
 						disabled: false, // optional
 						type: 'number',
-						min: 20,
+						min: 1,
+						step: 1,
+						max: 250
+					}
+				},
+				{
+					type: 'imagedetail', // required
+					name: 'RespiratoryDiagram', // required
+					value: '30', // required
+					prefix: { classes: ['mb-2 w-full'] },
+					attributes: {
+						id: 'Type', // required
+						classes: ['form-input rounded'], // optional
+						label: 'Respiratory Rate:', // optional
+						disabled: false, // optional
+						type: 'number',
+						image:
+							'https://kidney-project-lka-public-media.s3.ap-southeast-1.amazonaws.com/lungs-diagram.svg',
+						min: 1,
 						step: 1,
 						max: 250
 					}
 				},
 				{
 					type: 'input', // required
-					name: 'PulseVolume', // required
-					value: '', // required
+					name: 'SpO2', // required
+					value: '99', // required
 					prefix: { classes: ['mb-2 w-full'] },
 					attributes: {
 						id: 'Type', // required
 						classes: ['form-input rounded'], // optional
-						label: 'Pulse Volume:', // optional
+						label: 'SpO2:', // optional
 						disabled: false, // optional
 						type: 'number',
-						min: 20,
+						min: 0,
 						step: 1,
-						max: 250
+						max: 100
 					}
 				},
-				{
-					type: 'input', // required
-					name: 'Blood Pressure', // required
-					value: '', // required
-					prefix: { classes: ['mb-2 w-full'] },
-					attributes: {
-						id: 'Type', // required
-						classes: ['form-input rounded'], // optional
-						label: 'Blood Pressure:', // optional
-						disabled: false // optional
-					}
-				},
-				{
-					type: 'input', // required
-					name: 'Pulse Pressure', // required
-					value: '', // required
-					prefix: { classes: ['mb-2 w-full'] },
-					attributes: {
-						id: 'Type', // required
-						classes: ['form-input rounded'], // optional
-						label: 'Pulse Pressure:', // optional
-						disabled: false // optional
-					}
-				},
-
-				{
-					type: 'customcheckbox', // required
-					name: 'General', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'px-4 py-2 border border-black rounded-xl labelStyle whitespace-nowrap',
-						fieldName: 'General: '
-					},
-					extra: {
-						items: [
-							{ value: 'Dyspnoea', name: 'Dyspnoea', title: 'Dyspnoea' },
-							{ value: 'Cyanosis', name: 'Cyanosis', title: 'Cyanosis' },
-							{ value: 'Pallor', name: 'Pallor', title: 'Pallor' },
-							{ value: 'Not Pale', name: 'Not Pale', title: 'Not Pale' },
-							{ value: 'Clubbing', name: 'Clubbing', title: 'Clubbing' }
-						]
-					}
-				},
-
-				{
-					type: 'customradio', // required
-					name: 'JVP', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'px-4 py-2 border	 border-black rounded-xl labelStyle',
-						fieldName: 'JVP: '
-					},
-					extra: {
-						items: [
-							{ value: 'Normal', id: 'Normal', name: 'JVP', title: 'Normal' },
-							{ value: 'Elevated', id: 'Elevated', name: 'JVP', title: 'Elevated' }
-						]
-					}
-				},
-				{
-					type: 'customradio', // required
-					name: 'CarotidBruit', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'px-4 py-2 border	 border-black rounded-xl labelStyle',
-						fieldName: 'Carotid Bruit: '
-					},
-					extra: {
-						items: [
-							{ value: 'Yes', id: 'Yes', name: 'CarotidBruit', title: 'Yes' },
-							{ value: 'No', id: 'No', name: 'CarotidBruit', title: 'No' }
-						]
-					}
-				},
-
 				{
 					type: 'textarea', // required
 					name: 'Auscultation', // required
@@ -178,7 +106,6 @@
 						cols: null // optional
 					}
 				}
-				//old
 			]
 		},
 		order: 0
@@ -283,7 +210,7 @@
 				</div>
 			{/if}
 			<div class="flex w-full flex-col items-center justify-between">
-				<Field inline={true} bind:isValidForm bind:values {fields} />
+				<Field inline={false} bind:isValidForm bind:values {fields} />
 				{message}
 				<button class="rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
 					>Save

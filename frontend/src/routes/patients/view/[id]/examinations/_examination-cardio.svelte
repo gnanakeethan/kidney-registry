@@ -81,30 +81,6 @@
 				},
 
 				{
-					type: 'customcheckbox', // required
-					name: 'General', // required
-					prefix: {
-						classes: 'w-full'
-					},
-					attributes: {
-						id: 'id-field', // required
-						classes: ['hidden'], // optional
-						label: '', // optional
-						labelClasses: 'px-4 py-2 border border-black rounded-xl labelStyle whitespace-nowrap',
-						fieldName: 'General: '
-					},
-					extra: {
-						items: [
-							{ value: 'Dyspnoea', name: 'Dyspnoea', title: 'Dyspnoea' },
-							{ value: 'Cyanosis', name: 'Cyanosis', title: 'Cyanosis' },
-							{ value: 'Pallor', name: 'Pallor', title: 'Pallor' },
-							{ value: 'Not Pale', name: 'Not Pale', title: 'Not Pale' },
-							{ value: 'Clubbing', name: 'Clubbing', title: 'Clubbing' }
-						]
-					}
-				},
-
-				{
 					type: 'customradio', // required
 					name: 'JVP', // required
 					prefix: {

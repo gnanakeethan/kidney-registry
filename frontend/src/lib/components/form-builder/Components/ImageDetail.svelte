@@ -68,6 +68,10 @@
 			}
 		];
 	}
+
+	function removeItem(i: number) {
+		items.splice(i, 1);
+	}
 </script>
 
 <input
@@ -89,14 +93,9 @@
 />
 <div>
 	<div class="relative cursor-crosshair">
-		<img
-			on:click={mouseHandler}
-			class="z-5"
-			src="https://i.picsum.photos/id/58/600/600.jpg?hmac=6fU01NczrGGCEMOGlJoK50FXZS2FL-LiU4Dm-Key4Tc"
-			alt="Svelte"
-		/>
-		{#each items as item}
-			<div class="absolute z-10 text-white " style="top:{item.y}px;left:{item.x}px">
+		<img on:click={mouseHandler} class="z-5 grayscale" src={field.attributes.image} alt="Svelte" />
+		{#each items as item, i}
+			<div class="absolute z-10 m-4 text-white" style="top:{item.y}px;left:{item.x}px">
 				<div class="relative flex h-3 w-3">
 					<div class="relative inline-flex h-1  w-1 rounded-full bg-red-700" />
 					<div
@@ -110,10 +109,12 @@
 							class="relative mx-auto rounded border-2   indent-2 text-sm text-black"
 							bind:value={item.data.description}
 						/>
-						<span
+						<div
+							on:click={removeItem(i)}
 							class="absolute -top-1 -right-2 h-4 w-4 rounded-full bg-red-500 text-center text-xs text-white"
-							>X</span
 						>
+							X
+						</div>
 					</div>
 				</div>
 			</div>
