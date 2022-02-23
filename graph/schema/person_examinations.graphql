@@ -10,6 +10,13 @@ type PersonExamination {
     UpdatedAt:String
     DeletedAt: String
 }
+input PersonExaminationInput {
+    ID : ID!
+    Description: String
+    Results: ExaminationResults
+    ExaminationId : ID!
+    FollowUpId: ID
+}
 
 scalar ExaminationResults
 
@@ -23,6 +30,11 @@ input PersonExaminationFilter {
 type PersonExaminationList {
     items: [PersonExamination]
     pagination: Pagination
+}
+extend type Mutation {
+    createPersonExamination(input: PersonExaminationInput!): PersonExamination
+    updatePersonExamination(input: PersonExaminationInput!): PersonExamination
+    deletePersonExamination(ID: ID!): ID
 }
 extend type Query {
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList

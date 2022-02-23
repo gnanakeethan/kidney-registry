@@ -11,6 +11,18 @@ import (
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
+func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeletePersonExamination(ctx context.Context, id string) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *personExaminationResolver) Details(ctx context.Context, obj *models.PersonExamination) (*models.ExaminationDetails, error) {
 	panic(fmt.Errorf("not implemented"))
 }
@@ -40,6 +52,10 @@ func (r *personExaminationResolver) UpdatedAt(ctx context.Context, obj *models.P
 }
 
 func (r *personExaminationResolver) DeletedAt(ctx context.Context, obj *models.PersonExamination) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

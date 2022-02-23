@@ -19,6 +19,17 @@ type Attributes struct {
 	Classes  []*string `json:"classes"`
 }
 
+type AttributesInput struct {
+	ID       *string   `json:"id"`
+	Max      *int      `json:"max"`
+	Min      *int      `json:"min"`
+	Step     *int      `json:"step"`
+	Type     *string   `json:"type"`
+	Label    *string   `json:"label"`
+	Disabled *bool     `json:"disabled"`
+	Classes  []*string `json:"classes"`
+}
+
 type DashboardMenus struct {
 	SidebarTop    *Menu `json:"sidebarTop"`
 	SidebarBottom *Menu `json:"sidebarBottom"`
@@ -30,6 +41,11 @@ type Error struct {
 }
 
 type ExaminationDetails struct {
+	Name        *string `json:"Name"`
+	Description *string `json:"Description"`
+}
+
+type ExaminationDetailsInput struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
 }
@@ -47,8 +63,16 @@ type ExaminationProcedure struct {
 	Fields []*Fields `json:"fields"`
 }
 
+type ExaminationProcedureInput struct {
+	Fields []*FieldsInput `json:"fields"`
+}
+
 type Extra struct {
 	Items []*Items `json:"items"`
+}
+
+type ExtraInput struct {
+	Items []*ItemsInput `json:"items"`
 }
 
 type Fields struct {
@@ -58,6 +82,15 @@ type Fields struct {
 	Attributes *Attributes `json:"attributes"`
 	Prefix     *Prefix     `json:"prefix"`
 	Extra      *Extra      `json:"extra"`
+}
+
+type FieldsInput struct {
+	Name       *string          `json:"name"`
+	Type       *string          `json:"type"`
+	Value      *string          `json:"value"`
+	Attributes *AttributesInput `json:"attributes"`
+	Prefix     *PrefixInput     `json:"prefix"`
+	Extra      *ExtraInput      `json:"extra"`
 }
 
 type FloatFilter struct {
@@ -91,6 +124,13 @@ type Items struct {
 	Value *string `json:"value"`
 }
 
+type ItemsInput struct {
+	ID    *string `json:"id"`
+	Name  *string `json:"name"`
+	Title *string `json:"title"`
+	Value *string `json:"value"`
+}
+
 type Menu struct {
 	Items []*MenuItem `json:"items"`
 }
@@ -112,6 +152,27 @@ type Pagination struct {
 type PersonComparison struct {
 	Comparison ComparisonType `json:"comparison"`
 	Value      *string        `json:"value"`
+}
+
+type PersonExaminationFilter struct {
+	ExaminationID *StringFilter `json:"ExaminationId"`
+	FollowUpID    *StringFilter `json:"FollowUpId"`
+	CreatedAt     *StringFilter `json:"CreatedAt"`
+	UpdatedAt     *StringFilter `json:"UpdatedAt"`
+	DeletedAt     *StringFilter `json:"DeletedAt"`
+}
+
+type PersonExaminationInput struct {
+	ID            string             `json:"ID"`
+	Description   *string            `json:"Description"`
+	Results       ExaminationResults `json:"Results"`
+	ExaminationID string             `json:"ExaminationId"`
+	FollowUpID    *string            `json:"FollowUpId"`
+}
+
+type PersonExaminationList struct {
+	Items      []*PersonExamination `json:"items"`
+	Pagination *Pagination          `json:"pagination"`
 }
 
 type PersonFilter struct {
@@ -209,6 +270,10 @@ type PersonMedicalHistoryList struct {
 }
 
 type Prefix struct {
+	Classes []*string `json:"classes"`
+}
+
+type PrefixInput struct {
 	Classes []*string `json:"classes"`
 }
 

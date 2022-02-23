@@ -11,7 +11,21 @@ type ExaminationDetails {
     Name: String
     Description:String
 }
+input ExaminationDetailsInput {
+    Name: String
+    Description:String
+}
 type Attributes {
+    id: String
+    max: Int
+    min: Int
+    step: Int
+    type: String
+    label: String
+    disabled: Boolean
+    classes: [String]
+}
+input AttributesInput {
     id: String
     max: Int
     min: Int
@@ -25,7 +39,16 @@ type Attributes {
 type Prefix {
     classes: [String ]
 }
+input PrefixInput {
+    classes: [String ]
+}
 type Items {
+    id: String
+    name: String
+    title: String
+    value: String
+}
+input ItemsInput {
     id: String
     name: String
     title: String
@@ -35,6 +58,9 @@ type Items {
 type Extra {
     items: [Items ]
 }
+input ExtraInput {
+    items: [ ItemsInput ]
+}
 type Fields {
     name: String
     type: String
@@ -43,9 +69,20 @@ type Fields {
     prefix: Prefix
     extra: Extra
 }
+input FieldsInput {
+    name: String
+    type: String
+    value: String
+    attributes: AttributesInput
+    prefix: PrefixInput
+    extra: ExtraInput
+}
 
 type ExaminationProcedure {
     fields: [Fields ]
+}
+input ExaminationProcedureInput {
+    fields: [FieldsInput]
 }
 input ExaminationFilter {
     Order: IntFilter
@@ -56,6 +93,7 @@ type ExaminationList {
 }
 
 extend type Query {
+    getExamination(id: ID!): Examination
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
 }
