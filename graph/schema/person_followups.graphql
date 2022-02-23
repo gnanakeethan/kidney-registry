@@ -37,7 +37,29 @@ input PersonFollowUpInput{
     ConsultantOpinion: String
     Person: PersonInput!
     Donation: PersonOrganDonationInput!
+    Medicines: [PersonFollowUpMedicineInput]
 }
+input PersonFollowUpMedicineInput{
+    ID: String!
+    MedicineCode: String
+    Name: String
+    Dosage: String
+    Frequency: String
+    Duration: String
+    StartDate: String
+    EndDate: String
+}
+type PersonFollowUpMedicine{
+    ID: String!
+    MedicineCode: String
+    Name: String
+    Dosage: String
+    Frequency: String
+    Duration: String
+    StartDate: String
+    EndDate: String
+}
+
 extend type Person {
     followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
 }
@@ -48,8 +70,8 @@ type PersonFollowUpList {
 
 extend type Mutation {
     createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
-    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
-    deletePersonFollowUp(ID: ID!): PersonFollowUp
+    #    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    #    deletePersonFollowUp(ID: ID!): PersonFollowUp
 }
 extend type Query {
     personFollowUp(ID: ID!): PersonFollowUp

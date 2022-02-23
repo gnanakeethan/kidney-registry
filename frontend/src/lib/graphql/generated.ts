@@ -14,6 +14,7 @@ export type Scalars = {
   Float: number;
   ExaminationResults: any;
   InvestigationResults: any;
+  WorkupResults: any;
 };
 
 export type Attributes = {
@@ -62,6 +63,19 @@ export type DashboardMenus = {
   sidebarTop?: Maybe<Menu>;
 };
 
+export type DialysisPlan = {
+  __typename?: 'DialysisPlan';
+  Frequency?: Maybe<Scalars['String']>;
+  Plan?: Maybe<Scalars['String']>;
+  Type?: Maybe<Scalars['String']>;
+};
+
+export type DialysisPlanInput = {
+  Frequency?: InputMaybe<Scalars['String']>;
+  Plan?: InputMaybe<Scalars['String']>;
+  Type?: InputMaybe<Scalars['String']>;
+};
+
 export type DynamicFormInterface = {
   Procedure?: Maybe<Procedure>;
 };
@@ -83,13 +97,18 @@ export type Examination = DynamicFormInterface & {
   UpdatedAt?: Maybe<Scalars['String']>;
 };
 
-export type ExaminationDetailsInput = {
-  Description?: InputMaybe<Scalars['String']>;
-  Name?: InputMaybe<Scalars['String']>;
-};
-
 export type ExaminationFilter = {
   Order?: InputMaybe<IntFilter>;
+};
+
+export type ExaminationInput = {
+  CreatedAt?: InputMaybe<Scalars['String']>;
+  DeletedAt?: InputMaybe<Scalars['String']>;
+  Details?: InputMaybe<FormDetailsInput>;
+  ID: Scalars['ID'];
+  Order?: InputMaybe<Scalars['Int']>;
+  Procedure?: InputMaybe<ProcedureInput>;
+  UpdatedAt?: InputMaybe<Scalars['String']>;
 };
 
 export type ExaminationList = {
@@ -251,10 +270,12 @@ export type Mutation = {
   createPersonFollowUp?: Maybe<PersonFollowUp>;
   createPersonInvestigation?: Maybe<PersonInvestigation>;
   createPersonMedicalHistory?: Maybe<PersonMedicalHistory>;
+  createPersonWorkup?: Maybe<PersonWorkup>;
   deletePersonExamination?: Maybe<Scalars['ID']>;
   deletePersonFollowUp?: Maybe<PersonFollowUp>;
   deletePersonInvestigation?: Maybe<Scalars['ID']>;
   deletePersonMedicalHistory?: Maybe<Scalars['ID']>;
+  deletePersonWorkup?: Maybe<Scalars['ID']>;
   error?: Maybe<Error>;
   newPatient?: Maybe<Person>;
   updatePatient?: Maybe<Person>;
@@ -262,6 +283,7 @@ export type Mutation = {
   updatePersonFollowUp?: Maybe<PersonFollowUp>;
   updatePersonInvestigation?: Maybe<PersonInvestigation>;
   updatePersonMedicalHistory?: Maybe<PersonMedicalHistory>;
+  updatePersonWorkup?: Maybe<PersonWorkup>;
   userLogin: UserToken;
 };
 
@@ -291,6 +313,11 @@ export type MutationCreatePersonMedicalHistoryArgs = {
 };
 
 
+export type MutationCreatePersonWorkupArgs = {
+  input: PersonWorkupInput;
+};
+
+
 export type MutationDeletePersonExaminationArgs = {
   ID: Scalars['ID'];
 };
@@ -307,6 +334,11 @@ export type MutationDeletePersonInvestigationArgs = {
 
 
 export type MutationDeletePersonMedicalHistoryArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type MutationDeletePersonWorkupArgs = {
   ID: Scalars['ID'];
 };
 
@@ -333,6 +365,11 @@ export type MutationUpdatePersonInvestigationArgs = {
 
 export type MutationUpdatePersonMedicalHistoryArgs = {
   input: PersonMedicalHistoryInput;
+};
+
+
+export type MutationUpdatePersonWorkupArgs = {
+  input: PersonWorkupInput;
 };
 
 
@@ -438,9 +475,9 @@ export type PersonExaminationFilter = {
 
 export type PersonExaminationInput = {
   Description?: InputMaybe<Scalars['String']>;
-  ExaminationId: Scalars['ID'];
-  FollowUpId?: InputMaybe<Scalars['ID']>;
+  Examination?: InputMaybe<ExaminationInput>;
   ID: Scalars['ID'];
+  Person?: InputMaybe<PersonInput>;
   Results?: InputMaybe<Scalars['ExaminationResults']>;
 };
 
@@ -476,10 +513,14 @@ export type PersonFollowUp = {
   CaseStatus?: Maybe<Scalars['String']>;
   ClinicNo?: Maybe<Scalars['String']>;
   Complaints?: Maybe<Scalars['String']>;
+  ConsultantOpinion?: Maybe<Scalars['String']>;
   Description?: Maybe<Scalars['String']>;
-  DonationId?: Maybe<PersonOrganDonation>;
+  DialysisPlan?: Maybe<DialysisPlan>;
+  Donation?: Maybe<PersonOrganDonation>;
   ID: Scalars['String'];
+  OtherFindings?: Maybe<Scalars['String']>;
   Person?: Maybe<Person>;
+  Referrals?: Maybe<Scalars['String']>;
   RenalBiopsies?: Maybe<Scalars['String']>;
 };
 
@@ -487,9 +528,15 @@ export type PersonFollowUpInput = {
   CaseStatus?: InputMaybe<Scalars['String']>;
   ClinicNo?: InputMaybe<Scalars['String']>;
   Complaints?: InputMaybe<Scalars['String']>;
+  ConsultantOpinion?: InputMaybe<Scalars['String']>;
   Description?: InputMaybe<Scalars['String']>;
+  DialysisPlan?: InputMaybe<DialysisPlanInput>;
+  Donation: PersonOrganDonationInput;
   ID: Scalars['String'];
+  Medicines?: InputMaybe<Array<InputMaybe<PersonFollowUpMedicineInput>>>;
+  OtherFindings?: InputMaybe<Scalars['String']>;
   Person: PersonInput;
+  Referrals?: InputMaybe<Scalars['String']>;
   RenalBiopsies?: InputMaybe<Scalars['String']>;
 };
 
@@ -497,6 +544,27 @@ export type PersonFollowUpList = {
   __typename?: 'PersonFollowUpList';
   followUps?: Maybe<Array<Maybe<PersonFollowUp>>>;
   pagination?: Maybe<Pagination>;
+};
+
+export type PersonFollowUpMedicine = {
+  __typename?: 'PersonFollowUpMedicine';
+  Dosage?: Maybe<Scalars['String']>;
+  Duration?: Maybe<Scalars['String']>;
+  EndDate?: Maybe<Scalars['String']>;
+  Frequency?: Maybe<Scalars['String']>;
+  ID: Scalars['String'];
+  Name?: Maybe<Scalars['String']>;
+  StartDate?: Maybe<Scalars['String']>;
+};
+
+export type PersonFollowUpMedicineInput = {
+  Dosage?: InputMaybe<Scalars['String']>;
+  Duration?: InputMaybe<Scalars['String']>;
+  EndDate?: InputMaybe<Scalars['String']>;
+  Frequency?: InputMaybe<Scalars['String']>;
+  ID: Scalars['String'];
+  Name?: InputMaybe<Scalars['String']>;
+  StartDate?: InputMaybe<Scalars['String']>;
 };
 
 export type PersonInput = {
@@ -544,10 +612,10 @@ export type PersonInvestigationFilter = {
 
 export type PersonInvestigationInput = {
   Description?: InputMaybe<Scalars['String']>;
-  FollowUpId?: InputMaybe<Scalars['ID']>;
   ID: Scalars['ID'];
   Investigation?: InputMaybe<InvestigationInput>;
   InvestigationId: Scalars['ID'];
+  Person?: InputMaybe<PersonInput>;
   Results?: InputMaybe<Scalars['InvestigationResults']>;
 };
 
@@ -616,10 +684,57 @@ export type PersonOrganDonation = {
   DonationType?: Maybe<Scalars['String']>;
   Donor?: Maybe<Person>;
   FollowUps?: Maybe<Array<Maybe<FollowUp>>>;
-  ID?: Maybe<Scalars['String']>;
+  ID: Scalars['ID'];
   PerformedDate?: Maybe<Scalars['String']>;
   PlannedDate?: Maybe<Scalars['String']>;
   Recipient?: Maybe<Person>;
+};
+
+export type PersonOrganDonationInput = {
+  AcuteRejection?: InputMaybe<Scalars['Boolean']>;
+  DischargedDate?: InputMaybe<Scalars['String']>;
+  DonationType?: InputMaybe<Scalars['String']>;
+  Donor?: InputMaybe<PersonInput>;
+  ID: Scalars['ID'];
+  PerformedDate?: InputMaybe<Scalars['String']>;
+  PlannedDate?: InputMaybe<Scalars['String']>;
+  Recipient?: InputMaybe<PersonInput>;
+};
+
+export type PersonWorkup = DynamicFormInterface & {
+  __typename?: 'PersonWorkup';
+  CreatedAt?: Maybe<Scalars['String']>;
+  DeletedAt?: Maybe<Scalars['String']>;
+  Description?: Maybe<Scalars['String']>;
+  Details?: Maybe<FormDetails>;
+  ID: Scalars['ID'];
+  Person?: Maybe<Person>;
+  Procedure?: Maybe<Procedure>;
+  Results?: Maybe<Scalars['WorkupResults']>;
+  UpdatedAt?: Maybe<Scalars['String']>;
+  Workup?: Maybe<Workup>;
+};
+
+export type PersonWorkupFilter = {
+  CreatedAt?: InputMaybe<StringFilter>;
+  DeletedAt?: InputMaybe<StringFilter>;
+  UpdatedAt?: InputMaybe<StringFilter>;
+  WorkupId?: InputMaybe<StringFilter>;
+};
+
+export type PersonWorkupInput = {
+  Description?: InputMaybe<Scalars['String']>;
+  ID: Scalars['ID'];
+  Person?: InputMaybe<PersonInput>;
+  Results?: InputMaybe<Scalars['WorkupResults']>;
+  Workup?: InputMaybe<WorkupInput>;
+  WorkupId: Scalars['ID'];
+};
+
+export type PersonWorkupList = {
+  __typename?: 'PersonWorkupList';
+  items?: Maybe<Array<Maybe<PersonWorkup>>>;
+  pagination?: Maybe<Pagination>;
 };
 
 export type Prefix = {
@@ -646,12 +761,18 @@ export type Query = {
   getExamination?: Maybe<Examination>;
   getInvestigation?: Maybe<Investigation>;
   getPatient?: Maybe<Person>;
+  getPersonExamination?: Maybe<PersonExamination>;
+  getPersonInvestigation?: Maybe<PersonInvestigation>;
+  getPersonWorkup?: Maybe<PersonWorkup>;
+  getWorkup?: Maybe<Workup>;
   listExaminations?: Maybe<ExaminationList>;
   listInvestigations?: Maybe<InvestigationList>;
   listPatients?: Maybe<PersonList>;
   listPersonExaminations?: Maybe<PersonExaminationList>;
   listPersonInvestigations?: Maybe<PersonInvestigationList>;
   listPersonMedicalHistories?: Maybe<PersonMedicalHistoryList>;
+  listPersonWorkups?: Maybe<PersonWorkupList>;
+  listWorkups?: Maybe<WorkupList>;
   personFollowUp?: Maybe<PersonFollowUp>;
   personFollowUps?: Maybe<PersonFollowUpList>;
   personMedicalHistory?: Maybe<PersonMedicalHistory>;
@@ -671,6 +792,26 @@ export type QueryGetInvestigationArgs = {
 
 export type QueryGetPatientArgs = {
   ID: Scalars['ID'];
+};
+
+
+export type QueryGetPersonExaminationArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type QueryGetPersonInvestigationArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type QueryGetPersonWorkupArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type QueryGetWorkupArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -724,6 +865,25 @@ export type QueryListPersonInvestigationsArgs = {
 export type QueryListPersonMedicalHistoriesArgs = {
   PersonID: Scalars['ID'];
   filter?: InputMaybe<PersonMedicalHistoryFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
+  page?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryListPersonWorkupsArgs = {
+  PersonID: Scalars['ID'];
+  filter?: InputMaybe<PersonWorkupFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
+  page?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryListWorkupsArgs = {
+  filter?: InputMaybe<WorkupFilter>;
   limit?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
   page?: InputMaybe<Scalars['Int']>;
@@ -806,6 +966,37 @@ export type UserToken = {
   user?: Maybe<User>;
 };
 
+export type Workup = DynamicFormInterface & {
+  __typename?: 'Workup';
+  CreatedAt?: Maybe<Scalars['String']>;
+  DeletedAt?: Maybe<Scalars['String']>;
+  Details?: Maybe<FormDetails>;
+  ID: Scalars['ID'];
+  Order?: Maybe<Scalars['Int']>;
+  Procedure?: Maybe<Procedure>;
+  UpdatedAt?: Maybe<Scalars['String']>;
+};
+
+export type WorkupFilter = {
+  Order?: InputMaybe<IntFilter>;
+};
+
+export type WorkupInput = {
+  CreatedAt?: InputMaybe<Scalars['String']>;
+  DeletedAt?: InputMaybe<Scalars['String']>;
+  Details?: InputMaybe<FormDetailsInput>;
+  ID: Scalars['ID'];
+  Order?: InputMaybe<Scalars['Int']>;
+  Procedure?: InputMaybe<ProcedureInput>;
+  UpdatedAt?: InputMaybe<Scalars['String']>;
+};
+
+export type WorkupList = {
+  __typename?: 'WorkupList';
+  items?: Maybe<Array<Maybe<Workup>>>;
+  pagination?: Maybe<Pagination>;
+};
+
 export type PaginationFragment = { __typename?: 'Pagination', currentPage: number, prevPage: number, nextPage: number, totalItems: number, itemsPerPage: number };
 
 type Procedure_Examination_Fragment = { __typename?: 'Examination', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
@@ -816,7 +1007,11 @@ type Procedure_PersonExamination_Fragment = { __typename?: 'PersonExamination', 
 
 type Procedure_PersonInvestigation_Fragment = { __typename?: 'PersonInvestigation', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
 
-export type ProcedureFragment = Procedure_Examination_Fragment | Procedure_Investigation_Fragment | Procedure_PersonExamination_Fragment | Procedure_PersonInvestigation_Fragment;
+type Procedure_PersonWorkup_Fragment = { __typename?: 'PersonWorkup', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
+
+type Procedure_Workup_Fragment = { __typename?: 'Workup', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
+
+export type ProcedureFragment = Procedure_Examination_Fragment | Procedure_Investigation_Fragment | Procedure_PersonExamination_Fragment | Procedure_PersonInvestigation_Fragment | Procedure_PersonWorkup_Fragment | Procedure_Workup_Fragment;
 
 export type PersonFieldsFragment = { __typename?: 'Person', ID: string, FirstName?: string | null, LastName?: string | null, Address?: string | null, DateOfBirth?: string | null, Ethnicity?: string | null, Phn?: string | null, PrimaryRenalDisease?: string | null, Weight?: number | null, Height?: number | null, Gender?: Gender | null, MaritalStatus?: MaritalStatus | null, ContactNo?: string | null, PersonType?: PatientType | null, Status?: PatientStatus | null, RecordStatus?: RecordStatus | null };
 

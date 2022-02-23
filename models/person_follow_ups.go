@@ -14,7 +14,6 @@ type PersonFollowUp struct {
 	ClinicNo          string               `orm:"column(clinic_no)"`
 	Description       string               `orm:"column(description);null"`
 	Complaints        string               `orm:"column(complaints);null"`
-	RenalBiopsies     string               `orm:"column(renal_biopsies);null"`
 	CaseStatus        string               `orm:"column(case_status);null"`
 	DialysisPlan      orm.JsonbField       `orm:"column(dialysis_plan);"`
 	OtherFindings     string               `orm:"column(other_findings);null"`
@@ -37,18 +36,9 @@ func init() {
 
 // AddPersonFollowUps insert a new PersonFollowUp into database and returns
 // last inserted ID on success.
-func AddPersonFollowUps(m PersonFollowUpInput) (id int64, err error) {
+func AddPersonFollowUps(m *PersonFollowUp) (id int64, err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUp{
-		ID:            m.ID,
-		Person:        &Person{ID: m.Person.ID},
-		ClinicNo:      *m.ClinicNo,
-		Description:   *m.Description,
-		Complaints:    *m.Complaints,
-		RenalBiopsies: *m.RenalBiopsies,
-		CaseStatus:    *m.CaseStatus,
-	}
-	id, err = o.Insert(v)
+	id, err = o.Insert(m)
 	return
 }
 

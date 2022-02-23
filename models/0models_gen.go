@@ -42,6 +42,18 @@ type DashboardMenus struct {
 	SidebarBottom *Menu `json:"sidebarBottom"`
 }
 
+type DialysisPlan struct {
+	Type      *string `json:"Type"`
+	Plan      *string `json:"Plan"`
+	Frequency *string `json:"Frequency"`
+}
+
+type DialysisPlanInput struct {
+	Type      *string `json:"Type"`
+	Plan      *string `json:"Plan"`
+	Frequency *string `json:"Frequency"`
+}
+
 type Error struct {
 	String string `json:"string"`
 	Status int    `json:"status"`
@@ -228,18 +240,46 @@ type PersonFilter struct {
 }
 
 type PersonFollowUpInput struct {
-	ID            string       `json:"ID"`
-	Person        *PersonInput `json:"Person"`
-	ClinicNo      *string      `json:"ClinicNo"`
-	Description   *string      `json:"Description"`
-	Complaints    *string      `json:"Complaints"`
-	RenalBiopsies *string      `json:"RenalBiopsies"`
-	CaseStatus    *string      `json:"CaseStatus"`
+	ID                string                         `json:"ID"`
+	ClinicNo          *string                        `json:"ClinicNo"`
+	Description       *string                        `json:"Description"`
+	Complaints        *string                        `json:"Complaints"`
+	RenalBiopsies     *string                        `json:"RenalBiopsies"`
+	CaseStatus        *string                        `json:"CaseStatus"`
+	DialysisPlan      *DialysisPlanInput             `json:"DialysisPlan"`
+	OtherFindings     *string                        `json:"OtherFindings"`
+	Referrals         *string                        `json:"Referrals"`
+	ConsultantOpinion *string                        `json:"ConsultantOpinion"`
+	Person            *PersonInput                   `json:"Person"`
+	Donation          *PersonOrganDonationInput      `json:"Donation"`
+	Medicines         []*PersonFollowUpMedicineInput `json:"Medicines"`
 }
 
 type PersonFollowUpList struct {
 	FollowUps  []*PersonFollowUp `json:"followUps"`
 	Pagination *Pagination       `json:"pagination"`
+}
+
+type PersonFollowUpMedicine struct {
+	ID           string  `json:"ID"`
+	MedicineCode *string `json:"MedicineCode"`
+	Name         *string `json:"Name"`
+	Dosage       *string `json:"Dosage"`
+	Frequency    *string `json:"Frequency"`
+	Duration     *string `json:"Duration"`
+	StartDate    *string `json:"StartDate"`
+	EndDate      *string `json:"EndDate"`
+}
+
+type PersonFollowUpMedicineInput struct {
+	ID           string  `json:"ID"`
+	MedicineCode *string `json:"MedicineCode"`
+	Name         *string `json:"Name"`
+	Dosage       *string `json:"Dosage"`
+	Frequency    *string `json:"Frequency"`
+	Duration     *string `json:"Duration"`
+	StartDate    *string `json:"StartDate"`
+	EndDate      *string `json:"EndDate"`
 }
 
 type PersonInput struct {
@@ -319,6 +359,17 @@ type PersonMedicalHistoryInput struct {
 type PersonMedicalHistoryList struct {
 	Histories  []*PersonMedicalHistory `json:"histories"`
 	Pagination *Pagination             `json:"pagination"`
+}
+
+type PersonOrganDonationInput struct {
+	ID             string       `json:"ID"`
+	Donor          *PersonInput `json:"Donor"`
+	Recipient      *PersonInput `json:"Recipient"`
+	DonationType   *string      `json:"DonationType"`
+	PlannedDate    *string      `json:"PlannedDate"`
+	PerformedDate  *string      `json:"PerformedDate"`
+	DischargedDate *string      `json:"DischargedDate"`
+	AcuteRejection *bool        `json:"AcuteRejection"`
 }
 
 type PersonWorkupFilter struct {
