@@ -7,7 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -43,6 +43,9 @@ func (r *queryResolver) GetExamination(ctx context.Context, id string) (*models.
 }
 
 func (r *queryResolver) ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error) {
+	sortBy = append(sortBy, StringPointer("Order"))
+	orderByAc := models.OrderByAsc
+	orderBy = append(orderBy, &orderByAc)
 	return models.ListExaminations(ctx, filter, page, limit, sortBy, orderBy)
 }
 

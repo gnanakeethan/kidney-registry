@@ -63,6 +63,7 @@ query ListExaminations {
     listExaminations {
         items {
             ID
+            Order
             Details {
                 Name
             }
