@@ -50,11 +50,11 @@
 				route: '/patients/view/' + $recipientId + '/history/',
 				icon: SearchIcon
 			},
-			{
-				name: 'New Record',
-				route: '/patients/view/' + $recipientId + '/history/new',
-				icon: NewIcon
-			},
+			// {
+			// 	name: 'New Record',
+			// 	route: '/patients/view/' + $recipientId + '/history/new',
+			// 	icon: NewIcon
+			// },
 			{
 				name: 'Follow Ups',
 				route: '/patients/view/' + $recipientId + '/followups',

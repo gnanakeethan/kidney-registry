@@ -35,7 +35,7 @@ func (r *personExaminationResolver) Details(ctx context.Context, obj *models.Per
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personExaminationResolver) Results(ctx context.Context, obj *models.PersonExamination) (models.ExaminationResults, error) {
+func (r *personExaminationResolver) Results(ctx context.Context, obj *models.PersonExamination) (models.ResultsModel, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

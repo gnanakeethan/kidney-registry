@@ -1,0 +1,42 @@
+type PersonWorkup implements DynamicFormInterface{
+    ID : ID!
+    Workup : Workup
+    Person: Person
+    Description: String
+    Details: FormDetails
+    Results: WorkupResults
+    Procedure: Procedure
+    CreatedAt: String
+    UpdatedAt:String
+    DeletedAt: String
+}
+input PersonWorkupInput {
+    ID : ID!
+    Description: String
+    Results: WorkupResults
+    WorkupId : ID!
+    Workup: WorkupInput
+    FollowUpId: ID
+}
+
+scalar WorkupResults
+
+input PersonWorkupFilter {
+    WorkupId: StringFilter
+    CreatedAt: StringFilter
+    UpdatedAt: StringFilter
+    DeletedAt: StringFilter
+}
+type PersonWorkupList {
+    items: [PersonWorkup]
+    pagination: Pagination
+}
+extend type Mutation {
+    createPersonWorkup(input: PersonWorkupInput!): PersonWorkup
+    updatePersonWorkup(input: PersonWorkupInput!): PersonWorkup
+    deletePersonWorkup(ID: ID!): ID
+}
+extend type Query {
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
+}

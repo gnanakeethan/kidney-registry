@@ -189,11 +189,11 @@ type PersonExaminationFilter struct {
 }
 
 type PersonExaminationInput struct {
-	ID            string             `json:"ID"`
-	Description   *string            `json:"Description"`
-	Results       ExaminationResults `json:"Results"`
-	ExaminationID string             `json:"ExaminationId"`
-	FollowUpID    *string            `json:"FollowUpId"`
+	ID            string       `json:"ID"`
+	Description   *string      `json:"Description"`
+	Results       ResultsModel `json:"Results"`
+	ExaminationID string       `json:"ExaminationId"`
+	FollowUpID    *string      `json:"FollowUpId"`
 }
 
 type PersonExaminationList struct {
@@ -259,21 +259,6 @@ type PersonInput struct {
 	UpdatedAt           *string        `json:"UpdatedAt"`
 }
 
-type PersonInvestigation struct {
-	ID            string             `json:"ID"`
-	Investigation *Investigation     `json:"Investigation"`
-	Person        *Person            `json:"Person"`
-	Description   *string            `json:"Description"`
-	Details       *FormDetails       `json:"Details"`
-	Results       ExaminationResults `json:"Results"`
-	Procedure     *Procedure         `json:"Procedure"`
-	CreatedAt     *string            `json:"CreatedAt"`
-	UpdatedAt     *string            `json:"UpdatedAt"`
-	DeletedAt     *string            `json:"DeletedAt"`
-}
-
-func (PersonInvestigation) IsDynamicFormInterface() {}
-
 type PersonInvestigationFilter struct {
 	InvestigationID *StringFilter `json:"InvestigationId"`
 	CreatedAt       *StringFilter `json:"CreatedAt"`
@@ -284,7 +269,7 @@ type PersonInvestigationFilter struct {
 type PersonInvestigationInput struct {
 	ID              string              `json:"ID"`
 	Description     *string             `json:"Description"`
-	Results         ExaminationResults  `json:"Results"`
+	Results         ResultsModel        `json:"Results"`
 	InvestigationID string              `json:"InvestigationId"`
 	Investigation   *InvestigationInput `json:"Investigation"`
 	FollowUpID      *string             `json:"FollowUpId"`
@@ -331,6 +316,27 @@ type PersonMedicalHistoryList struct {
 	Pagination *Pagination             `json:"pagination"`
 }
 
+type PersonWorkupFilter struct {
+	WorkupID  *StringFilter `json:"WorkupId"`
+	CreatedAt *StringFilter `json:"CreatedAt"`
+	UpdatedAt *StringFilter `json:"UpdatedAt"`
+	DeletedAt *StringFilter `json:"DeletedAt"`
+}
+
+type PersonWorkupInput struct {
+	ID          string       `json:"ID"`
+	Description *string      `json:"Description"`
+	Results     ResultsModel `json:"Results"`
+	WorkupID    string       `json:"WorkupId"`
+	Workup      *WorkupInput `json:"Workup"`
+	FollowUpID  *string      `json:"FollowUpId"`
+}
+
+type PersonWorkupList struct {
+	Items      []*PersonWorkup `json:"items"`
+	Pagination *Pagination     `json:"pagination"`
+}
+
 type Prefix struct {
 	Classes *string `json:"classes"`
 }
@@ -375,6 +381,25 @@ type UserToken struct {
 	Token string `json:"token"`
 	Error *Error `json:"error"`
 	User  *User  `json:"user"`
+}
+
+type WorkupFilter struct {
+	Order *IntFilter `json:"Order"`
+}
+
+type WorkupInput struct {
+	ID        string            `json:"ID"`
+	Details   *FormDetailsInput `json:"Details"`
+	Procedure *ProcedureInput   `json:"Procedure"`
+	Order     *int              `json:"Order"`
+	CreatedAt *string           `json:"CreatedAt"`
+	UpdatedAt *string           `json:"UpdatedAt"`
+	DeletedAt *string           `json:"DeletedAt"`
+}
+
+type WorkupList struct {
+	Items      []*Workup   `json:"items"`
+	Pagination *Pagination `json:"pagination"`
 }
 
 type ComparisonType string

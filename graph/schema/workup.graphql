@@ -1,0 +1,32 @@
+type Workup implements DynamicFormInterface{
+    ID          : ID!
+    Details   : FormDetails
+    Procedure : Procedure
+    Order: Int
+    CreatedAt: String
+    UpdatedAt: String
+    DeletedAt: String
+}
+input WorkupInput{
+    ID          : ID!
+    Details   : FormDetailsInput
+    Procedure : ProcedureInput
+    Order: Int
+    CreatedAt: String
+    UpdatedAt: String
+    DeletedAt: String
+}
+
+input WorkupFilter {
+    Order: IntFilter
+}
+type WorkupList {
+    items: [Workup]
+    pagination: Pagination
+}
+
+extend type Query {
+    getWorkup(id: ID!): Workup
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listWorkups(filter: WorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): WorkupList
+}

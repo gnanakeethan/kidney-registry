@@ -1,33 +1,14 @@
 package models
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"reflect"
 	"strings"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
 )
-
-type ExaminationResults map[string]string
-
-// UnmarshalGQL implements the graphql.Unmarshaler interface
-func (y *ExaminationResults) UnmarshalGQL(v interface{}) error {
-	_, ok := v.(map[string]string)
-	if !ok {
-		return fmt.Errorf(" Examination result must be a map string, got: %v", v)
-	}
-	return nil
-}
-
-// MarshalGQL implements the graphql.Marshaler interface
-func (y ExaminationResults) MarshalGQL(w io.Writer) {
-	result, _ := json.Marshal(y)
-	w.Write(result)
-}
 
 type PersonExamination struct {
 	ID            string          `orm:"column(id);pk"`

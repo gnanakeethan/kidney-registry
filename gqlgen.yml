@@ -45,10 +45,13 @@ autobind:
 models:
   ExaminationResults:
     model:
-      - models.ExaminationResults
+      - models.ResultsModel
   InvestigationResults:
     model:
-      - models.ExaminationResults
+      - models.ResultsModel
+  WorkupResults:
+    model:
+      - models.ResultsModel
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.ID

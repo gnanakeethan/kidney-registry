@@ -10,54 +10,57 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type PersonInvestigations struct {
-	ID              string          `orm:"column(id);pk"`
-	Description     string          `orm:"column(description)"`
-	Details         string          `orm:"column(details);null"`
-	Results         string          `orm:"column(results);null"`
-	InvestigationId *Investigation  `orm:"column(investigation_id);rel(fk)"`
-	Procedure       string          `orm:"column(procedure);null"`
-	FollowUpId      *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
-	CreatedAt       time.Time       `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt       time.Time       `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt       time.Time       `orm:"column(deleted_at);null"`
+type PersonInvestigation struct {
+	ID            string         `orm:"column(id);pk"`
+	Description   string         `orm:"column(description)"`
+	Details       string         `orm:"column(details);null"`
+	Procedure     string         `orm:"column(procedure);null"`
+	Results       string         `orm:"column(results);null"`
+	Investigation *Investigation `orm:"column(investigation_id);rel(fk)"`
+	Person        *Person        `orm:"column(person_id);rel(fk)"`
+	ValidDays     int            `orm:"column(valid_days);null"`
+	ExpectedDate  time.Time      `orm:"column(expected_date);type(timestamp without time zone);null"`
+	ObtainedDate  time.Time      `orm:"column(obtained_date);type(timestamp without time zone);null"`
+	CreatedAt     time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt     time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt     time.Time      `orm:"column(deleted_at);null"`
 }
 
-func (PersonInvestigations) IsDynamicFormInterface() {}
+func (PersonInvestigation) IsDynamicFormInterface() {}
 
-func (t *PersonInvestigations) TableName() string {
+func (t *PersonInvestigation) TableName() string {
 	return "person_investigations"
 }
 
 func init() {
-	orm.RegisterModel(new(PersonInvestigations))
+	orm.RegisterModel(new(PersonInvestigation))
 }
 
-// AddPersonFollowUpsInvestigations insert a new PersonInvestigations into database and returns
+// AddPersonFollowUpsInvestigations insert a new PersonInvestigation into database and returns
 // last inserted ID on success.
-func AddPersonFollowUpsInvestigations(m *PersonInvestigations) (id int64, err error) {
+func AddPersonFollowUpsInvestigations(m *PersonInvestigation) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsInvestigationsById retrieves PersonInvestigations by ID. Returns error if
+// GetPersonFollowUpsInvestigationsById retrieves PersonInvestigation by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsInvestigationsById(id string) (v *PersonInvestigations, err error) {
+func GetPersonFollowUpsInvestigationsById(id string) (v *PersonInvestigation, err error) {
 	o := orm.NewOrm()
-	v = &PersonInvestigations{ID: id}
+	v = &PersonInvestigation{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllPersonFollowUpsInvestigations retrieves all PersonInvestigations matches certain condition. Returns empty list if
+// GetAllPersonFollowUpsInvestigations retrieves all PersonInvestigation matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonInvestigations))
+	qs := o.QueryTable(new(PersonInvestigation))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -107,7 +110,7 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 		}
 	}
 	
-	var l []PersonInvestigations
+	var l []PersonInvestigation
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -130,11 +133,11 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 	return nil, err
 }
 
-// UpdatePersonFollowUpsInvestigations updates PersonInvestigations by ID and returns error if
+// UpdatePersonFollowUpsInvestigations updates PersonInvestigation by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsInvestigationsById(m *PersonInvestigations) (err error) {
+func UpdatePersonFollowUpsInvestigationsById(m *PersonInvestigation) (err error) {
 	o := orm.NewOrm()
-	v := PersonInvestigations{ID: m.ID}
+	v := PersonInvestigation{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -145,15 +148,15 @@ func UpdatePersonFollowUpsInvestigationsById(m *PersonInvestigations) (err error
 	return
 }
 
-// DeletePersonFollowUpsInvestigations deletes PersonInvestigations by ID and returns error if
+// DeletePersonFollowUpsInvestigations deletes PersonInvestigation by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonFollowUpsInvestigations(id string) (err error) {
 	o := orm.NewOrm()
-	v := PersonInvestigations{ID: id}
+	v := PersonInvestigation{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonInvestigations{ID: id}); err == nil {
+		if num, err = o.Delete(&PersonInvestigation{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

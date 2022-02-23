@@ -10,7 +10,7 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type Workups struct {
+type Workup struct {
 	ID          string    `orm:"column(id);pk"`
 	Name        string    `orm:"column(name)"`
 	Description string    `orm:"column(description);null"`
@@ -20,39 +20,41 @@ type Workups struct {
 	DeletedAt   time.Time `orm:"column(deleted_at);null"`
 }
 
-func (t *Workups) TableName() string {
+func (Workup) IsDynamicFormInterface() {}
+
+func (t *Workup) TableName() string {
 	return "workups"
 }
 
 func init() {
-	orm.RegisterModel(new(Workups))
+	orm.RegisterModel(new(Workup))
 }
 
-// AddWorkups insert a new Workups into database and returns
+// AddWorkups insert a new Workup into database and returns
 // last inserted ID on success.
-func AddWorkups(m *Workups) (id int64, err error) {
+func AddWorkups(m *Workup) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetWorkupsById retrieves Workups by ID. Returns error if
+// GetWorkupsById retrieves Workup by ID. Returns error if
 // ID doesn't exist
-func GetWorkupsById(id string) (v *Workups, err error) {
+func GetWorkupsById(id string) (v *Workup, err error) {
 	o := orm.NewOrm()
-	v = &Workups{ID: id}
+	v = &Workup{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllWorkups retrieves all Workups matches certain condition. Returns empty list if
+// GetAllWorkups retrieves all Workup matches certain condition. Returns empty list if
 // no records exist
 func GetAllWorkups(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Workups))
+	qs := o.QueryTable(new(Workup))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -102,7 +104,7 @@ func GetAllWorkups(query map[string]string, fields []string, sortby []string, or
 		}
 	}
 	
-	var l []Workups
+	var l []Workup
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -125,11 +127,11 @@ func GetAllWorkups(query map[string]string, fields []string, sortby []string, or
 	return nil, err
 }
 
-// UpdateWorkups updates Workups by ID and returns error if
+// UpdateWorkups updates Workup by ID and returns error if
 // the record to be updated doesn't exist
-func UpdateWorkupsById(m *Workups) (err error) {
+func UpdateWorkupsById(m *Workup) (err error) {
 	o := orm.NewOrm()
-	v := Workups{ID: m.ID}
+	v := Workup{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -140,15 +142,15 @@ func UpdateWorkupsById(m *Workups) (err error) {
 	return
 }
 
-// DeleteWorkups deletes Workups by ID and returns error if
+// DeleteWorkups deletes Workup by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteWorkups(id string) (err error) {
 	o := orm.NewOrm()
-	v := Workups{ID: id}
+	v := Workup{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Workups{ID: id}); err == nil {
+		if num, err = o.Delete(&Workup{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

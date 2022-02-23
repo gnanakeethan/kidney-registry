@@ -10,52 +10,56 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type PersonWorkups struct {
-	ID             string    `orm:"column(id);pk"`
-	WorkupId       *Workups  `orm:"column(workup_id);rel(fk)"`
-	PersonId       *Person   `orm:"column(person_id);rel(fk)"`
-	Procedure      string    `orm:"column(procedure)"`
-	Comments       string    `orm:"column(comments);null"`
-	InitiationDate time.Time `orm:"column(initiation_date);type(timestamp without time zone);null"`
-	ActivationDate time.Time `orm:"column(activation_date);type(timestamp without time zone);null"`
-	CreatedAt      time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt      time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt      time.Time `orm:"column(deleted_at);null"`
+type PersonWorkup struct {
+	ID             string         `orm:"column(id);pk"`
+	Workup         *Workup        `orm:"column(workup_id);rel(fk)"`
+	Person         *Person        `orm:"column(person_id);rel(fk)"`
+	Procedure      orm.JsonbField `orm:"column(procedure)"`
+	Details        orm.JsonbField `orm:"column(details)"`
+	Results        orm.JsonbField `orm:"column(results)"`
+	Comments       string         `orm:"column(comments);null"`
+	InitiationDate time.Time      `orm:"column(initiation_date);type(timestamp without time zone);null"`
+	ActivationDate time.Time      `orm:"column(activation_date);type(timestamp without time zone);null"`
+	CreatedAt      time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt      time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt      time.Time      `orm:"column(deleted_at);null"`
 }
 
-func (t *PersonWorkups) TableName() string {
+func (PersonWorkup) IsDynamicFormInterface() {}
+
+func (t *PersonWorkup) TableName() string {
 	return "person_workups"
 }
 
 func init() {
-	orm.RegisterModel(new(PersonWorkups))
+	orm.RegisterModel(new(PersonWorkup))
 }
 
-// AddPersonWorkups insert a new PersonWorkups into database and returns
+// AddPersonWorkups insert a new PersonWorkup into database and returns
 // last inserted ID on success.
-func AddPersonWorkups(m *PersonWorkups) (id int64, err error) {
+func AddPersonWorkups(m *PersonWorkup) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonWorkupsById retrieves PersonWorkups by ID. Returns error if
+// GetPersonWorkupsById retrieves PersonWorkup by ID. Returns error if
 // ID doesn't exist
-func GetPersonWorkupsById(id string) (v *PersonWorkups, err error) {
+func GetPersonWorkupsById(id string) (v *PersonWorkup, err error) {
 	o := orm.NewOrm()
-	v = &PersonWorkups{ID: id}
+	v = &PersonWorkup{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllPersonWorkups retrieves all PersonWorkups matches certain condition. Returns empty list if
+// GetAllPersonWorkups retrieves all PersonWorkup matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersonWorkups(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonWorkups))
+	qs := o.QueryTable(new(PersonWorkup))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -105,7 +109,7 @@ func GetAllPersonWorkups(query map[string]string, fields []string, sortby []stri
 		}
 	}
 	
-	var l []PersonWorkups
+	var l []PersonWorkup
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -128,11 +132,11 @@ func GetAllPersonWorkups(query map[string]string, fields []string, sortby []stri
 	return nil, err
 }
 
-// UpdatePersonWorkups updates PersonWorkups by ID and returns error if
+// UpdatePersonWorkups updates PersonWorkup by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonWorkupsById(m *PersonWorkups) (err error) {
+func UpdatePersonWorkupsById(m *PersonWorkup) (err error) {
 	o := orm.NewOrm()
-	v := PersonWorkups{ID: m.ID}
+	v := PersonWorkup{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -143,15 +147,15 @@ func UpdatePersonWorkupsById(m *PersonWorkups) (err error) {
 	return
 }
 
-// DeletePersonWorkups deletes PersonWorkups by ID and returns error if
+// DeletePersonWorkups deletes PersonWorkup by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonWorkups(id string) (err error) {
 	o := orm.NewOrm()
-	v := PersonWorkups{ID: id}
+	v := PersonWorkup{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonWorkups{ID: id}); err == nil {
+		if num, err = o.Delete(&PersonWorkup{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
