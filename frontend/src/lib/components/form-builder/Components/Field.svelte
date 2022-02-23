@@ -97,15 +97,11 @@
 		classes={field.prefix
 			? field.prefix.classes
 				? field.prefix.classes
-				: 'form-group'
-			: 'form-group'}
+				: 'form-group w-full'
+			: 'form-group w-full'}
 	>
 		<!-- Label -->
-		<div
-			class="flex w-full items-center justify-between"
-			class:flex-row={inline}
-			class:flex-col={!inline}
-		>
+		<div class="flex w-full" class:flex-row={inline} class:flex-col={!inline}>
 			{#if field.attributes}
 				{#if field.attributes.label}
 					<label for={field.id} class="label text-md mt-2 w-full font-bold"

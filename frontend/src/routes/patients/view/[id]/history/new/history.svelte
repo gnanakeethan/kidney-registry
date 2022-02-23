@@ -1,5 +1,11 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { recipientId } from '../../../../../../lib/state/recipient';
 	import History from './_history.svelte';
+
+	function GoToNext() {
+		goto('/patients/view/' + recipientId + '/history/new/medical');
+	}
 
 	let historyList = [null];
 
@@ -22,5 +28,6 @@
 	<div>
 		<button class="float-right m-4 bg-green-400 p-4" on:click={Save}>Save All</button>
 		<button class="float-right m-4 bg-green-400 p-4" on:click={add}>Add</button>
+		<button class="float-right m-4 bg-yellow-400 p-4" on:click={GoToNext}>Next</button>
 	</div>
 </div>

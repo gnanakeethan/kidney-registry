@@ -7,17 +7,17 @@
 	import { onMount } from 'svelte';
 	// import { Person } from 'lib/graphql/generated';
 	import {
+		AddPatientDocument,
+		AddPatientMutation,
 		NewPatientDocument,
-		NewPatientMutation,
-		UpdatePatientDocument,
-		UpdatePatientMutation
+		NewPatientMutation
 	} from '../../lib/graphql/generated';
 
 	const newPatient = mutation<NewPatientMutation>({
 		query: NewPatientDocument
 	});
-	const updatePatient = mutation<UpdatePatientMutation>({
-		query: UpdatePatientDocument
+	const addPatient = mutation<AddPatientMutation>({
+		query: AddPatientDocument
 	});
 	onMount(() => {
 		newPatient<NewPatientDocument>(null).then((root: { data: NewPatientDocument }) => {
@@ -205,10 +205,10 @@
 		console.log(isValidForm);
 		if (isValidForm) {
 			message = 'Saving Data....';
-			updatePatient({ patientInput: values }).then((result) => {
+			addPatient({ patientInput: values }).then((result) => {
 				console.log(result);
-				alert('SAved');
-				goto('/patients/view/' + result.data.updatePatient.ID);
+				alert('Saved');
+				goto('/patients/view/' + result.data.addPatient.ID);
 			});
 		} else {
 			message =

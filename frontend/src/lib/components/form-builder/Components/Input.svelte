@@ -49,6 +49,7 @@
 	id={field.attributes.id}
 	max={field.attributes.max}
 	min={field.attributes.min}
+	minlength="10"
 	name={field.name}
 	on:input={onChangerValue}
 	placeholder={field.attributes.placeholder}
