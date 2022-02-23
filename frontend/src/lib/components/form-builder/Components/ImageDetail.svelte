@@ -98,6 +98,9 @@
 				>
 				<div class="left-2 top-2">
 					<div>
+						<div class="bg-blue-500 px-4 font-bold text-white">
+							{i + 1}
+						</div>
 						<textarea
 							placeholder="Type here ..."
 							class="relative mx-auto rounded border-2   indent-2 text-sm text-black"
@@ -112,7 +115,15 @@
 	<div class="flex flex-col">
 		{#each items as item, i}
 			<div class="m-1 flex flex-row justify-between rounded border border-gray-300 p-2">
-				<div class="w-11/12">{i + 1}: {item.data.description}</div>
+				<div class="w-11/12">
+					{i + 1}:
+					<textarea
+						placeholder="Type here ..."
+						rows="3"
+						class="w-full flex-grow rounded border-2 indent-2 text-sm text-black"
+						bind:value={item.data.description}
+					/>
+				</div>
 				<button
 					on:click={() => removeItem(i)}
 					class=" h-4 w-4 rounded-full bg-red-500 text-center text-xs text-white">X</button

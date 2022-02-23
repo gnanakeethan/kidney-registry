@@ -250,7 +250,7 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap p-2">
+<div class="flex h-full w-full flex-wrap p-2">
 	{#if formSet}
 		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
@@ -261,8 +261,8 @@
 			<div class="flex w-full flex-col items-center justify-between">
 				<Field inline={true} bind:isValidForm bind:values {fields} />
 				{message}
-				<button class="rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
-					>Save
+				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit">
+					Save
 				</button>
 			</div>
 		</form>

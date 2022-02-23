@@ -362,7 +362,7 @@
 			<div class="flex w-full flex-col items-center justify-between">
 				<Field bind:isValidForm bind:values {fields} />
 				{message}
-				<button class="rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
+				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
 					>Save
 				</button>
 			</div>

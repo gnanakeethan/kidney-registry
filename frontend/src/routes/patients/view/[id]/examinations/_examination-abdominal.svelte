@@ -19,86 +19,38 @@
 		procedure: {
 			fields: [
 				{
-					type: 'input', // required
-					name: 'RespiratoryRate', // required
-					value: '30', // required
-					prefix: { classes: ['mb-2 w-full'] },
+					type: 'textarea', // required
+					name: 'Findings', // required
+					value: '', // optional
+
+					prefix: { classes: ['mx-2 flex-grow w-full'] },
 					attributes: {
-						id: 'Type', // required
-						classes: ['form-input rounded'], // optional
-						label: 'Respiratory Rate:', // optional
+						id: 'id-field', // required
+						classes: 'form-textarea rounded w-full my-2', // optional
+						label: 'Findings', // optional
 						disabled: false, // optional
-						type: 'number',
-						min: 1,
-						step: 1,
-						max: 250
+						readonly: false, // optional
+						rows: 1, // optional
+						cols: null // optional
 					}
 				},
+
 				{
 					type: 'imagedetail', // required
-					name: 'RespiratoryDiagram', // required
+					name: 'AbdominalDiagram', // required
 					value: '30', // required
 					prefix: { classes: ['mb-2 w-full'] },
 					attributes: {
 						id: 'Type', // required
 						classes: ['form-input rounded'], // optional
-						label: 'Respiratory Rate:', // optional
+						label: 'Abdominal Diagram Notes:', // optional
 						disabled: false, // optional
 						type: 'number',
 						image:
-							'https://kidney-project-lka-public-media.s3.ap-southeast-1.amazonaws.com/lungs-diagram.svg',
+							'https://kidney-project-lka-public-media.s3.ap-southeast-1.amazonaws.com/abdominal.png',
 						min: 1,
 						step: 1,
 						max: 250
-					}
-				},
-				{
-					type: 'input', // required
-					name: 'SpO2', // required
-					value: '99', // required
-					prefix: { classes: ['mb-2 w-full'] },
-					attributes: {
-						id: 'Type', // required
-						classes: ['form-input rounded'], // optional
-						label: 'SpO2:', // optional
-						disabled: false, // optional
-						type: 'number',
-						min: 0,
-						step: 1,
-						max: 100
-					}
-				},
-				{
-					type: 'textarea', // required
-					name: 'Auscultation', // required
-					value: '', // optional
-
-					prefix: { classes: ['mx-2 flex-grow w-full'] },
-					attributes: {
-						id: 'id-field', // required
-						classes: 'form-textarea rounded w-full my-2', // optional
-						label: 'Auscultation', // optional
-						disabled: false, // optional
-						readonly: false, // optional
-						rows: 1, // optional
-						cols: null // optional
-					}
-				},
-
-				{
-					type: 'textarea', // required
-					name: 'OtherFindings', // required
-					value: '', // optional
-
-					prefix: { classes: ['mx-2 flex-grow w-full'] },
-					attributes: {
-						id: 'id-field', // required
-						classes: 'form-textarea rounded w-full my-2', // optional
-						label: 'Other Findings', // optional
-						disabled: false, // optional
-						readonly: false, // optional
-						rows: 1, // optional
-						cols: null // optional
 					}
 				}
 			]
