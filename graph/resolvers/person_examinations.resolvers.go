@@ -58,6 +58,10 @@ func (r *personExaminationResolver) DeletedAt(ctx context.Context, obj *models.P
 	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
 }
 
+func (r *queryResolver) GetPersonExamination(ctx context.Context, id string) (*models.PersonExamination, error) {
+	return models.GetPersonExaminationsById(id)
+}
+
 func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
 	return models.ListPersonExaminations(ctx, filter, page, limit, sortBy, orderBy)
 }

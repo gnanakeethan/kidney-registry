@@ -51,6 +51,10 @@ func (r *personWorkupResolver) DeletedAt(ctx context.Context, obj *models.Person
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error) {
 	panic(fmt.Errorf("not implemented"))
 }

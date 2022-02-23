@@ -330,6 +330,9 @@ type ComplexityRoot struct {
 		GetExamination             func(childComplexity int, id string) int
 		GetInvestigation           func(childComplexity int, id string) int
 		GetPatient                 func(childComplexity int, id string) int
+		GetPersonExamination       func(childComplexity int, id string) int
+		GetPersonInvestigation     func(childComplexity int, id string) int
+		GetPersonWorkup            func(childComplexity int, id string) int
 		GetWorkup                  func(childComplexity int, id string) int
 		ListExaminations           func(childComplexity int, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListInvestigations         func(childComplexity int, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
@@ -477,12 +480,15 @@ type QueryResolver interface {
 	ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.InvestigationList, error)
 	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error)
 	GetPatient(ctx context.Context, id string) (*models.Person, error)
+	GetPersonExamination(ctx context.Context, id string) (*models.PersonExamination, error)
 	ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error)
 	PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
 	PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
+	GetPersonInvestigation(ctx context.Context, id string) (*models.PersonInvestigation, error)
 	ListPersonInvestigations(ctx context.Context, personID string, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error)
 	PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error)
 	ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
+	GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error)
 	ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error)
 	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
 	GetWorkup(ctx context.Context, id string) (*models.Workup, error)
@@ -1893,6 +1899,42 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetPatient(childComplexity, args["ID"].(string)), true
 
+	case "Query.getPersonExamination":
+		if e.complexity.Query.GetPersonExamination == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getPersonExamination_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetPersonExamination(childComplexity, args["ID"].(string)), true
+
+	case "Query.getPersonInvestigation":
+		if e.complexity.Query.GetPersonInvestigation == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getPersonInvestigation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetPersonInvestigation(childComplexity, args["ID"].(string)), true
+
+	case "Query.getPersonWorkup":
+		if e.complexity.Query.GetPersonWorkup == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getPersonWorkup_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetPersonWorkup(childComplexity, args["ID"].(string)), true
+
 	case "Query.getWorkup":
 		if e.complexity.Query.GetWorkup == nil {
 			break
@@ -2646,6 +2688,7 @@ extend type Mutation {
     deletePersonExamination(ID: ID!): ID
 }
 extend type Query {
+    getPersonExamination(ID: ID!): PersonExamination
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listPersonExaminations(PersonID: ID!,filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
 }`, BuiltIn: false},
@@ -2725,6 +2768,7 @@ extend type Mutation {
     deletePersonInvestigation(ID: ID!): ID
 }
 extend type Query {
+    getPersonInvestigation(ID: ID!): PersonInvestigation
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listPersonInvestigations(PersonID: ID!,filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
 }`, BuiltIn: false},
@@ -2838,6 +2882,7 @@ extend type Mutation {
     deletePersonWorkup(ID: ID!): ID
 }
 extend type Query {
+    getPersonWorkup(ID: ID!): PersonWorkup
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
 }`, BuiltIn: false},
@@ -3318,6 +3363,51 @@ func (ec *executionContext) field_Query_getInvestigation_args(ctx context.Contex
 }
 
 func (ec *executionContext) field_Query_getPatient_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["ID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getPersonExamination_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["ID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getPersonInvestigation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["ID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getPersonWorkup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -10056,6 +10146,45 @@ func (ec *executionContext) _Query_getPatient(ctx context.Context, field graphql
 	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query_getPersonExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_getPersonExamination_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetPersonExamination(rctx, args["ID"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonExamination)
+	fc.Result = res
+	return ec.marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_listPersonExaminations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10173,6 +10302,45 @@ func (ec *executionContext) _Query_personFollowUps(ctx context.Context, field gr
 	return ec.marshalOPersonFollowUpList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpList(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query_getPersonInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_getPersonInvestigation_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetPersonInvestigation(rctx, args["ID"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonInvestigation)
+	fc.Result = res
+	return ec.marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_listPersonInvestigations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10288,6 +10456,45 @@ func (ec *executionContext) _Query_listPersonMedicalHistories(ctx context.Contex
 	res := resTmp.(*models.PersonMedicalHistoryList)
 	fc.Result = res
 	return ec.marshalOPersonMedicalHistoryList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryList(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_getPersonWorkup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_getPersonWorkup_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetPersonWorkup(rctx, args["ID"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonWorkup)
+	fc.Result = res
+	return ec.marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonWorkups(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -16535,6 +16742,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "getPersonExamination":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getPersonExamination(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "listPersonExaminations":
 			field := field
 
@@ -16595,6 +16822,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "getPersonInvestigation":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getPersonInvestigation(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "listPersonInvestigations":
 			field := field
 
@@ -16645,6 +16892,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_listPersonMedicalHistories(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "getPersonWorkup":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getPersonWorkup(ctx, field)
 				return res
 			}
 

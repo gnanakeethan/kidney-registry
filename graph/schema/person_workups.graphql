@@ -37,6 +37,7 @@ extend type Mutation {
     deletePersonWorkup(ID: ID!): ID
 }
 extend type Query {
+    getPersonWorkup(ID: ID!): PersonWorkup
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
 }
