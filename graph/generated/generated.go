@@ -503,7 +503,7 @@ type UserResolver interface {
 type WorkupResolver interface {
 	Details(ctx context.Context, obj *models.Workup) (*models.FormDetails, error)
 	Procedure(ctx context.Context, obj *models.Workup) (*models.Procedure, error)
-	Order(ctx context.Context, obj *models.Workup) (*int, error)
+
 	CreatedAt(ctx context.Context, obj *models.Workup) (*string, error)
 	UpdatedAt(ctx context.Context, obj *models.Workup) (*string, error)
 	DeletedAt(ctx context.Context, obj *models.Workup) (*string, error)
@@ -11119,14 +11119,14 @@ func (ec *executionContext) _Workup_Order(ctx context.Context, field graphql.Col
 		Object:     "Workup",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Workup().Order(rctx, obj)
+		return obj.Order, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11135,9 +11135,9 @@ func (ec *executionContext) _Workup_Order(ctx context.Context, field graphql.Col
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalOInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Workup_CreatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Workup) (ret graphql.Marshaler) {
@@ -17280,22 +17280,12 @@ func (ec *executionContext) _Workup(ctx context.Context, sel ast.SelectionSet, o
 
 			})
 		case "Order":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Workup_Order(ctx, field, obj)
-				return res
+				return ec._Workup_Order(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "CreatedAt":
 			field := field
 

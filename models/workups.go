@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -8,6 +9,7 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type Workup struct {
@@ -16,6 +18,7 @@ type Workup struct {
 	Description string         `orm:"column(description);null"`
 	Procedure   orm.JsonbField `orm:"column(procedure);null"`
 	Details     orm.JsonbField `orm:"column(details);null"`
+	Order       int            `orm:"column(order)"`
 	CreatedAt   time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
 	UpdatedAt   time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
 	DeletedAt   time.Time      `orm:"column(deleted_at);null"`
@@ -48,6 +51,28 @@ func GetWorkupsById(id string) (v *Workup, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+func ListWorkups(ctx context.Context, filter *WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*WorkupList, error) {
+	workup, workups := Workup{}, []*Workup{}
+	filterPtr := WorkupFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, workup, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(workup, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&workups, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &WorkupList{
+		Items:      workups,
+		Pagination: pagination,
+	}, nil
 }
 
 // GetAllWorkups retrieves all Workup matches certain condition. Returns empty list if
