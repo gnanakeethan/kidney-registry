@@ -114,4 +114,5 @@ extend type Query {
 extend type Mutation {
     newPatient: Person
     updatePatient(input:PersonInput) : Person
+    addPatient(input:PersonInput) : Person
 }

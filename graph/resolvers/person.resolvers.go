@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -31,6 +32,10 @@ func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, erro
 
 func (r *mutationResolver) UpdatePatient(ctx context.Context, input *models.PersonInput) (*models.Person, error) {
 	return models.UpdatePatient(input)
+}
+
+func (r *mutationResolver) AddPatient(ctx context.Context, input *models.PersonInput) (*models.Person, error) {
+	return models.AddPatient(input)
 }
 
 func (r *personResolver) DateOfBirth(ctx context.Context, obj *models.Person) (*string, error) {

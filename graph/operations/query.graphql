@@ -69,3 +69,15 @@ query ListExaminations {
         }
     }
 }
+
+query GetExamination ($id: ID!){
+    getExamination(id: $id) {
+        ID
+        Details {
+            Name
+            Inline
+            Description
+        }
+        ...Procedure
+    }
+}

@@ -9,16 +9,17 @@ import (
 )
 
 type Attributes struct {
-	ID           *string   `json:"id"`
-	Max          *int      `json:"max"`
-	Min          *int      `json:"min"`
-	Step         *int      `json:"step"`
-	Type         *string   `json:"type"`
-	Label        *string   `json:"label"`
-	Disabled     *bool     `json:"disabled"`
-	Classes      []*string `json:"classes"`
-	LabelClasses []*string `json:"labelClasses"`
-	FieldName    *string   `json:"fieldName"`
+	ID           *string `json:"id"`
+	Max          *int    `json:"max"`
+	Min          *int    `json:"min"`
+	Step         *int    `json:"step"`
+	Type         *string `json:"type"`
+	Label        *string `json:"label"`
+	Disabled     *bool   `json:"disabled"`
+	Classes      *string `json:"classes"`
+	LabelClasses *string `json:"labelClasses"`
+	FieldName    *string `json:"fieldName"`
+	Image        *string `json:"image"`
 }
 
 type AttributesInput struct {
@@ -45,6 +46,7 @@ type Error struct {
 type ExaminationDetails struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
+	Inline      *bool   `json:"Inline"`
 }
 
 type ExaminationDetailsInput struct {

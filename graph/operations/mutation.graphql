@@ -26,6 +26,13 @@ mutation UpdatePatient($patientInput: PersonInput!) {
     }
 }
 
+mutation AddPatient($patientInput: PersonInput!) {
+    addPatient(input: $patientInput) {
+        ...PersonFields
+        Age
+    }
+}
+
 
 mutation NewHistory($input: PersonMedicalHistoryInput!) {
     createPersonMedicalHistory(input: $input) {

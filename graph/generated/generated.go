@@ -56,6 +56,7 @@ type ComplexityRoot struct {
 		Disabled     func(childComplexity int) int
 		FieldName    func(childComplexity int) int
 		ID           func(childComplexity int) int
+		Image        func(childComplexity int) int
 		Label        func(childComplexity int) int
 		LabelClasses func(childComplexity int) int
 		Max          func(childComplexity int) int
@@ -86,6 +87,7 @@ type ComplexityRoot struct {
 
 	ExaminationDetails struct {
 		Description func(childComplexity int) int
+		Inline      func(childComplexity int) int
 		Name        func(childComplexity int) int
 	}
 
@@ -139,6 +141,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		AddPatient                 func(childComplexity int, input *models.PersonInput) int
 		CreatePersonExamination    func(childComplexity int, input models.PersonExaminationInput) int
 		CreatePersonFollowUp       func(childComplexity int, input models.PersonFollowUpInput) int
 		CreatePersonMedicalHistory func(childComplexity int, input models.PersonMedicalHistoryInput) int
@@ -307,6 +310,7 @@ type MutationResolver interface {
 	UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error)
 	NewPatient(ctx context.Context) (*models.Person, error)
 	UpdatePatient(ctx context.Context, input *models.PersonInput) (*models.Person, error)
+	AddPatient(ctx context.Context, input *models.PersonInput) (*models.Person, error)
 	CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error)
 	UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error)
 	DeletePersonExamination(ctx context.Context, id string) (*string, error)
@@ -414,6 +418,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Attributes.ID(childComplexity), true
+
+	case "Attributes.image":
+		if e.complexity.Attributes.Image == nil {
+			break
+		}
+
+		return e.complexity.Attributes.Image(childComplexity), true
 
 	case "Attributes.label":
 		if e.complexity.Attributes.Label == nil {
@@ -540,6 +551,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ExaminationDetails.Description(childComplexity), true
+
+	case "ExaminationDetails.Inline":
+		if e.complexity.ExaminationDetails.Inline == nil {
+			break
+		}
+
+		return e.complexity.ExaminationDetails.Inline(childComplexity), true
 
 	case "ExaminationDetails.Name":
 		if e.complexity.ExaminationDetails.Name == nil {
@@ -722,6 +740,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MenuItem.Route(childComplexity), true
+
+	case "Mutation.addPatient":
+		if e.complexity.Mutation.AddPatient == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_addPatient_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AddPatient(childComplexity, args["input"].(*models.PersonInput)), true
 
 	case "Mutation.createPersonExamination":
 		if e.complexity.Mutation.CreatePersonExamination == nil {
@@ -1739,6 +1769,7 @@ extend type Mutation {
 type ExaminationDetails {
     Name: String
     Description:String
+    Inline: Boolean
 }
 input ExaminationDetailsInput {
     Name: String
@@ -1752,9 +1783,10 @@ type Attributes {
     type: String
     label: String
     disabled: Boolean
-    classes: [String]
-    labelClasses: [String]
+    classes: String
+    labelClasses: String
     fieldName: String
+    image: String
 }
 input AttributesInput {
     id: String
@@ -1959,6 +1991,7 @@ extend type Query {
 extend type Mutation {
     newPatient: Person
     updatePatient(input:PersonInput) : Person
+    addPatient(input:PersonInput) : Person
 }`, BuiltIn: false},
 	{Name: "graph/schema/person_examinations.graphql", Input: `type PersonExamination {
     ID : ID!
@@ -2136,6 +2169,21 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation_addPatient_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.PersonInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation_createPersonExamination_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -3098,9 +3146,9 @@ func (ec *executionContext) _Attributes_classes(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Attributes_labelClasses(ctx context.Context, field graphql.CollectedField, obj *models.Attributes) (ret graphql.Marshaler) {
@@ -3130,9 +3178,9 @@ func (ec *executionContext) _Attributes_labelClasses(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Attributes_fieldName(ctx context.Context, field graphql.CollectedField, obj *models.Attributes) (ret graphql.Marshaler) {
@@ -3154,6 +3202,38 @@ func (ec *executionContext) _Attributes_fieldName(ctx context.Context, field gra
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.FieldName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Attributes_image(ctx context.Context, field graphql.CollectedField, obj *models.Attributes) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Attributes",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Image, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3590,6 +3670,38 @@ func (ec *executionContext) _ExaminationDetails_Description(ctx context.Context,
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ExaminationDetails_Inline(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationDetails) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "ExaminationDetails",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Inline, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ExaminationList_items(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationList) (ret graphql.Marshaler) {
@@ -4524,6 +4636,45 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdatePatient(rctx, args["input"].(*models.PersonInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Person)
+	fc.Result = res
+	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_addPatient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_addPatient_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddPatient(rctx, args["input"].(*models.PersonInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10489,6 +10640,13 @@ func (ec *executionContext) _Attributes(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+		case "image":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Attributes_image(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -10719,6 +10877,13 @@ func (ec *executionContext) _ExaminationDetails(ctx context.Context, sel ast.Sel
 		case "Description":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._ExaminationDetails_Description(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "Inline":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._ExaminationDetails_Inline(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -11123,6 +11288,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePatient":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePatient(ctx, field)
+			}
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
+
+		case "addPatient":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_addPatient(ctx, field)
 			}
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)

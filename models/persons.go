@@ -89,10 +89,7 @@ func UpdatePersonsById(m *Person) (err error) {
 				return err2
 			}
 		}
-	} else if num, err := o.Insert(m); err == nil {
-		fmt.Println("Number of records updated in database:", num)
 	}
-	
 	return
 }
 
@@ -156,6 +153,34 @@ func UpdatePatient(input *PersonInput) (*Person, error) {
 	}
 	pretty.Println(person)
 	if err := UpdatePersonsById(person); err == nil {
+		return person, nil
+	} else {
+		return nil, err
+	}
+}
+func AddPatient(input *PersonInput) (*Person, error) {
+	location, _ := time.LoadLocation("Asia/Colombo")
+	dateOfBirth, _ := time.ParseInLocation("2006-01-02", *input.DateOfBirth, location)
+	person := &Person{
+		ID:                  input.ID,
+		DateOfBirth:         dateOfBirth,
+		Gender:              *input.Gender,
+		MaritalStatus:       *input.MaritalStatus,
+		Phn:                 time.Now().Format("20060102") + randString(3),
+		PersonType:          *input.PersonType,
+		Status:              *input.Status,
+		RecordStatus:        *input.RecordStatus,
+		FirstName:           *input.FirstName,
+		LastName:            *input.LastName,
+		Address:             *input.Address,
+		Ethnicity:           *input.Ethnicity,
+		PrimaryRenalDisease: *input.PrimaryRenalDisease,
+		Weight:              *input.Weight,
+		Height:              *input.Height,
+		ContactNo:           *input.ContactNo,
+	}
+	pretty.Println(person)
+	if _, err := AddPersons(person); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
 		return person, nil
 	} else {
 		return nil, err
