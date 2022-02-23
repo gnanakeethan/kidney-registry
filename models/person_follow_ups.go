@@ -10,17 +10,21 @@ import (
 )
 
 type PersonFollowUp struct {
-	ID            string               `orm:"column(id);pk"`
-	ClinicNo      string               `orm:"column(clinic_no)"`
-	Description   string               `orm:"column(description);null"`
-	Person        *Person              `orm:"column(person_id);rel(fk)"`
-	Complaints    string               `orm:"column(complaints);null"`
-	RenalBiopsies string               `orm:"column(renal_biopsies);null"`
-	CaseStatus    string               `orm:"column(case_status);null"`
-	DonationId    *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
-	CreatedAt     time.Time            `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt     time.Time            `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt     time.Time            `orm:"column(deleted_at);null"`
+	ID                string               `orm:"column(id);pk"`
+	ClinicNo          string               `orm:"column(clinic_no)"`
+	Description       string               `orm:"column(description);null"`
+	Person            *Person              `orm:"column(person_id);rel(fk)"`
+	Complaints        string               `orm:"column(complaints);null"`
+	RenalBiopsies     string               `orm:"column(renal_biopsies);null"`
+	CaseStatus        string               `orm:"column(case_status);null"`
+	DonationId        *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
+	DialysisPlan      orm.JsonbField       `orm:"column(dialysis_plan);"`
+	OtherFindings     string               `orm:"column(other_findings);null"`
+	Referrals         string               `orm:"column(referrals);null"`
+	ConsultantOpinion string               `orm:"column(consultant_opinion);null"`
+	CreatedAt         time.Time            `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt         time.Time            `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt         time.Time            `orm:"column(deleted_at);null"`
 }
 
 func (t *PersonFollowUp) TableName() string {
