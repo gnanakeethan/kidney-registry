@@ -13,7 +13,7 @@
 		order: number;
 	} = {
 		details: {
-			name: 'Respiratory Examination',
+			name: 'Abdominal Examination',
 			description: 'Description'
 		},
 		procedure: {
