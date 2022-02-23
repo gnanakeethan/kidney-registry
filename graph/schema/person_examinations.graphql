@@ -1,10 +1,10 @@
 type PersonExamination {
     ID : ID!
     Description: String
-    Details: ExaminationDetails
+    Details: FormDetails
     Results: ExaminationResults
     ExaminationId : ID!
-    Procedure: ExaminationProcedure
+    Procedure: Procedure
     FollowUpId: ID
     CreatedAt: String
     UpdatedAt:String

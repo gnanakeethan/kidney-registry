@@ -15,7 +15,7 @@ type PersonFollowUpsInvestigations struct {
 	Description     string          `orm:"column(description)"`
 	Details         string          `orm:"column(details);null"`
 	Results         string          `orm:"column(results);null"`
-	InvestigationId *Investigations `orm:"column(investigation_id);rel(fk)"`
+	InvestigationId *Investigation  `orm:"column(investigation_id);rel(fk)"`
 	Procedure       string          `orm:"column(procedure);null"`
 	FollowUpId      *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
 	CreatedAt       time.Time       `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`

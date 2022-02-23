@@ -22,6 +22,8 @@ type Examination struct {
 	DeletedAt time.Time      `orm:"column(deleted_at);null"`
 }
 
+func (Examination) IsDynamicFormInterface() {}
+
 func (t *Examination) TableName() string {
 	return "examinations"
 }

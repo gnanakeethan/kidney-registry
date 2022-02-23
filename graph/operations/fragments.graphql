@@ -6,7 +6,8 @@ fragment Pagination on Pagination {
     itemsPerPage
 }
 
-fragment Procedure on Examination {
+
+fragment Procedure on DynamicFormInterface {
     Procedure {
         fields {
             name
@@ -29,6 +30,10 @@ fragment Procedure on Examination {
                 image
             }
             extra {
+                options {
+                    title
+                    value
+                }
                 items {
                     id
                     title

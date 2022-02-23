@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -8,50 +9,76 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
-type Investigations struct {
-	ID        string    `orm:"column(id);pk"`
-	Details   string    `orm:"column(details);null"`
-	Procedure string    `orm:"column(procedure);null"`
-	CreatedAt time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt time.Time `orm:"column(deleted_at);null"`
+type Investigation struct {
+	ID        string         `orm:"column(id);pk"`
+	Details   orm.JsonbField `orm:"column(details);null"`
+	Procedure orm.JsonbField `orm:"column(procedure);null"`
+	Order     int            `orm:"column(order);null"`
+	CreatedAt time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt time.Time      `orm:"column(deleted_at);null"`
 }
 
-func (t *Investigations) TableName() string {
+func (Investigation) IsDynamicFormInterface() {}
+
+func (t *Investigation) TableName() string {
 	return "investigations"
 }
 
 func init() {
-	orm.RegisterModel(new(Investigations))
+	orm.RegisterModel(new(Investigation))
 }
 
-// AddInvestigations insert a new Investigations into database and returns
+// AddInvestigations insert a new Investigation into database and returns
 // last inserted ID on success.
-func AddInvestigations(m *Investigations) (id int64, err error) {
+func AddInvestigations(m *Investigation) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetInvestigationsById retrieves Investigations by ID. Returns error if
+// GetInvestigationsById retrieves Investigation by ID. Returns error if
 // ID doesn't exist
-func GetInvestigationsById(id string) (v *Investigations, err error) {
+func GetInvestigationsById(id string) (v *Investigation, err error) {
 	o := orm.NewOrm()
-	v = &Investigations{ID: id}
+	v = &Investigation{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllInvestigations retrieves all Investigations matches certain condition. Returns empty list if
+func ListInvestigations(ctx context.Context, filter *InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*InvestigationList, error) {
+	investigation, investigations := Investigation{}, []*Investigation{}
+	filterPtr := InvestigationFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, investigation, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(investigation, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&investigations, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &InvestigationList{
+		Items:      investigations,
+		Pagination: pagination,
+	}, nil
+}
+
+// GetAllInvestigations retrieves all Investigation matches certain condition. Returns empty list if
 // no records exist
 func GetAllInvestigations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Investigations))
+	qs := o.QueryTable(new(Investigation))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -101,7 +128,7 @@ func GetAllInvestigations(query map[string]string, fields []string, sortby []str
 		}
 	}
 	
-	var l []Investigations
+	var l []Investigation
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -124,11 +151,11 @@ func GetAllInvestigations(query map[string]string, fields []string, sortby []str
 	return nil, err
 }
 
-// UpdateInvestigations updates Investigations by ID and returns error if
+// UpdateInvestigations updates Investigation by ID and returns error if
 // the record to be updated doesn't exist
-func UpdateInvestigationsById(m *Investigations) (err error) {
+func UpdateInvestigationsById(m *Investigation) (err error) {
 	o := orm.NewOrm()
-	v := Investigations{ID: m.ID}
+	v := Investigation{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -139,15 +166,15 @@ func UpdateInvestigationsById(m *Investigations) (err error) {
 	return
 }
 
-// DeleteInvestigations deletes Investigations by ID and returns error if
+// DeleteInvestigations deletes Investigation by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteInvestigations(id string) (err error) {
 	o := orm.NewOrm()
-	v := Investigations{ID: id}
+	v := Investigation{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Investigations{ID: id}); err == nil {
+		if num, err = o.Delete(&Investigation{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

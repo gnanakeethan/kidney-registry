@@ -4,20 +4,20 @@
 	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { operationStore, query } from '@urql/svelte';
-	import { Examination, GetExaminationDocument } from '../../../../../lib/graphql/generated';
+	import { GetInvestigationDocument, Investigation } from '../../../../../lib/graphql/generated';
 
-	export let examinationId = '';
-	let examination: Examination;
+	export let investigationId = '';
+	let investigation: Investigation;
 
-	if (examinationId != '') {
+	if (investigationId != '') {
 		const result = query(
-			operationStore(GetExaminationDocument, {
-				id: examinationId
+			operationStore(GetInvestigationDocument, {
+				id: investigationId
 			})
 		).subscribe(({ data }) => {
-			if (data?.getExamination) {
-				examination = data?.getExamination;
-				console.log(examination);
+			if (data?.getInvestigation) {
+				investigation = data?.getInvestigation;
+				console.log(investigation);
 			}
 		});
 	}
@@ -25,14 +25,14 @@
 	let values = {};
 	export let i = 0;
 	export let others = 1;
-	$: formSet = !!$recipient.ID && !!examination?.ID;
+	$: formSet = !!$recipient.ID && !!investigation?.ID;
 	let baseFields = [];
 	let fields = [];
-	$: if (examination !== undefined) {
-		fields = [...baseFields, ...examination.Procedure.fields];
+	$: if (investigation !== undefined) {
+		fields = [...baseFields, ...investigation.Procedure.fields];
 	}
 
-	$: if (formSet && examination !== undefined && examination.ID !== undefined) {
+	$: if (formSet && investigation !== undefined && investigation.ID !== undefined) {
 		baseFields = [
 			{
 				type: 'input',
@@ -51,8 +51,8 @@
 			},
 			{
 				type: 'input',
-				name: 'Examination.ID',
-				value: examination.ID,
+				name: 'Investigation.ID',
+				value: investigation.ID,
 				prefix: {
 					classes: ['hidden flex flex-col items-center justify-between']
 				},
@@ -134,12 +134,12 @@
 		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
 				<div class="my-8 text-xl font-bold capitalize">
-					{examination?.Details?.Name?.toString().toLowerCase()} For {$recipient.FirstName}
+					{investigation?.Details?.Name?.toString()} For {$recipient.FirstName}
 				</div>
 			{/if}
 			<div class="flex w-full flex-col items-center justify-between">
 				<Field
-					inline={examination?.Details?.Inline ?? false}
+					inline={investigation?.Details?.Inline ?? false}
 					bind:isValidForm
 					bind:values
 					{fields}

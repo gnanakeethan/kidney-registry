@@ -1,133 +1,73 @@
-<script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
-	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { FormValues } from '$lib/components/form-builder/lib/stores';
-	import { recipientId } from '$lib/state/recipient';
-	import { activeUrl } from '$lib/state/SidebarStore';
-	import { get, writable, Writable } from 'svelte/store';
+<script>
+	import { operationStore, query } from '@urql/svelte';
+	import { ListInvestigationsDocument } from '../../../../../lib/graphql/generated';
+	import GenericInvestigation from './_investigation-generic.svelte';
+	import { goto } from '$app/navigation';
+	import { recipientId } from '../../../../../lib/state/recipient';
 
-	const fields = [
-		{
-			type: 'input',
-			name: 'patient_identifier',
-			value: $recipientId,
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'Recipient ID',
-				id: 'recipient_id',
-				classes: ['form-input bg-gray-200 rounded w-full']
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'first_name',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's First Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'last_name',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'Last Name',
-				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Lastname field is required!',
-				minlen: 'Last name field must have more that 6 characters!'
-			}
-		}
-	];
-	let message = '';
-	let values = {};
-	export let contextKey = 'test';
-	let valuesForm: Writable<FormValues> = writable<FormValues>({
-		valid: true,
-		values: { test: 'test1' }
+	const investigations = operationStore(ListInvestigationsDocument);
+	query(investigations);
+	let investigationId = '';
+	$: if (investigationId) {
+		const backup = investigationId;
+		investigationId = '';
+		// setTimeout(()  => {
+		investigationId = backup;
+		// }, 100);
+	}
+	let currentInvestigation = 0;
+	let examsLength = 0;
+	investigations.subscribe((data) => {
+		examsLength = data?.data?.listInvestigations.items.length;
+		let exam1 = data?.data?.listInvestigations.items[0];
+		investigationId = exam1?.ID;
+		currentInvestigation = 1;
 	});
 
-	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
-		const data = get(valuesForm) as FormValues;
-		if (!data.valid) {
-			if (
-				!confirm(
-					'Are you sure you want to navigate away from this page?\n\n' +
-						'\n\nPress OK to continue, or Cancel to stay on the current page.'
-				)
-			) {
-				p1.cancel();
-			} else {
-				console.log(p1.from);
-				$activeUrl = p1.from.pathname;
-			}
-		}
-	});
+	function Clear() {
+		investigationId = '';
+	}
 
-	function onSubmit() {
-		const data = get(valuesForm);
-		if (data.valid) {
-			values = data.values;
-			message = 'Congratulation! now your form is valid';
-		} else {
-			message = 'Your form is not valid!';
+	function Next() {
+		console.log(currentInvestigation);
+		currentInvestigation++;
+		if (currentInvestigation > examsLength) {
+			currentInvestigation = 1;
 		}
+		investigationId = '';
+
+		console.log(investigations);
+		setTimeout(() => {
+			investigationId = investigations.data.listInvestigations.items[currentInvestigation - 1].ID;
+		}, 200);
+	}
+
+	function Investigate() {
+		goto('/patients/view/' + $recipientId + '/investigations/new');
 	}
 </script>
 
-<div class="h-full bg-gradient-to-b from-blue-50 to-stone-50 p-2">
-	<form
-		class="custom-form mx-auto my-auto w-1/2 rounded-xl border border-neutral-500 p-4"
-		on:submit|preventDefault={onSubmit}
-	>
-		<div class="text-xl font-bold">New Investigation</div>
-		<Field {fields} {valuesForm} />
-		<button class=" m-8 rounded bg-green-400 py-2 px-4 text-lg uppercase" type="submit">
-			Save
-		</button>
-	</form>
-</div>
-
-<style>
-	.custom-form :global(.form-group) {
-		padding: 10px;
-		margin-bottom: 10px;
-	}
-
-	.custom-form :global(.custom-form-group) {
-		padding: 10px;
-		color: white;
-		margin-bottom: 10px;
-	}
-
-	.custom-form :global(.class-description) {
-	}
-</style>
+{#if $investigations.fetching}
+	<p>Loading...</p>
+{:else if $investigations.error}
+	<p>Oh no... {$investigations.error.message}</p>
+{:else}
+	Select Investigation
+	<select class="form-select" name="" id="" bind:value={investigationId}>
+		{#each $investigations.data.listInvestigations.items as investigation}
+			<!--{investigation.Details.Name} <br>-->
+			<option disabled={investigationId !== ''} value={investigation.ID}
+				>{investigation.Details.Name}</option
+			>
+		{/each}
+	</select>
+	<button on:click={() => Clear()} class="bg-yellow-400 p-4 m-2">Clear Selection</button>
+	<button on:click={() => Next()} class="bg-green-400 p-4 m-2">Next</button>
+	<button on:click={() => Investigate()} class="bg-green-400 p-4 m-2">Investigate</button>
+{/if}
+{#if investigationId}
+	<div class="w-1/3 px-8">
+		<GenericInvestigation bind:investigationId />
+	</div>
+{/if}
+<!--<GeneralInvestigation bind:investigationId />-->

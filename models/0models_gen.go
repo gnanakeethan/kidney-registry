@@ -8,6 +8,10 @@ import (
 	"strconv"
 )
 
+type DynamicFormInterface interface {
+	IsDynamicFormInterface()
+}
+
 type Attributes struct {
 	ID           *string `json:"id"`
 	Max          *int    `json:"max"`
@@ -43,12 +47,6 @@ type Error struct {
 	Status int    `json:"status"`
 }
 
-type ExaminationDetails struct {
-	Name        *string `json:"Name"`
-	Description *string `json:"Description"`
-	Inline      *bool   `json:"Inline"`
-}
-
 type ExaminationDetailsInput struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
@@ -63,16 +61,9 @@ type ExaminationList struct {
 	Pagination *Pagination    `json:"pagination"`
 }
 
-type ExaminationProcedure struct {
-	Fields []*Fields `json:"fields"`
-}
-
-type ExaminationProcedureInput struct {
-	Fields []*FieldsInput `json:"fields"`
-}
-
 type Extra struct {
-	Items []*Items `json:"items"`
+	Items   []*Items `json:"items"`
+	Options []*Items `json:"options"`
 }
 
 type ExtraInput struct {
@@ -114,11 +105,26 @@ type FollowUp struct {
 	CaseStatus    *string `json:"CaseStatus"`
 }
 
+type FormDetails struct {
+	Name        *string `json:"Name"`
+	Description *string `json:"Description"`
+	Inline      *bool   `json:"Inline"`
+}
+
 type IntFilter struct {
 	Comparison ComparisonType `json:"comparison"`
 	And        *IntFilter     `json:"and"`
 	Or         *IntFilter     `json:"or"`
 	Value      *int           `json:"value"`
+}
+
+type InvestigationFilter struct {
+	Order *IntFilter `json:"Order"`
+}
+
+type InvestigationList struct {
+	Items      []*Investigation `json:"items"`
+	Pagination *Pagination      `json:"pagination"`
 }
 
 type Items struct {
@@ -279,6 +285,14 @@ type Prefix struct {
 
 type PrefixInput struct {
 	Classes []*string `json:"classes"`
+}
+
+type Procedure struct {
+	Fields []*Fields `json:"fields"`
+}
+
+type ProcedureInput struct {
+	Fields []*FieldsInput `json:"fields"`
 }
 
 type StringFilter struct {

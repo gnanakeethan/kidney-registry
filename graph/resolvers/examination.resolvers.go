@@ -7,21 +7,21 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *examinationResolver) Details(ctx context.Context, obj *models.Examination) (*models.ExaminationDetails, error) {
+func (r *examinationResolver) Details(ctx context.Context, obj *models.Examination) (*models.FormDetails, error) {
 	detailString := obj.Details.String()
-	detail := models.ExaminationDetails{}
+	detail := models.FormDetails{}
 	json.Unmarshal([]byte(detailString), &detail)
 	return &detail, nil
 }
 
-func (r *examinationResolver) Procedure(ctx context.Context, obj *models.Examination) (*models.ExaminationProcedure, error) {
+func (r *examinationResolver) Procedure(ctx context.Context, obj *models.Examination) (*models.Procedure, error) {
 	procedureString := obj.Procedure.String()
-	procedure := models.ExaminationProcedure{}
+	procedure := models.Procedure{}
 	json.Unmarshal([]byte(procedureString), &procedure)
 	return &procedure, nil
 }

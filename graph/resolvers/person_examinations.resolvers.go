@@ -23,7 +23,7 @@ func (r *mutationResolver) DeletePersonExamination(ctx context.Context, id strin
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personExaminationResolver) Details(ctx context.Context, obj *models.PersonExamination) (*models.ExaminationDetails, error) {
+func (r *personExaminationResolver) Details(ctx context.Context, obj *models.PersonExamination) (*models.FormDetails, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -35,7 +35,7 @@ func (r *personExaminationResolver) ExaminationID(ctx context.Context, obj *mode
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personExaminationResolver) Procedure(ctx context.Context, obj *models.PersonExamination) (*models.ExaminationProcedure, error) {
+func (r *personExaminationResolver) Procedure(ctx context.Context, obj *models.PersonExamination) (*models.Procedure, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

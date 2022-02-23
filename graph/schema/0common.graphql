@@ -1,0 +1,80 @@
+type Attributes {
+    id: String
+    max: Int
+    min: Int
+    step: Int
+    type: String
+    label: String
+    disabled: Boolean
+    classes: String
+    labelClasses: String
+    fieldName: String
+    image: String
+}
+input AttributesInput {
+    id: String
+    max: Int
+    min: Int
+    step: Int
+    type: String
+    label: String
+    disabled: Boolean
+    classes: [String]
+}
+
+type Prefix {
+    classes: [String ]
+}
+input PrefixInput {
+    classes: [String ]
+}
+type Items {
+    id: String
+    name: String
+    title: String
+    value: String
+}
+input ItemsInput {
+    id: String
+    name: String
+    title: String
+    value: String
+}
+
+type Extra {
+    items: [Items ]
+    options: [Items]
+}
+input ExtraInput {
+    items: [ ItemsInput ]
+}
+type Fields {
+    name: String
+    type: String
+    value: String
+    attributes: Attributes
+    prefix: Prefix
+    extra: Extra
+}
+input FieldsInput {
+    name: String
+    type: String
+    value: String
+    attributes: AttributesInput
+    prefix: PrefixInput
+    extra: ExtraInput
+}
+interface DynamicFormInterface {
+    Procedure: Procedure
+}
+type Procedure {
+    fields: [Fields ]
+}
+input ProcedureInput {
+    fields: [FieldsInput]
+}
+type FormDetails {
+    Name: String
+    Description:String
+    Inline: Boolean
+}

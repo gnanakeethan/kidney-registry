@@ -1,4 +1,4 @@
-type Examination implements DynamicFormInterface {
+type Investigation implements DynamicFormInterface{
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -8,21 +8,16 @@ type Examination implements DynamicFormInterface {
     DeletedAt: String
 }
 
-input ExaminationDetailsInput {
-    Name: String
-    Description:String
-}
-
-input ExaminationFilter {
+input InvestigationFilter {
     Order: IntFilter
 }
-type ExaminationList {
-    items: [Examination]
+type InvestigationList {
+    items: [Investigation]
     pagination: Pagination
 }
 
 extend type Query {
-    getExamination(id: ID!): Examination
+    getInvestigation(id: ID!): Investigation
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
+    listInvestigations(filter: InvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): InvestigationList
 }

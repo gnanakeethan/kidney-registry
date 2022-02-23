@@ -82,3 +82,28 @@ query GetExamination ($id: ID!){
         ...Procedure
     }
 }
+
+
+query ListInvestigations {
+    listInvestigations {
+        items {
+            ID
+            Order
+            Details {
+                Name
+            }
+        }
+    }
+}
+
+query GetInvestigation ($id: ID!){
+    getInvestigation(id: $id) {
+        ID
+        Details {
+            Name
+            Inline
+            Description
+        }
+        ...Procedure
+    }
+}
