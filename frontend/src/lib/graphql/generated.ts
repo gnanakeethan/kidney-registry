@@ -153,17 +153,6 @@ export type FloatFilter = {
   value?: InputMaybe<Scalars['Float']>;
 };
 
-export type FollowUp = {
-  __typename?: 'FollowUp';
-  CaseStatus?: Maybe<Scalars['String']>;
-  ClinicNo?: Maybe<Scalars['String']>;
-  Complaints?: Maybe<Scalars['String']>;
-  Description?: Maybe<Scalars['String']>;
-  ID?: Maybe<Scalars['ID']>;
-  Person?: Maybe<Person>;
-  RenalBiopsies?: Maybe<Scalars['String']>;
-};
-
 export type FormDetails = {
   __typename?: 'FormDetails';
   Description?: Maybe<Scalars['String']>;
@@ -462,8 +451,9 @@ export type PersonExamination = DynamicFormInterface & {
 export type PersonExaminationFilter = {
   CreatedAt?: InputMaybe<StringFilter>;
   DeletedAt?: InputMaybe<StringFilter>;
-  ExaminationId?: InputMaybe<StringFilter>;
+  Examination?: InputMaybe<ExaminationFilter>;
   FollowUpId?: InputMaybe<StringFilter>;
+  Person?: InputMaybe<PersonFilter>;
   UpdatedAt?: InputMaybe<StringFilter>;
 };
 
@@ -507,6 +497,7 @@ export type PersonFollowUp = {
   CaseStatus?: Maybe<Scalars['String']>;
   Complaints?: Maybe<Scalars['String']>;
   ConsultantOpinion?: Maybe<Scalars['String']>;
+  CreatedAt?: Maybe<Scalars['String']>;
   Description?: Maybe<Scalars['String']>;
   DialysisPlan?: Maybe<DialysisPlan>;
   Donation?: Maybe<PersonOrganDonation>;
@@ -514,7 +505,19 @@ export type PersonFollowUp = {
   OtherFindings?: Maybe<Scalars['String']>;
   Person?: Maybe<Person>;
   Referrals?: Maybe<Scalars['String']>;
-  RenalBiopsies?: Maybe<Scalars['String']>;
+  UpdatedAt?: Maybe<Scalars['String']>;
+};
+
+export type PersonFollowUpFilter = {
+  CaseStatus?: InputMaybe<StringFilter>;
+  Complaints?: InputMaybe<StringFilter>;
+  ConsultantOpinion?: InputMaybe<StringFilter>;
+  Description?: InputMaybe<StringFilter>;
+  Donation?: InputMaybe<PersonOrganDonationInput>;
+  ID?: InputMaybe<StringFilter>;
+  OtherFindings?: InputMaybe<StringFilter>;
+  Person?: InputMaybe<PersonInput>;
+  Referrals?: InputMaybe<StringFilter>;
 };
 
 export type PersonFollowUpInput = {
@@ -529,12 +532,11 @@ export type PersonFollowUpInput = {
   OtherFindings?: InputMaybe<Scalars['String']>;
   Person: PersonInput;
   Referrals?: InputMaybe<Scalars['String']>;
-  RenalBiopsies?: InputMaybe<Scalars['String']>;
 };
 
 export type PersonFollowUpList = {
   __typename?: 'PersonFollowUpList';
-  followUps?: Maybe<Array<Maybe<PersonFollowUp>>>;
+  items?: Maybe<Array<Maybe<PersonFollowUp>>>;
   pagination?: Maybe<Pagination>;
 };
 
@@ -677,7 +679,7 @@ export type PersonOrganDonation = {
   DischargedDate?: Maybe<Scalars['String']>;
   DonationType?: Maybe<Scalars['String']>;
   Donor?: Maybe<Person>;
-  FollowUps?: Maybe<Array<Maybe<FollowUp>>>;
+  FollowUps?: Maybe<Array<Maybe<PersonFollowUp>>>;
   ID: Scalars['ID'];
   PerformedDate?: Maybe<Scalars['String']>;
   PlannedDate?: Maybe<Scalars['String']>;
@@ -756,6 +758,7 @@ export type Query = {
   getInvestigation?: Maybe<Investigation>;
   getPatient?: Maybe<Person>;
   getPersonExamination?: Maybe<PersonExamination>;
+  getPersonFollowUp?: Maybe<PersonFollowUp>;
   getPersonInvestigation?: Maybe<PersonInvestigation>;
   getPersonWorkup?: Maybe<PersonWorkup>;
   getWorkup?: Maybe<Workup>;
@@ -763,12 +766,11 @@ export type Query = {
   listInvestigations?: Maybe<InvestigationList>;
   listPatients?: Maybe<PersonList>;
   listPersonExaminations?: Maybe<PersonExaminationList>;
+  listPersonFollowUps?: Maybe<PersonFollowUpList>;
   listPersonInvestigations?: Maybe<PersonInvestigationList>;
   listPersonMedicalHistories?: Maybe<PersonMedicalHistoryList>;
   listPersonWorkups?: Maybe<PersonWorkupList>;
   listWorkups?: Maybe<WorkupList>;
-  personFollowUp?: Maybe<PersonFollowUp>;
-  personFollowUps?: Maybe<PersonFollowUpList>;
   personMedicalHistory?: Maybe<PersonMedicalHistory>;
   users?: Maybe<UserList>;
 };
@@ -790,6 +792,11 @@ export type QueryGetPatientArgs = {
 
 
 export type QueryGetPersonExaminationArgs = {
+  ID: Scalars['ID'];
+};
+
+
+export type QueryGetPersonFollowUpArgs = {
   ID: Scalars['ID'];
 };
 
@@ -846,6 +853,16 @@ export type QueryListPersonExaminationsArgs = {
 };
 
 
+export type QueryListPersonFollowUpsArgs = {
+  PersonID: Scalars['ID'];
+  filter?: InputMaybe<PersonFollowUpFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
+  page?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
 export type QueryListPersonInvestigationsArgs = {
   PersonID: Scalars['ID'];
   filter?: InputMaybe<PersonInvestigationFilter>;
@@ -878,21 +895,6 @@ export type QueryListPersonWorkupsArgs = {
 
 export type QueryListWorkupsArgs = {
   filter?: InputMaybe<WorkupFilter>;
-  limit?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
-  page?: InputMaybe<Scalars['Int']>;
-  sortBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-export type QueryPersonFollowUpArgs = {
-  ID: Scalars['ID'];
-};
-
-
-export type QueryPersonFollowUpsArgs = {
-  PersonID: Scalars['ID'];
-  filter?: InputMaybe<PersonFilter>;
   limit?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<InputMaybe<OrderBy>>>;
   page?: InputMaybe<Scalars['Int']>;
@@ -993,7 +995,7 @@ export type WorkupList = {
 
 export type PaginationFragment = { __typename?: 'Pagination', currentPage: number, prevPage: number, nextPage: number, totalItems: number, itemsPerPage: number };
 
-export type PersonFollowUpFieldsFragment = { __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, RenalBiopsies?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null };
+export type PersonFollowUpFieldsFragment = { __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, CreatedAt?: string | null, UpdatedAt?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null };
 
 type Procedure_Examination_Fragment = { __typename?: 'Examination', Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null };
 
@@ -1030,14 +1032,14 @@ export type NewPersonFollowUpMutationVariables = Exact<{
 }>;
 
 
-export type NewPersonFollowUpMutation = { __typename?: 'Mutation', createPersonFollowUp?: { __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, RenalBiopsies?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null } | null };
+export type NewPersonFollowUpMutation = { __typename?: 'Mutation', createPersonFollowUp?: { __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, CreatedAt?: string | null, UpdatedAt?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null } | null };
 
 export type UpdatePersonFollowUpMutationVariables = Exact<{
   input: PersonFollowUpInput;
 }>;
 
 
-export type UpdatePersonFollowUpMutation = { __typename?: 'Mutation', updatePersonFollowUp?: { __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, RenalBiopsies?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null } | null };
+export type UpdatePersonFollowUpMutation = { __typename?: 'Mutation', updatePersonFollowUp?: { __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, CreatedAt?: string | null, UpdatedAt?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null } | null };
 
 export type UpdatePatientMutationVariables = Exact<{
   patientInput: PersonInput;
@@ -1106,6 +1108,18 @@ export type ListPersonMedicalHistoryQueryVariables = Exact<{
 
 export type ListPersonMedicalHistoryQuery = { __typename?: 'Query', listPersonMedicalHistories?: { __typename?: 'PersonMedicalHistoryList', pagination?: { __typename?: 'Pagination', currentPage: number, prevPage: number, nextPage: number, totalItems: number, itemsPerPage: number } | null, histories?: Array<{ __typename?: 'PersonMedicalHistory', ID?: string | null, Description?: string | null, Reason?: string | null, StartDate?: string | null, EndDate?: string | null, Medications?: string | null, Type?: HistoryType | null, CreatedAt?: string | null, UpdatedAt?: string | null, Person: { __typename?: 'Person', ID: string } } | null> | null } | null };
 
+export type ListPersonFollowUpQueryVariables = Exact<{
+  ID: Scalars['ID'];
+  filter?: InputMaybe<PersonFollowUpFilter>;
+  page?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  sortBy?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  orderBy?: InputMaybe<Array<InputMaybe<OrderBy>> | InputMaybe<OrderBy>>;
+}>;
+
+
+export type ListPersonFollowUpQuery = { __typename?: 'Query', listPersonFollowUps?: { __typename?: 'PersonFollowUpList', pagination?: { __typename?: 'Pagination', currentPage: number, prevPage: number, nextPage: number, totalItems: number, itemsPerPage: number } | null, items?: Array<{ __typename?: 'PersonFollowUp', ID: string, Description?: string | null, Complaints?: string | null, CaseStatus?: string | null, OtherFindings?: string | null, Referrals?: string | null, ConsultantOpinion?: string | null, CreatedAt?: string | null, UpdatedAt?: string | null, DialysisPlan?: { __typename?: 'DialysisPlan', Type?: string | null, Plan?: string | null, Frequency?: string | null } | null, Person?: { __typename?: 'Person', ID: string } | null } | null> | null } | null };
+
 export type ListExaminationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1131,7 +1145,7 @@ export type GetInvestigationQueryVariables = Exact<{
 export type GetInvestigationQuery = { __typename?: 'Query', getInvestigation?: { __typename?: 'Investigation', ID: string, Details?: { __typename?: 'FormDetails', Name?: string | null, Inline?: boolean | null, Description?: string | null } | null, Procedure?: { __typename?: 'Procedure', fields?: Array<{ __typename?: 'Fields', name?: string | null, type?: string | null, value?: string | null, prefix?: { __typename?: 'Prefix', classes?: string | null } | null, attributes?: { __typename?: 'Attributes', classes?: string | null, id?: string | null, max?: number | null, min?: number | null, step?: number | null, type?: string | null, label?: string | null, labelClasses?: string | null, fieldName?: string | null, image?: string | null } | null, extra?: { __typename?: 'Extra', options?: Array<{ __typename?: 'Items', title?: string | null, value?: string | null } | null> | null, items?: Array<{ __typename?: 'Items', id?: string | null, title?: string | null, value?: string | null, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
 export const PaginationFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Pagination"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Pagination"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"prevPage"}},{"kind":"Field","name":{"kind":"Name","value":"nextPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalItems"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}}]}}]} as unknown as DocumentNode<PaginationFragment, unknown>;
-export const PersonFollowUpFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PersonFollowUpFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PersonFollowUp"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Description"}},{"kind":"Field","name":{"kind":"Name","value":"Complaints"}},{"kind":"Field","name":{"kind":"Name","value":"RenalBiopsies"}},{"kind":"Field","name":{"kind":"Name","value":"CaseStatus"}},{"kind":"Field","name":{"kind":"Name","value":"DialysisPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Type"}},{"kind":"Field","name":{"kind":"Name","value":"Plan"}},{"kind":"Field","name":{"kind":"Name","value":"Frequency"}}]}},{"kind":"Field","name":{"kind":"Name","value":"OtherFindings"}},{"kind":"Field","name":{"kind":"Name","value":"Referrals"}},{"kind":"Field","name":{"kind":"Name","value":"ConsultantOpinion"}},{"kind":"Field","name":{"kind":"Name","value":"Person"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}}]}}]}}]} as unknown as DocumentNode<PersonFollowUpFieldsFragment, unknown>;
+export const PersonFollowUpFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PersonFollowUpFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PersonFollowUp"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Description"}},{"kind":"Field","name":{"kind":"Name","value":"Complaints"}},{"kind":"Field","name":{"kind":"Name","value":"CaseStatus"}},{"kind":"Field","name":{"kind":"Name","value":"DialysisPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Type"}},{"kind":"Field","name":{"kind":"Name","value":"Plan"}},{"kind":"Field","name":{"kind":"Name","value":"Frequency"}}]}},{"kind":"Field","name":{"kind":"Name","value":"OtherFindings"}},{"kind":"Field","name":{"kind":"Name","value":"Referrals"}},{"kind":"Field","name":{"kind":"Name","value":"ConsultantOpinion"}},{"kind":"Field","name":{"kind":"Name","value":"Person"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}}]}},{"kind":"Field","name":{"kind":"Name","value":"CreatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"UpdatedAt"}}]}}]} as unknown as DocumentNode<PersonFollowUpFieldsFragment, unknown>;
 export const ProcedureFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Procedure"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"DynamicFormInterface"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Procedure"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"prefix"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"classes"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"classes"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"max"}},{"kind":"Field","name":{"kind":"Name","value":"min"}},{"kind":"Field","name":{"kind":"Name","value":"step"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"labelClasses"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"image"}}]}},{"kind":"Field","name":{"kind":"Name","value":"extra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"options"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<ProcedureFragment, unknown>;
 export const PersonFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PersonFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Person"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"FirstName"}},{"kind":"Field","name":{"kind":"Name","value":"LastName"}},{"kind":"Field","name":{"kind":"Name","value":"Address"}},{"kind":"Field","name":{"kind":"Name","value":"DateOfBirth"}},{"kind":"Field","name":{"kind":"Name","value":"Ethnicity"}},{"kind":"Field","name":{"kind":"Name","value":"Phn"}},{"kind":"Field","name":{"kind":"Name","value":"PrimaryRenalDisease"}},{"kind":"Field","name":{"kind":"Name","value":"Weight"}},{"kind":"Field","name":{"kind":"Name","value":"Height"}},{"kind":"Field","name":{"kind":"Name","value":"Gender"}},{"kind":"Field","name":{"kind":"Name","value":"MaritalStatus"}},{"kind":"Field","name":{"kind":"Name","value":"ContactNo"}},{"kind":"Field","name":{"kind":"Name","value":"PersonType"}},{"kind":"Field","name":{"kind":"Name","value":"Status"}},{"kind":"Field","name":{"kind":"Name","value":"RecordStatus"}}]}}]} as unknown as DocumentNode<PersonFieldsFragment, unknown>;
 export const PersonMedicalHistoryFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PersonMedicalHistoryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PersonMedicalHistory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Person"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"}},{"kind":"Field","name":{"kind":"Name","value":"Reason"}},{"kind":"Field","name":{"kind":"Name","value":"StartDate"}},{"kind":"Field","name":{"kind":"Name","value":"EndDate"}},{"kind":"Field","name":{"kind":"Name","value":"Medications"}},{"kind":"Field","name":{"kind":"Name","value":"Type"}},{"kind":"Field","name":{"kind":"Name","value":"CreatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"UpdatedAt"}}]}}]} as unknown as DocumentNode<PersonMedicalHistoryFieldsFragment, unknown>;
@@ -1147,6 +1161,7 @@ export const ListPatientsDocument = {"kind":"Document","definitions":[{"kind":"O
 export const GetPatientDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPatient"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPatient"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonFields"}},{"kind":"Field","name":{"kind":"Name","value":"Age"}}]}}]}},...PersonFieldsFragmentDoc.definitions]} as unknown as DocumentNode<GetPatientQuery, GetPatientQueryVariables>;
 export const ListPeopleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListPeople"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserListFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"perPage"},"value":{"kind":"Variable","name":{"kind":"Name","value":"perPage"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"totalItems"}}]}}]}}]}}]} as unknown as DocumentNode<ListPeopleQuery, ListPeopleQueryVariables>;
 export const ListPersonMedicalHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListPersonMedicalHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PersonMedicalHistoryFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderBy"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listPersonMedicalHistories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"PersonID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ID"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Pagination"}}]}},{"kind":"Field","name":{"kind":"Name","value":"histories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonMedicalHistoryFields"}}]}}]}}]}},...PaginationFragmentDoc.definitions,...PersonMedicalHistoryFieldsFragmentDoc.definitions]} as unknown as DocumentNode<ListPersonMedicalHistoryQuery, ListPersonMedicalHistoryQueryVariables>;
+export const ListPersonFollowUpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListPersonFollowUp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ID"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"PersonFollowUpFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderBy"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listPersonFollowUps"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"PersonID"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ID"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Pagination"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonFollowUpFields"}}]}}]}}]}},...PaginationFragmentDoc.definitions,...PersonFollowUpFieldsFragmentDoc.definitions]} as unknown as DocumentNode<ListPersonFollowUpQuery, ListPersonFollowUpQueryVariables>;
 export const ListExaminationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListExaminations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listExaminations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Order"}},{"kind":"Field","name":{"kind":"Name","value":"Details"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ListExaminationsQuery, ListExaminationsQueryVariables>;
 export const GetExaminationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetExamination"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getExamination"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Details"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Name"}},{"kind":"Field","name":{"kind":"Name","value":"Inline"}},{"kind":"Field","name":{"kind":"Name","value":"Description"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"Procedure"}}]}}]}},...ProcedureFragmentDoc.definitions]} as unknown as DocumentNode<GetExaminationQuery, GetExaminationQueryVariables>;
 export const ListInvestigationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListInvestigations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listInvestigations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Order"}},{"kind":"Field","name":{"kind":"Name","value":"Details"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ListInvestigationsQuery, ListInvestigationsQueryVariables>;
@@ -1163,6 +1178,7 @@ export type ListPatientsQueryStore = OperationStore<ListPatientsQuery, ListPatie
 export type GetPatientQueryStore = OperationStore<GetPatientQuery, GetPatientQueryVariables>;
 export type ListPeopleQueryStore = OperationStore<ListPeopleQuery, ListPeopleQueryVariables>;
 export type ListPersonMedicalHistoryQueryStore = OperationStore<ListPersonMedicalHistoryQuery, ListPersonMedicalHistoryQueryVariables>;
+export type ListPersonFollowUpQueryStore = OperationStore<ListPersonFollowUpQuery, ListPersonFollowUpQueryVariables>;
 export type ListExaminationsQueryStore = OperationStore<ListExaminationsQuery, ListExaminationsQueryVariables>;
 export type GetExaminationQueryStore = OperationStore<GetExaminationQuery, GetExaminationQueryVariables>;
 export type ListInvestigationsQueryStore = OperationStore<ListInvestigationsQuery, ListInvestigationsQueryVariables>;
