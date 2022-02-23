@@ -1,0 +1,48 @@
+type Examination {
+    ID          : ID!
+    Details   : ExaminationDetails
+    Procedure : ExaminationProcedure
+    CreatedAt: String
+    UpdatedAt: String
+    DeletedAt: String
+}
+type ExaminationDetails {
+    Name: String
+    Description:String
+}
+type Attributes {
+    id: String
+    max: Int
+    min: Int
+    step: Int
+    type: String
+    label: String
+    disabled: Boolean
+    classes: [String]
+}
+
+type Prefix {
+    classes: [String ]
+}
+type Items {
+    id: String
+    name: String
+    title: String
+    value: String
+}
+
+type Extra {
+    items: [Items ]
+}
+type Fields {
+    name: String
+    type: String
+    value: String
+    attributes: Attributes
+    prefix: Prefix
+    extra: Extra
+}
+
+type ExaminationProcedure {
+    fields: [Fields ]
+}

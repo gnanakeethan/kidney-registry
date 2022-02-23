@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { beforeNavigate, goto } from '$app/navigation';
+	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { NewHistoryDocument, NewHistoryMutation } from '$lib/graphql/generated';
-	import { recipient, recipientId } from '$lib/state/recipient';
+	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation } from '@urql/svelte';
 
@@ -309,15 +309,6 @@
 	export function onSubmit() {
 		if (isValidForm) {
 			try {
-				const valuesRef: { Reason: any } = deepen(values);
-
-				newHistory({ input: valuesRef }).then((result) => {
-					console.log(result);
-					alert('Data Saved');
-					if (others == 1) {
-						goto('/patients/view/' + $recipientId + '/history/');
-					}
-				});
 			} catch (e) {
 				alert('Please fill all the required fields');
 				message = 'Please fill all the required fields';

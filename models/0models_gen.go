@@ -8,6 +8,17 @@ import (
 	"strconv"
 )
 
+type Attributes struct {
+	ID       *string   `json:"id"`
+	Max      *int      `json:"max"`
+	Min      *int      `json:"min"`
+	Step     *int      `json:"step"`
+	Type     *string   `json:"type"`
+	Label    *string   `json:"label"`
+	Disabled *bool     `json:"disabled"`
+	Classes  []*string `json:"classes"`
+}
+
 type DashboardMenus struct {
 	SidebarTop    *Menu `json:"sidebarTop"`
 	SidebarBottom *Menu `json:"sidebarBottom"`
@@ -16,6 +27,37 @@ type DashboardMenus struct {
 type Error struct {
 	String string `json:"string"`
 	Status int    `json:"status"`
+}
+
+type Examination struct {
+	ID        string                `json:"ID"`
+	Details   *ExaminationDetails   `json:"Details"`
+	Procedure *ExaminationProcedure `json:"Procedure"`
+	CreatedAt *string               `json:"CreatedAt"`
+	UpdatedAt *string               `json:"UpdatedAt"`
+	DeletedAt *string               `json:"DeletedAt"`
+}
+
+type ExaminationDetails struct {
+	Name        *string `json:"Name"`
+	Description *string `json:"Description"`
+}
+
+type ExaminationProcedure struct {
+	Fields []*Fields `json:"fields"`
+}
+
+type Extra struct {
+	Items []*Items `json:"items"`
+}
+
+type Fields struct {
+	Name       *string     `json:"name"`
+	Type       *string     `json:"type"`
+	Value      *string     `json:"value"`
+	Attributes *Attributes `json:"attributes"`
+	Prefix     *Prefix     `json:"prefix"`
+	Extra      *Extra      `json:"extra"`
 }
 
 type FloatFilter struct {
@@ -40,6 +82,13 @@ type IntFilter struct {
 	And        *IntFilter     `json:"and"`
 	Or         *IntFilter     `json:"or"`
 	Value      *int           `json:"value"`
+}
+
+type Items struct {
+	ID    *string `json:"id"`
+	Name  *string `json:"name"`
+	Title *string `json:"title"`
+	Value *string `json:"value"`
 }
 
 type Menu struct {
@@ -157,6 +206,10 @@ type PersonMedicalHistoryInput struct {
 type PersonMedicalHistoryList struct {
 	Histories  []*PersonMedicalHistory `json:"histories"`
 	Pagination *Pagination             `json:"pagination"`
+}
+
+type Prefix struct {
+	Classes []*string `json:"classes"`
 }
 
 type StringFilter struct {
