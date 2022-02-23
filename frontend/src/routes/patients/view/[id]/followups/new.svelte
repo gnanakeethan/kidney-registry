@@ -1,186 +1,248 @@
 <script lang="ts">
-	import { beforeNavigate, goto } from '$app/navigation';
+	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
+	import { recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
+	import { deepen } from '$lib/utils';
+	import { defULID } from '@thi.ng/ksuid';
 	import { mutation } from '@urql/svelte';
-	import { onMount } from 'svelte';
 	// import { Person } from 'lib/graphql/generated';
 	import {
-		AddPatientDocument,
-		AddPatientMutation,
-		NewPatientDocument,
-		NewPatientMutation
+		NewPersonFollowUpDocument,
+		NewPersonFollowUpMutation
 	} from '../../../../../lib/graphql/generated';
 
-	const newPatient = mutation<NewPatientMutation>({
-		query: NewPatientDocument
+	const id = defULID();
+
+	const newPersonFollowUp = mutation<NewPersonFollowUpMutation>({
+		query: NewPersonFollowUpDocument
 	});
-	const addPatient = mutation<AddPatientMutation>({
-		query: AddPatientDocument
-	});
-	onMount(() => {
-		newPatient<NewPatientDocument>(null).then((root: { data: NewPatientDocument }) => {
-			let patient = root.data.newPatient;
-			values = patient;
-			console.log(values);
-			formSet = true;
-		});
-	});
+	const dialysisPlanFields = [
+		{
+			type: 'input',
+			name: 'DialysisPlan.Type',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Type',
+				id: 'recipient_id',
+				classes: ['form-input rounded w-full readonly']
+			}
+		},
+		{
+			type: 'input',
+			name: 'DialysisPlan.Plan',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Plan',
+				id: 'recipient_id',
+				classes: ['form-input rounded w-full readonly']
+			}
+		},
+		{
+			type: 'input',
+			name: 'DialysisPlan.Frequency',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Frequency',
+				id: 'recipient_id',
+				classes: ['form-input rounded w-full readonly']
+			}
+		}
+	];
+	const medicineFields = [
+		{
+			type: 'input',
+			name: 'ID',
+			value: id.next(),
+			prefix: {
+				classes: ['hidden flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'ID',
+				id: 'recipient_id',
+				classes: ['form-input bg-gray-200 rounded w-full readonly'],
+				readonly: true
+			}
+		},
+		{
+			type: 'input',
+			name: 'Name',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col mx-2 items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Type',
+				id: 'recipient_id',
+				classes: ['form-input rounded w-full readonly']
+			}
+		},
+		{
+			type: 'input',
+			name: 'Dosage',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col mx-2 items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Dosage',
+				id: 'recipient_id',
+				classes: ['form-input rounded w-full readonly']
+			}
+		},
+		{
+			type: 'input',
+			name: 'Frequency',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col mx-2 items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Frequency',
+				id: 'recipient_id',
+				classes: ['form-input rounded w-full readonly']
+			}
+		}
+	];
 	const fields = [
 		{
 			type: 'input',
 			name: 'ID',
-			value: '',
+			value: id.next(),
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['hidden flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
-				label: 'Recipient ID',
+				label: 'ID',
 				id: 'recipient_id',
-				classes: ['form-input bg-gray-200 rounded w-full']
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
+				classes: ['form-input bg-gray-200 rounded w-full readonly'],
+				readonly: true
 			}
 		},
+
 		{
 			type: 'input',
-			name: 'Phn',
-			value: '',
+			name: 'Person.ID',
+			value: $recipientId,
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['hidden flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
-				label: 'PHN',
-				id: 'phn',
-				classes: ['form-input bg-gray-200 rounded w-full']
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
+				label: 'ID',
+				id: 'recipient_id',
+				classes: ['form-input bg-gray-200 rounded w-full readonly'],
+				readonly: true
 			}
 		},
-		{
-			type: 'input',
-			name: 'FirstName',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's First Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'LastName',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'Last Name',
-				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Lastname field is required!',
-				minlen: 'Last name field must have more that 6 characters!'
-			}
-		},
+
 		{
 			type: 'select', // required
-			name: 'MaritalStatus', //required
+			name: 'CaseStatus', // required
+			prefix: { classes: ['mb-2 w-full'] },
+
 			attributes: {
-				id: 'MaritalStatus', // required
-				classes: ['form-input rounded w-full'], // optional
-				label: 'Marital Status', // optional
+				id: 'id-field', // required
+				classes: ['form-select'], // optional
+				label: 'Case Status', // optional
 				disabled: false // optional
 			},
 			extra: {
 				options: [
+					{ value: 'WORKING_UP', title: 'Working Up' },
+					{ value: 'ACTIVE', title: 'Active' },
+					{ value: 'SUSPENDED', title: 'Suspended' },
+					{ value: 'PERMANENTLY_UNFIT', title: 'Permanently Unfit' },
+					{ value: 'DECEASED_AWAITING_TRANSPLANT', title: 'Deceased Awaiting Transplant' },
 					{
-						value: 'NA',
-						title: 'N/A'
+						value: 'DECEASED_POST_CADAVERIC_TRANSPLANT',
+						title: 'Deceased Post Cadaveric Transplant'
 					},
-					{
-						value: 'SINGLE',
-						title: 'Single'
-					},
-					{
-						value: 'MARRIED',
-						title: 'Married'
-					}
+					{ value: 'RECEIVED_LIVE_TRANSPLANT', title: 'Non Received Live Transplant' }
 				]
-			}, // optional
-			rules: [] // optional
+			} // optional
+		},
+		// WORKING_UP
+		// ACTIVE
+		// SUSPENDED
+		// PERMANENTLY_UNFIT
+		// DECEASED_WILL_AWAITING_TRANSPLANT
+		// DECEASED_POST_CADAVERIC_TRANSPLANT
+		// RECEIVED_LIVE_TRANSPLANT
+		{
+			type: 'textarea', // required
+			name: 'OtherFindings', // required
+			value: '', // optional
+
+			prefix: { classes: ['mx-2 flex-grow w-full'] },
+			attributes: {
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-2', // optional
+				label: 'Other Findings', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: 1, // optional
+				cols: null // optional
+			}
 		},
 		{
-			type: 'select', // required
-			name: 'Gender', // required
+			type: 'textarea', // required
+			name: 'Referrals', // required
+			value: '', // optional
+
+			prefix: { classes: ['mx-2 flex-grow w-full'] },
 			attributes: {
-				id: 'Gender', // required
-				classes: ['form-input rounded w-full'], // optional
-				label: 'Gender', // optional
-				disabled: false // optional
-			},
-			extra: {
-				options: [
-					{
-						value: 'NA',
-						title: 'N/A'
-					},
-					{
-						value: 'MALE',
-						title: 'Male'
-					},
-					{
-						value: 'FEMALE',
-						title: 'Female'
-					}
-				]
-			}, // optional
-			rules: [] // optional
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-2', // optional
+				label: 'Referrals', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: 1, // optional
+				cols: null // optional
+			}
 		},
 		{
-			type: 'input',
-			name: 'DateOfBirth',
-			value: '',
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
+			type: 'textarea', // required
+			name: 'ConsultantOpinion', // required
+			value: '', // optional
+
+			prefix: { classes: ['mx-2 flex-grow w-full'] },
 			attributes: {
-				type: 'date',
-				label: 'Date of Birth',
-				id: 'dob',
-				max: new Date().toISOString().split('T')[0],
-				min: '1900-01-01',
-				classes: ['form-input rounded w-full']
+				id: 'id-field', // required
+				classes: 'form-textarea rounded w-full my-2', // optional
+				label: 'Consultant Opinion', // optional
+				disabled: false, // optional
+				readonly: false, // optional
+				rows: 1, // optional
+				cols: null // optional
 			}
 		}
-		//phonenumber
 	];
 	let message = '';
-	let values = {};
-	let formSet = false;
+	let values = {
+		Medicines: []
+	};
+	let medicines = [{}, {}];
+	let dialysisValues = {};
+	let formSet = !!$recipientId;
 	let isValidForm = false;
 
 	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
@@ -205,10 +267,17 @@
 		console.log(isValidForm);
 		if (isValidForm) {
 			message = 'Saving Data....';
-			addPatient({ patientInput: values }).then((result) => {
+			Object.assign({}, values, dialysisValues);
+			values.Medicines = [];
+			medicines.forEach((medicine) => {
+				const medicineValue = deepen(medicine);
+				values.Medicines.push(medicineValue);
+			});
+			values = deepen(values);
+			console.log(values);
+			newPersonFollowUp({ input: values }).then((result) => {
 				console.log(result);
-				alert('Saved');
-				goto('/patients/view/' + result.data.addPatient.ID + '/history/new/history');
+				alert('Saved =>' + result.data.createPersonFollowUp.ID);
 			});
 		} else {
 			message =
@@ -221,13 +290,31 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class="flex h-full flex-wrap bg-gradient-to-b from-teal-50 to-stone-50 p-2">
 	{#if formSet}
 		<form
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Patient</div>
+			<div class="text-xl font-bold">New FollowUp</div>
+			<fieldset class="my-4 flex flex-col rounded border  border-black p-2">
+				<legend>Medicines</legend>
+				{#each medicines as medicine, i}
+					<div class="flex flex-row">
+						<Field fields={medicineFields} bind:values={medicine} bind:isValidForm />
+					</div>
+				{/each}
+			</fieldset>
+			<fieldset class="my-4 w-full rounded border border-black  p-2">
+				<legend>Dialysis Plan</legend>
+				<Field
+					inline={true}
+					fields={dialysisPlanFields}
+					bind:values={dialysisValues}
+					bind:isValidForm
+				/>
+			</fieldset>
+
 			<Field {fields} bind:values bind:isValidForm />
 			{message}
 			<button
@@ -239,19 +326,3 @@
 		</form>
 	{/if}
 </div>
-
-<style>
-	.custom-form :global(.form-group) {
-		padding: 10px;
-		margin-bottom: 10px;
-	}
-
-	.custom-form :global(.custom-form-group) {
-		padding: 10px;
-		color: white;
-		margin-bottom: 10px;
-	}
-
-	.custom-form :global(.class-description) {
-	}
-</style>

@@ -34,7 +34,7 @@ input PersonFollowUpInput{
     Referrals: String
     ConsultantOpinion: String
     Person: PersonInput!
-    Donation: PersonOrganDonationInput!
+    Donation: PersonOrganDonationInput
     Medicines: [PersonFollowUpMedicineInput]
 }
 input PersonFollowUpMedicineInput{

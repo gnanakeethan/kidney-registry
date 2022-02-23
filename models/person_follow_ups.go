@@ -22,7 +22,7 @@ type PersonFollowUp struct {
 	UpdatedAt         time.Time            `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
 	DeletedAt         time.Time            `orm:"column(deleted_at);null"`
 	Person            *Person              `orm:"column(person_id);rel(fk)"`
-	Donation          *PersonOrganDonation `orm:"column(donation_id);rel(fk)"`
+	Donation          *PersonOrganDonation `orm:"column(donation_id);rel(fk);null"`
 }
 
 func (t *PersonFollowUp) TableName() string {

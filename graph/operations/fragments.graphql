@@ -5,7 +5,24 @@ fragment Pagination on Pagination {
     totalItems
     itemsPerPage
 }
-
+fragment PersonFollowUpFields on PersonFollowUp {
+    ID
+    Description
+    Complaints
+    RenalBiopsies
+    CaseStatus
+    DialysisPlan {
+        Type
+        Plan
+        Frequency
+    }
+    OtherFindings
+    Referrals
+    ConsultantOpinion
+    Person {
+        ID
+    }
+}
 
 fragment Procedure on DynamicFormInterface {
     Procedure {

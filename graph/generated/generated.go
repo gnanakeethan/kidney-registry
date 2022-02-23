@@ -2842,7 +2842,7 @@ input PersonFollowUpInput{
     Referrals: String
     ConsultantOpinion: String
     Person: PersonInput!
-    Donation: PersonOrganDonationInput!
+    Donation: PersonOrganDonationInput
     Medicines: [PersonFollowUpMedicineInput]
 }
 input PersonFollowUpMedicineInput{
@@ -13954,7 +13954,7 @@ func (ec *executionContext) unmarshalInputPersonFollowUpInput(ctx context.Contex
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Donation"))
-			it.Donation, err = ec.unmarshalNPersonOrganDonationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationInput(ctx, v)
+			it.Donation, err = ec.unmarshalOPersonOrganDonationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -18906,11 +18906,6 @@ func (ec *executionContext) unmarshalNPersonMedicalHistoryInput2githubᚗcomᚋg
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNPersonOrganDonationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationInput(ctx context.Context, v interface{}) (*models.PersonOrganDonationInput, error) {
-	res, err := ec.unmarshalInputPersonOrganDonationInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNPersonWorkupInput2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupInput(ctx context.Context, v interface{}) (models.PersonWorkupInput, error) {
 	res, err := ec.unmarshalInputPersonWorkupInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -20378,6 +20373,14 @@ func (ec *executionContext) marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanak
 		return graphql.Null
 	}
 	return ec._PersonOrganDonation(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOPersonOrganDonationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationInput(ctx context.Context, v interface{}) (*models.PersonOrganDonationInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputPersonOrganDonationInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOPersonWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx context.Context, sel ast.SelectionSet, v []*models.PersonWorkup) graphql.Marshaler {

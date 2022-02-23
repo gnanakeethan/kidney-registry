@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"time"
 	
+	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
 	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
@@ -16,14 +17,15 @@ import (
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
+	pretty.Println(input)
 	personFollowUp := &models.PersonFollowUp{
-		ID:                ksuid.New().String(),
-		Description:       *input.Description,
-		Complaints:        *input.Complaints,
-		CaseStatus:        *input.CaseStatus,
-		OtherFindings:     *input.OtherFindings,
-		Referrals:         *input.Referrals,
-		ConsultantOpinion: *input.ConsultantOpinion,
+		ID:                input.ID,
+		Description:       PointerString(input.Description),
+		Complaints:        PointerString(input.Complaints),
+		CaseStatus:        PointerString(input.CaseStatus),
+		OtherFindings:     PointerString(input.OtherFindings),
+		Referrals:         PointerString(input.Referrals),
+		ConsultantOpinion: PointerString(input.ConsultantOpinion),
 		CreatedAt:         time.Now(),
 		UpdatedAt:         time.Now(),
 		DeletedAt:         time.Time{},
@@ -38,8 +40,8 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	}
 	if _, err := models.AddPersonFollowUps(personFollowUp); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
 		for _, medicineInput := range input.Medicines {
-			startDate, _ := time.Parse("2006-01-01", *medicineInput.StartDate)
-			endDate, _ := time.Parse("2006-01-01", *medicineInput.EndDate)
+			startDate, _ := time.Parse("2006-01-01", PointerString(medicineInput.StartDate))
+			endDate, _ := time.Parse("2006-01-01", PointerString(medicineInput.EndDate))
 			medicine := models.PersonFollowUpsMedicine{
 				ID:           ksuid.New().String(),
 				MedicineCode: *medicineInput.MedicineCode,

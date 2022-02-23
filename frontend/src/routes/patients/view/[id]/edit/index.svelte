@@ -13,162 +13,180 @@
 
 	import { recipient } from '../../../../../lib/state/recipient';
 
+	async function awaitRecipient() {
+		while ($recipient.ID === undefined || $recipient.ID === '') {
+			await sleep(10);
+		}
+		loadFields();
+		formSet = true;
+		return;
+	}
+
+	async function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+
 	const updatePatient = mutation<UpdatePatientMutation>({
 		query: UpdatePatientDocument
 	});
-	const fields = [
-		{
-			type: 'input',
-			name: 'ID',
-			value: $recipient.ID,
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+	let fields = [];
+
+	function loadFields() {
+		fields = [
+			{
+				type: 'input',
+				name: 'ID',
+				value: $recipient.ID,
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'text',
+					label: 'Recipient ID',
+					id: 'recipient_id',
+					classes: ['form-input bg-gray-200 rounded w-full']
+				},
+				rules: ['required', 'minlen:6'],
+				messages: {
+					required: 'Firstname field is required!',
+					minlen: 'First name field must have more that 6 characters!'
+				}
 			},
-			attributes: {
-				type: 'text',
-				label: 'Recipient ID',
-				id: 'recipient_id',
-				classes: ['form-input bg-gray-200 rounded w-full']
+			{
+				type: 'input',
+				name: 'Phn',
+				value: $recipient.Phn,
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'text',
+					label: 'PHN',
+					id: 'phn',
+					classes: ['form-input bg-gray-200 rounded w-full']
+				},
+				rules: ['required', 'minlen:6'],
+				messages: {
+					required: 'Firstname field is required!',
+					minlen: 'First name field must have more that 6 characters!'
+				}
 			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
+			{
+				type: 'input',
+				name: 'FirstName',
+				value: $recipient.FirstName,
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'text',
+					label: 'First Name',
+					id: 'firstname',
+					classes: ['form-input rounded w-full'],
+					placeholder: "Patient's First Name"
+				},
+				rules: ['required', 'minlen:6'],
+				messages: {
+					required: 'Firstname field is required!',
+					minlen: 'First name field must have more that 6 characters!'
+				}
+			},
+			{
+				type: 'input',
+				name: 'LastName',
+				value: $recipient.LastName,
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'text',
+					label: 'Last Name',
+					id: 'lastname',
+					classes: ['form-input rounded w-full'],
+					placeholder: "Patient's Last Name"
+				},
+				rules: ['required', 'minlen:6'],
+				messages: {
+					required: 'Lastname field is required!',
+					minlen: 'Last name field must have more that 6 characters!'
+				}
+			},
+			{
+				type: 'select', // required
+				name: 'MaritalStatus', //required
+				value: $recipient.MaritalStatus,
+				attributes: {
+					id: 'MaritalStatus', // required
+					classes: ['form-input rounded w-full'], // optional
+					label: 'Marital Status', // optional
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{
+							value: 'NA',
+							title: 'N/A'
+						},
+						{
+							value: 'SINGLE',
+							title: 'Single'
+						},
+						{
+							value: 'MARRIED',
+							title: 'Married'
+						}
+					]
+				}, // optional
+				rules: [] // optional
+			},
+			{
+				type: 'select', // required
+				name: 'Gender', // required
+				value: $recipient.Gender,
+				attributes: {
+					id: 'Gender', // required
+					classes: ['form-input rounded w-full'], // optional
+					label: 'Gender', // optional
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{
+							value: 'NA',
+							title: 'N/A'
+						},
+						{
+							value: 'MALE',
+							title: 'Male'
+						},
+						{
+							value: 'FEMALE',
+							title: 'Female'
+						}
+					]
+				}, // optional
+				rules: [] // optional
+			},
+			{
+				type: 'input',
+				name: 'DateOfBirth',
+				value: $recipient.DateOfBirth,
+				prefix: {
+					classes: ['flex flex-col items-center justify-between w-full py-2']
+				},
+				attributes: {
+					type: 'date',
+					label: 'Date of Birth',
+					id: 'dob',
+					max: new Date().toISOString().split('T')[0],
+					min: '1900-01-01',
+					classes: ['form-input rounded w-full']
+				}
 			}
-		},
-		{
-			type: 'input',
-			name: 'Phn',
-			value: $recipient.Phn,
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'PHN',
-				id: 'phn',
-				classes: ['form-input bg-gray-200 rounded w-full']
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'FirstName',
-			value: $recipient.FirstName,
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'First Name',
-				id: 'firstname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's First Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'input',
-			name: 'LastName',
-			value: $recipient.LastName,
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'text',
-				label: 'Last Name',
-				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
-			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Lastname field is required!',
-				minlen: 'Last name field must have more that 6 characters!'
-			}
-		},
-		{
-			type: 'select', // required
-			name: 'MaritalStatus', //required
-			value: $recipient.MaritalStatus,
-			attributes: {
-				id: 'MaritalStatus', // required
-				classes: ['form-input rounded w-full'], // optional
-				label: 'Marital Status', // optional
-				disabled: false // optional
-			},
-			extra: {
-				options: [
-					{
-						value: 'NA',
-						title: 'N/A'
-					},
-					{
-						value: 'SINGLE',
-						title: 'Single'
-					},
-					{
-						value: 'MARRIED',
-						title: 'Married'
-					}
-				]
-			}, // optional
-			rules: [] // optional
-		},
-		{
-			type: 'select', // required
-			name: 'Gender', // required
-			value: $recipient.Gender,
-			attributes: {
-				id: 'Gender', // required
-				classes: ['form-input rounded w-full'], // optional
-				label: 'Gender', // optional
-				disabled: false // optional
-			},
-			extra: {
-				options: [
-					{
-						value: 'NA',
-						title: 'N/A'
-					},
-					{
-						value: 'MALE',
-						title: 'Male'
-					},
-					{
-						value: 'FEMALE',
-						title: 'Female'
-					}
-				]
-			}, // optional
-			rules: [] // optional
-		},
-		{
-			type: 'input',
-			name: 'DateOfBirth',
-			value: $recipient.DateOfBirth,
-			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
-			},
-			attributes: {
-				type: 'date',
-				label: 'Date of Birth',
-				id: 'dob',
-				max: new Date().toISOString().split('T')[0],
-				min: '1900-01-01',
-				classes: ['form-input rounded w-full']
-			}
-		}
-		//phonenumber
-	];
+			//phonenumber
+		];
+	}
+
 	let message = '';
 	let values = {};
 	let formSet = false;
@@ -211,11 +229,12 @@
 	}
 
 	values = $recipient;
-	formSet = $recipient.ID !== '';
 </script>
 
 <div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
-	{#if formSet}
+	{#await awaitRecipient()}
+		<div class="mx-auto my-auto text-3xl">Loading...</div>
+	{:then formSet}
 		<form
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
@@ -230,5 +249,5 @@
 				Save
 			</button>
 		</form>
-	{/if}
+	{/await}
 </div>

@@ -18,6 +18,16 @@ mutation NewPatient {
         ...PersonFields
     }
 }
+mutation NewPersonFollowUp($input: PersonFollowUpInput!) {
+    createPersonFollowUp(input: $input) {
+        ...PersonFollowUpFields
+    }
+}
+mutation UpdatePersonFollowUp($input: PersonFollowUpInput!) {
+    updatePersonFollowUp(input: $input) {
+        ...PersonFollowUpFields
+    }
+}
 
 mutation UpdatePatient($patientInput: PersonInput!) {
     updatePatient(input: $patientInput) {

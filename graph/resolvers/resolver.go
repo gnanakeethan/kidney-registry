@@ -58,3 +58,13 @@ var englishUnitedStates = locale.Formatters{
 	17 * (24 * time.Hour) * 30: func(_ time.Duration) string { return "a year" },
 	1<<63 - 1:                  func(d time.Duration) string { return fmt.Sprintf("%.0f years", math.Ceil(d.Hours()/(24.0*30*12))) },
 }
+
+func StringPointer(s string) *string {
+	return &s
+}
+func PointerString(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
