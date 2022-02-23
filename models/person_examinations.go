@@ -1,8 +1,10 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"reflect"
 	"strings"
 	"time"
@@ -10,52 +12,69 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type PersonFollowUpsExaminations struct {
+type ExaminationResults map[string]string
+
+// UnmarshalGQL implements the graphql.Unmarshaler interface
+func (y *ExaminationResults) UnmarshalGQL(v interface{}) error {
+	_, ok := v.(map[string]string)
+	if !ok {
+		return fmt.Errorf(" Examination result must be a map string, got: %v", v)
+	}
+	return nil
+}
+
+// MarshalGQL implements the graphql.Marshaler interface
+func (y ExaminationResults) MarshalGQL(w io.Writer) {
+	result, _ := json.Marshal(y)
+	w.Write(result)
+}
+
+type PersonExamination struct {
 	ID            string          `orm:"column(id);pk"`
 	Description   string          `orm:"column(description)"`
-	Details       string          `orm:"column(details);null"`
-	Results       string          `orm:"column(results);null"`
+	Details       orm.JsonbField  `orm:"column(details);null"`
+	Results       orm.JsonbField  `orm:"column(results);null"`
 	ExaminationId *Examinations   `orm:"column(examination_id);rel(fk)"`
-	Procedure     string          `orm:"column(procedure);null"`
+	Procedure     orm.JsonbField  `orm:"column(procedure);null"`
 	FollowUpId    *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
 	CreatedAt     time.Time       `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
 	UpdatedAt     time.Time       `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
 	DeletedAt     time.Time       `orm:"column(deleted_at);null"`
 }
 
-func (t *PersonFollowUpsExaminations) TableName() string {
+func (t *PersonExamination) TableName() string {
 	return "person_follow_ups_examinations"
 }
 
 func init() {
-	orm.RegisterModel(new(PersonFollowUpsExaminations))
+	orm.RegisterModel(new(PersonExamination))
 }
 
-// AddPersonFollowUpsExaminations insert a new PersonFollowUpsExaminations into database and returns
+// AddPersonFollowUpsExaminations insert a new PersonExamination into database and returns
 // last inserted ID on success.
-func AddPersonFollowUpsExaminations(m *PersonFollowUpsExaminations) (id int64, err error) {
+func AddPersonFollowUpsExaminations(m *PersonExamination) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsExaminationsById retrieves PersonFollowUpsExaminations by ID. Returns error if
+// GetPersonFollowUpsExaminationsById retrieves PersonExamination by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsExaminationsById(id string) (v *PersonFollowUpsExaminations, err error) {
+func GetPersonFollowUpsExaminationsById(id string) (v *PersonExamination, err error) {
 	o := orm.NewOrm()
-	v = &PersonFollowUpsExaminations{ID: id}
+	v = &PersonExamination{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllPersonFollowUpsExaminations retrieves all PersonFollowUpsExaminations matches certain condition. Returns empty list if
+// GetAllPersonFollowUpsExaminations retrieves all PersonExamination matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersonFollowUpsExaminations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonFollowUpsExaminations))
+	qs := o.QueryTable(new(PersonExamination))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -105,7 +124,7 @@ func GetAllPersonFollowUpsExaminations(query map[string]string, fields []string,
 		}
 	}
 	
-	var l []PersonFollowUpsExaminations
+	var l []PersonExamination
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -128,11 +147,11 @@ func GetAllPersonFollowUpsExaminations(query map[string]string, fields []string,
 	return nil, err
 }
 
-// UpdatePersonFollowUpsExaminations updates PersonFollowUpsExaminations by ID and returns error if
+// UpdatePersonFollowUpsExaminations updates PersonExamination by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsExaminationsById(m *PersonFollowUpsExaminations) (err error) {
+func UpdatePersonFollowUpsExaminationsById(m *PersonExamination) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUpsExaminations{ID: m.ID}
+	v := PersonExamination{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -143,15 +162,15 @@ func UpdatePersonFollowUpsExaminationsById(m *PersonFollowUpsExaminations) (err 
 	return
 }
 
-// DeletePersonFollowUpsExaminations deletes PersonFollowUpsExaminations by ID and returns error if
+// DeletePersonFollowUpsExaminations deletes PersonExamination by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonFollowUpsExaminations(id string) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUpsExaminations{ID: id}
+	v := PersonExamination{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonFollowUpsExaminations{ID: id}); err == nil {
+		if num, err = o.Delete(&PersonExamination{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

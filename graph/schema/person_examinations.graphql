@@ -1,0 +1,14 @@
+type PersonExamination {
+    ID : ID!
+    Description: String
+    Details: ExaminationDetails
+    Results: ExaminationResults
+    ExaminationId : ID!
+    Procedure: ExaminationProcedure
+    FollowUpId: ID
+    CreatedAt: String
+    UpdatedAt:String
+    DeletedAt: String
+}
+
+scalar ExaminationResults
