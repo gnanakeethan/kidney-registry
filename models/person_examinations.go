@@ -42,6 +42,8 @@ type PersonExamination struct {
 	DeletedAt     time.Time       `orm:"column(deleted_at);null"`
 }
 
+func (PersonExamination) IsDynamicFormInterface() {}
+
 func (t *PersonExamination) TableName() string {
 	return "person_follow_ups_examinations"
 }

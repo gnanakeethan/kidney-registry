@@ -10,7 +10,7 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type PersonFollowUpsInvestigations struct {
+type PersonInvestigations struct {
 	ID              string          `orm:"column(id);pk"`
 	Description     string          `orm:"column(description)"`
 	Details         string          `orm:"column(details);null"`
@@ -23,39 +23,41 @@ type PersonFollowUpsInvestigations struct {
 	DeletedAt       time.Time       `orm:"column(deleted_at);null"`
 }
 
-func (t *PersonFollowUpsInvestigations) TableName() string {
-	return "person_follow_ups_investigations"
+func (PersonInvestigations) IsDynamicFormInterface() {}
+
+func (t *PersonInvestigations) TableName() string {
+	return "person_investigations"
 }
 
 func init() {
-	orm.RegisterModel(new(PersonFollowUpsInvestigations))
+	orm.RegisterModel(new(PersonInvestigations))
 }
 
-// AddPersonFollowUpsInvestigations insert a new PersonFollowUpsInvestigations into database and returns
+// AddPersonFollowUpsInvestigations insert a new PersonInvestigations into database and returns
 // last inserted ID on success.
-func AddPersonFollowUpsInvestigations(m *PersonFollowUpsInvestigations) (id int64, err error) {
+func AddPersonFollowUpsInvestigations(m *PersonInvestigations) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetPersonFollowUpsInvestigationsById retrieves PersonFollowUpsInvestigations by ID. Returns error if
+// GetPersonFollowUpsInvestigationsById retrieves PersonInvestigations by ID. Returns error if
 // ID doesn't exist
-func GetPersonFollowUpsInvestigationsById(id string) (v *PersonFollowUpsInvestigations, err error) {
+func GetPersonFollowUpsInvestigationsById(id string) (v *PersonInvestigations, err error) {
 	o := orm.NewOrm()
-	v = &PersonFollowUpsInvestigations{ID: id}
+	v = &PersonInvestigations{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllPersonFollowUpsInvestigations retrieves all PersonFollowUpsInvestigations matches certain condition. Returns empty list if
+// GetAllPersonFollowUpsInvestigations retrieves all PersonInvestigations matches certain condition. Returns empty list if
 // no records exist
 func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(PersonFollowUpsInvestigations))
+	qs := o.QueryTable(new(PersonInvestigations))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -105,7 +107,7 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 		}
 	}
 	
-	var l []PersonFollowUpsInvestigations
+	var l []PersonInvestigations
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -128,11 +130,11 @@ func GetAllPersonFollowUpsInvestigations(query map[string]string, fields []strin
 	return nil, err
 }
 
-// UpdatePersonFollowUpsInvestigations updates PersonFollowUpsInvestigations by ID and returns error if
+// UpdatePersonFollowUpsInvestigations updates PersonInvestigations by ID and returns error if
 // the record to be updated doesn't exist
-func UpdatePersonFollowUpsInvestigationsById(m *PersonFollowUpsInvestigations) (err error) {
+func UpdatePersonFollowUpsInvestigationsById(m *PersonInvestigations) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUpsInvestigations{ID: m.ID}
+	v := PersonInvestigations{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -143,15 +145,15 @@ func UpdatePersonFollowUpsInvestigationsById(m *PersonFollowUpsInvestigations) (
 	return
 }
 
-// DeletePersonFollowUpsInvestigations deletes PersonFollowUpsInvestigations by ID and returns error if
+// DeletePersonFollowUpsInvestigations deletes PersonInvestigations by ID and returns error if
 // the record to be deleted doesn't exist
 func DeletePersonFollowUpsInvestigations(id string) (err error) {
 	o := orm.NewOrm()
-	v := PersonFollowUpsInvestigations{ID: id}
+	v := PersonInvestigations{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&PersonFollowUpsInvestigations{ID: id}); err == nil {
+		if num, err = o.Delete(&PersonInvestigations{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

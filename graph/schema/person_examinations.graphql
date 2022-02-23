@@ -1,11 +1,11 @@
-type PersonExamination {
+type PersonExamination implements DynamicFormInterface{
     ID : ID!
+    Examination : Examination
+    Person: Person
     Description: String
     Details: FormDetails
     Results: ExaminationResults
-    ExaminationId : ID!
     Procedure: Procedure
-    FollowUpId: ID
     CreatedAt: String
     UpdatedAt:String
     DeletedAt: String

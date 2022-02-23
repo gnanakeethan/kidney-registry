@@ -7,6 +7,15 @@ type Investigation implements DynamicFormInterface{
     UpdatedAt: String
     DeletedAt: String
 }
+input InvestigationInput{
+    ID          : ID!
+    Details   : FormDetailsInput
+    Procedure : ProcedureInput
+    Order: Int
+    CreatedAt: String
+    UpdatedAt: String
+    DeletedAt: String
+}
 
 input InvestigationFilter {
     Order: IntFilter

@@ -1,0 +1,42 @@
+type PersonInvestigation implements DynamicFormInterface{
+    ID : ID!
+    Investigation : Investigation
+    Person: Person
+    Description: String
+    Details: FormDetails
+    Results: InvestigationResults
+    Procedure: Procedure
+    CreatedAt: String
+    UpdatedAt:String
+    DeletedAt: String
+}
+input PersonInvestigationInput {
+    ID : ID!
+    Description: String
+    Results: InvestigationResults
+    InvestigationId : ID!
+    Investigation: InvestigationInput
+    FollowUpId: ID
+}
+
+scalar InvestigationResults
+
+input PersonInvestigationFilter {
+    InvestigationId: StringFilter
+    CreatedAt: StringFilter
+    UpdatedAt: StringFilter
+    DeletedAt: StringFilter
+}
+type PersonInvestigationList {
+    items: [PersonInvestigation]
+    pagination: Pagination
+}
+extend type Mutation {
+    createPersonInvestigation(input: PersonInvestigationInput!): PersonInvestigation
+    updatePersonInvestigation(input: PersonInvestigationInput!): PersonInvestigation
+    deletePersonInvestigation(ID: ID!): ID
+}
+extend type Query {
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listPersonInvestigations(PersonID: ID!,filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
+}

@@ -19,14 +19,14 @@ input AttributesInput {
     type: String
     label: String
     disabled: Boolean
-    classes: [String]
+    classes: String
 }
 
 type Prefix {
-    classes: [String ]
+    classes: String
 }
 input PrefixInput {
-    classes: [String ]
+    classes: String
 }
 type Items {
     id: String
@@ -74,6 +74,11 @@ input ProcedureInput {
     fields: [FieldsInput]
 }
 type FormDetails {
+    Name: String
+    Description:String
+    Inline: Boolean
+}
+input FormDetailsInput {
     Name: String
     Description:String
     Inline: Boolean

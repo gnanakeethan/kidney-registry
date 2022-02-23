@@ -46,6 +46,9 @@ models:
   ExaminationResults:
     model:
       - models.ExaminationResults
+  InvestigationResults:
+    model:
+      - models.ExaminationResults
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.ID

@@ -27,14 +27,14 @@ type Attributes struct {
 }
 
 type AttributesInput struct {
-	ID       *string   `json:"id"`
-	Max      *int      `json:"max"`
-	Min      *int      `json:"min"`
-	Step     *int      `json:"step"`
-	Type     *string   `json:"type"`
-	Label    *string   `json:"label"`
-	Disabled *bool     `json:"disabled"`
-	Classes  []*string `json:"classes"`
+	ID       *string `json:"id"`
+	Max      *int    `json:"max"`
+	Min      *int    `json:"min"`
+	Step     *int    `json:"step"`
+	Type     *string `json:"type"`
+	Label    *string `json:"label"`
+	Disabled *bool   `json:"disabled"`
+	Classes  *string `json:"classes"`
 }
 
 type DashboardMenus struct {
@@ -111,6 +111,12 @@ type FormDetails struct {
 	Inline      *bool   `json:"Inline"`
 }
 
+type FormDetailsInput struct {
+	Name        *string `json:"Name"`
+	Description *string `json:"Description"`
+	Inline      *bool   `json:"Inline"`
+}
+
 type IntFilter struct {
 	Comparison ComparisonType `json:"comparison"`
 	And        *IntFilter     `json:"and"`
@@ -120,6 +126,16 @@ type IntFilter struct {
 
 type InvestigationFilter struct {
 	Order *IntFilter `json:"Order"`
+}
+
+type InvestigationInput struct {
+	ID        string            `json:"ID"`
+	Details   *FormDetailsInput `json:"Details"`
+	Procedure *ProcedureInput   `json:"Procedure"`
+	Order     *int              `json:"Order"`
+	CreatedAt *string           `json:"CreatedAt"`
+	UpdatedAt *string           `json:"UpdatedAt"`
+	DeletedAt *string           `json:"DeletedAt"`
 }
 
 type InvestigationList struct {
@@ -243,6 +259,42 @@ type PersonInput struct {
 	UpdatedAt           *string        `json:"UpdatedAt"`
 }
 
+type PersonInvestigation struct {
+	ID            string             `json:"ID"`
+	Investigation *Investigation     `json:"Investigation"`
+	Person        *Person            `json:"Person"`
+	Description   *string            `json:"Description"`
+	Details       *FormDetails       `json:"Details"`
+	Results       ExaminationResults `json:"Results"`
+	Procedure     *Procedure         `json:"Procedure"`
+	CreatedAt     *string            `json:"CreatedAt"`
+	UpdatedAt     *string            `json:"UpdatedAt"`
+	DeletedAt     *string            `json:"DeletedAt"`
+}
+
+func (PersonInvestigation) IsDynamicFormInterface() {}
+
+type PersonInvestigationFilter struct {
+	InvestigationID *StringFilter `json:"InvestigationId"`
+	CreatedAt       *StringFilter `json:"CreatedAt"`
+	UpdatedAt       *StringFilter `json:"UpdatedAt"`
+	DeletedAt       *StringFilter `json:"DeletedAt"`
+}
+
+type PersonInvestigationInput struct {
+	ID              string              `json:"ID"`
+	Description     *string             `json:"Description"`
+	Results         ExaminationResults  `json:"Results"`
+	InvestigationID string              `json:"InvestigationId"`
+	Investigation   *InvestigationInput `json:"Investigation"`
+	FollowUpID      *string             `json:"FollowUpId"`
+}
+
+type PersonInvestigationList struct {
+	Items      []*PersonInvestigation `json:"items"`
+	Pagination *Pagination            `json:"pagination"`
+}
+
 type PersonList struct {
 	Persons    []*Person   `json:"persons"`
 	Pagination *Pagination `json:"pagination"`
@@ -280,11 +332,11 @@ type PersonMedicalHistoryList struct {
 }
 
 type Prefix struct {
-	Classes []*string `json:"classes"`
+	Classes *string `json:"classes"`
 }
 
 type PrefixInput struct {
-	Classes []*string `json:"classes"`
+	Classes *string `json:"classes"`
 }
 
 type Procedure struct {

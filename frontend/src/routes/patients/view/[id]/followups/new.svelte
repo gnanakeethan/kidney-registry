@@ -1,106 +1,190 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { recipient } from '$lib/state/recipient';
+	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { activeUrl } from '$lib/state/SidebarStore';
+	import { mutation } from '@urql/svelte';
+	import { onMount } from 'svelte';
+	// import { Person } from 'lib/graphql/generated';
+	import {
+		AddPatientDocument,
+		AddPatientMutation,
+		NewPatientDocument,
+		NewPatientMutation
+	} from '../../../../../lib/graphql/generated';
 
-	let fields = [];
+	const newPatient = mutation<NewPatientMutation>({
+		query: NewPatientDocument
+	});
+	const addPatient = mutation<AddPatientMutation>({
+		query: AddPatientDocument
+	});
+	onMount(() => {
+		newPatient<NewPatientDocument>(null).then((root: { data: NewPatientDocument }) => {
+			let patient = root.data.newPatient;
+			values = patient;
+			console.log(values);
+			formSet = true;
+		});
+	});
+	const fields = [
+		{
+			type: 'input',
+			name: 'ID',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Recipient ID',
+				id: 'recipient_id',
+				classes: ['form-input bg-gray-200 rounded w-full']
+			},
+			rules: ['required', 'minlen:6'],
+			messages: {
+				required: 'Firstname field is required!',
+				minlen: 'First name field must have more that 6 characters!'
+			}
+		},
+		{
+			type: 'input',
+			name: 'Phn',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'PHN',
+				id: 'phn',
+				classes: ['form-input bg-gray-200 rounded w-full']
+			},
+			rules: ['required', 'minlen:6'],
+			messages: {
+				required: 'Firstname field is required!',
+				minlen: 'First name field must have more that 6 characters!'
+			}
+		},
+		{
+			type: 'input',
+			name: 'FirstName',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'First Name',
+				id: 'firstname',
+				classes: ['form-input rounded w-full'],
+				placeholder: "Patient's First Name"
+			},
+			rules: ['required', 'minlen:6'],
+			messages: {
+				required: 'Firstname field is required!',
+				minlen: 'First name field must have more that 6 characters!'
+			}
+		},
+		{
+			type: 'input',
+			name: 'LastName',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Last Name',
+				id: 'lastname',
+				classes: ['form-input rounded w-full'],
+				placeholder: "Patient's Last Name"
+			},
+			rules: ['required', 'minlen:6'],
+			messages: {
+				required: 'Lastname field is required!',
+				minlen: 'Last name field must have more that 6 characters!'
+			}
+		},
+		{
+			type: 'select', // required
+			name: 'MaritalStatus', //required
+			attributes: {
+				id: 'MaritalStatus', // required
+				classes: ['form-input rounded w-full'], // optional
+				label: 'Marital Status', // optional
+				disabled: false // optional
+			},
+			extra: {
+				options: [
+					{
+						value: 'NA',
+						title: 'N/A'
+					},
+					{
+						value: 'SINGLE',
+						title: 'Single'
+					},
+					{
+						value: 'MARRIED',
+						title: 'Married'
+					}
+				]
+			}, // optional
+			rules: [] // optional
+		},
+		{
+			type: 'select', // required
+			name: 'Gender', // required
+			attributes: {
+				id: 'Gender', // required
+				classes: ['form-input rounded w-full'], // optional
+				label: 'Gender', // optional
+				disabled: false // optional
+			},
+			extra: {
+				options: [
+					{
+						value: 'NA',
+						title: 'N/A'
+					},
+					{
+						value: 'MALE',
+						title: 'Male'
+					},
+					{
+						value: 'FEMALE',
+						title: 'Female'
+					}
+				]
+			}, // optional
+			rules: [] // optional
+		},
+		{
+			type: 'input',
+			name: 'DateOfBirth',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'date',
+				label: 'Date of Birth',
+				id: 'dob',
+				max: new Date().toISOString().split('T')[0],
+				min: '1900-01-01',
+				classes: ['form-input rounded w-full']
+			}
+		}
+		//phonenumber
+	];
 	let message = '';
 	let values = {};
-	$: formSet = !!$recipient.ID;
-	$: if (formSet) {
-		fields = [
-			{
-				type: 'input',
-				name: 'Person.ID',
-				value: $recipient.ID,
-				prefix: {
-					classes: ['hidden flex flex-col items-center justify-between w-full py-2']
-				},
-				attributes: {
-					type: 'text',
-					label: 'Recipient PHN',
-					id: 'recipient_id',
-					readonly: true,
-					classes: ['form-input bg-gray-200 rounded w-full']
-				}
-			},
-			{
-				type: 'input',
-				name: 'Person.Phn',
-				value: $recipient.Phn,
-				prefix: {
-					classes: ['flex flex-col items-center justify-between w-full py-2']
-				},
-				attributes: {
-					type: 'text',
-					label: 'Recipient PHN',
-					id: 'recipient_idd',
-					readonly: true,
-					classes: ['form-input bg-gray-200 rounded w-full']
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Description', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Description', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'Complaints', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Complaints', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'RenalBiopsies', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Renal Biopsies', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			},
-			{
-				type: 'textarea', // required
-				name: 'CaseStatus', // required
-				value: '', // optional
-				attributes: {
-					id: 'id-field', // required
-					classes: 'form-textarea rounded w-full my-3', // optional
-					label: 'Case Status', // optional
-					disabled: false, // optional
-					readonly: false, // optional
-					rows: null, // optional
-					cols: null // optional
-				}
-			}
-		];
-	}
+	let formSet = false;
 	let isValidForm = false;
 
 	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+		const data = values as FormValues;
 		if (!isValidForm) {
 			if (
 				!confirm(
@@ -120,34 +204,20 @@
 		console.log(values);
 		console.log(isValidForm);
 		if (isValidForm) {
-			values = deepen(values);
-			console.log(values);
 			message = 'Saving Data....';
+			addPatient({ patientInput: values }).then((result) => {
+				console.log(result);
+				alert('Saved');
+				goto('/patients/view/' + result.data.addPatient.ID + '/history/new/history');
+			});
 		} else {
-			message = 'Please fill all the required fields';
+			message =
+				'Please check the fields ' +
+				fields
+					.filter((field) => field.dirty)
+					.map((field) => field.name)
+					.join(' ,');
 		}
-	}
-
-	function deepen(obj) {
-		const result = {};
-
-		// For each object path (property key) in the object
-		for (const objectPath in obj) {
-			// Split path into component parts
-			const parts = objectPath.split('.');
-
-			// Create sub-objects along path as needed
-			let target = result;
-			while (parts.length > 1) {
-				const part = parts.shift();
-				target = target[part] = target[part] || {};
-			}
-
-			// Set value at end of path
-			target[parts[0]] = obj[objectPath];
-		}
-
-		return result;
 	}
 </script>
 
@@ -157,17 +227,31 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Followup For {$recipient.FirstName}</div>
-			<Field bind:isValidForm bind:values {fields} />
+			<div class="text-xl font-bold">New Patient</div>
+			<Field {fields} bind:values bind:isValidForm />
 			{message}
 			<button
 				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
 				type="submit"
 			>
-				Add Followup
+				Register Patient
 			</button>
 		</form>
-	{:else}
-		Loading...
 	{/if}
 </div>
+
+<style>
+	.custom-form :global(.form-group) {
+		padding: 10px;
+		margin-bottom: 10px;
+	}
+
+	.custom-form :global(.custom-form-group) {
+		padding: 10px;
+		color: white;
+		margin-bottom: 10px;
+	}
+
+	.custom-form :global(.class-description) {
+	}
+</style>

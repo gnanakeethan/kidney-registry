@@ -18,10 +18,9 @@ type PersonWorkups struct {
 	Comments       string    `orm:"column(comments);null"`
 	InitiationDate time.Time `orm:"column(initiation_date);type(timestamp without time zone);null"`
 	ActivationDate time.Time `orm:"column(activation_date);type(timestamp without time zone);null"`
-	
-	CreatedAt time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
-	DeletedAt time.Time `orm:"column(deleted_at);null"`
+	CreatedAt      time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
+	UpdatedAt      time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	DeletedAt      time.Time `orm:"column(deleted_at);null"`
 }
 
 func (t *PersonWorkups) TableName() string {
