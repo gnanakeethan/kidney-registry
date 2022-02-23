@@ -36,6 +36,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Examination() ExaminationResolver
 	Mutation() MutationResolver
 	Person() PersonResolver
 	PersonExamination() PersonExaminationResolver
@@ -76,6 +77,7 @@ type ComplexityRoot struct {
 		DeletedAt func(childComplexity int) int
 		Details   func(childComplexity int) int
 		ID        func(childComplexity int) int
+		Order     func(childComplexity int) int
 		Procedure func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
 	}
@@ -83,6 +85,11 @@ type ComplexityRoot struct {
 	ExaminationDetails struct {
 		Description func(childComplexity int) int
 		Name        func(childComplexity int) int
+	}
+
+	ExaminationList struct {
+		Items      func(childComplexity int) int
+		Pagination func(childComplexity int) int
 	}
 
 	ExaminationProcedure struct {
@@ -245,6 +252,7 @@ type ComplexityRoot struct {
 	Query struct {
 		Error                      func(childComplexity int) int
 		GetPatient                 func(childComplexity int, id string) int
+		ListExaminations           func(childComplexity int, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListPatients               func(childComplexity int, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListPersonMedicalHistories func(childComplexity int, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		PersonFollowUp             func(childComplexity int, id string) int
@@ -274,6 +282,14 @@ type ComplexityRoot struct {
 	}
 }
 
+type ExaminationResolver interface {
+	Details(ctx context.Context, obj *models.Examination) (*models.ExaminationDetails, error)
+	Procedure(ctx context.Context, obj *models.Examination) (*models.ExaminationProcedure, error)
+	Order(ctx context.Context, obj *models.Examination) (*int, error)
+	CreatedAt(ctx context.Context, obj *models.Examination) (*string, error)
+	UpdatedAt(ctx context.Context, obj *models.Examination) (*string, error)
+	DeletedAt(ctx context.Context, obj *models.Examination) (*string, error)
+}
 type MutationResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
 	UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error)
@@ -323,6 +339,7 @@ type PersonOrganDonationResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
+	ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error)
 	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error)
 	GetPatient(ctx context.Context, id string) (*models.Person, error)
 	PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
@@ -465,6 +482,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Examination.ID(childComplexity), true
 
+	case "Examination.Order":
+		if e.complexity.Examination.Order == nil {
+			break
+		}
+
+		return e.complexity.Examination.Order(childComplexity), true
+
 	case "Examination.Procedure":
 		if e.complexity.Examination.Procedure == nil {
 			break
@@ -492,6 +516,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ExaminationDetails.Name(childComplexity), true
+
+	case "ExaminationList.items":
+		if e.complexity.ExaminationList.Items == nil {
+			break
+		}
+
+		return e.complexity.ExaminationList.Items(childComplexity), true
+
+	case "ExaminationList.pagination":
+		if e.complexity.ExaminationList.Pagination == nil {
+			break
+		}
+
+		return e.complexity.ExaminationList.Pagination(childComplexity), true
 
 	case "ExaminationProcedure.fields":
 		if e.complexity.ExaminationProcedure.Fields == nil {
@@ -1283,6 +1321,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetPatient(childComplexity, args["ID"].(string)), true
 
+	case "Query.listExaminations":
+		if e.complexity.Query.ListExaminations == nil {
+			break
+		}
+
+		args, err := ec.field_Query_listExaminations_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ListExaminations(childComplexity, args["filter"].(*models.ExaminationFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
+
 	case "Query.listPatients":
 		if e.complexity.Query.ListPatients == nil {
 			break
@@ -1576,6 +1626,7 @@ extend type Mutation {
     ID          : ID!
     Details   : ExaminationDetails
     Procedure : ExaminationProcedure
+    Order: Int
     CreatedAt: String
     UpdatedAt: String
     DeletedAt: String
@@ -1619,6 +1670,18 @@ type Fields {
 
 type ExaminationProcedure {
     fields: [Fields ]
+}
+input ExaminationFilter {
+    Order: IntFilter
+}
+type ExaminationList {
+    items: [Examination]
+    pagination: Pagination
+}
+
+extend type Query {
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
 }`, BuiltIn: false},
 	{Name: "graph/schema/menu.graphql", Input: `type DashboardMenus {
     sidebarTop: Menu
@@ -1765,7 +1828,9 @@ extend type Mutation {
     DeletedAt: String
 }
 
-scalar ExaminationResults`, BuiltIn: false},
+scalar ExaminationResults
+
+`, BuiltIn: false},
 	{Name: "graph/schema/person_followups.graphql", Input: `type PersonFollowUp {
     ID: String!
     ClinicNo: String
@@ -2150,6 +2215,57 @@ func (ec *executionContext) field_Query_getPatient_args(ctx context.Context, raw
 		}
 	}
 	args["ID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_listExaminations_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.ExaminationFilter
+	if tmp, ok := rawArgs["filter"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
+		arg0, err = ec.unmarshalOExaminationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationFilter(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["filter"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg1
+	var arg2 *int
+	if tmp, ok := rawArgs["limit"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limit"] = arg2
+	var arg3 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg3, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg3
+	var arg4 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
 	return args, nil
 }
 
@@ -2876,14 +2992,14 @@ func (ec *executionContext) _Examination_Details(ctx context.Context, field grap
 		Object:     "Examination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Details, nil
+		return ec.resolvers.Examination().Details(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2908,14 +3024,14 @@ func (ec *executionContext) _Examination_Procedure(ctx context.Context, field gr
 		Object:     "Examination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Procedure, nil
+		return ec.resolvers.Examination().Procedure(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2929,6 +3045,38 @@ func (ec *executionContext) _Examination_Procedure(ctx context.Context, field gr
 	return ec.marshalOExaminationProcedure2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationProcedure(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Examination_Order(ctx context.Context, field graphql.CollectedField, obj *models.Examination) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Examination",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Examination().Order(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Examination_CreatedAt(ctx context.Context, field graphql.CollectedField, obj *models.Examination) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -2940,14 +3088,14 @@ func (ec *executionContext) _Examination_CreatedAt(ctx context.Context, field gr
 		Object:     "Examination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedAt, nil
+		return ec.resolvers.Examination().CreatedAt(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2972,14 +3120,14 @@ func (ec *executionContext) _Examination_UpdatedAt(ctx context.Context, field gr
 		Object:     "Examination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedAt, nil
+		return ec.resolvers.Examination().UpdatedAt(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3004,14 +3152,14 @@ func (ec *executionContext) _Examination_DeletedAt(ctx context.Context, field gr
 		Object:     "Examination",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.DeletedAt, nil
+		return ec.resolvers.Examination().DeletedAt(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3087,6 +3235,70 @@ func (ec *executionContext) _ExaminationDetails_Description(ctx context.Context,
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ExaminationList_items(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationList) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "ExaminationList",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.Examination)
+	fc.Result = res
+	return ec.marshalOExamination2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ExaminationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationList) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "ExaminationList",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pagination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ExaminationProcedure_fields(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationProcedure) (ret graphql.Marshaler) {
@@ -6523,6 +6735,45 @@ func (ec *executionContext) _Query_error(ctx context.Context, field graphql.Coll
 	return ec.marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query_listExaminations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_listExaminations_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().ListExaminations(rctx, args["filter"].(*models.ExaminationFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.ExaminationList)
+	fc.Result = res
+	return ec.marshalOExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationList(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_listPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -8277,6 +8528,29 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputExaminationFilter(ctx context.Context, obj interface{}) (models.ExaminationFilter, error) {
+	var it models.ExaminationFilter
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "Order":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Order"))
+			it.Order, err = ec.unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐIntFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputFloatFilter(ctx context.Context, obj interface{}) (models.FloatFilter, error) {
 	var it models.FloatFilter
 	asMap := map[string]interface{}{}
@@ -9293,43 +9567,110 @@ func (ec *executionContext) _Examination(ctx context.Context, sel ast.SelectionS
 			out.Values[i] = innerFunc(ctx)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "Details":
+			field := field
+
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Examination_Details(ctx, field, obj)
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Examination_Details(ctx, field, obj)
+				return res
 			}
 
-			out.Values[i] = innerFunc(ctx)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
+			})
 		case "Procedure":
+			field := field
+
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Examination_Procedure(ctx, field, obj)
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Examination_Procedure(ctx, field, obj)
+				return res
 			}
 
-			out.Values[i] = innerFunc(ctx)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
+			})
+		case "Order":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Examination_Order(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "CreatedAt":
+			field := field
+
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Examination_CreatedAt(ctx, field, obj)
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Examination_CreatedAt(ctx, field, obj)
+				return res
 			}
 
-			out.Values[i] = innerFunc(ctx)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
+			})
 		case "UpdatedAt":
+			field := field
+
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Examination_UpdatedAt(ctx, field, obj)
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Examination_UpdatedAt(ctx, field, obj)
+				return res
 			}
 
-			out.Values[i] = innerFunc(ctx)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
+			})
 		case "DeletedAt":
+			field := field
+
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Examination_DeletedAt(ctx, field, obj)
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Examination_DeletedAt(ctx, field, obj)
+				return res
 			}
 
-			out.Values[i] = innerFunc(ctx)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9361,6 +9702,41 @@ func (ec *executionContext) _ExaminationDetails(ctx context.Context, sel ast.Sel
 		case "Description":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._ExaminationDetails_Description(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var examinationListImplementors = []string{"ExaminationList"}
+
+func (ec *executionContext) _ExaminationList(ctx context.Context, sel ast.SelectionSet, obj *models.ExaminationList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, examinationListImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ExaminationList")
+		case "items":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._ExaminationList_items(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "pagination":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._ExaminationList_pagination(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -10799,6 +11175,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "listExaminations":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_listExaminations(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "listPatients":
 			field := field
 
@@ -12056,11 +12452,74 @@ func (ec *executionContext) marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidne
 	return ec._Error(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOExamination2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx context.Context, sel ast.SelectionSet, v []*models.Examination) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx context.Context, sel ast.SelectionSet, v *models.Examination) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Examination(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOExaminationDetails2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationDetails(ctx context.Context, sel ast.SelectionSet, v *models.ExaminationDetails) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ExaminationDetails(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOExaminationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationFilter(ctx context.Context, v interface{}) (*models.ExaminationFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputExaminationFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationList(ctx context.Context, sel ast.SelectionSet, v *models.ExaminationList) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ExaminationList(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOExaminationProcedure2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationProcedure(ctx context.Context, sel ast.SelectionSet, v *models.ExaminationProcedure) graphql.Marshaler {

@@ -34,7 +34,7 @@ type PersonExamination struct {
 	Description   string          `orm:"column(description)"`
 	Details       orm.JsonbField  `orm:"column(details);null"`
 	Results       orm.JsonbField  `orm:"column(results);null"`
-	ExaminationId *Examinations   `orm:"column(examination_id);rel(fk)"`
+	ExaminationId *Examination    `orm:"column(examination_id);rel(fk)"`
 	Procedure     orm.JsonbField  `orm:"column(procedure);null"`
 	FollowUpId    *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
 	CreatedAt     time.Time       `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`

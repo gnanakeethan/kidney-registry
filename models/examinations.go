@@ -10,7 +10,7 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type Examinations struct {
+type Examination struct {
 	ID        string         `orm:"column(id);pk"`
 	Details   orm.JsonbField `orm:"column(details);null"`
 	Procedure orm.JsonbField `orm:"column(procedure);null"`
@@ -19,39 +19,39 @@ type Examinations struct {
 	DeletedAt time.Time      `orm:"column(deleted_at);null"`
 }
 
-func (t *Examinations) TableName() string {
+func (t *Examination) TableName() string {
 	return "examinations"
 }
 
 func init() {
-	orm.RegisterModel(new(Examinations))
+	orm.RegisterModel(new(Examination))
 }
 
-// AddExaminations insert a new Examinations into database and returns
+// AddExaminations insert a new Examination into database and returns
 // last inserted ID on success.
-func AddExaminations(m *Examinations) (id int64, err error) {
+func AddExaminations(m *Examination) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetExaminationsById retrieves Examinations by ID. Returns error if
+// GetExaminationsById retrieves Examination by ID. Returns error if
 // ID doesn't exist
-func GetExaminationsById(id string) (v *Examinations, err error) {
+func GetExaminationsById(id string) (v *Examination, err error) {
 	o := orm.NewOrm()
-	v = &Examinations{ID: id}
+	v = &Examination{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllExaminations retrieves all Examinations matches certain condition. Returns empty list if
+// GetAllExaminations retrieves all Examination matches certain condition. Returns empty list if
 // no records exist
 func GetAllExaminations(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Examinations))
+	qs := o.QueryTable(new(Examination))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -101,7 +101,7 @@ func GetAllExaminations(query map[string]string, fields []string, sortby []strin
 		}
 	}
 	
-	var l []Examinations
+	var l []Examination
 	qs = qs.OrderBy(sortFields...)
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -124,11 +124,11 @@ func GetAllExaminations(query map[string]string, fields []string, sortby []strin
 	return nil, err
 }
 
-// UpdateExaminations updates Examinations by ID and returns error if
+// UpdateExaminations updates Examination by ID and returns error if
 // the record to be updated doesn't exist
-func UpdateExaminationsById(m *Examinations) (err error) {
+func UpdateExaminationsById(m *Examination) (err error) {
 	o := orm.NewOrm()
-	v := Examinations{ID: m.ID}
+	v := Examination{ID: m.ID}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -139,15 +139,15 @@ func UpdateExaminationsById(m *Examinations) (err error) {
 	return
 }
 
-// DeleteExaminations deletes Examinations by ID and returns error if
+// DeleteExaminations deletes Examination by ID and returns error if
 // the record to be deleted doesn't exist
 func DeleteExaminations(id string) (err error) {
 	o := orm.NewOrm()
-	v := Examinations{ID: id}
+	v := Examination{ID: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Examinations{ID: id}); err == nil {
+		if num, err = o.Delete(&Examination{ID: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

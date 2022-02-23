@@ -2,6 +2,7 @@ type Examination {
     ID          : ID!
     Details   : ExaminationDetails
     Procedure : ExaminationProcedure
+    Order: Int
     CreatedAt: String
     UpdatedAt: String
     DeletedAt: String
@@ -45,4 +46,16 @@ type Fields {
 
 type ExaminationProcedure {
     fields: [Fields ]
+}
+input ExaminationFilter {
+    Order: IntFilter
+}
+type ExaminationList {
+    items: [Examination]
+    pagination: Pagination
+}
+
+extend type Query {
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
 }

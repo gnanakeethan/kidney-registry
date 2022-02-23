@@ -12,3 +12,19 @@ type PersonExamination {
 }
 
 scalar ExaminationResults
+
+input PersonExaminationFilter {
+    ExaminationId: StringFilter
+    FollowUpId: StringFilter
+    CreatedAt: StringFilter
+    UpdatedAt: StringFilter
+    DeletedAt: StringFilter
+}
+type PersonExaminationList {
+    items: [PersonExamination]
+    pagination: Pagination
+}
+extend type Query {
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listPersonExaminations(PersonID: ID!,filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
+}

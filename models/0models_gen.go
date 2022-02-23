@@ -29,18 +29,18 @@ type Error struct {
 	Status int    `json:"status"`
 }
 
-type Examination struct {
-	ID        string                `json:"ID"`
-	Details   *ExaminationDetails   `json:"Details"`
-	Procedure *ExaminationProcedure `json:"Procedure"`
-	CreatedAt *string               `json:"CreatedAt"`
-	UpdatedAt *string               `json:"UpdatedAt"`
-	DeletedAt *string               `json:"DeletedAt"`
-}
-
 type ExaminationDetails struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
+}
+
+type ExaminationFilter struct {
+	Order *IntFilter `json:"Order"`
+}
+
+type ExaminationList struct {
+	Items      []*Examination `json:"items"`
+	Pagination *Pagination    `json:"pagination"`
 }
 
 type ExaminationProcedure struct {
