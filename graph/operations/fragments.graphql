@@ -9,7 +9,6 @@ fragment PersonFollowUpFields on PersonFollowUp {
     ID
     Description
     Complaints
-    RenalBiopsies
     CaseStatus
     DialysisPlan {
         Type
@@ -22,6 +21,8 @@ fragment PersonFollowUpFields on PersonFollowUp {
     Person {
         ID
     }
+    CreatedAt
+    UpdatedAt
 }
 
 fragment Procedure on DynamicFormInterface {

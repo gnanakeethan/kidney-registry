@@ -8,11 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
@@ -33,7 +34,7 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	if input.Donation != nil && input.Donation.ID != "" {
 		personFollowUp.Donation = &models.PersonOrganDonation{ID: input.Donation.ID}
 	}
-
+	
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}
@@ -79,6 +80,14 @@ func (r *personFollowUpResolver) DialysisPlan(ctx context.Context, obj *models.P
 	dialysisPlan := models.DialysisPlan{}
 	json.Unmarshal([]byte(dialysisString), &dialysisPlan)
 	return &dialysisPlan, nil
+}
+
+func (r *personFollowUpResolver) CreatedAt(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
+	return StringPointer(obj.CreatedAt.Format(time.RFC3339)), nil
+}
+
+func (r *personFollowUpResolver) UpdatedAt(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
+	return StringPointer(obj.UpdatedAt.Format(time.RFC3339)), nil
 }
 
 func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {

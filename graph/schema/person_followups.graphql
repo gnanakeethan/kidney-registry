@@ -9,6 +9,8 @@ type PersonFollowUp {
     ConsultantOpinion: String
     Person: Person
     Donation: PersonOrganDonation
+    CreatedAt: String
+    UpdatedAt: String
 }
 input PersonFollowUpFilter {
     ID: StringFilter

@@ -59,6 +59,19 @@ query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $p
     }
 }
 
+
+query ListPersonFollowUp ($ID: ID!,$filter: PersonFollowUpFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPersonFollowUps(PersonID: $ID,filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonFollowUpFields
+        }
+    }
+}
+
+
 query ListExaminations {
     listExaminations {
         items {
