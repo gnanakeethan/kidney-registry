@@ -20,7 +20,7 @@ input PersonOrganDonationInput{
     AcuteRejection: Boolean
 }
 input PersonOrganDonationFilter{
-    ID: ID!
+    ID: ID
     Donor: PersonFilter
     Recipient: PersonFilter
     DonationType: String

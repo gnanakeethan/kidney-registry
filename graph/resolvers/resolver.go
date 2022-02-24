@@ -69,6 +69,13 @@ func PointerString(s *string) string {
 	return *s
 }
 
+func PointerBool(b *bool) bool {
+	if b == nil {
+		return false
+	}
+	return *b
+}
+
 func formatDateTime(date time.Time) string {
 	location, _ := time.LoadLocation("Asia/Colombo")
 	return date.In(location).Format("2006-01-02 15:04:05")

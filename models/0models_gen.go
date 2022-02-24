@@ -368,7 +368,7 @@ type PersonMedicalHistoryList struct {
 }
 
 type PersonOrganDonationFilter struct {
-	ID             string        `json:"ID"`
+	ID             *string       `json:"ID"`
 	Donor          *PersonFilter `json:"Donor"`
 	Recipient      *PersonFilter `json:"Recipient"`
 	DonationType   *string       `json:"DonationType"`

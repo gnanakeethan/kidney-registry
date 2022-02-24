@@ -6,13 +6,35 @@ package resolvers
 import (
 	"context"
 	"fmt"
-
+	
+	"github.com/kr/pretty"
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
-	panic(fmt.Errorf("not implemented"))
+	pretty.Println(input.Donor)
+	donor, err := models.AddPatient(input.Donor)
+	
+	if err != nil {
+		panic(err)
+	}
+	personOrganDonation := models.PersonOrganDonation{
+		ID:             ksuid.New().String(),
+		Receiver:       &models.Person{ID: input.Recipient.ID},
+		Donor:          donor,
+		DonationType:   PointerString(input.DonationType),
+		PlannedDate:    GetDate(PointerString(input.PlannedDate)),
+		PerformedDate:  GetDate(PointerString(input.PerformedDate)),
+		DischargedDate: GetDate(PointerString(input.DischargedDate)),
+		AcuteRejection: PointerBool(input.AcuteRejection),
+	}
+	if _, err = models.AddPersonOrganDonation(&personOrganDonation); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
+		return &personOrganDonation, nil
+	}
+	return &personOrganDonation, err
 }
 
 func (r *mutationResolver) UpdatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
@@ -48,7 +70,11 @@ func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (
 }
 
 func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {
-	panic(fmt.Errorf("not implemented"))
+	if filter == nil {
+		filter = &models.PersonOrganDonationFilter{}
+	}
+	filter.Recipient = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
+	return models.ListPersonOrganDonations(ctx, filter, page, limit, sortBy, orderBy)
 }
 
 // PersonOrganDonation returns generated.PersonOrganDonationResolver implementation.

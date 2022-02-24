@@ -3092,7 +3092,7 @@ input PersonOrganDonationInput{
     AcuteRejection: Boolean
 }
 input PersonOrganDonationFilter{
-    ID: ID!
+    ID: ID
     Donor: PersonFilter
     Recipient: PersonFilter
     DonationType: String
@@ -15073,7 +15073,7 @@ func (ec *executionContext) unmarshalInputPersonOrganDonationFilter(ctx context.
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

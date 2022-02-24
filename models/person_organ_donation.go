@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -8,6 +9,7 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/kr/pretty"
 )
 
 type PersonOrganDonation struct {
@@ -50,6 +52,28 @@ func GetPersonOrganDonationById(id string) (v *PersonOrganDonation, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+func ListPersonOrganDonations(ctx context.Context, filter *PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonOrganDonationList, error) {
+	personOrganDonation, personOrganDonations := PersonOrganDonation{}, []*PersonOrganDonation{}
+	filterPtr := PersonOrganDonationFilter{}
+	if filter != nil {
+		filterPtr = *filter
+	}
+	query, currentPage, perPage, preloads := extractQuery(ctx, personOrganDonation, filterPtr, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAll(personOrganDonation, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := qs.All(&personOrganDonations, preloads...); err != nil {
+		return nil, err
+	}
+	pagination := getPagination(currentPage, totalItems, perPage)
+	return &PersonOrganDonationList{
+		Items:      personOrganDonations,
+		Pagination: pagination,
+	}, nil
 }
 
 // GetAllPersonOrganDonation retrieves all PersonOrganDonation matches certain condition. Returns empty list if

@@ -21,9 +21,6 @@ func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, erro
 		FirstName:     "testing",
 		Gender:        "NA",
 		MaritalStatus: "NA",
-		PersonType:    "RECIPIENT",
-		Status:        "INACTIVE",
-		RecordStatus:  "DRAFT",
 		Phn:           time.Now().Format("20060102030405") + randString(2),
 	}
 	return person, nil

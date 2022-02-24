@@ -2,6 +2,7 @@
 	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
+	import { recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { deepen } from '$lib/utils';
 	import { mutation } from '@urql/svelte';
@@ -34,6 +35,25 @@
 	const fields = [
 		{
 			type: 'input',
+			name: 'Recipient.ID',
+			value: $recipientId,
+			prefix: {
+				classes: ['hidden flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Recipient ID',
+				id: 'recipient_id',
+				classes: ['form-input bg-gray-200 rounded w-full']
+			},
+			rules: ['required', 'minlen:6'],
+			messages: {
+				required: 'Firstname field is required!',
+				minlen: 'First name field must have more that 6 characters!'
+			}
+		},
+		{
+			type: 'input',
 			name: 'Donor.ID',
 			value: '',
 			prefix: {
@@ -49,6 +69,20 @@
 			messages: {
 				required: 'Firstname field is required!',
 				minlen: 'First name field must have more that 6 characters!'
+			}
+		},
+		{
+			type: 'input',
+			name: 'Donor.RecordStatus',
+			value: 'DRAFT',
+			prefix: {
+				classes: ['hidden flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'Donor ID',
+				id: 'recipient_id',
+				classes: ['form-input bg-gray-200 rounded w-full']
 			}
 		},
 		{
@@ -184,6 +218,7 @@
 		{
 			type: 'select', // required
 			name: 'Donor.Status', // required
+			value: 'ACTIVE',
 			prefix: { classes: ['mb-2 w-full'] },
 
 			attributes: {
@@ -194,20 +229,20 @@
 			},
 			extra: {
 				options: [
-					{ value: 'REACTIVE', title: 'Reactive' },
-					{ value: 'NON_REACTIVE', title: 'Non Reactive' }
+					{ value: 'ACTIVE', title: 'Active' },
+					{ value: 'INACTIVE', title: 'Inactive' }
 				]
 			} // optional
 		},
 		{
-			type: 'select', // required
+			type: 'text', // required
 			name: 'Donor.PersonType', // required
 			value: 'DONOR',
-			prefix: { classes: ['mb-2 w-full'] },
+			prefix: { classes: [' hidden mb-2 w-full'] },
 			attributes: {
 				id: 'id-field', // required
 				classes: ['form-select'], // optional
-				label: 'Person Status', // optional
+				label: 'Person Type', // optional
 				disabled: false // optional
 			},
 			extra: {
