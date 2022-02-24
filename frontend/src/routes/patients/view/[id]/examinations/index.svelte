@@ -24,7 +24,8 @@
 
 	let columns = [
 		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'Details.Name', name: 'Examination Name' }
+		{ key: 'Details.Name', name: 'Examination Name' },
+		{ key: 'ID', name: 'Examination Name' }
 	];
 	let displayedColumns = ['CreatedAt', 'Details.Name'];
 	let element: User;
@@ -42,8 +43,8 @@
 		{filters}
 		rootAccessPath="data.listPersonExaminations.items"
 	>
-		<svelte:fragment let:element={Patient} slot="actions">
-			<!--			<a href="/patients/view/{Patient.ID}">View Patient</a>-->
+		<svelte:fragment let:element={examination} slot="actions">
+			<a href="/patients/view/{$recipientId}/examinations/{examination.ID}">View</a>
 		</svelte:fragment>
 	</Table>
 </div>

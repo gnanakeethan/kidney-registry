@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { recipient } from '$lib/state/recipient';
+	import { recipient, recipientId } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation, operationStore, query } from '@urql/svelte';
 	import {
@@ -101,20 +101,14 @@
 	export function onSubmit() {
 		if (isValidForm) {
 			try {
+				console.log(values);
 				values = deepen(values);
 				console.log(values);
 				newPersonExamination({ input: values }).then((result) => {
 					console.log(result);
 					alert('Saved =>' + result.data.createPersonExamination.ID);
-					// goto('/patients/view/' + $recipientId + '/examinations');
+					goto('/patients/view/' + $recipientId + '/examinations');
 				});
-				// newHistory({ input: valuesRef }).then((result) => {
-				// 	console.log(result);
-				// 	alert('Data Saved');
-				// 	if (others == 1) {
-				// 		goto('/patients/view/' + $recipientId + '/history/');
-				// 	}
-				// });
 			} catch (e) {
 				alert('Please fill all the required fields');
 				message = 'Please fill all the required fields';

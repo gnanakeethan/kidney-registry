@@ -28,10 +28,10 @@
 	const dispatch = createEventDispatcher();
 
 	// Change value field.
-	function onChangerValue(event) {
+	function onChangedValue(event) {
 		dispatch('changeValue', {
 			name: field.name,
-			value: scanValue(field.attributes.type, event.target.value)
+			value: items
 		});
 	}
 
@@ -51,8 +51,13 @@
 
 	let x = 0;
 	let y = 0;
-	let items = [];
+	let items: Item[] = [];
 	$: console.log(items);
+	if (field.value !== undefined || field.value !== {}) {
+		if (field.value[0].x !== undefined) {
+			items = field.value as Item[];
+		}
+	}
 
 	function mouseHandler(e) {
 		const rect = e.currentTarget.getBoundingClientRect();
@@ -102,6 +107,7 @@
 							{i + 1}
 						</div>
 						<textarea
+							on:change={onChangedValue}
 							placeholder="Type here ..."
 							class="relative mx-auto rounded border-2   indent-2 text-sm text-black"
 							bind:value={item.data.description}
@@ -120,6 +126,7 @@
 					<textarea
 						placeholder="Type here ..."
 						rows="3"
+						on:change={onChangedValue}
 						class="w-full flex-grow rounded border-2 indent-2 text-sm text-black"
 						bind:value={item.data.description}
 					/>
