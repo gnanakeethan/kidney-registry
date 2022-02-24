@@ -156,3 +156,19 @@ query GetPersonInvestigation ($id: ID!){
         ...ProcedureFragment
     }
 }
+query ListPersonWorkup ($ID: ID!,$filter: PersonWorkupFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPersonWorkups(PersonID: $ID,filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonWorkupFields
+        }
+    }
+}
+query GetPersonWorkup ($id: ID!){
+    getPersonWorkup(ID: $id) {
+        ...PersonWorkupFields
+        ...ProcedureFragment
+    }
+}

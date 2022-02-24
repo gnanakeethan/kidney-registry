@@ -1,44 +1,44 @@
 <script>
 	import { operationStore, query } from '@urql/svelte';
-	import { ListInvestigationsDocument } from '../../../../../lib/graphql/generated';
-	import GenericInvestigation from './_investigation-generic.svelte';
+	import { ListWorkupsDocument } from '../../../../../lib/graphql/generated';
+	import GenericWorkup from './_workup-generic.svelte';
 	import { goto } from '$app/navigation';
 	import { recipientId } from '../../../../../lib/state/recipient';
 
-	const investigations = operationStore(ListInvestigationsDocument);
-	query(investigations);
-	let investigationId = '';
-	$: if (investigationId) {
-		const backup = investigationId;
-		investigationId = '';
+	const workups = operationStore(ListWorkupsDocument);
+	query(workups);
+	let workupId = '';
+	$: if (workupId) {
+		const backup = workupId;
+		workupId = '';
 		// setTimeout(()  => {
-		investigationId = backup;
+		workupId = backup;
 		// }, 100);
 	}
-	let currentInvestigation = 0;
+	let currentWorkup = 0;
 	let examsLength = 0;
-	investigations.subscribe((data) => {
-		examsLength = data?.data?.listInvestigations.items.length;
-		let exam1 = data?.data?.listInvestigations.items[0];
-		investigationId = exam1?.ID;
-		currentInvestigation = 1;
+	workups.subscribe((data) => {
+		examsLength = data?.data?.listWorkups.items.length;
+		let exam1 = data?.data?.listWorkups.items[0];
+		workupId = exam1?.ID;
+		currentWorkup = 1;
 	});
 
 	function Clear() {
-		investigationId = '';
+		workupId = '';
 	}
 
 	function Next() {
-		console.log(currentInvestigation);
-		currentInvestigation++;
-		if (currentInvestigation > examsLength) {
-			currentInvestigation = 1;
+		console.log(currentWorkup);
+		currentWorkup++;
+		if (currentWorkup > examsLength) {
+			currentWorkup = 1;
 		}
-		investigationId = '';
+		workupId = '';
 
-		console.log(investigations);
+		console.log(workups);
 		setTimeout(() => {
-			investigationId = investigations.data.listInvestigations.items[currentInvestigation - 1].ID;
+			workupId = workups.data.listWorkups.items[currentWorkup - 1].ID;
 		}, 200);
 	}
 
@@ -47,27 +47,25 @@
 	}
 </script>
 
-{#if $investigations.fetching}
+{#if $workups.fetching}
 	<p>Loading...</p>
-{:else if $investigations.error}
-	<p>Oh no... {$investigations.error.message}</p>
+{:else if $workups.error}
+	<p>Oh no... {$workups.error.message}</p>
 {:else}
-	Select Investigation
-	<select class="form-select" name="" id="" bind:value={investigationId}>
-		{#each $investigations.data.listInvestigations.items as investigation}
-			<!--{investigation.Details.Name} <br>-->
-			<option disabled={investigationId !== ''} value={investigation.ID}
-				>{investigation.Details.Name}</option
-			>
+	Select Workup
+	<select class="form-select" name="" id="" bind:value={workupId}>
+		{#each $workups.data.listWorkups.items as workup}
+			<!--{workup.Details.Name} <br>-->
+			<option disabled={workupId !== ''} value={workup.ID}>{workup.Details.Name}</option>
 		{/each}
 	</select>
 	<button on:click={() => Clear()} class="bg-yellow-400 p-4 m-2">Clear Selection</button>
 	<button on:click={() => Next()} class="bg-green-400 p-4 m-2">Next</button>
 	<button on:click={() => Followup()} class="bg-green-400 p-4 m-2">FollowUp</button>
 {/if}
-{#if investigationId}
+{#if workupId}
 	<div class="mx-auto w-3/4">
-		<GenericInvestigation bind:investigationId />
+		<GenericWorkup bind:workupId />
 	</div>
 {/if}
-<!--<GeneralInvestigation bind:investigationId />-->
+<!--<GeneralWorkup bind:workupId />-->

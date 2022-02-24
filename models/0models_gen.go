@@ -367,6 +367,17 @@ type PersonMedicalHistoryList struct {
 	Pagination *Pagination             `json:"pagination"`
 }
 
+type PersonOrganDonationFilter struct {
+	ID             string        `json:"ID"`
+	Donor          *PersonFilter `json:"Donor"`
+	Recipient      *PersonFilter `json:"Recipient"`
+	DonationType   *string       `json:"DonationType"`
+	PlannedDate    *string       `json:"PlannedDate"`
+	PerformedDate  *string       `json:"PerformedDate"`
+	DischargedDate *string       `json:"DischargedDate"`
+	AcuteRejection *bool         `json:"AcuteRejection"`
+}
+
 type PersonOrganDonationInput struct {
 	ID             string       `json:"ID"`
 	Donor          *PersonInput `json:"Donor"`
@@ -376,6 +387,11 @@ type PersonOrganDonationInput struct {
 	PerformedDate  *string      `json:"PerformedDate"`
 	DischargedDate *string      `json:"DischargedDate"`
 	AcuteRejection *bool        `json:"AcuteRejection"`
+}
+
+type PersonOrganDonationList struct {
+	Items      []*PersonOrganDonation `json:"items"`
+	Pagination *Pagination            `json:"pagination"`
 }
 
 type PersonWorkupFilter struct {

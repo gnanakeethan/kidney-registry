@@ -5,6 +5,24 @@ fragment Pagination on Pagination {
     totalItems
     itemsPerPage
 }
+fragment PersonWorkupFields on PersonWorkup {
+    ID
+    Workup {
+        ID
+    }
+    Person {
+        ID
+    }
+    Description
+    Details {
+        Name
+        Description
+    }
+    Results
+    CreatedAt
+    UpdatedAt
+    DeletedAt
+}
 fragment PersonFollowUpFields on PersonFollowUp {
     ID
     Description

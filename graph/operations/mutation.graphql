@@ -67,3 +67,27 @@ mutation UpdatePersonInvestigation($input: PersonInvestigationInput!) {
         ...PersonInvestigationFields
     }
 }
+
+
+mutation NewPersonWorkup($input: PersonWorkupInput!) {
+    createPersonWorkup(input: $input) {
+        ...PersonWorkupFields
+    }
+}
+mutation UpdatePersonWorkup($input: PersonWorkupInput!) {
+    updatePersonWorkup(input: $input) {
+        ...PersonWorkupFields
+    }
+}
+
+
+mutation NewPersonWorkup($input: PersonWorkupInput!) {
+    createPersonWorkup(input: $input) {
+        ...PersonWorkupFields
+    }
+}
+mutation UpdatePersonWorkup($input: PersonWorkupInput!) {
+    updatePersonWorkup(input: $input) {
+        ...PersonWorkupFields
+    }
+}

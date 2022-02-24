@@ -5,27 +5,27 @@
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation, operationStore, query } from '@urql/svelte';
 	import {
-		GetInvestigationDocument,
-		Investigation,
-		NewPersonInvestigationDocument,
-		NewPersonInvestigationMutation
+		GetWorkupDocument,
+		NewPersonWorkupDocument,
+		NewPersonWorkupMutation,
+		Workup
 	} from '../../../../../lib/graphql/generated';
 
-	const newPersonInvestigation = mutation<NewPersonInvestigationMutation>({
-		query: NewPersonInvestigationDocument
+	const newPersonWorkup = mutation<NewPersonWorkupMutation>({
+		query: NewPersonWorkupDocument
 	});
-	export let investigationId = '';
-	let investigation: Investigation;
+	export let workupId = '';
+	let workup: Workup;
 
-	if (investigationId != '') {
+	if (workupId != '') {
 		const result = query(
-			operationStore(GetInvestigationDocument, {
-				id: investigationId
+			operationStore(GetWorkupDocument, {
+				id: workupId
 			})
 		).subscribe(({ data }) => {
-			if (data?.getInvestigation) {
-				investigation = data?.getInvestigation;
-				console.log(investigation);
+			if (data?.getWorkup) {
+				workup = data?.getWorkup;
+				console.log(workup);
 			}
 		});
 	}
@@ -33,12 +33,12 @@
 	let values = {};
 	export let i = 0;
 	export let others = 1;
-	$: formSet = !!$recipient.ID && !!investigation?.ID;
+	$: formSet = !!$recipient.ID && !!workup?.ID;
 	let baseFields = [];
 	let fields = [];
-	$: if (investigation !== undefined) {
+	$: if (workup !== undefined) {
 		fields = [...baseFields];
-		investigation.Procedure.fields.forEach((field) => {
+		workup.Procedure.fields.forEach((field) => {
 			if (!field.name.startsWith('Results.')) {
 				field.name = 'Results.' + field.name;
 			}
@@ -46,7 +46,7 @@
 		});
 	}
 
-	$: if (formSet && investigation !== undefined && investigation.ID !== undefined) {
+	$: if (formSet && workup !== undefined && workup.ID !== undefined) {
 		baseFields = [
 			{
 				type: 'input',
@@ -65,8 +65,8 @@
 			},
 			{
 				type: 'input',
-				name: 'Investigation.ID',
-				value: investigation.ID,
+				name: 'Workup.ID',
+				value: workup.ID,
 				prefix: {
 					classes: ['hidden flex flex-col items-center justify-between']
 				},
@@ -81,7 +81,7 @@
 			{
 				type: 'input',
 				name: 'ValidDays',
-				value: investigation.Details.ValidDays,
+				value: workup.Details.ValidDays,
 				prefix: {
 					classes: ['w-full  items-center justify-between']
 				},
@@ -162,10 +162,10 @@
 				console.log(values);
 				values = deepen(values);
 				console.log(values);
-				newPersonInvestigation({ input: values }).then((result) => {
+				newPersonWorkup({ input: values }).then((result) => {
 					console.log(result);
-					alert('Saved =>' + result.data.createPersonInvestigation.ID);
-					goto('/patients/view/' + $recipientId + '/investigations');
+					alert('Saved =>' + result.data.createPersonWorkup.ID);
+					goto('/patients/view/' + $recipientId + '/workups');
 				});
 			} catch (e) {
 				alert('Please fill all the required fields');
@@ -205,16 +205,11 @@
 		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
 				<div class="my-8 text-xl font-bold capitalize">
-					{investigation?.Details?.Name?.toString()} For {$recipient.FirstName}
+					{workup?.Details?.Name?.toString()} For {$recipient.FirstName}
 				</div>
 			{/if}
 			<div class="flex w-full flex-col items-center justify-between">
-				<Field
-					inline={investigation?.Details?.Inline ?? false}
-					bind:isValidForm
-					bind:values
-					{fields}
-				/>
+				<Field inline={workup?.Details?.Inline ?? false} bind:isValidForm bind:values {fields} />
 				{message}
 				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
 					>Save

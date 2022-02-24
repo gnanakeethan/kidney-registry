@@ -4,9 +4,9 @@
 	import Table from '$lib/components/table/Table.svelte';
 	import { recipientId } from '$lib/state/recipient';
 	import {
-		ListPersonInvestigationDocument,
-		ListPersonInvestigationQuery,
-		PersonInvestigationList
+		ListPersonWorkupDocument,
+		ListPersonWorkupQuery,
+		PersonWorkupList
 	} from '../../../../../lib/graphql/generated';
 
 	interface User {
@@ -14,18 +14,18 @@
 		ID: string;
 	}
 
-	const queryRepository = new GraphQLQueryRepository<ListPersonInvestigationQuery>();
-	let dataSource = new DataSourceConnector<PersonInvestigationList>(
+	const queryRepository = new GraphQLQueryRepository<ListPersonWorkupQuery>();
+	let dataSource = new DataSourceConnector<PersonWorkupList>(
 		queryRepository,
-		ListPersonInvestigationDocument
+		ListPersonWorkupDocument
 	);
 	let loading = true;
 	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
 		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'Details.Name', name: 'Investigation Name' },
-		{ key: 'ID', name: 'Investigation Name' }
+		{ key: 'Details.Name', name: 'Workup Name' },
+		{ key: 'ID', name: 'Workup Name' }
 	];
 	let displayedColumns = ['CreatedAt', 'Details.Name'];
 	let element: User;
@@ -41,10 +41,10 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath="data.listPersonInvestigations.items"
+		rootAccessPath="data.listPersonWorkups.items"
 	>
-		<svelte:fragment let:element={investigation} slot="actions">
-			<a href="/patients/view/{$recipientId}/investigations/{investigation.ID}">View</a>
+		<svelte:fragment let:element={workup} slot="actions">
+			<a href="/patients/view/{$recipientId}/workups/{workup.ID}">View</a>
 		</svelte:fragment>
 	</Table>
 </div>

@@ -6,12 +6,20 @@ package resolvers
 import (
 	"context"
 	"fmt"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *personOrganDonationResolver) Donor(ctx context.Context, obj *models.PersonOrganDonation) (*models.Person, error) {
+func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) UpdatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeletePersonOrganDonation(ctx context.Context, id string) (*string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -32,6 +40,14 @@ func (r *personOrganDonationResolver) PerformedDate(ctx context.Context, obj *mo
 }
 
 func (r *personOrganDonationResolver) DischargedDate(ctx context.Context, obj *models.PersonOrganDonation) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonation, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

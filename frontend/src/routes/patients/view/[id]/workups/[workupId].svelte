@@ -3,8 +3,8 @@
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
 		console.log(loadInput.url);
-		const { investigationId } = loadInput.params;
-		return { props: { investigationId } };
+		const { workupId } = loadInput.params;
+		return { props: { workupId } };
 	}
 </script>
 
@@ -15,28 +15,28 @@
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation, operationStore, query } from '@urql/svelte';
 	import {
-		GetPersonInvestigationDocument,
-		UpdatePersonInvestigationDocument,
-		UpdatePersonInvestigationMutation,
-		PersonInvestigation
+		GetPersonWorkupDocument,
+		UpdatePersonWorkupDocument,
+		UpdatePersonWorkupMutation,
+		PersonWorkup
 	} from '../../../../../lib/graphql/generated';
 
-	const updatePersonInvestigation = mutation<UpdatePersonInvestigationMutation>({
-		query: UpdatePersonInvestigationDocument
+	const updatePersonWorkup = mutation<UpdatePersonWorkupMutation>({
+		query: UpdatePersonWorkupDocument
 	});
-	export let investigationId = '';
-	let investigation: PersonInvestigation;
+	export let workupId = '';
+	let workup: PersonWorkup;
 
 	let message = '';
 	let values = {};
 	export let i = 0;
 	export let others = 1;
-	$: formSet = !!$recipient.ID && !!investigation?.ID;
+	$: formSet = !!$recipient.ID && !!workup?.ID;
 	let baseFields = [];
 	let fields = [];
-	$: if (investigation !== undefined) {
+	$: if (workup !== undefined) {
 		fields = [...baseFields];
-		investigation.Procedure.fields.forEach((field) => {
+		workup.Procedure.fields.forEach((field) => {
 			if (!field.name.startsWith('Results.')) {
 				field.name = 'Results.' + field.name;
 			}
@@ -44,12 +44,12 @@
 		});
 	}
 
-	$: if (formSet && investigation !== undefined && investigation.ID !== undefined) {
+	$: if (formSet && workup !== undefined && workup.ID !== undefined) {
 		baseFields = [
 			{
 				type: 'input',
 				name: 'ID',
-				value: investigationId,
+				value: workupId,
 				prefix: {
 					classes: ['hidden flex flex-col items-center justify-between']
 				},
@@ -78,8 +78,8 @@
 			},
 			{
 				type: 'input',
-				name: 'Investigation.ID',
-				value: investigation.Investigation.ID,
+				name: 'Workup.ID',
+				value: workup.Workup.ID,
 				prefix: {
 					classes: ['hidden flex flex-col items-center justify-between']
 				},
@@ -90,65 +90,65 @@
 					readonly: true,
 					classes: ['form-input bg-gray-200 rounded my-2']
 				}
-			},
-			{
-				type: 'input',
-				name: 'ValidDays',
-				value: investigation.ValidDays,
-				prefix: {
-					classes: ['w-full  items-center justify-between']
-				},
-				attributes: {
-					type: 'text',
-					label: 'Valid Days',
-					id: 'recipient_id',
-					classes: ['form-input rounded my-2']
-				}
-			},
-
-			{
-				type: 'input',
-				name: 'CreatedAt',
-				value: new Date().toISOString().split('T')[0],
-				prefix: {
-					classes: ['w-full items-center justify-between']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Requested Date',
-					id: 'recipient_id',
-					readonly: true,
-					classes: ['form-input rounded my-2']
-				}
-			},
-			{
-				type: 'input',
-				name: 'ExpectedDate',
-				value: investigation.ExpectedDate === '0001-01-01' ? '' : investigation.ExpectedDate,
-				prefix: {
-					classes: ['w-full items-center justify-between']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Expected Date',
-					id: 'recipient_id',
-					classes: ['form-input rounded my-2']
-				}
-			},
-			{
-				type: 'input',
-				name: 'ObtainedDate',
-				value: investigation.ObtainedDate === '0001-01-01' ? '' : investigation.ObtainedDate,
-				prefix: {
-					classes: ['w-full items-center justify-between']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Obtained Date',
-					id: 'recipient_id',
-					classes: ['form-input rounded my-2']
-				}
 			}
+			// {
+			// 	type: 'input',
+			// 	name: 'ValidDays',
+			// 	value: workup.ValidDays,
+			// 	prefix: {
+			// 		classes: ['w-full  items-center justify-between']
+			// 	},
+			// 	attributes: {
+			// 		type: 'text',
+			// 		label: 'Valid Days',
+			// 		id: 'recipient_id',
+			// 		classes: ['form-input rounded my-2']
+			// 	}
+			// },
+			//
+			// {
+			// 	type: 'input',
+			// 	name: 'CreatedAt',
+			// 	value: new Date().toISOString().split('T')[0],
+			// 	prefix: {
+			// 		classes: ['w-full items-center justify-between']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'Requested Date',
+			// 		id: 'recipient_id',
+			// 		readonly: true,
+			// 		classes: ['form-input rounded my-2']
+			// 	}
+			// },
+			// {
+			// 	type: 'input',
+			// 	name: 'ExpectedDate',
+			// 	value: workup.ExpectedDate === '0001-01-01' ? '' : workup.ExpectedDate,
+			// 	prefix: {
+			// 		classes: ['w-full items-center justify-between']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'Expected Date',
+			// 		id: 'recipient_id',
+			// 		classes: ['form-input rounded my-2']
+			// 	}
+			// },
+			// {
+			// 	type: 'input',
+			// 	name: 'ObtainedDate',
+			// 	value: workup.ObtainedDate === '0001-01-01' ? '' : workup.ObtainedDate,
+			// 	prefix: {
+			// 		classes: ['w-full items-center justify-between']
+			// 	},
+			// 	attributes: {
+			// 		type: 'date',
+			// 		label: 'Obtained Date',
+			// 		id: 'recipient_id',
+			// 		classes: ['form-input rounded my-2']
+			// 	}
+			// }
 		];
 	}
 	let isValidForm = false;
@@ -174,10 +174,10 @@
 			try {
 				values = deepen(values);
 				console.log(values);
-				updatePersonInvestigation({ input: values }).then((result) => {
+				updatePersonWorkup({ input: values }).then((result) => {
 					console.log(result);
-					alert('Saved =>' + result.data.updatePersonInvestigation.ID);
-					// goto('/patients/view/' + $recipientId + '/investigations');
+					alert('Saved =>' + result.data.updatePersonWorkup.ID);
+					// goto('/patients/view/' + $recipientId + '/workups');
 				});
 				// newHistory({ input: valuesRef }).then((result) => {
 				// 	console.log(result);
@@ -218,22 +218,22 @@
 		return result;
 	}
 
-	if (investigationId != '') {
+	if (workupId != '') {
 		const result = query(
-			operationStore(GetPersonInvestigationDocument, {
-				id: investigationId
+			operationStore(GetPersonWorkupDocument, {
+				id: workupId
 			})
 		).subscribe(({ data }) => {
-			if (data?.getPersonInvestigation) {
-				investigation = data?.getPersonInvestigation;
-				console.log(investigation.Results);
-				// for (let [i, results] of investigation.Results) {
+			if (data?.getPersonWorkup) {
+				workup = data?.getPersonWorkup;
+				console.log(workup.Results);
+				// for (let [i, results] of workup.Results) {
 				// 	if (!i.startsWith('Results.')) {
 				// 		i = 'Results.' + i;
 				// 	}
 				// 	values[i] = results;
 				// }
-				Object.entries(investigation.Results).forEach(([key, value]) => {
+				Object.entries(workup.Results).forEach(([key, value]) => {
 					if (!key.startsWith('Results.')) {
 						key = 'Results.' + key;
 					}
@@ -250,16 +250,11 @@
 		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
 				<div class="my-8 text-xl font-bold capitalize">
-					{investigation?.Details?.Name?.toString().toLowerCase()} For {$recipient.FirstName}
+					{workup?.Details?.Name?.toString().toLowerCase()} For {$recipient.FirstName}
 				</div>
 			{/if}
 			<div class="flex w-full flex-col items-center justify-between">
-				<Field
-					inline={investigation?.Details?.Inline ?? false}
-					bind:isValidForm
-					bind:values
-					{fields}
-				/>
+				<Field inline={workup?.Details?.Inline ?? false} bind:isValidForm bind:values {fields} />
 				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
 					>Save
 				</button>

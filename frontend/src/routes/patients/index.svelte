@@ -9,6 +9,13 @@
 		ID: string;
 	}
 
+	let filters = {
+		filter: {
+			PersonType: { comparison: 'EQUAL', value: 'RECIPIENT' }
+		},
+		orderBy: ['desc'],
+		sortBy: ['CreatedAt']
+	};
 	const queryRepository = new GraphQLQueryRepository<Person>();
 	let dataSource = new DataSourceConnector<Person>(queryRepository, ListPatientsDocument);
 	let loading = true;
@@ -37,6 +44,7 @@
 		bind:selectedRows
 		{columns}
 		{displayedColumns}
+		{filters}
 		rootAccessPath="data.listPatients.persons"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">

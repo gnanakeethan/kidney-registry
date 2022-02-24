@@ -175,6 +175,42 @@
 				min: '1900-01-01',
 				classes: ['form-input rounded w-full']
 			}
+		},
+
+		{
+			type: 'select', // required
+			name: 'Status', // required
+			prefix: { classes: ['mb-2 w-full'] },
+
+			attributes: {
+				id: 'id-field', // required
+				classes: ['form-select'], // optional
+				label: 'Patient Status', // optional
+				disabled: false // optional
+			},
+			extra: {
+				options: [
+					{ value: 'REACTIVE', title: 'Reactive' },
+					{ value: 'NON_REACTIVE', title: 'Non Reactive' }
+				]
+			} // optional
+		},
+		{
+			type: 'select', // required
+			name: 'PersonType', // required
+			prefix: { classes: ['mb-2 w-full'] },
+			attributes: {
+				id: 'id-field', // required
+				classes: ['form-select'], // optional
+				label: 'Person Status', // optional
+				disabled: false // optional
+			},
+			extra: {
+				options: [
+					{ value: 'RECIPIENT', title: 'Recipient' },
+					{ value: 'DONOR', title: 'Donor' }
+				]
+			} // optional
 		}
 		//phonenumber
 	];
@@ -221,7 +257,7 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class="flex h-full flex-wrap overflow-scroll bg-gradient-to-b from-blue-50 to-stone-50 p-2">
 	{#if formSet}
 		<form
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"

@@ -19,3 +19,28 @@ input PersonOrganDonationInput{
     DischargedDate: String
     AcuteRejection: Boolean
 }
+input PersonOrganDonationFilter{
+    ID: ID!
+    Donor: PersonFilter
+    Recipient: PersonFilter
+    DonationType: String
+    PlannedDate: String
+    PerformedDate: String
+    DischargedDate: String
+    AcuteRejection: Boolean
+}
+
+type  PersonOrganDonationList {
+    items: [PersonOrganDonation]
+    pagination: Pagination
+}
+extend type Mutation {
+    createPersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonation
+    updatePersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonation
+    deletePersonOrganDonation(ID: ID!): ID
+}
+extend type Query {
+    getPersonOrganDonation(ID: ID!): PersonOrganDonation
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listPersonOrganDonations(PersonID: ID!,filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonOrganDonationList
+}

@@ -12,8 +12,8 @@ import (
 
 type PersonOrganDonation struct {
 	ID             string    `orm:"column(id);pk"`
-	ReceiverId     *Person   `orm:"column(receiver_id);rel(fk)"`
-	DonorId        *Person   `orm:"column(donor_id);rel(fk)"`
+	Receiver       *Person   `orm:"column(receiver_id);rel(fk)"`
+	Donor          *Person   `orm:"column(donor_id);rel(fk)"`
 	DonationType   string    `orm:"column(donation_type)"`
 	PlannedDate    time.Time `orm:"column(planned_date);type(timestamp);null"`
 	PerformedDate  time.Time `orm:"column(performed_date);type(timestamp);null"`
