@@ -83,11 +83,11 @@ func (r *personFollowUpResolver) DialysisPlan(ctx context.Context, obj *models.P
 }
 
 func (r *personFollowUpResolver) CreatedAt(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
-	return StringPointer(obj.CreatedAt.Format(time.RFC3339)), nil
+	return StringPointer(formatDate(obj.CreatedAt)), nil
 }
 
 func (r *personFollowUpResolver) UpdatedAt(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
-	return StringPointer(obj.UpdatedAt.Format(time.RFC3339)), nil
+	return StringPointer(formatDate(obj.UpdatedAt)), nil
 }
 
 func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {

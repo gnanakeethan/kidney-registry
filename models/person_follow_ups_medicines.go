@@ -17,11 +17,11 @@ type PersonFollowUpsMedicine struct {
 	Dosage       string          `orm:"column(dosage);null"`
 	Frequency    string          `orm:"column(frequency);null"`
 	Duration     string          `orm:"column(duration);null"`
-	StartDate    time.Time       `orm:"column(start_date);type(timestamp without time zone);null"`
-	EndDate      time.Time       `orm:"column(end_date);type(timestamp without time zone);null"`
+	StartDate    time.Time       `orm:"column(start_date);type(timestamp);null"`
+	EndDate      time.Time       `orm:"column(end_date);type(timestamp);null"`
 	FollowUpId   *PersonFollowUp `orm:"column(follow_up_id);rel(fk)"`
-	CreatedAt    time.Time       `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt    time.Time       `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	CreatedAt    time.Time       `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt    time.Time       `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt    time.Time       `orm:"column(deleted_at);null"`
 }
 

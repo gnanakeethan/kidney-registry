@@ -30,7 +30,7 @@ CREATE TYPE public.blood_group AS ENUM (
     'AB+',
     'AB-',
     'NA'
-);
+    );
 
 
 ALTER TYPE public.blood_group OWNER TO gnanakeethan;
@@ -42,8 +42,15 @@ ALTER TYPE public.blood_group OWNER TO gnanakeethan;
 CREATE TYPE public.case_status AS ENUM (
     'PRE',
     'POST',
-    'NA'
-);
+    'NA',
+    'WORKING_UP',
+    'ACTIVE',
+    'SUSPENDED',
+    'PERMANENTLY_UNFIT',
+    'DECEASED_WILL_AWAITING_TRANSPLANT',
+    'DECEASED_POST_CADAVERIC_TRANSPLANT',
+    'RECEIVED_LIVE_TRANSPLANT'
+    );
 
 
 ALTER TYPE public.case_status OWNER TO gnanakeethan;
@@ -58,7 +65,7 @@ CREATE TYPE public.gender AS ENUM (
     'OTHER',
     'N/A',
     'NA'
-);
+    );
 
 
 ALTER TYPE public.gender OWNER TO gnanakeethan;
@@ -72,7 +79,7 @@ CREATE TYPE public.history_type AS ENUM (
     'MEDICAL',
     'SURGICAL',
     'SOCIAL'
-);
+    );
 
 
 ALTER TYPE public.history_type OWNER TO gnanakeethan;
@@ -84,8 +91,14 @@ ALTER TYPE public.history_type OWNER TO gnanakeethan;
 CREATE TYPE public.person_status AS ENUM (
     'ACTIVE',
     'INACTIVE',
-    'NA'
-);
+    'NA',
+    'WORKING_UP',
+    'SUSPENDED',
+    'PERMANENTLY_UNFIT',
+    'DECEASED_WILL_AWAITING_TRANSPLANT',
+    'DECEASED_POST_CADAVERIC_TRANSPLANT',
+    'RECEIVED_LIVE_TRANSPLANT'
+    );
 
 
 ALTER TYPE public.person_status OWNER TO gnanakeethan;
@@ -99,7 +112,7 @@ CREATE TYPE public.person_type AS ENUM (
     'DONOR',
     'RECIPIENT',
     'NA'
-);
+    );
 
 
 ALTER TYPE public.person_type OWNER TO gnanakeethan;
@@ -113,7 +126,7 @@ CREATE TYPE public.record_status AS ENUM (
     'PUBLISHED',
     'REDACTED',
     'NA'
-);
+    );
 
 
 ALTER TYPE public.record_status OWNER TO gnanakeethan;
@@ -126,7 +139,7 @@ CREATE TYPE public.transplantation_type AS ENUM (
     'CADAVERIC',
     'LIV',
     'NA'
-);
+    );
 
 
 ALTER TYPE public.transplantation_type OWNER TO gnanakeethan;
@@ -139,378 +152,432 @@ SET default_table_access_method = heap;
 -- Name: action; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.action (
-    id character(27) NOT NULL,
-    action text,
-    user_id character(27) NOT NULL,
-    created_at timestamp without time zone
+CREATE TABLE public.action
+(
+    id         character(27) NOT NULL,
+    action     text,
+    user_id    character(27) NOT NULL,
+    created_at timestamp with time zone
 );
 
 
-ALTER TABLE public.action OWNER TO gnanakeethan;
+ALTER TABLE public.action
+    OWNER TO gnanakeethan;
 
 --
 -- Name: allergies; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.allergies (
-    id character(27) NOT NULL,
-    allergy text,
-    description text,
-    conditions text,
+CREATE TABLE public.allergies
+(
+    id                character(27) NOT NULL,
+    allergy           text,
+    description       text,
+    conditions        text,
     associated_causes text,
-    type text,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    type              text,
+    created_at        timestamp with time zone DEFAULT now(),
+    updated_at        timestamp with time zone DEFAULT now(),
+    deleted_at        timestamp with time zone
 );
 
 
-ALTER TABLE public.allergies OWNER TO gnanakeethan;
+ALTER TABLE public.allergies
+    OWNER TO gnanakeethan;
 
 --
 -- Name: comorbidities; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.comorbidities (
-    id character(27) NOT NULL,
+CREATE TABLE public.comorbidities
+(
+    id          character(27) NOT NULL,
     comorbidity text,
     description text,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    created_at  timestamp with time zone DEFAULT now(),
+    updated_at  timestamp with time zone DEFAULT now(),
+    deleted_at  timestamp with time zone
 );
 
 
-ALTER TABLE public.comorbidities OWNER TO gnanakeethan;
+ALTER TABLE public.comorbidities
+    OWNER TO gnanakeethan;
 
 --
 -- Name: examinations; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.examinations (
-    id character(27) NOT NULL,
-    details jsonb,
-    procedure jsonb,
-    "order" integer,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+CREATE TABLE public.examinations
+(
+    id         character(27) NOT NULL,
+    details    jsonb,
+    procedure  jsonb,
+    "order"    integer,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    deleted_at timestamp with time zone
 );
 
 
-ALTER TABLE public.examinations OWNER TO gnanakeethan;
+ALTER TABLE public.examinations
+    OWNER TO gnanakeethan;
 
 --
 -- Name: investigations; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.investigations (
-    id character(27) NOT NULL,
-    details jsonb,
-    procedure jsonb,
-    "order" integer,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+CREATE TABLE public.investigations
+(
+    id         character(27) NOT NULL,
+    details    jsonb,
+    procedure  jsonb,
+    "order"    integer,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    deleted_at timestamp with time zone
 );
 
 
-ALTER TABLE public.investigations OWNER TO gnanakeethan;
+ALTER TABLE public.investigations
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_allergy; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_allergy (
-    id character(27) NOT NULL,
-    person_id character(27) NOT NULL,
+CREATE TABLE public.person_allergy
+(
+    id         character(27) NOT NULL,
+    person_id  character(27) NOT NULL,
     allergy_id character(27) NOT NULL,
-    note text,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    note       text,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    deleted_at timestamp with time zone
 );
 
 
-ALTER TABLE public.person_allergy OWNER TO gnanakeethan;
+ALTER TABLE public.person_allergy
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_comorbidities; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_comorbidities (
-    id character(27) NOT NULL,
+CREATE TABLE public.person_comorbidities
+(
+    id             character(27) NOT NULL,
     comorbidity_id character(27) NOT NULL,
-    person_id character(27) NOT NULL,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    person_id      character(27) NOT NULL,
+    created_at     timestamp with time zone DEFAULT now(),
+    updated_at     timestamp with time zone DEFAULT now(),
+    deleted_at     timestamp with time zone
 );
 
 
-ALTER TABLE public.person_comorbidities OWNER TO gnanakeethan;
+ALTER TABLE public.person_comorbidities
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_examinations; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_examinations (
-    id character(27) NOT NULL,
-    description text NOT NULL,
-    details jsonb,
-    results jsonb,
+CREATE TABLE public.person_examinations
+(
+    id             character(27) NOT NULL,
+    description    text          NOT NULL,
+    details        jsonb,
+    results        jsonb,
     examination_id character(27),
-    procedure jsonb,
-    person_id character(27),
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    procedure      jsonb,
+    person_id      character(27),
+    created_at     timestamp with time zone DEFAULT now(),
+    updated_at     timestamp with time zone DEFAULT now(),
+    deleted_at     timestamp with time zone
 );
 
 
-ALTER TABLE public.person_examinations OWNER TO gnanakeethan;
+ALTER TABLE public.person_examinations
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_follow_ups; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_follow_ups (
-    id character(27) NOT NULL,
-    description text,
-    person_id character(27) NOT NULL,
-    complaints text,
-    case_status public.case_status,
-    donation_id character(27),
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+CREATE TABLE public.person_follow_ups
+(
+    id                 character(27) NOT NULL,
+    description        text,
+    person_id          character(27) NOT NULL,
+    complaints         text,
+    case_status        public.case_status,
+    created_at         timestamp with time zone DEFAULT now(),
+    updated_at         timestamp with time zone DEFAULT now(),
+    deleted_at         timestamp with time zone,
+    dialysis_plan      jsonb,
+    other_findings     text,
+    referrals          text,
+    consultant_opinion text,
+    donation_id        character(27)
 );
 
 
-ALTER TABLE public.person_follow_ups OWNER TO gnanakeethan;
+ALTER TABLE public.person_follow_ups
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_follow_ups_medicines; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_follow_ups_medicines (
-    id character(27) NOT NULL,
-    medicine_code text NOT NULL,
-    reason text,
-    follow_up_id character(27) NOT NULL,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+CREATE TABLE public.person_follow_ups_medicines
+(
+    id            character(27) NOT NULL,
+    medicine_code text          NOT NULL,
+    reason        text,
+    follow_up_id  character(27) NOT NULL,
+    created_at    timestamp with time zone DEFAULT now(),
+    updated_at    timestamp with time zone DEFAULT now(),
+    deleted_at    timestamp with time zone,
+    name          text,
+    dosage        text,
+    frequency     text,
+    duration      text,
+    start_date    timestamp with time zone,
+    end_date      timestamp with time zone
 );
 
 
-ALTER TABLE public.person_follow_ups_medicines OWNER TO gnanakeethan;
+ALTER TABLE public.person_follow_ups_medicines
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_investigations; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_investigations (
-    id character(27) NOT NULL,
-    description text NOT NULL,
-    details jsonb,
-    results jsonb,
+CREATE TABLE public.person_investigations
+(
+    id               character(27) NOT NULL,
+    description      text          NOT NULL,
+    details          jsonb,
+    results          jsonb,
     investigation_id character(27),
-    procedure jsonb,
-    person_id character(27) NOT NULL,
-    obtained_date timestamp without time zone,
-    valid_days integer,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    procedure        jsonb,
+    person_id        character(27) NOT NULL,
+    obtained_date    timestamp with time zone,
+    valid_days       integer,
+    created_at       timestamp with time zone DEFAULT now(),
+    updated_at       timestamp with time zone DEFAULT now(),
+    deleted_at       timestamp with time zone,
+    expected_date    timestamp with time zone
 );
 
 
-ALTER TABLE public.person_investigations OWNER TO gnanakeethan;
+ALTER TABLE public.person_investigations
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_medical_history; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_medical_history (
-    id character(27) NOT NULL,
-    person_id character(27) NOT NULL,
-    start_date timestamp without time zone,
-    end_date timestamp without time zone,
-    reason text,
+CREATE TABLE public.person_medical_history
+(
+    id          character(27) NOT NULL,
+    person_id   character(27) NOT NULL,
+    start_date  timestamp with time zone,
+    end_date    timestamp with time zone,
+    reason      text,
     description text,
     medications text,
-    type public.history_type,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    type        public.history_type,
+    created_at  timestamp with time zone DEFAULT now(),
+    updated_at  timestamp with time zone DEFAULT now(),
+    deleted_at  timestamp with time zone
 );
 
 
-ALTER TABLE public.person_medical_history OWNER TO gnanakeethan;
+ALTER TABLE public.person_medical_history
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_organ_donation; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_organ_donation (
-    id character(27) NOT NULL,
-    receiver_id character(27) NOT NULL,
-    donor_id character(27) NOT NULL,
-    donation_type public.transplantation_type NOT NULL,
-    planned_date timestamp without time zone,
-    performed_date timestamp without time zone,
-    discharged_date timestamp without time zone,
+CREATE TABLE public.person_organ_donation
+(
+    id              character(27)               NOT NULL,
+    receiver_id     character(27)               NOT NULL,
+    donor_id        character(27)               NOT NULL,
+    donation_type   public.transplantation_type NOT NULL,
+    planned_date    timestamp with time zone,
+    performed_date  timestamp with time zone,
+    discharged_date timestamp with time zone,
     acute_rejection boolean,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    created_at      timestamp with time zone DEFAULT now(),
+    updated_at      timestamp with time zone DEFAULT now(),
+    deleted_at      timestamp with time zone
 );
 
 
-ALTER TABLE public.person_organ_donation OWNER TO gnanakeethan;
+ALTER TABLE public.person_organ_donation
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_organ_donation_complications; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_organ_donation_complications (
-    id character(27) NOT NULL,
-    donation_id character(27) NOT NULL,
+CREATE TABLE public.person_organ_donation_complications
+(
+    id          character(27)      NOT NULL,
+    donation_id character(27)      NOT NULL,
     description text,
-    type public.case_status NOT NULL,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    type        public.case_status NOT NULL,
+    created_at  timestamp with time zone DEFAULT now(),
+    updated_at  timestamp with time zone DEFAULT now(),
+    deleted_at  timestamp with time zone
 );
 
 
-ALTER TABLE public.person_organ_donation_complications OWNER TO gnanakeethan;
+ALTER TABLE public.person_organ_donation_complications
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_relations; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_relations (
-    id character(27) NOT NULL,
-    patient_id character(27) NOT NULL,
-    relation_id character(27) NOT NULL,
+CREATE TABLE public.person_relations
+(
+    id            character(27)          NOT NULL,
+    patient_id    character(27)          NOT NULL,
+    relation_id   character(27)          NOT NULL,
     relation_type character varying(255) NOT NULL,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    created_at    timestamp with time zone DEFAULT now(),
+    updated_at    timestamp with time zone DEFAULT now(),
+    deleted_at    timestamp with time zone
 );
 
 
-ALTER TABLE public.person_relations OWNER TO gnanakeethan;
+ALTER TABLE public.person_relations
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_suspensions; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_suspensions (
-    id character(27) NOT NULL,
-    person_id character(27) NOT NULL,
-    workup_id character(27),
-    reason text,
-    reviewed_date timestamp(6) without time zone,
+CREATE TABLE public.person_suspensions
+(
+    id               character(27) NOT NULL,
+    person_id        character(27) NOT NULL,
+    workup_id        character(27),
+    reason           text,
+    reviewed_date    timestamp(6) without time zone,
     next_review_date timestamp(6) without time zone,
-    concerns text,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    concerns         text,
+    created_at       timestamp with time zone DEFAULT now(),
+    updated_at       timestamp with time zone DEFAULT now(),
+    deleted_at       timestamp with time zone
 );
 
 
-ALTER TABLE public.person_suspensions OWNER TO gnanakeethan;
+ALTER TABLE public.person_suspensions
+    OWNER TO gnanakeethan;
 
 --
 -- Name: person_workups; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.person_workups (
-    id character(27) NOT NULL,
-    workup_id character(27) NOT NULL,
-    person_id character(27) NOT NULL,
-    procedure jsonb NOT NULL,
-    comments text,
+CREATE TABLE public.person_workups
+(
+    id              character(27) NOT NULL,
+    workup_id       character(27) NOT NULL,
+    person_id       character(27) NOT NULL,
+    procedure       jsonb         NOT NULL,
+    comments        text,
     initiation_date timestamp(6) without time zone,
     activation_date timestamp(6) without time zone,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    created_at      timestamp with time zone DEFAULT now(),
+    updated_at      timestamp with time zone DEFAULT now(),
+    deleted_at      timestamp with time zone,
+    details         jsonb,
+    results         jsonb
 );
 
 
-ALTER TABLE public.person_workups OWNER TO gnanakeethan;
+ALTER TABLE public.person_workups
+    OWNER TO gnanakeethan;
 
 --
 -- Name: persons; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.persons (
-    id character(27) NOT NULL,
-    first_name text NOT NULL,
-    last_name text,
-    address text,
-    date_of_birth date,
-    ethnicity text,
-    phn character varying(255),
-    primary_renal_disease character varying(255),
-    weight double precision,
-    height double precision,
-    gender public.gender,
-    marital_status character varying(255) NOT NULL,
-    contact_no character varying(30),
-    person_type public.person_type DEFAULT 'PATIENT'::public.person_type,
+CREATE TABLE public.persons
+(
+    id                     character(27)          NOT NULL,
+    first_name             text                   NOT NULL,
+    last_name              text,
+    address                text,
+    date_of_birth          date,
+    ethnicity              text,
+    phn                    character varying(255),
+    primary_renal_disease  character varying(255),
+    weight                 double precision,
+    height                 double precision,
+    gender                 public.gender,
+    marital_status         character varying(255) NOT NULL,
+    contact_no             character varying(30),
+    person_type            public.person_type       DEFAULT 'PATIENT'::public.person_type,
     waiting_list_inclusion date,
-    blood_group public.blood_group,
-    status public.person_status,
-    record_status public.record_status,
-    created_by character(27),
-    record_removal_at timestamp without time zone,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone,
-    hla jsonb
+    blood_group            public.blood_group,
+    status                 public.person_status,
+    record_status          public.record_status,
+    created_by             character(27),
+    record_removal_at      timestamp with time zone,
+    created_at             timestamp with time zone DEFAULT now(),
+    updated_at             timestamp with time zone DEFAULT now(),
+    deleted_at             timestamp with time zone,
+    hla                    jsonb
 );
 
 
-ALTER TABLE public.persons OWNER TO gnanakeethan;
+ALTER TABLE public.persons
+    OWNER TO gnanakeethan;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.users (
-    id character(27) NOT NULL,
-    username character varying(255) NOT NULL,
-    password character varying(255) NOT NULL,
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+CREATE TABLE public.users
+(
+    id         character(27)          NOT NULL,
+    username   character varying(255) NOT NULL,
+    password   character varying(255) NOT NULL,
+    updated_at timestamp with time zone DEFAULT now(),
+    deleted_at timestamp with time zone
 );
 
 
-ALTER TABLE public.users OWNER TO gnanakeethan;
+ALTER TABLE public.users
+    OWNER TO gnanakeethan;
 
 --
 -- Name: workups; Type: TABLE; Schema: public; Owner: gnanakeethan
 --
 
-CREATE TABLE public.workups (
-    id character(27) NOT NULL,
-    name text NOT NULL,
+CREATE TABLE public.workups
+(
+    id          character(27) NOT NULL,
+    name        text          NOT NULL,
     description text,
-    procedure jsonb,
-    "order" integer,
-    created_at timestamp without time zone DEFAULT now(),
-    updated_at timestamp without time zone DEFAULT now(),
-    deleted_at timestamp without time zone
+    procedure   jsonb,
+    "order"     integer,
+    created_at  timestamp with time zone DEFAULT now(),
+    updated_at  timestamp with time zone DEFAULT now(),
+    deleted_at  timestamp with time zone,
+    details     jsonb
 );
 
 
-ALTER TABLE public.workups OWNER TO gnanakeethan;
+ALTER TABLE public.workups
+    OWNER TO gnanakeethan;
 
 --
 -- Data for Name: action; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
@@ -524,7 +591,8 @@ COPY public.action (id, action, user_id, created_at) FROM stdin;
 -- Data for Name: allergies; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.allergies (id, allergy, description, conditions, associated_causes, type, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.allergies (id, allergy, description, conditions, associated_causes, type, created_at, updated_at,
+                       deleted_at) FROM stdin;
 \.
 
 
@@ -587,7 +655,8 @@ COPY public.person_comorbidities (id, comorbidity_id, person_id, created_at, upd
 -- Data for Name: person_examinations; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_examinations (id, description, details, results, examination_id, procedure, person_id, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_examinations (id, description, details, results, examination_id, procedure, person_id, created_at,
+                                 updated_at, deleted_at) FROM stdin;
 \.
 
 
@@ -595,7 +664,11 @@ COPY public.person_examinations (id, description, details, results, examination_
 -- Data for Name: person_follow_ups; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_follow_ups (id, description, person_id, complaints, case_status, donation_id, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_follow_ups (id, description, person_id, complaints, case_status, created_at, updated_at, deleted_at,
+                               dialysis_plan, other_findings, referrals, consultant_opinion, donation_id) FROM stdin;
+01FWMFX723KFKCW063WVKF2MHW 		25PJP9EI1WWOWFoIQ9ODc5gbCmT		ACTIVE	2022-02-24 05:21:15.876596	2022-02-24 05:21:15.876596	\N	{"Plan": "2twice per week", "Type": "Hemodialysis", "Frequency": null}				\N
+01FWMG34FXGVNGCHAYRJ2MWN7Q 		25PJP9EI1WWOWFoIQ9ODc5gbCmT		SUSPENDED	2022-02-24 05:24:09.136453	2022-02-24 05:24:09.136454	\N	{"Plan": "", "Type": "Hemodialysis", "Frequency": ""}				\N
+01FWMGBAKP8GKG8TB4BHDJZ6H7 		25PJP9EI1WWOWFoIQ9ODc5gbCmT		SUSPENDED	2022-02-24 05:28:38.012369	2022-02-24 05:28:38.012369	\N	{"Plan": "", "Type": "Hemodialysis", "Frequency": ""}				\N
 \.
 
 
@@ -603,7 +676,8 @@ COPY public.person_follow_ups (id, description, person_id, complaints, case_stat
 -- Data for Name: person_follow_ups_medicines; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_follow_ups_medicines (id, medicine_code, reason, follow_up_id, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_follow_ups_medicines (id, medicine_code, reason, follow_up_id, created_at, updated_at, deleted_at,
+                                         name, dosage, frequency, duration, start_date, end_date) FROM stdin;
 \.
 
 
@@ -611,7 +685,9 @@ COPY public.person_follow_ups_medicines (id, medicine_code, reason, follow_up_id
 -- Data for Name: person_investigations; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_investigations (id, description, details, results, investigation_id, procedure, person_id, obtained_date, valid_days, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_investigations (id, description, details, results, investigation_id, procedure, person_id,
+                                   obtained_date, valid_days, created_at, updated_at, deleted_at,
+                                   expected_date) FROM stdin;
 \.
 
 
@@ -619,11 +695,18 @@ COPY public.person_investigations (id, description, details, results, investigat
 -- Data for Name: person_medical_history; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_medical_history (id, person_id, start_date, end_date, reason, description, medications, type, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_medical_history (id, person_id, start_date, end_date, reason, description, medications, type,
+                                    created_at, updated_at, deleted_at) FROM stdin;
 25UoJM7ksSrakE1eiwPqU8NwCzQ	25Uo93SLVfs6mmj70TPp95mGMRf	\N	\N	Testing	Testing		COMPLAINT	2022-02-23 10:05:52.839485	2022-02-23 10:05:52.839486	\N
 25UoLutK66ennNrMwBwVU324uaq	25Uo93SLVfs6mmj70TPp95mGMRf	2009-02-22 05:30:00	\N	Cerebrovascular Disease	Testing	Testing	MEDICAL	2022-02-23 10:06:13.286879	2022-02-23 10:06:13.286881	\N
 25UoOYtBXXUZtmHQVWYWYVpp6NT	25Uo93SLVfs6mmj70TPp95mGMRf	1999-01-01 06:00:00	\N	Suturing	DIAf	FAI	SURGICAL	2022-02-23 10:06:34.721296	2022-02-23 10:06:34.721298	\N
 25UoRxYo5wkliHULa7NfVSRsiOZ	25Uo93SLVfs6mmj70TPp95mGMRf	2019-01-01 05:30:00	2019-10-10 05:30:00	Drinking	Drink occasionally		SOCIAL	2022-02-23 10:07:01.153918	2022-02-23 10:07:01.15392	\N
+25VV1nRVFk8QQAyCp9u6Nk3IiPt	25Upf1uhGVw9fRYfiqucBAEAW5b	\N	\N	Testing	Testing		COMPLAINT	2022-02-23 15:57:07.843622	2022-02-23 15:57:07.843624	\N
+25VzLESMO3X2EprTIj8TdD9Lmpj	25PJP9EI1WWOWFoIQ9ODc5gbCmT	\N	\N	Testing	Dizzy		COMPLAINT	2022-02-23 20:06:23.908866	2022-02-23 20:06:23.908868	\N
+25VzMlZqmAvTrGZ3DwosYQxbsc3	25VzEKlLn4Ya2KdZXed5aW6IybV	\N	\N	Testing	Dizzy		COMPLAINT	2022-02-23 20:06:35.513523	2022-02-23 20:06:35.513524	\N
+25VzSfrp91N0YPtLZEpHZmn7hF1	25VzEKlLn4Ya2KdZXed5aW6IybV	2009-10-10 05:30:00	\N	Diabetes mellitus			MEDICAL	2022-02-23 20:07:22.896473	2022-02-23 20:07:22.896475	\N
+25VzWukLZDhq6kuIVVsDZ9xo36t	25VzEKlLn4Ya2KdZXed5aW6IybV	2010-01-01 05:30:00	\N	Suturing	Testing		SURGICAL	2022-02-23 20:07:56.60167	2022-02-23 20:07:56.601672	\N
+25Vzb2u1dV3pyy88Nx0ieQut0BN	25VzEKlLn4Ya2KdZXed5aW6IybV	2010-10-10 05:30:00	2015-10-10 05:30:00	Drinking	Occassional		SOCIAL	2022-02-23 20:08:29.07296	2022-02-23 20:08:29.072962	\N
 \.
 
 
@@ -631,7 +714,8 @@ COPY public.person_medical_history (id, person_id, start_date, end_date, reason,
 -- Data for Name: person_organ_donation; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_organ_donation (id, receiver_id, donor_id, donation_type, planned_date, performed_date, discharged_date, acute_rejection, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_organ_donation (id, receiver_id, donor_id, donation_type, planned_date, performed_date,
+                                   discharged_date, acute_rejection, created_at, updated_at, deleted_at) FROM stdin;
 \.
 
 
@@ -639,7 +723,8 @@ COPY public.person_organ_donation (id, receiver_id, donor_id, donation_type, pla
 -- Data for Name: person_organ_donation_complications; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_organ_donation_complications (id, donation_id, description, type, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_organ_donation_complications (id, donation_id, description, type, created_at, updated_at,
+                                                 deleted_at) FROM stdin;
 \.
 
 
@@ -647,7 +732,8 @@ COPY public.person_organ_donation_complications (id, donation_id, description, t
 -- Data for Name: person_relations; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_relations (id, patient_id, relation_id, relation_type, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_relations (id, patient_id, relation_id, relation_type, created_at, updated_at,
+                              deleted_at) FROM stdin;
 \.
 
 
@@ -655,7 +741,8 @@ COPY public.person_relations (id, patient_id, relation_id, relation_type, create
 -- Data for Name: person_suspensions; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_suspensions (id, person_id, workup_id, reason, reviewed_date, next_review_date, concerns, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_suspensions (id, person_id, workup_id, reason, reviewed_date, next_review_date, concerns, created_at,
+                                updated_at, deleted_at) FROM stdin;
 \.
 
 
@@ -663,7 +750,8 @@ COPY public.person_suspensions (id, person_id, workup_id, reason, reviewed_date,
 -- Data for Name: person_workups; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.person_workups (id, workup_id, person_id, procedure, comments, initiation_date, activation_date, created_at, updated_at, deleted_at) FROM stdin;
+COPY public.person_workups (id, workup_id, person_id, procedure, comments, initiation_date, activation_date, created_at,
+                            updated_at, deleted_at, details, results) FROM stdin;
 \.
 
 
@@ -671,15 +759,19 @@ COPY public.person_workups (id, workup_id, person_id, procedure, comments, initi
 -- Data for Name: persons; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.persons (id, first_name, last_name, address, date_of_birth, ethnicity, phn, primary_renal_disease, weight, height, gender, marital_status, contact_no, person_type, waiting_list_inclusion, blood_group, status, record_status, created_by, record_removal_at, created_at, updated_at, deleted_at, hla) FROM stdin;
+COPY public.persons (id, first_name, last_name, address, date_of_birth, ethnicity, phn, primary_renal_disease, weight,
+                     height, gender, marital_status, contact_no, person_type, waiting_list_inclusion, blood_group,
+                     status, record_status, created_by, record_removal_at, created_at, updated_at, deleted_at,
+                     hla) FROM stdin;
 25Or4YKypfNN33NyPVPXfW7lOHV	asdfgtesting	adsfgfd		1966-01-05		2022022189162982		0	0	FEMALE	SINGLE		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-21 16:22:06.415421	2022-02-21 16:22:06.424663	\N	\N
 25Oqo9JBsOyyWK1vKBE0I9hCIic	testing	Testing		1966-01-05		2022022130952687		0	0	MALE	SINGLE		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-21 16:22:06.415421	2022-02-21 16:22:06.424663	\N	\N
 25PJmjvJzf01Hml3FGRpdIm70Pl	testing2	testing2		2000-02-22		2022022187679988		0	0	NA	NA		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-21 16:22:06.415421	2022-02-21 16:22:06.424663	\N	\N
-25PJP9EI1WWOWFoIQ9ODc5gbCmT	Gnanakeethan	Balasubramaniam		1990-02-23		2022022180296172		0	0	MALE	SINGLE		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-22 13:41:51.933829	2022-02-22 20:48:02.946867	\N	\N
 25Un9wt3Ntd0JyFdfuHcffAZdBz	Testing 6 	Testing 6 		1998-10-20				0	0	FEMALE	MARRIED		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-23 09:56:45.289045	2022-02-23 09:56:45.289064	\N	\N
 25Upf1uhGVw9fRYfiqucBAEAW5b	testing9	testing9		2022-02-09		20220223961		0	0	NA	NA		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-23 10:17:17.286314	2022-02-23 10:17:17.286316	\N	\N
+25PJP9EI1WWOWFoIQ9ODc5gbCmT	Gnanakeethan	Balasubramaniam		1990-02-23		2022022180296172		0	0	MALE	SINGLE		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-22 13:41:51.933829	2022-02-24 05:00:25.594837	\N	\N
 25Uo93SLVfs6mmj70TPp95mGMRf	testing 7	testing 7		1996-06-06		20220223802		0	0	MALE	MARRIED		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-23 10:05:39.315652	2022-02-23 10:05:39.315653	\N	\N
 25UpCueq5pXByJCJtgM4ZfEXJuu	testing 8	test 8		2022-02-02		20220223171		0	0	NA	NA		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-23 10:13:21.757483	2022-02-23 10:13:21.757486	\N	\N
+25VzEKlLn4Ya2KdZXed5aW6IybV	testing 10	testing 10		1999-09-09		20220223152		0	0	MALE	SINGLE		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-23 20:05:44.036799	2022-02-23 20:05:44.036801	\N	\N
 25Ord5TRiCeBvvdknJRYaJWc8O2	testing2	testing3		1966-01-05		2022022180296171		0	0	MALE	MARRIED		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-21 16:22:06.415421	2022-02-21 16:22:06.424663	\N	\N
 25QWVrZomOrRHbYqHEdluAGF5dn	testing5	testing5		1992-09-01		2022022128802961		0	0	FEMALE	SINGLE		RECIPIENT	\N	\N	INACTIVE	DRAFT	\N	\N	2022-02-21 16:22:06.415421	2022-02-21 16:22:06.424663	\N	\N
 \.
@@ -698,7 +790,7 @@ uasyhgdfbfn                	admin	gnana	2022-02-21 16:22:06.522882	\N
 -- Data for Name: workups; Type: TABLE DATA; Schema: public; Owner: gnanakeethan
 --
 
-COPY public.workups (id, name, description, procedure, "order", created_at, updated_at, deleted_at) FROM stdin;
+COPY public.workups (id, name, description, procedure, "order", created_at, updated_at, deleted_at, details) FROM stdin;
 \.
 
 
@@ -995,7 +1087,7 @@ CREATE UNIQUE INDEX workups_name_uindex ON public.workups USING btree (name);
 --
 
 ALTER TABLE ONLY public.person_follow_ups
-    ADD CONSTRAINT follow_ups_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT follow_ups_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1003,7 +1095,7 @@ ALTER TABLE ONLY public.person_follow_ups
 --
 
 ALTER TABLE ONLY public.person_allergy
-    ADD CONSTRAINT person_allergy_allergies_id_fk FOREIGN KEY (allergy_id) REFERENCES public.allergies(id);
+    ADD CONSTRAINT person_allergy_allergies_id_fk FOREIGN KEY (allergy_id) REFERENCES public.allergies (id);
 
 
 --
@@ -1011,7 +1103,7 @@ ALTER TABLE ONLY public.person_allergy
 --
 
 ALTER TABLE ONLY public.person_allergy
-    ADD CONSTRAINT person_allergy_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_allergy_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1019,7 +1111,7 @@ ALTER TABLE ONLY public.person_allergy
 --
 
 ALTER TABLE ONLY public.person_comorbidities
-    ADD CONSTRAINT person_comorbidities_comorbidities_id_fk FOREIGN KEY (comorbidity_id) REFERENCES public.comorbidities(id);
+    ADD CONSTRAINT person_comorbidities_comorbidities_id_fk FOREIGN KEY (comorbidity_id) REFERENCES public.comorbidities (id);
 
 
 --
@@ -1027,7 +1119,7 @@ ALTER TABLE ONLY public.person_comorbidities
 --
 
 ALTER TABLE ONLY public.person_comorbidities
-    ADD CONSTRAINT person_comorbidities_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_comorbidities_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1035,7 +1127,7 @@ ALTER TABLE ONLY public.person_comorbidities
 --
 
 ALTER TABLE ONLY public.person_examinations
-    ADD CONSTRAINT person_follow_ups_examinations_examinations_id_fk FOREIGN KEY (examination_id) REFERENCES public.examinations(id);
+    ADD CONSTRAINT person_follow_ups_examinations_examinations_id_fk FOREIGN KEY (examination_id) REFERENCES public.examinations (id);
 
 
 --
@@ -1043,7 +1135,7 @@ ALTER TABLE ONLY public.person_examinations
 --
 
 ALTER TABLE ONLY public.person_examinations
-    ADD CONSTRAINT person_follow_ups_examinations_person_follow_ups_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_follow_ups_examinations_person_follow_ups_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1051,7 +1143,7 @@ ALTER TABLE ONLY public.person_examinations
 --
 
 ALTER TABLE ONLY public.person_investigations
-    ADD CONSTRAINT person_follow_ups_investigations_investigations_id_fk FOREIGN KEY (investigation_id) REFERENCES public.investigations(id);
+    ADD CONSTRAINT person_follow_ups_investigations_investigations_id_fk FOREIGN KEY (investigation_id) REFERENCES public.investigations (id);
 
 
 --
@@ -1059,7 +1151,7 @@ ALTER TABLE ONLY public.person_investigations
 --
 
 ALTER TABLE ONLY public.person_investigations
-    ADD CONSTRAINT person_follow_ups_investigations_person_follow_ups_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_follow_ups_investigations_person_follow_ups_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1067,7 +1159,7 @@ ALTER TABLE ONLY public.person_investigations
 --
 
 ALTER TABLE ONLY public.person_follow_ups_medicines
-    ADD CONSTRAINT person_follow_ups_medicines_person_follow_ups_id_fk FOREIGN KEY (follow_up_id) REFERENCES public.person_follow_ups(id);
+    ADD CONSTRAINT person_follow_ups_medicines_person_follow_ups_id_fk FOREIGN KEY (follow_up_id) REFERENCES public.person_follow_ups (id);
 
 
 --
@@ -1075,7 +1167,7 @@ ALTER TABLE ONLY public.person_follow_ups_medicines
 --
 
 ALTER TABLE ONLY public.person_follow_ups
-    ADD CONSTRAINT person_follow_ups_person_organ_donation_id_fk FOREIGN KEY (donation_id) REFERENCES public.person_organ_donation(id);
+    ADD CONSTRAINT person_follow_ups_person_organ_donation_id_fk FOREIGN KEY (donation_id) REFERENCES public.person_organ_donation (id);
 
 
 --
@@ -1083,7 +1175,7 @@ ALTER TABLE ONLY public.person_follow_ups
 --
 
 ALTER TABLE ONLY public.person_medical_history
-    ADD CONSTRAINT person_medical_history_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_medical_history_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1091,7 +1183,7 @@ ALTER TABLE ONLY public.person_medical_history
 --
 
 ALTER TABLE ONLY public.person_organ_donation_complications
-    ADD CONSTRAINT person_organ_donation_complications_person_organ_donation_id_fk FOREIGN KEY (donation_id) REFERENCES public.person_organ_donation(id);
+    ADD CONSTRAINT person_organ_donation_complications_person_organ_donation_id_fk FOREIGN KEY (donation_id) REFERENCES public.person_organ_donation (id);
 
 
 --
@@ -1099,7 +1191,7 @@ ALTER TABLE ONLY public.person_organ_donation_complications
 --
 
 ALTER TABLE ONLY public.person_organ_donation
-    ADD CONSTRAINT person_organ_donation_persons_id_fk FOREIGN KEY (receiver_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_organ_donation_persons_id_fk FOREIGN KEY (receiver_id) REFERENCES public.persons (id);
 
 
 --
@@ -1107,7 +1199,7 @@ ALTER TABLE ONLY public.person_organ_donation
 --
 
 ALTER TABLE ONLY public.person_organ_donation
-    ADD CONSTRAINT person_organ_donation_persons_id_fk_2 FOREIGN KEY (donor_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_organ_donation_persons_id_fk_2 FOREIGN KEY (donor_id) REFERENCES public.persons (id);
 
 
 --
@@ -1115,7 +1207,7 @@ ALTER TABLE ONLY public.person_organ_donation
 --
 
 ALTER TABLE ONLY public.person_relations
-    ADD CONSTRAINT person_relations_persons_id_fk FOREIGN KEY (patient_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_relations_persons_id_fk FOREIGN KEY (patient_id) REFERENCES public.persons (id);
 
 
 --
@@ -1123,7 +1215,7 @@ ALTER TABLE ONLY public.person_relations
 --
 
 ALTER TABLE ONLY public.person_relations
-    ADD CONSTRAINT person_relations_persons_id_fk_2 FOREIGN KEY (relation_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_relations_persons_id_fk_2 FOREIGN KEY (relation_id) REFERENCES public.persons (id);
 
 
 --
@@ -1131,7 +1223,7 @@ ALTER TABLE ONLY public.person_relations
 --
 
 ALTER TABLE ONLY public.person_suspensions
-    ADD CONSTRAINT person_suspensions_person_workups_id_fk FOREIGN KEY (workup_id) REFERENCES public.person_workups(id);
+    ADD CONSTRAINT person_suspensions_person_workups_id_fk FOREIGN KEY (workup_id) REFERENCES public.person_workups (id);
 
 
 --
@@ -1139,7 +1231,7 @@ ALTER TABLE ONLY public.person_suspensions
 --
 
 ALTER TABLE ONLY public.person_suspensions
-    ADD CONSTRAINT person_suspensions_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_suspensions_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1147,7 +1239,7 @@ ALTER TABLE ONLY public.person_suspensions
 --
 
 ALTER TABLE ONLY public.person_workups
-    ADD CONSTRAINT person_workups_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons(id);
+    ADD CONSTRAINT person_workups_persons_id_fk FOREIGN KEY (person_id) REFERENCES public.persons (id);
 
 
 --
@@ -1155,7 +1247,7 @@ ALTER TABLE ONLY public.person_workups
 --
 
 ALTER TABLE ONLY public.person_workups
-    ADD CONSTRAINT person_workups_workups_id_fk FOREIGN KEY (workup_id) REFERENCES public.workups(id);
+    ADD CONSTRAINT person_workups_workups_id_fk FOREIGN KEY (workup_id) REFERENCES public.workups (id);
 
 
 --

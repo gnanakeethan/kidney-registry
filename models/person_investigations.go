@@ -21,10 +21,10 @@ type PersonInvestigation struct {
 	Investigation *Investigation `orm:"column(investigation_id);rel(fk)"`
 	Person        *Person        `orm:"column(person_id);rel(fk)"`
 	ValidDays     int            `orm:"column(valid_days);null"`
-	ExpectedDate  time.Time      `orm:"column(expected_date);type(timestamp without time zone);null"`
-	ObtainedDate  time.Time      `orm:"column(obtained_date);type(timestamp without time zone);null"`
-	CreatedAt     time.Time      `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt     time.Time      `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	ExpectedDate  time.Time      `orm:"column(expected_date);type(timestamp);null"`
+	ObtainedDate  time.Time      `orm:"column(obtained_date);type(timestamp);null"`
+	CreatedAt     time.Time      `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt     time.Time      `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt     time.Time      `orm:"column(deleted_at);null"`
 }
 

@@ -15,11 +15,11 @@ type PersonSuspensions struct {
 	Person         *Person       `orm:"column(person_id);rel(fk)"`
 	Workup         *PersonWorkup `orm:"column(workup_id);rel(fk)"`
 	Reason         string        `orm:"column(reason);null"`
-	ReviewedDate   time.Time     `orm:"column(reviewed_date);type(timestamp without time zone);null"`
-	NextReviewDate time.Time     `orm:"column(next_review_date);type(timestamp without time zone);null"`
+	ReviewedDate   time.Time     `orm:"column(reviewed_date);type(timestamp);null"`
+	NextReviewDate time.Time     `orm:"column(next_review_date);type(timestamp);null"`
 	Concerns       string        `orm:"column(concerns);null"`
-	CreatedAt      time.Time     `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt      time.Time     `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	CreatedAt      time.Time     `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt      time.Time     `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt      time.Time     `orm:"column(deleted_at);null"`
 }
 

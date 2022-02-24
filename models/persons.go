@@ -15,7 +15,7 @@ type Person struct {
 	FirstName           string        `orm:"column(first_name)"`
 	LastName            string        `orm:"column(last_name);null"`
 	Address             string        `orm:"column(address);null"`
-	DateOfBirth         time.Time     `orm:"column(date_of_birth);type(timestamp without time zone);null"`
+	DateOfBirth         time.Time     `orm:"column(date_of_birth);type(timestamp);null"`
 	Ethnicity           string        `orm:"column(ethnicity);null"`
 	Phn                 string        `orm:"column(phn)"`
 	PrimaryRenalDisease string        `orm:"column(primary_renal_disease);null"`
@@ -27,8 +27,8 @@ type Person struct {
 	PersonType          PatientType   `orm:"column(person_type);null"`
 	Status              PatientStatus `orm:"column(status);null"`
 	RecordStatus        RecordStatus  `orm:"column(record_status);null"`
-	CreatedAt           time.Time     `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt           time.Time     `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	CreatedAt           time.Time     `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt           time.Time     `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt           time.Time     `orm:"column(deleted_at);null"`
 }
 

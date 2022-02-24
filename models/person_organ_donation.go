@@ -15,13 +15,13 @@ type PersonOrganDonation struct {
 	ReceiverId     *Person   `orm:"column(receiver_id);rel(fk)"`
 	DonorId        *Person   `orm:"column(donor_id);rel(fk)"`
 	DonationType   string    `orm:"column(donation_type)"`
-	PlannedDate    time.Time `orm:"column(planned_date);type(timestamp without time zone);null"`
-	PerformedDate  time.Time `orm:"column(performed_date);type(timestamp without time zone);null"`
-	DischargedDate time.Time `orm:"column(discharged_date);type(timestamp without time zone);null"`
+	PlannedDate    time.Time `orm:"column(planned_date);type(timestamp);null"`
+	PerformedDate  time.Time `orm:"column(performed_date);type(timestamp);null"`
+	DischargedDate time.Time `orm:"column(discharged_date);type(timestamp);null"`
 	AcuteRejection bool      `orm:"column(acute_rejection);null"`
 	
-	CreatedAt time.Time `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	CreatedAt time.Time `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt time.Time `orm:"column(deleted_at);null"`
 }
 

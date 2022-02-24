@@ -18,8 +18,8 @@ type PersonFollowUp struct {
 	OtherFindings     string               `orm:"column(other_findings);null"`
 	Referrals         string               `orm:"column(referrals);null"`
 	ConsultantOpinion string               `orm:"column(consultant_opinion);null"`
-	CreatedAt         time.Time            `orm:"column(created_at);type(timestamp without time zone);auto_now_add;null"`
-	UpdatedAt         time.Time            `orm:"column(updated_at);type(timestamp without time zone);auto_now;null"`
+	CreatedAt         time.Time            `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt         time.Time            `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt         time.Time            `orm:"column(deleted_at);null"`
 	Person            *Person              `orm:"column(person_id);rel(fk)"`
 	Donation          *PersonOrganDonation `orm:"column(donation_id);rel(fk);null"`
