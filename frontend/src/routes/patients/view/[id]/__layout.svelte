@@ -71,11 +71,6 @@
 				icon: SearchIcon
 			},
 			{
-				name: 'New Investigation',
-				route: '/patients/view/' + $recipientId + '/investigations/new',
-				icon: NewIcon
-			},
-			{
 				name: 'Examinations',
 				route: '/patients/view/' + $recipientId + '/examinations',
 				icon: SearchIcon

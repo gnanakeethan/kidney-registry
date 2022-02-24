@@ -118,6 +118,10 @@ func (r *queryResolver) ListPersonInvestigations(ctx context.Context, personID s
 	return models.ListPersonInvestigations(ctx, filter, page, limit, sortBy, orderBy)
 }
 
+func (r *queryResolver) ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error) {
+	return models.ListPersonInvestigations(ctx, filter, page, limit, sortBy, orderBy)
+}
+
 // PersonInvestigation returns generated.PersonInvestigationResolver implementation.
 func (r *Resolver) PersonInvestigation() generated.PersonInvestigationResolver {
 	return &personInvestigationResolver{r}

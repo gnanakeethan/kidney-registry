@@ -104,6 +104,13 @@ func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID str
 	return models.ListPersonExaminations(ctx, filter, page, limit, sortBy, orderBy)
 }
 
+func (r *queryResolver) ListAllPersonExaminations(ctx context.Context, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
+	if filter == nil {
+		filter = &models.PersonExaminationFilter{}
+	}
+	return models.ListPersonExaminations(ctx, filter, page, limit, sortBy, orderBy)
+}
+
 // PersonExamination returns generated.PersonExaminationResolver implementation.
 func (r *Resolver) PersonExamination() generated.PersonExaminationResolver {
 	return &personExaminationResolver{r}

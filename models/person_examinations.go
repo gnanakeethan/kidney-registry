@@ -66,7 +66,7 @@ func ListPersonExaminations(ctx context.Context, filter *PersonExaminationFilter
 	if err != nil {
 		return nil, err
 	}
-	if _, err := qs.All(&personExaminations, preloads...); err != nil {
+	if _, err := qs.RelatedSel("Person").All(&personExaminations, preloads...); err != nil {
 		return nil, err
 	}
 	pagination := getPagination(currentPage, totalItems, perPage)

@@ -197,30 +197,30 @@
 				]
 			} // optional
 		},
-		{
-			type: 'select', // required
-			name: 'RecordStatus', // required
-			value: 'DRAFT',
-			prefix: { classes: ['mb-2 w-full'] },
-			attributes: {
-				id: 'id-field', // required
-				classes: ['form-select'], // optional
-				label: 'Record Status', // optional
-				disabled: false // optional
-			},
-			extra: {
-				options: [
-					{ value: '', title: '' },
-					{ value: 'DRAFT', title: 'DRAFT' },
-					{ value: 'PUBLISHED', title: 'Published' },
-					{ value: 'REDACTED', title: 'Inactive' }
-				]
-			} // optional
-		},
+		// {
+		// 	type: 'select', // required
+		// 	name: 'RecordStatus', // required
+		// 	value: 'DRAFT',
+		// 	prefix: { classes: ['mb-2 w-full'] },
+		// 	attributes: {
+		// 		id: 'id-field', // required
+		// 		classes: ['form-select'], // optional
+		// 		label: 'Record Status', // optional
+		// 		disabled: false // optional
+		// 	},
+		// 	extra: {
+		// 		options: [
+		// 			{ value: '', title: '' },
+		// 			{ value: 'DRAFT', title: 'DRAFT' },
+		// 			{ value: 'PUBLISHED', title: 'Published' },
+		// 			{ value: 'REDACTED', title: 'Inactive' }
+		// 		]
+		// 	} // optional
+		// },
 		{
 			type: 'select', // required
 			name: 'PersonType', // required
-			value: 'Patient',
+			value: 'RECIPIENT',
 			prefix: { classes: ['mb-2 w-full'] },
 			attributes: {
 				id: 'id-field', // required

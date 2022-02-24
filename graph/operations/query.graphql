@@ -71,6 +71,17 @@ query ListPersonFollowUp ($ID: ID!,$filter: PersonFollowUpFilter, $page: Int, $l
     }
 }
 
+query ListAllPersonFollowUp ($filter: PersonFollowUpFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listAllPersonFollowUps(filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonFollowUpFields
+        }
+    }
+}
+
 
 query ListExaminations {
     listExaminations {
@@ -134,6 +145,21 @@ query ListPersonExamination ($ID: ID!,$filter: PersonExaminationFilter, $page: I
         }
     }
 }
+
+query ListAllPersonExamination ($filter: PersonExaminationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listAllPersonExaminations(filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonExaminationFields
+            Person {
+                FirstName
+                LastName
+            }
+        }
+    }
+}
 query GetPersonExamination ($id: ID!){
     getPersonExamination(ID: $id) {
         ...PersonExaminationFields
@@ -142,6 +168,16 @@ query GetPersonExamination ($id: ID!){
 }
 query ListPersonInvestigation ($ID: ID!,$filter: PersonInvestigationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
     listPersonInvestigations(PersonID: $ID,filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonInvestigationFields
+        }
+    }
+}
+query ListAllPersonInvestigation ($filter: PersonInvestigationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listAllPersonInvestigations(filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
         pagination {
             ...Pagination
         }

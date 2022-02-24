@@ -16,11 +16,14 @@ import (
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
 	person := &models.Person{
-		ID:            ksuid.New().String(),
-		DateOfBirth:   time.Time{},
-		FirstName:     "testing",
-		Gender:        "NA",
+		ID:          ksuid.New().String(),
+		DateOfBirth: time.Time{},
+		FirstName:   "testing" + randString(5),
+		LastName:    "testing" + randString(5),
+		Gender:      "NA",
+		// PersonType:    models.PatientTypeRecipient,
 		MaritalStatus: "NA",
+		RecordStatus:  models.RecordStatusPublished,
 		Phn:           time.Now().Format("20060102030405") + randString(2),
 	}
 	return person, nil

@@ -85,4 +85,5 @@ extend type Mutation {
 extend type Query {
     getPersonFollowUp(ID: ID!): PersonFollowUp
     listPersonFollowUps(PersonID: ID!,filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
+    listAllPersonFollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
 }

@@ -1,17 +1,50 @@
 <script lang="ts">
+	import { GraphQLQueryRepository } from '$lib/api/query-repository';
+	import { DataSourceConnector } from '$lib/api/table-datasource';
+	import Table from '$lib/components/table/Table.svelte';
+	import { recipientId } from '$lib/state/recipient';
+	import {
+		ListAllPersonInvestigationDocument,
+		ListAllPersonInvestigationQuery,
+		PersonInvestigationList
+	} from '../../lib/graphql/generated';
+
+	interface User {
+		name: string;
+		ID: string;
+	}
+
+	const queryRepository = new GraphQLQueryRepository<ListAllPersonInvestigationQuery>();
+	let dataSource = new DataSourceConnector<PersonInvestigationList>(
+		queryRepository,
+		ListAllPersonInvestigationDocument
+	);
+	let loading = true;
+	let filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
+
+	let columns = [
+		{ key: 'CreatedAt', name: 'Recorded On' },
+		{ key: 'Details.Name', name: 'Investigation Name' },
+		{ key: 'ID', name: 'Investigation Name' }
+	];
+	let displayedColumns = ['CreatedAt', 'Details.Name'];
+	let element: User;
+	let selectedRows = [];
+	$: console.log(selectedRows);
 </script>
 
-<div class="? p-2">
-	<div class="? flex flex-row justify-between p-2">
-		<div class="pl-2 font-nunito text-xl font-extrabold">Investigations</div>
-		<div>
-			<a
-				class="m-2 rounded bg-green-600 p-2 font-raleway text-lg font-bold text-white"
-				href="/examinations/new">New</a
-			>
-		</div>
-	</div>
-	<div class="? p-2">
-		<slot />
-	</div>
+<div class="p-2 p-4">
+	<Table
+		bind:dtSource={dataSource}
+		bind:loading
+		bind:selectedRows
+		{columns}
+		{displayedColumns}
+		{filters}
+		rootAccessPath="data.listAllPersonInvestigations.items"
+	>
+		<svelte:fragment let:element={investigation} slot="actions">
+			<a href="/patients/view/{investigation.Person.ID}/investigations/{investigation.ID}">View</a>
+		</svelte:fragment>
+	</Table>
 </div>

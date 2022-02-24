@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { beforeNavigate, goto } from '$app/navigation';
+	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { recipient, recipientId } from '$lib/state/recipient';
+	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation, operationStore, query } from '@urql/svelte';
+	import { createEventDispatcher } from 'svelte';
 	import {
 		Examination,
 		GetExaminationDocument,
@@ -98,7 +99,10 @@
 		}
 	});
 
-	export function onSubmit() {
+	// Dispatch.
+	const dispatch = createEventDispatcher();
+
+	export async function onSubmit() {
 		if (isValidForm) {
 			try {
 				console.log(values);
@@ -106,8 +110,6 @@
 				console.log(values);
 				newPersonExamination({ input: values }).then((result) => {
 					console.log(result);
-					alert('Saved =>' + result.data.createPersonExamination.ID);
-					goto('/patients/view/' + $recipientId + '/examinations');
 				});
 			} catch (e) {
 				alert('Please fill all the required fields');
@@ -117,6 +119,7 @@
 		} else {
 			message = 'Please fill all the required fields';
 		}
+		return true;
 	}
 
 	function deepen(obj) {
