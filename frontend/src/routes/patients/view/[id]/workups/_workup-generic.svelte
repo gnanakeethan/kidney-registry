@@ -77,64 +77,6 @@
 					readonly: true,
 					classes: ['form-input bg-gray-200 rounded my-2']
 				}
-			},
-			{
-				type: 'input',
-				name: 'ValidDays',
-				value: workup.Details.ValidDays,
-				prefix: {
-					classes: ['w-full  items-center justify-between']
-				},
-				attributes: {
-					type: 'text',
-					label: 'Valid Days',
-					id: 'recipient_id',
-					classes: ['form-input rounded my-2']
-				}
-			},
-
-			{
-				type: 'input',
-				name: 'CreatedAt',
-				value: new Date().toISOString().split('T')[0],
-				prefix: {
-					classes: ['w-full items-center justify-between']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Requested Date',
-					id: 'recipient_id',
-					readonly: true,
-					classes: ['form-input rounded my-2']
-				}
-			},
-			{
-				type: 'input',
-				name: 'ExpectedDate',
-				value: '',
-				prefix: {
-					classes: ['w-full items-center justify-between']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Expected Date',
-					id: 'recipient_id',
-					classes: ['form-input rounded my-2']
-				}
-			},
-			{
-				type: 'input',
-				name: 'ObtainedDate',
-				value: '',
-				prefix: {
-					classes: ['w-full items-center justify-between']
-				},
-				attributes: {
-					type: 'date',
-					label: 'Obtained Date',
-					id: 'recipient_id',
-					classes: ['form-input rounded my-2']
-				}
 			}
 		];
 	}

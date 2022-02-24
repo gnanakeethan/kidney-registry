@@ -180,6 +180,7 @@
 		{
 			type: 'select', // required
 			name: 'Status', // required
+			value: 'ACTIVE',
 			prefix: { classes: ['mb-2 w-full'] },
 
 			attributes: {
@@ -190,23 +191,46 @@
 			},
 			extra: {
 				options: [
-					{ value: 'REACTIVE', title: 'Reactive' },
-					{ value: 'NON_REACTIVE', title: 'Non Reactive' }
+					{ value: '', title: '' },
+					{ value: 'ACTIVE', title: 'Active' },
+					{ value: 'INACTIVE', title: 'Inactive' }
+				]
+			} // optional
+		},
+		{
+			type: 'select', // required
+			name: 'RecordStatus', // required
+			value: 'DRAFT',
+			prefix: { classes: ['mb-2 w-full'] },
+			attributes: {
+				id: 'id-field', // required
+				classes: ['form-select'], // optional
+				label: 'Record Status', // optional
+				disabled: false // optional
+			},
+			extra: {
+				options: [
+					{ value: '', title: '' },
+					{ value: 'DRAFT', title: 'DRAFT' },
+					{ value: 'PUBLISHED', title: 'Published' },
+					{ value: 'REDACTED', title: 'Inactive' }
 				]
 			} // optional
 		},
 		{
 			type: 'select', // required
 			name: 'PersonType', // required
+			value: 'Patient',
 			prefix: { classes: ['mb-2 w-full'] },
 			attributes: {
 				id: 'id-field', // required
 				classes: ['form-select'], // optional
-				label: 'Person Status', // optional
+				label: 'Person Type', // optional
 				disabled: false // optional
 			},
 			extra: {
 				options: [
+					{ value: '', title: '' },
 					{ value: 'RECIPIENT', title: 'Recipient' },
 					{ value: 'DONOR', title: 'Donor' }
 				]

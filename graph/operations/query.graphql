@@ -187,3 +187,30 @@ query GetPersonOrganDonation ($id: ID!){
         ...PersonOrganDonationFields
     }
 }
+
+
+query ListWorkups {
+    listWorkups {
+        items {
+            ID
+            Order
+            Details {
+                Name
+                ValidDays
+            }
+        }
+    }
+}
+
+query GetWorkup ($id: ID!){
+    getWorkup(id: $id) {
+        ID
+        Details {
+            Name
+            Inline
+            Description
+            ValidDays
+        }
+        ...ProcedureFragment
+    }
+}

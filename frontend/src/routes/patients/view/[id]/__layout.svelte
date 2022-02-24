@@ -86,6 +86,16 @@
 				icon: NewIcon
 			},
 			{
+				name: 'Workups',
+				route: '/patients/view/' + $recipientId + '/workups',
+				icon: SearchIcon
+			},
+			{
+				name: 'New Workup',
+				route: '/patients/view/' + $recipientId + '/workups/new',
+				icon: SearchIcon
+			},
+			{
 				name: 'Donor Details',
 				route: '/patients/view/' + $recipientId + '/donors',
 				icon: UserIcon
