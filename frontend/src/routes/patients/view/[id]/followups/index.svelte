@@ -20,29 +20,15 @@
 		ListPersonFollowUpDocument
 	);
 	let loading = true;
-	$: filters = { ID: $recipientId, orderBy: [], sortBy: [] };
+	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
 		{ key: 'CreatedAt', name: 'Recorded On' },
-		// { key: 'StartDate', name: 'Occurance Date (if any)' },
-		{ key: 'ID', name: 'ID' },
-		// { key: 'Type', name: 'Type' },
-		// { key: 'Reason', name: 'Reason' },
-		// { key: 'Description', name: 'Description' }
-		{ key: 'UpdatedAt', name: 'Updated On' }
-		// { key: 'FirstName', name: 'First Name' },
-		// { key: 'LastName', name: 'Last Name' },
-		// { key: 'Phn', name: 'Phn' }
+		{ key: 'CaseStatus', name: 'CaseStatus' },
+		{ key: 'Referrals', name: 'Referrals' },
+		{ key: 'ConsultantOpinion', name: 'Consultant Opinion' }
 	];
-	let displayedColumns = [
-		'ID',
-		// 'StartDate',
-		// 'Type',
-		// 'Reason',
-		// 'Description',
-		'CreatedAt',
-		'UpdatedAt'
-	];
+	let displayedColumns = ['CreatedAt', 'CaseStatus', 'Referrals', 'ConsultantOpinion', 'UpdatedAt'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);

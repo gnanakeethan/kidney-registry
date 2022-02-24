@@ -21,7 +21,7 @@
 	});
 	const dialysisPlanFields = [
 		{
-			type: 'input',
+			type: 'select',
 			name: 'DialysisPlan.Type',
 			value: '',
 			prefix: {
@@ -31,7 +31,14 @@
 				type: 'text',
 				label: 'Type',
 				id: 'recipient_id',
-				classes: ['form-input rounded w-full readonly']
+				classes: ['form-select rounded w-full readonly']
+			},
+			extra: {
+				options: [
+					{ value: '', title: '' },
+					{ value: 'Hemodialysis', title: 'Hemodialysis' },
+					{ value: 'Peritoneal Dialysis', title: 'Peritoneal Dialysis' }
+				]
 			}
 		},
 		{
@@ -245,10 +252,13 @@
 	];
 	let message = '';
 	let values = {
-		Medicines: []
+		Medicines: [],
+		DialysisPlan: {}
 	};
 	let medicines = [{}, {}];
-	let dialysisValues = {};
+	let dialysisValues: {
+		DialysisPlan: {};
+	} = {};
 	let formSet = !!$recipientId;
 	let isValidForm = false;
 
@@ -274,7 +284,12 @@
 		console.log(isValidForm);
 		if (isValidForm) {
 			message = 'Saving Data....';
+			console.log(values);
+			dialysisValues = deepen(dialysisValues);
+			console.log(dialysisValues);
+			values.DialysisPlan = dialysisValues.DialysisPlan;
 			Object.assign({}, values, dialysisValues);
+			console.log(values);
 			values.Medicines = [];
 			medicines.forEach((medicine) => {
 				const medicineValue = deepen(medicine);
