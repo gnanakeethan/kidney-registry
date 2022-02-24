@@ -262,12 +262,15 @@ type ComplexityRoot struct {
 		DeletedAt     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		Details       func(childComplexity int) int
+		ExpectedDate  func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Investigation func(childComplexity int) int
+		ObtainedDate  func(childComplexity int) int
 		Person        func(childComplexity int) int
 		Procedure     func(childComplexity int) int
 		Results       func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
+		ValidDays     func(childComplexity int) int
 	}
 
 	PersonInvestigationList struct {
@@ -459,6 +462,9 @@ type PersonInvestigationResolver interface {
 	Details(ctx context.Context, obj *models.PersonInvestigation) (*models.FormDetails, error)
 	Results(ctx context.Context, obj *models.PersonInvestigation) (models.ResultsModel, error)
 	Procedure(ctx context.Context, obj *models.PersonInvestigation) (*models.Procedure, error)
+
+	ObtainedDate(ctx context.Context, obj *models.PersonInvestigation) (*string, error)
+	ExpectedDate(ctx context.Context, obj *models.PersonInvestigation) (*string, error)
 	CreatedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error)
 	UpdatedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error)
 	DeletedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error)
@@ -1601,6 +1607,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonInvestigation.Details(childComplexity), true
 
+	case "PersonInvestigation.ExpectedDate":
+		if e.complexity.PersonInvestigation.ExpectedDate == nil {
+			break
+		}
+
+		return e.complexity.PersonInvestigation.ExpectedDate(childComplexity), true
+
 	case "PersonInvestigation.ID":
 		if e.complexity.PersonInvestigation.ID == nil {
 			break
@@ -1614,6 +1627,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonInvestigation.Investigation(childComplexity), true
+
+	case "PersonInvestigation.ObtainedDate":
+		if e.complexity.PersonInvestigation.ObtainedDate == nil {
+			break
+		}
+
+		return e.complexity.PersonInvestigation.ObtainedDate(childComplexity), true
 
 	case "PersonInvestigation.Person":
 		if e.complexity.PersonInvestigation.Person == nil {
@@ -1642,6 +1662,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonInvestigation.UpdatedAt(childComplexity), true
+
+	case "PersonInvestigation.ValidDays":
+		if e.complexity.PersonInvestigation.ValidDays == nil {
+			break
+		}
+
+		return e.complexity.PersonInvestigation.ValidDays(childComplexity), true
 
 	case "PersonInvestigationList.items":
 		if e.complexity.PersonInvestigationList.Items == nil {
@@ -2355,7 +2382,7 @@ var sources = []*ast.Source{
     id: String
     max: Int
     min: Int
-    step: Int
+    step: String
     type: String
     label: String
     disabled: Boolean
@@ -2844,6 +2871,9 @@ extend type Query {
     Details: FormDetails
     Results: InvestigationResults
     Procedure: Procedure
+    ValidDays: Int
+    ObtainedDate: String
+    ExpectedDate: String
     CreatedAt: String
     UpdatedAt:String
     DeletedAt: String
@@ -4280,9 +4310,9 @@ func (ec *executionContext) _Attributes_step(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Attributes_type(ctx context.Context, field graphql.CollectedField, obj *models.Attributes) (ret graphql.Marshaler) {
@@ -8845,6 +8875,102 @@ func (ec *executionContext) _PersonInvestigation_Procedure(ctx context.Context, 
 	res := resTmp.(*models.Procedure)
 	fc.Result = res
 	return ec.marshalOProcedure2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐProcedure(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonInvestigation_ValidDays(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonInvestigation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ValidDays, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonInvestigation_ObtainedDate(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonInvestigation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.PersonInvestigation().ObtainedDate(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonInvestigation_ExpectedDate(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonInvestigation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.PersonInvestigation().ExpectedDate(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonInvestigation_CreatedAt(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigation) (ret graphql.Marshaler) {
@@ -16647,6 +16773,47 @@ func (ec *executionContext) _PersonInvestigation(ctx context.Context, sel ast.Se
 					}
 				}()
 				res = ec._PersonInvestigation_Procedure(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "ValidDays":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonInvestigation_ValidDays(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "ObtainedDate":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._PersonInvestigation_ObtainedDate(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "ExpectedDate":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._PersonInvestigation_ExpectedDate(ctx, field, obj)
 				return res
 			}
 

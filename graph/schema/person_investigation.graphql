@@ -6,6 +6,9 @@ type PersonInvestigation implements DynamicFormInterface{
     Details: FormDetails
     Results: InvestigationResults
     Procedure: Procedure
+    ValidDays: Int
+    ObtainedDate: String
+    ExpectedDate: String
     CreatedAt: String
     UpdatedAt:String
     DeletedAt: String

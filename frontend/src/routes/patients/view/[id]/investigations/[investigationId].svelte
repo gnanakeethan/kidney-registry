@@ -1,34 +1,32 @@
+<script context="module" lang="ts">
+	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+
+	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
+		console.log(loadInput.url);
+		const { investigationId } = loadInput.params;
+		return { props: { investigationId } };
+	}
+</script>
+
 <script lang="ts">
-	import { beforeNavigate, goto } from '$app/navigation';
+	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { recipient, recipientId } from '$lib/state/recipient';
+	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation, operationStore, query } from '@urql/svelte';
 	import {
-		GetInvestigationDocument,
-		Investigation,
+		GetPersonInvestigationDocument,
 		NewPersonInvestigationDocument,
-		NewPersonInvestigationMutation
+		NewPersonInvestigationMutation,
+		PersonInvestigation
 	} from '../../../../../lib/graphql/generated';
 
 	const newPersonInvestigation = mutation<NewPersonInvestigationMutation>({
 		query: NewPersonInvestigationDocument
 	});
 	export let investigationId = '';
-	let investigation: Investigation;
+	let investigation: PersonInvestigation;
 
-	if (investigationId != '') {
-		const result = query(
-			operationStore(GetInvestigationDocument, {
-				id: investigationId
-			})
-		).subscribe(({ data }) => {
-			if (data?.getInvestigation) {
-				investigation = data?.getInvestigation;
-				console.log(investigation);
-			}
-		});
-	}
 	let message = '';
 	let values = {};
 	export let i = 0;
@@ -101,14 +99,20 @@
 	export function onSubmit() {
 		if (isValidForm) {
 			try {
-				console.log(values);
 				values = deepen(values);
 				console.log(values);
 				newPersonInvestigation({ input: values }).then((result) => {
 					console.log(result);
 					alert('Saved =>' + result.data.createPersonInvestigation.ID);
-					goto('/patients/view/' + $recipientId + '/investigations');
+					// goto('/patients/view/' + $recipientId + '/investigations');
 				});
+				// newHistory({ input: valuesRef }).then((result) => {
+				// 	console.log(result);
+				// 	alert('Data Saved');
+				// 	if (others == 1) {
+				// 		goto('/patients/view/' + $recipientId + '/history/');
+				// 	}
+				// });
 			} catch (e) {
 				alert('Please fill all the required fields');
 				message = 'Please fill all the required fields';
@@ -140,9 +144,35 @@
 
 		return result;
 	}
+
+	if (investigationId != '') {
+		const result = query(
+			operationStore(GetPersonInvestigationDocument, {
+				id: investigationId
+			})
+		).subscribe(({ data }) => {
+			if (data?.getPersonInvestigation) {
+				investigation = data?.getPersonInvestigation;
+				console.log(investigation.Results);
+				// for (let [i, results] of investigation.Results) {
+				// 	if (!i.startsWith('Results.')) {
+				// 		i = 'Results.' + i;
+				// 	}
+				// 	values[i] = results;
+				// }
+				Object.entries(investigation.Results).forEach(([key, value]) => {
+					if (!key.startsWith('Results.')) {
+						key = 'Results.' + key;
+					}
+					values[key] = value;
+				});
+				console.log(values);
+			}
+		});
+	}
 </script>
 
-<div class="flex h-full flex-wrap p-2">
+<div class="flex h-full flex-wrap p-2 px-8">
 	{#if formSet}
 		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
@@ -157,10 +187,6 @@
 					bind:values
 					{fields}
 				/>
-				{message}
-				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
-					>Save
-				</button>
 			</div>
 		</form>
 	{:else}

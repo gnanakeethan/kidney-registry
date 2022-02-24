@@ -7,7 +7,9 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -15,6 +17,7 @@ import (
 func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {
 	investigation, _ := models.GetInvestigationsById(input.Investigation.ID)
 	personInvestigation := &models.PersonInvestigation{
+		ID:            ksuid.New().String(),
 		Person:        &models.Person{ID: input.Person.ID},
 		Procedure:     investigation.Procedure,
 		Details:       investigation.Details,
@@ -78,8 +81,16 @@ func (r *personInvestigationResolver) Procedure(ctx context.Context, obj *models
 	return &procedure, nil
 }
 
+func (r *personInvestigationResolver) ObtainedDate(ctx context.Context, obj *models.PersonInvestigation) (*string, error) {
+	return StringPointer(formatDate(obj.ObtainedDate)), nil
+}
+
+func (r *personInvestigationResolver) ExpectedDate(ctx context.Context, obj *models.PersonInvestigation) (*string, error) {
+	return StringPointer(formatDate(obj.ExpectedDate)), nil
+}
+
 func (r *personInvestigationResolver) CreatedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error) {
-	return StringPointer(obj.CreatedAt.Format(time.RFC3339)), nil
+	return StringPointer(formatDate(obj.CreatedAt)), nil
 }
 
 func (r *personInvestigationResolver) UpdatedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error) {

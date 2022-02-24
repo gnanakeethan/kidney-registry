@@ -104,6 +104,7 @@ query ListInvestigations {
             Order
             Details {
                 Name
+                ValidDays
             }
         }
     }
@@ -116,6 +117,7 @@ query GetInvestigation ($id: ID!){
             Name
             Inline
             Description
+            ValidDays
         }
         ...ProcedureFragment
     }
@@ -135,6 +137,22 @@ query ListPersonExamination ($ID: ID!,$filter: PersonExaminationFilter, $page: I
 query GetPersonExamination ($id: ID!){
     getPersonExamination(ID: $id) {
         ...PersonExaminationFields
+        ...ProcedureFragment
+    }
+}
+query ListPersonInvestigation ($ID: ID!,$filter: PersonInvestigationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPersonInvestigations(PersonID: $ID,filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonInvestigationFields
+        }
+    }
+}
+query GetPersonInvestigation ($id: ID!){
+    getPersonInvestigation(ID: $id) {
+        ...PersonInvestigationFields
         ...ProcedureFragment
     }
 }

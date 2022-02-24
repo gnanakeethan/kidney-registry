@@ -2,7 +2,7 @@ type Attributes {
     id: String
     max: Int
     min: Int
-    step: Int
+    step: String
     type: String
     label: String
     disabled: Boolean
@@ -77,9 +77,11 @@ type FormDetails {
     Name: String
     Description:String
     Inline: Boolean
+    ValidDays: Int
 }
 input FormDetailsInput {
     Name: String
     Description:String
     Inline: Boolean
+    ValidDays: Int
 }

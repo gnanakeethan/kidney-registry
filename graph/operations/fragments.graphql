@@ -58,7 +58,6 @@ fragment ProcedureFragment on DynamicFormInterface {
                 max
                 min
                 step
-
                 type
                 label
                 labelClasses
@@ -115,3 +114,27 @@ fragment PersonMedicalHistoryFields on PersonMedicalHistory {
     CreatedAt
     UpdatedAt
 }
+
+fragment PersonInvestigationFields on PersonInvestigation {
+    ID
+    Investigation {
+        ID
+    }
+    Person {
+        ID
+    }
+    Description
+    Details {
+        Name
+        Description
+        Inline
+    }
+    Results
+    ValidDays
+    ObtainedDate
+    ExpectedDate
+    CreatedAt
+    UpdatedAt
+    DeletedAt
+}
+

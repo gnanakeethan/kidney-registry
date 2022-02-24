@@ -56,3 +56,9 @@ mutation NewPersonExamination($input: PersonExaminationInput!) {
         ...PersonExaminationFields
     }
 }
+
+mutation NewPersonInvestigation($input: PersonInvestigationInput!) {
+    createPersonInvestigation(input: $input) {
+        ...PersonInvestigationFields
+    }
+}

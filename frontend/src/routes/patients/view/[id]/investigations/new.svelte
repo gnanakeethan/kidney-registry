@@ -66,7 +66,7 @@
 	<button on:click={() => Investigate()} class="bg-green-400 p-4 m-2">Investigate</button>
 {/if}
 {#if investigationId}
-	<div class="w-1/3 px-8">
+	<div class="w-full px-8">
 		<GenericInvestigation bind:investigationId />
 	</div>
 {/if}

@@ -16,7 +16,7 @@ type Attributes struct {
 	ID           *string `json:"id"`
 	Max          *int    `json:"max"`
 	Min          *int    `json:"min"`
-	Step         *int    `json:"step"`
+	Step         *string `json:"step"`
 	Type         *string `json:"type"`
 	Label        *string `json:"label"`
 	Disabled     *bool   `json:"disabled"`
