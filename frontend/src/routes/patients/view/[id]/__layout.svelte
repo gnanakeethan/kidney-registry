@@ -103,6 +103,7 @@
 	<div
 		class="flex max-w-[140px] flex-col break-words border-b border-dashed bg-yellow-100 p-3 transition-all"
 	>
+		<span class="mx-auto text-xl font-bold">{$recipient.PersonType}</span> <br />
 		<div class="mx-auto h-20 w-20">
 			{#if $recipient.Gender === 'FEMALE'}
 				<FemaleIcon class="h-20 text-6xl" />
