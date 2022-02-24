@@ -88,6 +88,19 @@
 	onMount(() => {
 		dtSource.loadCurrentPage(filters);
 	});
+
+	function getValue(key, element) {
+		const keyItems = key.split('.');
+		let data = element;
+		for (let i = 0; i < keyItems.length; i++) {
+			if (data !== undefined && data !== null && data[keyItems[i]] !== undefined) {
+				data = data[keyItems[i]];
+			} else {
+				break;
+			}
+		}
+		return data;
+	}
 </script>
 
 <table class="w-full border-collapse">
@@ -135,7 +148,7 @@
 						<input type="checkbox" bind:checked={element.__selected} on:change={elementSelected} />
 					</td>
 					{#each activeColumns as i}
-						<td class="border border-neutral-600 bg-zinc-200/75 p-2">{element[i.key]}</td>
+						<td class="border border-neutral-600 bg-zinc-200/75 p-2">{getValue(i.key, element)}</td>
 					{/each}
 					{#if $$slots.actions}
 						<td class="border border-neutral-600 bg-zinc-200/75 p-2">

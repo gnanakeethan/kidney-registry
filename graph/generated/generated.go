@@ -2717,7 +2717,7 @@ extend type Mutation {
     DeletedAt: String
 }
 input PersonExaminationInput {
-    ID : ID!
+    ID : ID
     Description: String
     Results: ExaminationResults
     Examination : ExaminationInput
@@ -2849,10 +2849,9 @@ extend type Query {
     DeletedAt: String
 }
 input PersonInvestigationInput {
-    ID : ID!
+    ID : ID
     Description: String
     Results: InvestigationResults
-    InvestigationId : ID!
     Investigation: InvestigationInput
     Person: PersonInput
 }
@@ -2973,10 +2972,9 @@ input PersonOrganDonationInput{
     DeletedAt: String
 }
 input PersonWorkupInput {
-    ID : ID!
+    ID : ID
     Description: String
     Results: WorkupResults
-    WorkupId : ID!
     Workup: WorkupInput
     Person: PersonInput
 }
@@ -13429,7 +13427,7 @@ func (ec *executionContext) unmarshalInputPersonExaminationInput(ctx context.Con
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14126,7 +14124,7 @@ func (ec *executionContext) unmarshalInputPersonInvestigationInput(ctx context.C
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14143,14 +14141,6 @@ func (ec *executionContext) unmarshalInputPersonInvestigationInput(ctx context.C
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Results"))
 			it.Results, err = ec.unmarshalOInvestigationResults2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐResultsModel(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "InvestigationId":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("InvestigationId"))
-			it.InvestigationID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14505,7 +14495,7 @@ func (ec *executionContext) unmarshalInputPersonWorkupInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14522,14 +14512,6 @@ func (ec *executionContext) unmarshalInputPersonWorkupInput(ctx context.Context,
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Results"))
 			it.Results, err = ec.unmarshalOWorkupResults2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐResultsModel(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "WorkupId":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("WorkupId"))
-			it.WorkupID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}

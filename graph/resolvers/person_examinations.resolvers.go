@@ -7,7 +7,9 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -15,6 +17,7 @@ import (
 func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
 	examination, _ := models.GetExaminationsById(input.Examination.ID)
 	personExamination := &models.PersonExamination{
+		ID:          ksuid.New().String(),
 		Person:      &models.Person{ID: input.Person.ID},
 		Procedure:   examination.Procedure,
 		Details:     examination.Details,
@@ -34,7 +37,7 @@ func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input mo
 
 func (r *mutationResolver) UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
 	personExamination := &models.PersonExamination{
-		ID:          input.ID,
+		ID:          PointerString(input.ID),
 		Person:      &models.Person{ID: input.Person.ID},
 		Examination: &models.Examination{ID: input.Examination.ID},
 		UpdatedAt:   time.Now(),

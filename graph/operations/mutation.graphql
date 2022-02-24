@@ -49,3 +49,10 @@ mutation NewHistory($input: PersonMedicalHistoryInput!) {
         ...PersonMedicalHistoryFields
     }
 }
+
+
+mutation NewPersonExamination($input: PersonExaminationInput!) {
+    createPersonExamination(input: $input) {
+        ...PersonExaminationFields
+    }
+}

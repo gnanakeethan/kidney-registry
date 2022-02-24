@@ -3,9 +3,17 @@
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
-	import { operationStore, query } from '@urql/svelte';
-	import { Examination, GetExaminationDocument } from '../../../../../lib/graphql/generated';
+	import { mutation, operationStore, query } from '@urql/svelte';
+	import {
+		Examination,
+		GetExaminationDocument,
+		NewPersonExaminationDocument,
+		NewPersonExaminationMutation
+	} from '../../../../../lib/graphql/generated';
 
+	const newPersonExamination = mutation<NewPersonExaminationMutation>({
+		query: NewPersonExaminationDocument
+	});
 	export let examinationId = '';
 	let examination: Examination;
 
@@ -29,7 +37,13 @@
 	let baseFields = [];
 	let fields = [];
 	$: if (examination !== undefined) {
-		fields = [...baseFields, ...examination.Procedure.fields];
+		fields = [...baseFields];
+		examination.Procedure.fields.forEach((field) => {
+			if (!field.name.startsWith('Results.')) {
+				field.name = 'Results.' + field.name;
+			}
+			fields = [...fields, field];
+		});
 	}
 
 	$: if (formSet && examination !== undefined && examination.ID !== undefined) {
@@ -87,8 +101,13 @@
 	export function onSubmit() {
 		if (isValidForm) {
 			try {
-				const valuesRef = values;
-
+				values = deepen(values);
+				console.log(values);
+				newPersonExamination({ input: values }).then((result) => {
+					console.log(result);
+					alert('Saved =>' + result.data.createPersonExamination.ID);
+					// goto('/patients/view/' + $recipientId + '/examinations');
+				});
 				// newHistory({ input: valuesRef }).then((result) => {
 				// 	console.log(result);
 				// 	alert('Data Saved');

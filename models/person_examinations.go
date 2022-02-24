@@ -28,7 +28,7 @@ type PersonExamination struct {
 func (PersonExamination) IsDynamicFormInterface() {}
 
 func (t *PersonExamination) TableName() string {
-	return "person_follow_ups_examinations"
+	return "person_examinations"
 }
 
 func init() {

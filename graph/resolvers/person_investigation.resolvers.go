@@ -34,7 +34,7 @@ func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input 
 
 func (r *mutationResolver) UpdatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {
 	personInvestigation := &models.PersonInvestigation{
-		ID:            input.ID,
+		ID:            PointerString(input.ID),
 		Person:        &models.Person{ID: input.Person.ID},
 		Investigation: &models.Investigation{ID: input.Investigation.ID},
 		UpdatedAt:     time.Now(),

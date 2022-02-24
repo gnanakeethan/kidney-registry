@@ -92,7 +92,7 @@ query GetExamination ($id: ID!){
             Inline
             Description
         }
-        ...Procedure
+        ...ProcedureFragment
     }
 }
 
@@ -117,6 +117,24 @@ query GetInvestigation ($id: ID!){
             Inline
             Description
         }
-        ...Procedure
+        ...ProcedureFragment
+    }
+}
+
+
+query ListPersonExamination ($ID: ID!,$filter: PersonExaminationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPersonExaminations(PersonID: $ID,filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonExaminationFields
+        }
+    }
+}
+query GetPersonExamination ($id: ID!){
+    getPersonExamination(ID: $id) {
+        ...PersonExaminationFields
+        ...ProcedureFragment
     }
 }

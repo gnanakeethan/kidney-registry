@@ -24,8 +24,26 @@ fragment PersonFollowUpFields on PersonFollowUp {
     CreatedAt
     UpdatedAt
 }
+fragment PersonExaminationFields on PersonExamination {
+    ID
+    Examination {
+        ID
+    }
+    Person {
+        ID
+    }
+    Description
+    Details {
+        Name
+        Description
+    }
+    Results
+    CreatedAt
+    UpdatedAt
+    DeletedAt
 
-fragment Procedure on DynamicFormInterface {
+}
+fragment ProcedureFragment on DynamicFormInterface {
     Procedure {
         fields {
             name

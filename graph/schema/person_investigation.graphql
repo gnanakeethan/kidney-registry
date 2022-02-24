@@ -11,10 +11,9 @@ type PersonInvestigation implements DynamicFormInterface{
     DeletedAt: String
 }
 input PersonInvestigationInput {
-    ID : ID!
+    ID : ID
     Description: String
     Results: InvestigationResults
-    InvestigationId : ID!
     Investigation: InvestigationInput
     Person: PersonInput
 }

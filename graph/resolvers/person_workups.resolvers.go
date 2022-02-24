@@ -35,7 +35,7 @@ func (r *mutationResolver) CreatePersonWorkup(ctx context.Context, input models.
 
 func (r *mutationResolver) UpdatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error) {
 	personWorkup := &models.PersonWorkup{
-		ID:        input.ID,
+		ID:        PointerString(input.ID),
 		Person:    &models.Person{ID: input.Person.ID},
 		Workup:    &models.Workup{ID: input.Workup.ID},
 		UpdatedAt: time.Now(),

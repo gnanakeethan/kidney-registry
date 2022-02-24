@@ -11,10 +11,9 @@ type PersonWorkup implements DynamicFormInterface{
     DeletedAt: String
 }
 input PersonWorkupInput {
-    ID : ID!
+    ID : ID
     Description: String
     Results: WorkupResults
-    WorkupId : ID!
     Workup: WorkupInput
     Person: PersonInput
 }

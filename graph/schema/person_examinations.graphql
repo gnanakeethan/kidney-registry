@@ -11,7 +11,7 @@ type PersonExamination implements DynamicFormInterface{
     DeletedAt: String
 }
 input PersonExaminationInput {
-    ID : ID!
+    ID : ID
     Description: String
     Results: ExaminationResults
     Examination : ExaminationInput

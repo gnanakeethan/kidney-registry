@@ -197,7 +197,7 @@ type PersonExaminationFilter struct {
 }
 
 type PersonExaminationInput struct {
-	ID          string            `json:"ID"`
+	ID          *string           `json:"ID"`
 	Description *string           `json:"Description"`
 	Results     ResultsModel      `json:"Results"`
 	Examination *ExaminationInput `json:"Examination"`
@@ -313,12 +313,11 @@ type PersonInvestigationFilter struct {
 }
 
 type PersonInvestigationInput struct {
-	ID              string              `json:"ID"`
-	Description     *string             `json:"Description"`
-	Results         ResultsModel        `json:"Results"`
-	InvestigationID string              `json:"InvestigationId"`
-	Investigation   *InvestigationInput `json:"Investigation"`
-	Person          *PersonInput        `json:"Person"`
+	ID            *string             `json:"ID"`
+	Description   *string             `json:"Description"`
+	Results       ResultsModel        `json:"Results"`
+	Investigation *InvestigationInput `json:"Investigation"`
+	Person        *PersonInput        `json:"Person"`
 }
 
 type PersonInvestigationList struct {
@@ -381,10 +380,9 @@ type PersonWorkupFilter struct {
 }
 
 type PersonWorkupInput struct {
-	ID          string       `json:"ID"`
+	ID          *string      `json:"ID"`
 	Description *string      `json:"Description"`
 	Results     ResultsModel `json:"Results"`
-	WorkupID    string       `json:"WorkupId"`
 	Workup      *WorkupInput `json:"Workup"`
 	Person      *PersonInput `json:"Person"`
 }
