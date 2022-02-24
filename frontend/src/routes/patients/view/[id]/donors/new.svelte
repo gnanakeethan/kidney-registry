@@ -3,26 +3,30 @@
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { activeUrl } from '$lib/state/SidebarStore';
+	import { deepen } from '$lib/utils';
 	import { mutation } from '@urql/svelte';
 	import { onMount } from 'svelte';
 	// import { Person } from 'lib/graphql/generated';
 	import {
-		AddPatientDocument,
-		AddPatientMutation,
+		CreatePersonOrganDonationDocument,
+		CreatePersonOrganDonationMutation,
 		NewPatientDocument,
 		NewPatientMutation
-	} from '../../lib/graphql/generated';
+	} from '../../../../../lib/graphql/generated';
 
 	const newPatient = mutation<NewPatientMutation>({
 		query: NewPatientDocument
 	});
-	const addPatient = mutation<AddPatientMutation>({
-		query: AddPatientDocument
+	const createPersonOrganDonation = mutation<CreatePersonOrganDonationMutation>({
+		query: CreatePersonOrganDonationDocument
 	});
 	onMount(() => {
 		newPatient<NewPatientDocument>(null).then((root: { data: NewPatientDocument }) => {
 			let patient = root.data.newPatient;
-			values = patient;
+			Object.entries(patient).forEach(([key, value]) => {
+				key = 'Donor.' + key;
+				values[key] = value;
+			});
 			console.log(values);
 			formSet = true;
 		});
@@ -30,14 +34,14 @@
 	const fields = [
 		{
 			type: 'input',
-			name: 'ID',
+			name: 'Donor.ID',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['hidden flex flex-col items-center justify-between w-full py-2']
 			},
 			attributes: {
 				type: 'text',
-				label: 'Recipient ID',
+				label: 'Donor ID',
 				id: 'recipient_id',
 				classes: ['form-input bg-gray-200 rounded w-full']
 			},
@@ -49,7 +53,7 @@
 		},
 		{
 			type: 'input',
-			name: 'Phn',
+			name: 'Donor.Phn',
 			value: '',
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
@@ -68,7 +72,7 @@
 		},
 		{
 			type: 'input',
-			name: 'FirstName',
+			name: 'Donor.FirstName',
 			value: '',
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
@@ -88,7 +92,7 @@
 		},
 		{
 			type: 'input',
-			name: 'LastName',
+			name: 'Donor.LastName',
 			value: '',
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
@@ -108,7 +112,7 @@
 		},
 		{
 			type: 'select', // required
-			name: 'MaritalStatus', //required
+			name: 'Donor.MaritalStatus', //required
 			attributes: {
 				id: 'MaritalStatus', // required
 				classes: ['form-input rounded w-full'], // optional
@@ -135,7 +139,7 @@
 		},
 		{
 			type: 'select', // required
-			name: 'Gender', // required
+			name: 'Donor.Gender', // required
 			attributes: {
 				id: 'Gender', // required
 				classes: ['form-input rounded w-full'], // optional
@@ -162,7 +166,7 @@
 		},
 		{
 			type: 'input',
-			name: 'DateOfBirth',
+			name: 'Donor.DateOfBirth',
 			value: '',
 			prefix: {
 				classes: ['flex flex-col items-center justify-between w-full py-2']
@@ -179,7 +183,7 @@
 
 		{
 			type: 'select', // required
-			name: 'Status', // required
+			name: 'Donor.Status', // required
 			prefix: { classes: ['mb-2 w-full'] },
 
 			attributes: {
@@ -197,7 +201,8 @@
 		},
 		{
 			type: 'select', // required
-			name: 'PersonType', // required
+			name: 'Donor.PersonType', // required
+			value: 'DONOR',
 			prefix: { classes: ['mb-2 w-full'] },
 			attributes: {
 				id: 'id-field', // required
@@ -206,9 +211,24 @@
 				disabled: false // optional
 			},
 			extra: {
+				options: [{ value: 'DONOR', title: 'Donor' }]
+			} // optional
+		},
+		{
+			type: 'select', // required
+			name: 'DonationType', // required
+			value: 'LIVE',
+			prefix: { classes: ['mb-2 w-full'] },
+			attributes: {
+				id: 'id-field', // required
+				classes: ['form-select'], // optional
+				label: 'Donation Type', // optional
+				disabled: false // optional
+			},
+			extra: {
 				options: [
-					{ value: 'RECIPIENT', title: 'Recipient' },
-					{ value: 'DONOR', title: 'Donor' }
+					{ value: 'LIVE', title: 'Live' },
+					{ value: 'CADAVERIC', title: 'Cadaveric' }
 				]
 			} // optional
 		}
@@ -241,10 +261,15 @@
 		console.log(isValidForm);
 		if (isValidForm) {
 			message = 'Saving Data....';
-			addPatient({ patientInput: values }).then((result) => {
+			const valuesRef = deepen(values);
+			createPersonOrganDonation({ input: valuesRef }).then((result) => {
 				console.log(result);
 				alert('Saved');
-				goto('/patients/view/' + result.data.addPatient.ID + '/history/new/history');
+				goto(
+					'/patients/view/' +
+						result.data.createPersonOrganDonation.Donor.ID +
+						'/history/new/history'
+				);
 			});
 		} else {
 			message =

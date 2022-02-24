@@ -379,7 +379,7 @@ type PersonOrganDonationFilter struct {
 }
 
 type PersonOrganDonationInput struct {
-	ID             string       `json:"ID"`
+	ID             *string      `json:"ID"`
 	Donor          *PersonInput `json:"Donor"`
 	Recipient      *PersonInput `json:"Recipient"`
 	DonationType   *string      `json:"DonationType"`

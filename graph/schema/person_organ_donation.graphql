@@ -10,7 +10,7 @@ type PersonOrganDonation{
     AcuteRejection: Boolean
 }
 input PersonOrganDonationInput{
-    ID: ID!
+    ID: ID
     Donor: PersonInput
     Recipient: PersonInput
     DonationType: String

@@ -8,11 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
@@ -30,10 +31,10 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 		DeletedAt:         time.Time{},
 		Person:            &models.Person{ID: input.Person.ID},
 	}
-	if input.Donation != nil && input.Donation.ID != "" {
-		personFollowUp.Donation = &models.PersonOrganDonation{ID: input.Donation.ID}
+	if input.Donation != nil {
+		personFollowUp.Donation = &models.PersonOrganDonation{ID: PointerString(input.Donation.ID)}
 	}
-
+	
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}

@@ -157,3 +157,19 @@ fragment PersonInvestigationFields on PersonInvestigation {
     DeletedAt
 }
 
+
+
+fragment  PersonOrganDonationFields on  PersonOrganDonation{
+    ID
+    Donor {
+        ...PersonFields
+    }
+    Recipient {
+        ...PersonFields
+    }
+    DonationType
+    PlannedDate
+    PerformedDate
+    DischargedDate
+    AcuteRejection
+}

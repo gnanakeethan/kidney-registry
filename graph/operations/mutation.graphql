@@ -91,3 +91,14 @@ mutation UpdatePersonWorkup($input: PersonWorkupInput!) {
         ...PersonWorkupFields
     }
 }
+
+mutation CreatePersonOrganDonation($input: PersonOrganDonationInput!) {
+    createPersonOrganDonation(input: $input) {
+        ...PersonOrganDonationFields
+    }
+}
+mutation UpdatePersonOrganDonation($input: PersonOrganDonationInput!) {
+    updatePersonOrganDonation(input: $input) {
+        ...PersonOrganDonationFields
+    }
+}

@@ -172,3 +172,18 @@ query GetPersonWorkup ($id: ID!){
         ...ProcedureFragment
     }
 }
+query ListPersonOrganDonation ($ID: ID!,$filter: PersonOrganDonationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listPersonOrganDonations(PersonID: $ID,filter:$filter, page: $page,limit: $limit ,sortBy: $sortBy,orderBy: $orderBy) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            ...PersonOrganDonationFields
+        }
+    }
+}
+query GetPersonOrganDonation ($id: ID!){
+    getPersonOrganDonation(ID: $id) {
+        ...PersonOrganDonationFields
+    }
+}
