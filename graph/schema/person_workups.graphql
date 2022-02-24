@@ -21,6 +21,7 @@ input PersonWorkupInput {
 scalar WorkupResults
 
 input PersonWorkupFilter {
+    Person: PersonFilter
     WorkupId: StringFilter
     CreatedAt: StringFilter
     UpdatedAt: StringFilter

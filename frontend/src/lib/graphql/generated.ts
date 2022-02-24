@@ -626,6 +626,7 @@ export type PersonInvestigationFilter = {
   CreatedAt?: InputMaybe<StringFilter>;
   DeletedAt?: InputMaybe<StringFilter>;
   InvestigationId?: InputMaybe<StringFilter>;
+  Person?: InputMaybe<PersonFilter>;
   UpdatedAt?: InputMaybe<StringFilter>;
 };
 
@@ -717,7 +718,7 @@ export type PersonOrganDonationFilter = {
   DischargedDate?: InputMaybe<Scalars['String']>;
   DonationType?: InputMaybe<Scalars['String']>;
   Donor?: InputMaybe<PersonFilter>;
-  ID: Scalars['ID'];
+  ID?: InputMaybe<Scalars['ID']>;
   PerformedDate?: InputMaybe<Scalars['String']>;
   PlannedDate?: InputMaybe<Scalars['String']>;
   Recipient?: InputMaybe<PersonFilter>;
@@ -728,7 +729,7 @@ export type PersonOrganDonationInput = {
   DischargedDate?: InputMaybe<Scalars['String']>;
   DonationType?: InputMaybe<Scalars['String']>;
   Donor?: InputMaybe<PersonInput>;
-  ID: Scalars['ID'];
+  ID?: InputMaybe<Scalars['ID']>;
   PerformedDate?: InputMaybe<Scalars['String']>;
   PlannedDate?: InputMaybe<Scalars['String']>;
   Recipient?: InputMaybe<PersonInput>;

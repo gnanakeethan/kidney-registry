@@ -20,7 +20,7 @@
 		ListPersonInvestigationDocument
 	);
 	let loading = true;
-	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
+	let filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
 		{ key: 'CreatedAt', name: 'Recorded On' },

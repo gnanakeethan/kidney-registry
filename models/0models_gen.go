@@ -233,15 +233,15 @@ type PersonFilter struct {
 }
 
 type PersonFollowUpFilter struct {
-	ID                *StringFilter             `json:"ID"`
-	Description       *StringFilter             `json:"Description"`
-	Complaints        *StringFilter             `json:"Complaints"`
-	CaseStatus        *StringFilter             `json:"CaseStatus"`
-	OtherFindings     *StringFilter             `json:"OtherFindings"`
-	Referrals         *StringFilter             `json:"Referrals"`
-	ConsultantOpinion *StringFilter             `json:"ConsultantOpinion"`
-	Person            *PersonInput              `json:"Person"`
-	Donation          *PersonOrganDonationInput `json:"Donation"`
+	ID                *StringFilter              `json:"ID"`
+	Description       *StringFilter              `json:"Description"`
+	Complaints        *StringFilter              `json:"Complaints"`
+	CaseStatus        *StringFilter              `json:"CaseStatus"`
+	OtherFindings     *StringFilter              `json:"OtherFindings"`
+	Referrals         *StringFilter              `json:"Referrals"`
+	ConsultantOpinion *StringFilter              `json:"ConsultantOpinion"`
+	Person            *PersonFilter              `json:"Person"`
+	Donation          *PersonOrganDonationFilter `json:"Donation"`
 }
 
 type PersonFollowUpInput struct {
@@ -308,6 +308,7 @@ type PersonInput struct {
 }
 
 type PersonInvestigationFilter struct {
+	Person          *PersonFilter `json:"Person"`
 	InvestigationID *StringFilter `json:"InvestigationId"`
 	CreatedAt       *StringFilter `json:"CreatedAt"`
 	UpdatedAt       *StringFilter `json:"UpdatedAt"`
@@ -395,6 +396,7 @@ type PersonOrganDonationList struct {
 }
 
 type PersonWorkupFilter struct {
+	Person    *PersonFilter `json:"Person"`
 	WorkupID  *StringFilter `json:"WorkupId"`
 	CreatedAt *StringFilter `json:"CreatedAt"`
 	UpdatedAt *StringFilter `json:"UpdatedAt"`

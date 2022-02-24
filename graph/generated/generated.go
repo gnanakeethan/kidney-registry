@@ -491,7 +491,6 @@ type PersonMedicalHistoryResolver interface {
 	UpdatedAt(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error)
 }
 type PersonOrganDonationResolver interface {
-	Recipient(ctx context.Context, obj *models.PersonOrganDonation) (*models.Person, error)
 	FollowUps(ctx context.Context, obj *models.PersonOrganDonation) ([]*models.PersonFollowUp, error)
 
 	PlannedDate(ctx context.Context, obj *models.PersonOrganDonation) (*string, error)
@@ -2895,8 +2894,8 @@ input PersonFollowUpFilter {
     OtherFindings: StringFilter
     Referrals: StringFilter
     ConsultantOpinion: StringFilter
-    Person: PersonInput
-    Donation: PersonOrganDonationInput
+    Person: PersonFilter
+    Donation: PersonOrganDonationFilter
 }
 input DialysisPlanInput {
     Type: String
@@ -2991,6 +2990,7 @@ input PersonInvestigationInput {
 scalar InvestigationResults
 
 input PersonInvestigationFilter {
+    Person: PersonFilter
     InvestigationId: StringFilter
     CreatedAt: StringFilter
     UpdatedAt: StringFilter
@@ -3139,6 +3139,7 @@ input PersonWorkupInput {
 scalar WorkupResults
 
 input PersonWorkupFilter {
+    Person: PersonFilter
     WorkupId: StringFilter
     CreatedAt: StringFilter
     UpdatedAt: StringFilter
@@ -10061,14 +10062,14 @@ func (ec *executionContext) _PersonOrganDonation_Recipient(ctx context.Context, 
 		Object:     "PersonOrganDonation",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PersonOrganDonation().Recipient(rctx, obj)
+		return obj.Recipient, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14369,7 +14370,7 @@ func (ec *executionContext) unmarshalInputPersonFollowUpFilter(ctx context.Conte
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
-			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
+			it.Person, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14377,7 +14378,7 @@ func (ec *executionContext) unmarshalInputPersonFollowUpFilter(ctx context.Conte
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Donation"))
-			it.Donation, err = ec.unmarshalOPersonOrganDonationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationInput(ctx, v)
+			it.Donation, err = ec.unmarshalOPersonOrganDonationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14745,6 +14746,14 @@ func (ec *executionContext) unmarshalInputPersonInvestigationFilter(ctx context.
 
 	for k, v := range asMap {
 		switch k {
+		case "Person":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "InvestigationId":
 			var err error
 
@@ -15227,6 +15236,14 @@ func (ec *executionContext) unmarshalInputPersonWorkupFilter(ctx context.Context
 
 	for k, v := range asMap {
 		switch k {
+		case "Person":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
+			it.Person, err = ec.unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "WorkupId":
 			var err error
 
@@ -17838,22 +17855,12 @@ func (ec *executionContext) _PersonOrganDonation(ctx context.Context, sel ast.Se
 			out.Values[i] = innerFunc(ctx)
 
 		case "Recipient":
-			field := field
-
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PersonOrganDonation_Recipient(ctx, field, obj)
-				return res
+				return ec._PersonOrganDonation_Recipient(ctx, field, obj)
 			}
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
+			out.Values[i] = innerFunc(ctx)
 
-			})
 		case "FollowUps":
 			field := field
 

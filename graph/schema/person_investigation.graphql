@@ -28,6 +28,7 @@ input PersonInvestigationInput {
 scalar InvestigationResults
 
 input PersonInvestigationFilter {
+    Person: PersonFilter
     InvestigationId: StringFilter
     CreatedAt: StringFilter
     UpdatedAt: StringFilter

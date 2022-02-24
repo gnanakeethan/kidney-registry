@@ -100,6 +100,10 @@ func (r *queryResolver) GetPersonWorkup(ctx context.Context, id string) (*models
 }
 
 func (r *queryResolver) ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error) {
+	if filter == nil {
+		filter = &models.PersonWorkupFilter{}
+	}
+	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
 	return models.ListPersonWorkups(ctx, filter, page, limit, sortBy, orderBy)
 }
 

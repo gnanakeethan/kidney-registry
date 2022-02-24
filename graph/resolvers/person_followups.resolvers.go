@@ -94,6 +94,10 @@ func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*mode
 }
 
 func (r *queryResolver) ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
+	if filter == nil {
+		filter = &models.PersonFollowUpFilter{}
+	}
+	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
 	return models.ListPersonFollowUps(ctx, filter, page, limit, sortBy, orderBy)
 }
 

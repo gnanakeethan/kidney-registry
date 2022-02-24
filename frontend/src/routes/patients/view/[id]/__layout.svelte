@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-	import { recipientId } from '$lib/state/recipient';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import { recipientId } from '../../../../lib/state/recipient';
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
 		const id = loadInput.params.id ?? '';
@@ -26,7 +26,7 @@
 	// import { Person } from 'lib/graphql/generated';
 	import { GetPatientDocument, GetPatientQuery, Person } from '../../../../lib/graphql/generated';
 
-	query<GetPatientQuery>(
+	$: query<GetPatientQuery>(
 		operationStore(GetPatientDocument, {
 			id: $recipientId
 		})
@@ -41,7 +41,7 @@
 			}
 		}
 	});
-	let props = {
+	$: props = {
 		activeUrl: activePath,
 		base: '/patients/view/' + $recipientId,
 		routes: [

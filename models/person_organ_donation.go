@@ -14,7 +14,7 @@ import (
 
 type PersonOrganDonation struct {
 	ID             string    `orm:"column(id);pk"`
-	Receiver       *Person   `orm:"column(receiver_id);rel(fk)"`
+	Recipient      *Person   `orm:"column(receiver_id);rel(fk)"`
 	Donor          *Person   `orm:"column(donor_id);rel(fk)"`
 	DonationType   string    `orm:"column(donation_type)"`
 	PlannedDate    time.Time `orm:"column(planned_date);type(timestamp);null"`
@@ -66,7 +66,7 @@ func ListPersonOrganDonations(ctx context.Context, filter *PersonOrganDonationFi
 	if err != nil {
 		return nil, err
 	}
-	if _, err := qs.All(&personOrganDonations, preloads...); err != nil {
+	if _, err := qs.RelatedSel().All(&personOrganDonations, preloads...); err != nil {
 		return nil, err
 	}
 	pagination := getPagination(currentPage, totalItems, perPage)

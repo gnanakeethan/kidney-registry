@@ -20,8 +20,8 @@ input PersonFollowUpFilter {
     OtherFindings: StringFilter
     Referrals: StringFilter
     ConsultantOpinion: StringFilter
-    Person: PersonInput
-    Donation: PersonOrganDonationInput
+    Person: PersonFilter
+    Donation: PersonOrganDonationFilter
 }
 input DialysisPlanInput {
     Type: String

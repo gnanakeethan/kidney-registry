@@ -6,24 +6,23 @@ package resolvers
 import (
 	"context"
 	"fmt"
-	
-	"github.com/kr/pretty"
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
 	pretty.Println(input.Donor)
 	donor, err := models.AddPatient(input.Donor)
-	
+
 	if err != nil {
 		panic(err)
 	}
 	personOrganDonation := models.PersonOrganDonation{
 		ID:             ksuid.New().String(),
-		Receiver:       &models.Person{ID: input.Recipient.ID},
+		Recipient:      &models.Person{ID: input.Recipient.ID},
 		Donor:          donor,
 		DonationType:   PointerString(input.DonationType),
 		PlannedDate:    GetDate(PointerString(input.PlannedDate)),
@@ -45,24 +44,20 @@ func (r *mutationResolver) DeletePersonOrganDonation(ctx context.Context, id str
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *personOrganDonationResolver) Recipient(ctx context.Context, obj *models.PersonOrganDonation) (*models.Person, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 func (r *personOrganDonationResolver) FollowUps(ctx context.Context, obj *models.PersonOrganDonation) ([]*models.PersonFollowUp, error) {
-	panic(fmt.Errorf("not implemented"))
+	return nil, nil
 }
 
 func (r *personOrganDonationResolver) PlannedDate(ctx context.Context, obj *models.PersonOrganDonation) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return StringPointer(formatDate(obj.PlannedDate)), nil
 }
 
 func (r *personOrganDonationResolver) PerformedDate(ctx context.Context, obj *models.PersonOrganDonation) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return StringPointer(formatDate(obj.PerformedDate)), nil
 }
 
 func (r *personOrganDonationResolver) DischargedDate(ctx context.Context, obj *models.PersonOrganDonation) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return StringPointer(formatDate(obj.DischargedDate)), nil
 }
 
 func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonation, error) {
