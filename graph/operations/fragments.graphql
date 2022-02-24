@@ -129,6 +129,7 @@ fragment PersonInvestigationFields on PersonInvestigation {
         Description
         Inline
     }
+    ValidDays
     Results
     ValidDays
     ObtainedDate

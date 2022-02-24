@@ -116,12 +116,14 @@ type FormDetails struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
 	Inline      *bool   `json:"Inline"`
+	ValidDays   *int    `json:"ValidDays"`
 }
 
 type FormDetailsInput struct {
 	Name        *string `json:"Name"`
 	Description *string `json:"Description"`
 	Inline      *bool   `json:"Inline"`
+	ValidDays   *int    `json:"ValidDays"`
 }
 
 type IntFilter struct {
@@ -318,6 +320,10 @@ type PersonInvestigationInput struct {
 	Results       ResultsModel        `json:"Results"`
 	Investigation *InvestigationInput `json:"Investigation"`
 	Person        *PersonInput        `json:"Person"`
+	ValidDays     *int                `json:"ValidDays"`
+	ObtainedDate  *string             `json:"ObtainedDate"`
+	ExpectedDate  *string             `json:"ExpectedDate"`
+	CreatedAt     *string             `json:"CreatedAt"`
 }
 
 type PersonInvestigationList struct {

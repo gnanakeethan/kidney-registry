@@ -22,6 +22,9 @@ func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input 
 		Procedure:     investigation.Procedure,
 		Details:       investigation.Details,
 		Investigation: &models.Investigation{ID: input.Investigation.ID},
+		ExpectedDate:  GetDate(PointerString(input.ExpectedDate)),
+		ObtainedDate:  GetDate(PointerString(input.ObtainedDate)),
+		ValidDays:     PointerInt(input.ValidDays),
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
 	}
@@ -40,6 +43,9 @@ func (r *mutationResolver) UpdatePersonInvestigation(ctx context.Context, input 
 		ID:            PointerString(input.ID),
 		Person:        &models.Person{ID: input.Person.ID},
 		Investigation: &models.Investigation{ID: input.Investigation.ID},
+		ObtainedDate:  GetDate(PointerString(input.ObtainedDate)),
+		ExpectedDate:  GetDate(PointerString(input.ExpectedDate)),
+		ValidDays:     PointerInt(input.ValidDays),
 		UpdatedAt:     time.Now(),
 	}
 	if results, err := json.Marshal(input.Results); err == nil {
@@ -90,7 +96,7 @@ func (r *personInvestigationResolver) ExpectedDate(ctx context.Context, obj *mod
 }
 
 func (r *personInvestigationResolver) CreatedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error) {
-	return StringPointer(formatDate(obj.CreatedAt)), nil
+	return StringPointer(formatDateTime(obj.CreatedAt)), nil
 }
 
 func (r *personInvestigationResolver) UpdatedAt(ctx context.Context, obj *models.PersonInvestigation) (*string, error) {

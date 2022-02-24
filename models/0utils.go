@@ -239,7 +239,7 @@ func getUpdatedFields(m interface{}, v interface{}) []string {
 	for i := 0; i < v1.NumField(); i++ {
 		if v2.Field(i).Interface() != v1.Field(i).Interface() {
 			name := t.Field(i).Name
-			if !StringInSlice(name, []string{"Phn"}) {
+			if !StringInSlice(name, []string{"Phn", "CreatedAt", "UpdatedAt", "DeletedAt"}) {
 				updatedFields = append(updatedFields, name)
 				fmt.Printf("%v ", t.Field(i).Name)
 				fmt.Printf("old: %v ", v1.Field(i))

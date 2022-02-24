@@ -120,6 +120,7 @@ type ComplexityRoot struct {
 		Description func(childComplexity int) int
 		Inline      func(childComplexity int) int
 		Name        func(childComplexity int) int
+		ValidDays   func(childComplexity int) int
 	}
 
 	Investigation struct {
@@ -811,6 +812,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FormDetails.Name(childComplexity), true
+
+	case "FormDetails.ValidDays":
+		if e.complexity.FormDetails.ValidDays == nil {
+			break
+		}
+
+		return e.complexity.FormDetails.ValidDays(childComplexity), true
 
 	case "Investigation.CreatedAt":
 		if e.complexity.Investigation.CreatedAt == nil {
@@ -2457,11 +2465,13 @@ type FormDetails {
     Name: String
     Description:String
     Inline: Boolean
+    ValidDays: Int
 }
 input FormDetailsInput {
     Name: String
     Description:String
     Inline: Boolean
+    ValidDays: Int
 }`, BuiltIn: false},
 	{Name: "graph/schema/0raw.graphql", Input: `type Error {
     string: String!
@@ -2884,6 +2894,10 @@ input PersonInvestigationInput {
     Results: InvestigationResults
     Investigation: InvestigationInput
     Person: PersonInput
+    ValidDays: Int
+    ObtainedDate: String
+    ExpectedDate: String
+    CreatedAt: String
 }
 
 scalar InvestigationResults
@@ -5410,6 +5424,38 @@ func (ec *executionContext) _FormDetails_Inline(ctx context.Context, field graph
 	res := resTmp.(*bool)
 	fc.Result = res
 	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _FormDetails_ValidDays(ctx context.Context, field graphql.CollectedField, obj *models.FormDetails) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "FormDetails",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ValidDays, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Investigation_ID(ctx context.Context, field graphql.CollectedField, obj *models.Investigation) (ret graphql.Marshaler) {
@@ -13252,6 +13298,14 @@ func (ec *executionContext) unmarshalInputFormDetailsInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
+		case "ValidDays":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ValidDays"))
+			it.ValidDays, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -14283,6 +14337,38 @@ func (ec *executionContext) unmarshalInputPersonInvestigationInput(ctx context.C
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Person"))
 			it.Person, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ValidDays":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ValidDays"))
+			it.ValidDays, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ObtainedDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ObtainedDate"))
+			it.ObtainedDate, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ExpectedDate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ExpectedDate"))
+			it.ExpectedDate, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "CreatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("CreatedAt"))
+			it.CreatedAt, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -15486,6 +15572,13 @@ func (ec *executionContext) _FormDetails(ctx context.Context, sel ast.SelectionS
 		case "Inline":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._FormDetails_Inline(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "ValidDays":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._FormDetails_ValidDays(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)

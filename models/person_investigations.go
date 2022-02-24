@@ -163,6 +163,8 @@ func UpdatePersonInvestigationById(m *PersonInvestigation) (err error) {
 	o := orm.NewOrm()
 	v := &PersonInvestigation{ID: m.ID}
 	if err = o.Read(v); err == nil {
+		v.Procedure = m.Procedure
+		v.Details = m.Details
 		updatedFields := getUpdatedFields(*m, *v)
 		if len(updatedFields) > 0 {
 			if num, err2 := o.Update(m, updatedFields...); err2 == nil {

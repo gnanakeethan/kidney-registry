@@ -69,7 +69,24 @@ func PointerString(s *string) string {
 	return *s
 }
 
-func formatDate(date time.Time) string {
+func formatDateTime(date time.Time) string {
 	location, _ := time.LoadLocation("Asia/Colombo")
 	return date.In(location).Format("2006-01-02 15:04:05")
+}
+func formatDate(date time.Time) string {
+	location, _ := time.LoadLocation("Asia/Colombo")
+	return date.In(location).Format("2006-01-02")
+}
+
+func GetDate(date string) time.Time {
+	location, _ := time.LoadLocation("Asia/Colombo")
+	timeResult, _ := time.ParseInLocation("2006-01-02", date, location)
+	return timeResult
+}
+
+func PointerInt(days *int) int {
+	if days == nil {
+		return 0
+	}
+	return *days
 }

@@ -19,6 +19,10 @@ input PersonInvestigationInput {
     Results: InvestigationResults
     Investigation: InvestigationInput
     Person: PersonInput
+    ValidDays: Int
+    ObtainedDate: String
+    ExpectedDate: String
+    CreatedAt: String
 }
 
 scalar InvestigationResults
