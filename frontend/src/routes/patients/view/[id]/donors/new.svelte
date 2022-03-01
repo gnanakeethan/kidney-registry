@@ -323,7 +323,7 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Patient</div>
+			<div class="text-xl font-bold">New Donor</div>
 			<Field {fields} bind:values bind:isValidForm />
 			{message}
 			<button
