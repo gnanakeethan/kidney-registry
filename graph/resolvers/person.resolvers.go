@@ -72,7 +72,12 @@ func (r *personResolver) UpdatedAt(ctx context.Context, obj *models.Person) (*st
 }
 
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error) {
-	return models.GetListPatients(ctx, filter, page, limit, sortBy, orderBy)
+	if len(sortBy) == 0 || len(orderBy) == 0 {
+		sortBy = append(sortBy, StringPointer("Order"))
+		orderByAc := models.OrderByAsc
+		orderBy = append(orderBy, &orderByAc)
+	}
+	return models.ListAnyGenerics(ctx, models.Person{}, filter, &models.PersonList{}, page, limit, sortBy, orderBy)
 }
 
 func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.Person, error) {

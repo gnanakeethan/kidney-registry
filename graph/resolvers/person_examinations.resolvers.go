@@ -95,7 +95,6 @@ func (r *personExaminationResolver) DeletedAt(ctx context.Context, obj *models.P
 
 func (r *queryResolver) GetPersonExamination(ctx context.Context, id string) (*models.PersonExamination, error) {
 	return models.GetAnyById(&models.PersonExamination{ID: id})
-	
 }
 
 func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
