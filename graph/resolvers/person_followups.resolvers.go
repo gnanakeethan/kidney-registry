@@ -115,22 +115,3 @@ func (r *Resolver) PersonFollowUp() generated.PersonFollowUpResolver {
 }
 
 type personFollowUpResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *personFollowUpResolver) RenalBiopsies(ctx context.Context, obj *models.PersonFollowUp) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-func (r *queryResolver) PersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-func (r *queryResolver) PersonFollowUps(ctx context.Context, personID string, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-func (r *mutationResolver) DeletePersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
-	panic(fmt.Errorf("not implemented"))
-}

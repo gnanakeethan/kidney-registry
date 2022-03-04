@@ -6,6 +6,7 @@ import (
 	"github.com/beego/beego/v2/server/web/filter/cors"
 	_ "github.com/lib/pq"
 	
+	"github.com/gnanakeethan/kidney-registry/graph/middleware"
 	_ "github.com/gnanakeethan/kidney-registry/routers"
 	
 	"os"
@@ -26,6 +27,7 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
 		AllowCredentials: true,
 	}))
+	beego.InsertFilter("*", beego.BeforeRouter, middleware.Middleware())
 	beego.BConfig.Listen.HTTPAddr = "0.0.0.0"
 	beego.Run()
 }
