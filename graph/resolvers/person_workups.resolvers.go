@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -96,7 +96,7 @@ func (r *personWorkupResolver) DeletedAt(ctx context.Context, obj *models.Person
 }
 
 func (r *queryResolver) GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error) {
-	return models.GetPersonWorkupsById(id)
+	return models.GetAnyById(&models.PersonWorkup{ID: id})
 }
 
 func (r *queryResolver) ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error) {

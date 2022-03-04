@@ -15,19 +15,17 @@ type contextKey struct {
 }
 
 // Middleware decodes the share session cookie and packs the session into context
-func Middleware() func(ctx context.Context) {
-	return func(ctx context.Context) {
-		authorization := ctx.Input.Header("Authorization")
-		if len(authorization) == 0 {
-			return
-		}
-		token := strings.Split(authorization, " ")
-		if len(token) != 2 {
-			return
-		}
-		ctx.Input.SetData(userCtxKey.name, token[1])
+func Middleware(ctx *context.Context) {
+	authorization := ctx.Input.Header("Authorization")
+	if len(authorization) == 0 {
 		return
 	}
+	token := strings.Split(authorization, " ")
+	if len(token) != 2 {
+		return
+	}
+	ctx.Input.SetData(userCtxKey.name, token[1])
+	return
 }
 
 // ForContext finds the user from the context. REQUIRES Middleware to have run.

@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -75,8 +76,7 @@ func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonF
 }
 
 func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.Person, error) {
-	time.Sleep(1 * time.Second)
-	return models.GetPersonsById(id)
+	return models.GetAnyById(&models.Person{ID: id})
 }
 
 // Person returns generated.PersonResolver implementation.

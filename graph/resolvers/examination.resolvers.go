@@ -7,7 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -43,13 +43,25 @@ func (r *queryResolver) GetExamination(ctx context.Context, id string) (*models.
 }
 
 func (r *queryResolver) ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error) {
-	sortBy = append(sortBy, StringPointer("Order"))
-	orderByAc := models.OrderByAsc
-	orderBy = append(orderBy, &orderByAc)
-	return models.ListExaminations(ctx, filter, page, limit, sortBy, orderBy)
+	if len(sortBy) == 0 || len(orderBy) == 0 {
+		sortBy = append(sortBy, StringPointer("Order"))
+		orderByAc := models.OrderByAsc
+		orderBy = append(orderBy, &orderByAc)
+	}
+	return models.ListAnyGenerics(ctx, models.Examination{}, filter, &models.ExaminationList{}, page, limit, sortBy, orderBy)
 }
 
 // Examination returns generated.ExaminationResolver implementation.
 func (r *Resolver) Examination() generated.ExaminationResolver { return &examinationResolver{r} }
 
 type examinationResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) ListExaminationsGenerics(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error) {
+	return nil, nil
+}

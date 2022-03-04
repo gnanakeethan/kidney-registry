@@ -91,7 +91,7 @@ func (r *personFollowUpResolver) UpdatedAt(ctx context.Context, obj *models.Pers
 }
 
 func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
-	panic(fmt.Errorf("not implemented"))
+	return models.GetAnyById(&models.PersonFollowUp{ID: id})
 }
 
 func (r *queryResolver) ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {

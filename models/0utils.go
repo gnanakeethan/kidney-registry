@@ -37,8 +37,7 @@ func getPagination(currentPage int64, totalItems int64, perPage int64) *Paginati
 	return pagination
 }
 
-func extractQuery(ctx context.Context, object, filter interface{}, page *int, limit *int) (*orm.Condition, int64, int64, []string) {
-	query := extractFilter("", filter)
+func extractQuery[F Model, T FilterInput](ctx context.Context, object F, filter T, page *int, limit *int) (*orm.Condition, int64, int64, []string) {
 	currentPage := int64(1)
 	perPage := int64(15)
 	preloads := GetPreloads(ctx, object)
@@ -48,84 +47,86 @@ func extractQuery(ctx context.Context, object, filter interface{}, page *int, li
 	if limit != nil {
 		perPage = int64(*limit)
 	}
+	if reflect.ValueOf(filter).IsNil() {
+		return orm.NewCondition(), currentPage, perPage, preloads
+	}
+	
+	query := extractFilter("", filter)
 	return query, currentPage, perPage, preloads
 }
 
-func extractFilter(prefix string, filterInterface interface{}) *orm.Condition {
-	filter := &filterInterface
+func extractFilter[T FilterInput](prefix string, filterInterface T) *orm.Condition {
 	condition := orm.NewCondition()
-	if filter != nil {
-		fields := reflect.VisibleFields(reflect.TypeOf(filterInterface))
-		v := reflect.ValueOf(*filter)
-		for _, j := range fields {
-			fieldValInterface := v.FieldByName(j.Name).Interface()
-			pretty.Println(j.Name, fieldValInterface)
-			if fieldValInterface != nil {
-				fieldVal := reflect.ValueOf(fieldValInterface).Elem()
-				if fieldVal.IsValid() {
-					notCustom := false
-					comparison := "EQUAL"
-					pretty.Println("TYPE", fieldVal.Type().String())
-					pretty.Println("INTERFACE", fieldVal.Interface())
-					fieldValType := fieldVal.Type().String()
-					if StringInSlice(fieldValType, []string{"models.StringFilter", "models.FloatFilter", "models.IntFilter"}) {
-						notCustom = true
-					}
-					if StringInSlice(j.Name, []string{"And", "Or", "AndNot", "OrNot"}) {
-						switch j.Name {
-						case "Or":
-							condition = condition.OrCond(extractFilter("", fieldVal.Interface()))
-						case "OrNot":
-							condition = condition.OrNotCond(extractFilter("", fieldVal.Interface()))
-						case "And":
-							condition = condition.AndCond(extractFilter("", fieldVal.Interface()))
-						case "AndNot":
-							condition = condition.AndNotCond(extractFilter("", fieldVal.Interface()))
-						}
-						
-					} else if notCustom {
-						switch comparison {
-						case "EQUAL":
-							condition = condition.And(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "NOT_EQUAL":
-							condition = condition.AndNot(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "GREATER_THAN":
-							condition = condition.And(prefix+j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "GREATER_THAN_OR_EQUAL":
-							condition = condition.And(prefix+j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "LESS_THAN":
-							condition = condition.And(prefix+j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "LESS_THAN_OR_EQUAL":
-							condition = condition.And(prefix+j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "BETWEEN":
-							// condition[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
-							break
-						case "CONTAINS":
-							condition = condition.And(prefix+j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "ICONTAINS":
-							condition = condition.And(prefix+j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "STARTS_WITH":
-							condition = condition.And(prefix+j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
-							break
-						case "ENDS_WITH":
-							condition = condition.And(prefix+j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
-							break
-						}
-					} else {
-						pretty.Println("PULLING IN", fieldVal.Interface())
-						condition = condition.AndCond(extractFilter(j.Name+"__", fieldVal.Interface()))
-					}
+	fields := reflect.VisibleFields(reflect.TypeOf(filterInterface))
+	v := reflect.ValueOf(filterInterface)
+	for _, j := range fields {
+		fieldValInterface := v.FieldByName(j.Name).Interface()
+		pretty.Println(j.Name, fieldValInterface)
+		if fieldValInterface != nil {
+			fieldVal := reflect.ValueOf(fieldValInterface).Elem()
+			if fieldVal.IsValid() {
+				notCustom := false
+				comparison := "EQUAL"
+				pretty.Println("TYPE", fieldVal.Type().String())
+				pretty.Println("INTERFACE", fieldVal.Interface())
+				fieldValType := fieldVal.Type().String()
+				if StringInSlice(fieldValType, []string{"models.StringFilter", "models.FloatFilter", "models.IntFilter"}) {
+					notCustom = true
 				}
-				
+				if StringInSlice(j.Name, []string{"And", "Or", "AndNot", "OrNot"}) {
+					switch j.Name {
+					case "Or":
+						condition = condition.OrCond(extractFilter("", fieldVal.Interface().(T)))
+					case "OrNot":
+						condition = condition.OrNotCond(extractFilter("", fieldVal.Interface().(T)))
+					case "And":
+						condition = condition.AndCond(extractFilter("", fieldVal.Interface().(T)))
+					case "AndNot":
+						condition = condition.AndNotCond(extractFilter("", fieldVal.Interface().(T)))
+					}
+					
+				} else if notCustom {
+					switch comparison {
+					case "EQUAL":
+						condition = condition.And(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "NOT_EQUAL":
+						condition = condition.AndNot(prefix+j.Name, fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "GREATER_THAN":
+						condition = condition.And(prefix+j.Name+"__gt", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "GREATER_THAN_OR_EQUAL":
+						condition = condition.And(prefix+j.Name+"__gte", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "LESS_THAN":
+						condition = condition.And(prefix+j.Name+"__lt", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "LESS_THAN_OR_EQUAL":
+						condition = condition.And(prefix+j.Name+"__lte", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "BETWEEN":
+						// condition[j.Name+"__between"] = fieldVal.FieldByName("Value").Elem().String()
+						break
+					case "CONTAINS":
+						condition = condition.And(prefix+j.Name+"__contains", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "ICONTAINS":
+						condition = condition.And(prefix+j.Name+"__icontains", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "STARTS_WITH":
+						condition = condition.And(prefix+j.Name+"__startswith", fieldVal.FieldByName("Value").Elem().String())
+						break
+					case "ENDS_WITH":
+						condition = condition.And(prefix+j.Name+"__endswith", fieldVal.FieldByName("Value").Elem().String())
+						break
+					}
+				} else {
+					pretty.Println("PULLING IN", fieldVal.Interface())
+					condition = condition.AndCond(extractFilter(j.Name+"__", fieldVal.Interface()))
+				}
 			}
+			
 		}
 	}
 	return condition
@@ -186,6 +187,93 @@ func GetAnyAll(object interface{}, query *orm.Condition, sortby []*string, order
 	o := orm.NewOrm()
 	typeOf := reflect.TypeOf(object)
 	qs = o.QueryTable(reflect.New(typeOf).Interface())
+	qs = qs.SetCond(query)
+	var sortFields []string
+	if len(sortby) != 0 {
+		if len(sortby) == len(order) {
+			// 1) for each sort field, there is an associated order
+			for i, v := range sortby {
+				orderby := ""
+				if *order[i] == "desc" {
+					orderby = "-" + *v
+				} else if *order[i] == "asc" {
+					orderby = *v
+				} else {
+					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+			qs = qs.OrderBy(sortFields...)
+		} else if len(sortby) != len(order) && len(order) == 1 {
+			// 2) there is exactly one order, all the sorted fields will be sorted by this order
+			for _, v := range sortby {
+				orderby := ""
+				if *order[0] == "desc" {
+					orderby = "-" + *v
+				} else if *order[0] == "asc" {
+					orderby = *v
+				} else {
+					return nil, 0, errors.New("Error: Invalid order. Must be either [asc|desc]")
+				}
+				sortFields = append(sortFields, orderby)
+			}
+		} else if len(sortby) != len(order) && len(order) != 1 {
+			return nil, 0, errors.New("Error: 'sortby', 'order' sizes mismatch or 'order' size is not 1")
+		}
+	} else {
+		if len(order) != 0 {
+			return nil, 0, errors.New("Error: unused 'order' fields")
+		}
+	}
+	
+	qs = qs.OrderBy(sortFields...)
+	totalItems, _ = qs.Count()
+	qs = qs.Limit(limit, offset)
+	return
+}
+
+type Model interface {
+	Examination | Investigation | Person | PersonExamination | PersonInvestigation | PersonMedicalHistory | PersonOrganDonation | PersonWorkup | User | Workup | PersonFollowUp
+}
+type FilterInput interface {
+	any | ExaminationFilter | InvestigationFilter | PersonFilter | PersonExaminationFilter | PersonFollowUpFilter | PersonInvestigationFilter | PersonMedicalHistoryFilter | PersonOrganDonationFilter | PersonWorkupFilter | WorkupFilter
+}
+
+type ListOutput interface {
+	*ExaminationList
+}
+
+func GetAnyById[T Model](v T) (T, error) {
+	o := orm.NewOrm()
+	if err := o.Read(v); err == nil {
+		return v, nil
+	} else {
+		return nil, err
+	}
+}
+
+func ListAnyGenerics[T Model, F FilterInput, G ListOutput](ctx context.Context, object T, filter F, listOutput G, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (G, error) {
+	var list []*T
+	query, currentPage, perPage, preloads := extractQuery(ctx, object, filter, page, limit)
+	pretty.Println(preloads)
+	qs, totalItems, err := GetAnyAllGenerics(object, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if err != nil {
+		return listOutput, err
+	}
+	if _, err := qs.All(&list, preloads...); err != nil {
+		return listOutput, err
+	}
+	pretty.Println(totalItems)
+	reflect.ValueOf(listOutput).Elem().FieldByName("Items").Set(reflect.ValueOf(list))
+	pretty.Println(listOutput)
+	return listOutput, nil
+}
+
+// Gets any type of object and destructures query.
+func GetAnyAllGenerics[T Model](object T, query *orm.Condition, sortby []*string, order []*OrderBy,
+	offset int64, limit int64) (qs orm.QuerySeter, totalItems int64, err error) {
+	o := orm.NewOrm()
+	qs = o.QueryTable(object)
 	qs = qs.SetCond(query)
 	var sortFields []string
 	if len(sortby) != 0 {

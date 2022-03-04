@@ -6,17 +6,18 @@ package resolvers
 import (
 	"context"
 	"fmt"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
 	pretty.Println(input.Donor)
 	donor, err := models.AddPatient(input.Donor)
-
+	
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +62,7 @@ func (r *personOrganDonationResolver) DischargedDate(ctx context.Context, obj *m
 }
 
 func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonation, error) {
-	panic(fmt.Errorf("not implemented"))
+	return models.GetAnyById(&models.PersonOrganDonation{ID: id})
 }
 
 func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {

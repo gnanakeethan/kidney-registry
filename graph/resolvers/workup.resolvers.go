@@ -7,13 +7,13 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *queryResolver) GetWorkup(ctx context.Context, id string) (*models.Workup, error) {
-	return models.GetWorkupsById(id)
+	return models.GetAnyById(&models.Workup{ID: id})
 }
 
 func (r *queryResolver) ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.WorkupList, error) {

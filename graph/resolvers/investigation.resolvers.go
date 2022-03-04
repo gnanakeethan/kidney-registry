@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -40,14 +40,16 @@ func (r *investigationResolver) DeletedAt(ctx context.Context, obj *models.Inves
 }
 
 func (r *queryResolver) GetInvestigation(ctx context.Context, id string) (*models.Investigation, error) {
-	return models.GetInvestigationsById(id)
+	return models.GetAnyById(&models.Investigation{ID: id})
 }
 
 func (r *queryResolver) ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.InvestigationList, error) {
-	sortBy = append(sortBy, StringPointer("Order"))
-	orderByAc := models.OrderByAsc
-	orderBy = append(orderBy, &orderByAc)
-	return models.ListInvestigations(ctx, filter, page, limit, sortBy, orderBy)
+	if len(sortBy) == 0 || len(orderBy) == 0 {
+		sortBy = append(sortBy, StringPointer("Order"))
+		orderByAc := models.OrderByAsc
+		orderBy = append(orderBy, &orderByAc)
+	}
+	return models.ListAnyGenerics(ctx, models.Investigation{}, filter, &models.InvestigationList{}, page, limit, sortBy, orderBy)
 }
 
 // Investigation returns generated.InvestigationResolver implementation.
