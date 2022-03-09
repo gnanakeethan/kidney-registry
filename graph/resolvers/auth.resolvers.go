@@ -8,6 +8,7 @@ import (
 	
 	"github.com/golang-jwt/jwt"
 	"github.com/kr/pretty"
+	"gopkg.in/hlandau/passlib.v1"
 	
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -22,7 +23,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 			Value:      StringPointer(userLogin.Email),
 		},
 	}
-	users, _ := models.ListAnyGenerics(ctx, models.User{}, filter, &models.UserList{}, IntPointer(0), IntPointer(1), nil, nil)
+	users, _ := models.ListAnyGenerics(ctx, models.User{}, filter, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
 	mySigningKey := []byte("9t78ifugkyjhbrto98y2rgi4eu")
 	
 	type MyCustomClaims struct {
@@ -31,7 +32,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 	}
 	
 	for _, user := range users.Users {
-		if true {
+		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
 			// Create the Claims
 			claims := MyCustomClaims{
 				"bar",
@@ -56,8 +57,4 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		}
 	}
 	return nil, nil
-}
-
-func IntPointer(i int) *int {
-	return &i
 }

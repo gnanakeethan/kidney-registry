@@ -7,10 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {
@@ -23,7 +24,7 @@ func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input 
 		Investigation: &models.Investigation{ID: input.Investigation.ID},
 		ExpectedDate:  GetDate(PointerString(input.ExpectedDate)),
 		ObtainedDate:  GetDate(PointerString(input.ObtainedDate)),
-		ValidDays:     PointerInt(input.ValidDays),
+		ValidDays:     PointerToInt(input.ValidDays),
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
 	}
@@ -44,7 +45,7 @@ func (r *mutationResolver) UpdatePersonInvestigation(ctx context.Context, input 
 		Investigation: &models.Investigation{ID: input.Investigation.ID},
 		ObtainedDate:  GetDate(PointerString(input.ObtainedDate)),
 		ExpectedDate:  GetDate(PointerString(input.ExpectedDate)),
-		ValidDays:     PointerInt(input.ValidDays),
+		ValidDays:     PointerToInt(input.ValidDays),
 		UpdatedAt:     time.Now(),
 	}
 	if results, err := json.Marshal(input.Results); err == nil {

@@ -91,9 +91,13 @@ func GetDate(date string) time.Time {
 	return timeResult
 }
 
-func PointerInt(days *int) int {
+func PointerToInt(days *int) int {
 	if days == nil {
 		return 0
 	}
 	return *days
+}
+
+func IntToPointer(i int) *int {
+	return &i
 }
