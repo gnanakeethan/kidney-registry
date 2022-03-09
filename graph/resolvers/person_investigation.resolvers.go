@@ -7,11 +7,10 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-	
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {

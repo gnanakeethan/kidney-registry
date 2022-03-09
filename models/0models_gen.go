@@ -445,10 +445,11 @@ type UserList struct {
 }
 
 type UserListFilter struct {
-	ID   *StringFilter   `json:"id"`
-	Name *StringFilter   `json:"name"`
-	And  *UserListFilter `json:"and"`
-	Or   *UserListFilter `json:"or"`
+	ID    *StringFilter   `json:"id"`
+	Name  *StringFilter   `json:"name"`
+	Email *StringFilter   `json:"email"`
+	And   *UserListFilter `json:"and"`
+	Or    *UserListFilter `json:"or"`
 }
 
 type UserLogin struct {

@@ -10,6 +10,7 @@ type UserList {
 input UserListFilter {
     id : StringFilter
     name: StringFilter
+    email: StringFilter
     and: UserListFilter
     or: UserListFilter
 }

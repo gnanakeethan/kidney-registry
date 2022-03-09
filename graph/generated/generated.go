@@ -3216,6 +3216,7 @@ type UserList {
 input UserListFilter {
     id : StringFilter
     name: StringFilter
+    email: StringFilter
     and: UserListFilter
     or: UserListFilter
 }
@@ -15767,6 +15768,14 @@ func (ec *executionContext) unmarshalInputUserListFilter(ctx context.Context, ob
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			it.Name, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "email":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			it.Email, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}

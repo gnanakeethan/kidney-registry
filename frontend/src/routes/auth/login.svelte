@@ -23,13 +23,14 @@
 		onSubmit: (values) => {
 			// alert(JSON.stringify(values));
 			loginMutation<UserLoginMutation>({ userLogin: values }).then((result) => {
+				console.log(result);
 				if (auth !== undefined) {
 					auth.loggedIn = true;
 					auth.token = result.data.userLogin.token;
 					authState.set(auth);
 					goto(auth.redirectPage);
 				}
-				goto('/');
+				// goto('/');
 			});
 		}
 	});
