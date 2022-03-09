@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (r *queryResolver) Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error) {
+func (r *queryResolver) Users(ctx context.Context, filter *models.UserFilter, perPage *int, currentPage *int) (*models.UserList, error) {
 	userList := &models.UserList{}
 	for i := 0; i < 5; i++ {
 		user := &models.User{

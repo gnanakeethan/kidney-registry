@@ -373,7 +373,7 @@ type ComplexityRoot struct {
 		ListPersonWorkups           func(childComplexity int, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListWorkups                 func(childComplexity int, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		PersonMedicalHistory        func(childComplexity int, id string) int
-		Users                       func(childComplexity int, filter *models.UserListFilter, perPage *int, currentPage *int) int
+		Users                       func(childComplexity int, filter *models.UserFilter, perPage *int, currentPage *int) int
 	}
 
 	Subscription struct {
@@ -532,7 +532,7 @@ type QueryResolver interface {
 	ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error)
 	GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error)
 	ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error)
-	Users(ctx context.Context, filter *models.UserListFilter, perPage *int, currentPage *int) (*models.UserList, error)
+	Users(ctx context.Context, filter *models.UserFilter, perPage *int, currentPage *int) (*models.UserList, error)
 	GetWorkup(ctx context.Context, id string) (*models.Workup, error)
 	ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.WorkupList, error)
 }
@@ -2313,7 +2313,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserListFilter), args["perPage"].(*int), args["currentPage"].(*int)), true
+		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserFilter), args["perPage"].(*int), args["currentPage"].(*int)), true
 
 	case "Subscription.error":
 		if e.complexity.Subscription.Error == nil {
@@ -3213,17 +3213,17 @@ type UserList {
     pagination: Pagination
 }
 
-input UserListFilter {
+input UserFilter {
     id : StringFilter
     name: StringFilter
     email: StringFilter
-    and: UserListFilter
-    or: UserListFilter
+    and: UserFilter
+    or: UserFilter
 }
 
 
 extend type Query {
-    users(filter: UserListFilter, perPage: Int, currentPage: Int): UserList
+    users(filter: UserFilter, perPage: Int, currentPage: Int): UserList
 }`, BuiltIn: false},
 	{Name: "graph/schema/workup.graphql", Input: `type Workup implements DynamicFormInterface{
     ID          : ID!
@@ -4551,10 +4551,10 @@ func (ec *executionContext) field_Query_personMedicalHistory_args(ctx context.Co
 func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *models.UserListFilter
+	var arg0 *models.UserFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOUserListFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserListFilter(ctx, tmp)
+		arg0, err = ec.unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -11865,7 +11865,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Users(rctx, args["filter"].(*models.UserListFilter), args["perPage"].(*int), args["currentPage"].(*int))
+		return ec.resolvers.Query().Users(rctx, args["filter"].(*models.UserFilter), args["perPage"].(*int), args["currentPage"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15746,8 +15746,8 @@ func (ec *executionContext) unmarshalInputStringFilter(ctx context.Context, obj 
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUserListFilter(ctx context.Context, obj interface{}) (models.UserListFilter, error) {
-	var it models.UserListFilter
+func (ec *executionContext) unmarshalInputUserFilter(ctx context.Context, obj interface{}) (models.UserFilter, error) {
+	var it models.UserFilter
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -15783,7 +15783,7 @@ func (ec *executionContext) unmarshalInputUserListFilter(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOUserListFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserListFilter(ctx, v)
+			it.And, err = ec.unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -15791,7 +15791,7 @@ func (ec *executionContext) unmarshalInputUserListFilter(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOUserListFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserListFilter(ctx, v)
+			it.Or, err = ec.unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -21681,19 +21681,19 @@ func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidney
 	return ec._User(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx context.Context, v interface{}) (*models.UserFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUserFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalOUserList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserList(ctx context.Context, sel ast.SelectionSet, v *models.UserList) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UserList(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOUserListFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserListFilter(ctx context.Context, v interface{}) (*models.UserListFilter, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputUserListFilter(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx context.Context, sel ast.SelectionSet, v []*models.Workup) graphql.Marshaler {

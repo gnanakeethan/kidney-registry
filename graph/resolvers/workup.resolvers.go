@@ -13,7 +13,7 @@ import (
 )
 
 func (r *queryResolver) GetWorkup(ctx context.Context, id string) (*models.Workup, error) {
-	return models.GetAnyById(&models.Workup{ID: id})
+	return models.GetAnyById(models.Workup{ID: id})
 }
 
 func (r *queryResolver) ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.WorkupList, error) {

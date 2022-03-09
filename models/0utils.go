@@ -236,17 +236,17 @@ type Model interface {
 	Examination | Investigation | Person | PersonExamination | PersonInvestigation | PersonMedicalHistory | PersonOrganDonation | PersonWorkup | User | Workup | PersonFollowUp
 }
 type FilterInput interface {
-	any | ExaminationFilter | InvestigationFilter | PersonFilter | PersonExaminationFilter | PersonFollowUpFilter | PersonInvestigationFilter | PersonMedicalHistoryFilter | PersonOrganDonationFilter | PersonWorkupFilter | WorkupFilter
+	any | ExaminationFilter | InvestigationFilter | PersonFilter | PersonExaminationFilter | PersonFollowUpFilter | PersonInvestigationFilter | PersonMedicalHistoryFilter | PersonOrganDonationFilter | PersonWorkupFilter | WorkupFilter | UserFilter
 }
 
 type ListOutput interface {
-	*ExaminationList
+	*ExaminationList | *PersonList | *PersonExaminationList | *PersonFollowUpList | *PersonInvestigationList | *PersonMedicalHistoryList | *PersonOrganDonationList | *PersonWorkupList | *UserList | *WorkupList | *InvestigationList
 }
 
-func GetAnyById[T Model](v T) (T, error) {
+func GetAnyById[T Model](v T) (*T, error) {
 	o := orm.NewOrm()
 	if err := o.Read(v); err == nil {
-		return v, nil
+		return &v, nil
 	} else {
 		return nil, err
 	}

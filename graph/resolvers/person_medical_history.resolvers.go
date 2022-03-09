@@ -67,7 +67,7 @@ func (r *personMedicalHistoryResolver) UpdatedAt(ctx context.Context, obj *model
 }
 
 func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error) {
-	return models.GetAnyById(&models.PersonMedicalHistory{ID: id})
+	return models.GetAnyById(models.PersonMedicalHistory{ID: id})
 }
 
 func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error) {

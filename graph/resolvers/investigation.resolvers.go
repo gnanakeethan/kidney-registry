@@ -40,7 +40,7 @@ func (r *investigationResolver) DeletedAt(ctx context.Context, obj *models.Inves
 }
 
 func (r *queryResolver) GetInvestigation(ctx context.Context, id string) (*models.Investigation, error) {
-	return models.GetAnyById(&models.Investigation{ID: id})
+	return models.GetAnyById(models.Investigation{ID: id})
 }
 
 func (r *queryResolver) ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.InvestigationList, error) {

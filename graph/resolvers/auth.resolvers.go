@@ -5,17 +5,16 @@ package resolvers
 
 import (
 	"context"
-	
+
+	"github.com/gnanakeethan/kidney-registry/models"
 	"github.com/golang-jwt/jwt"
 	"github.com/kr/pretty"
-	"gopkg.in/hlandau/passlib.v1"
-	
-	"github.com/gnanakeethan/kidney-registry/models"
+	passlib "gopkg.in/hlandau/passlib.v1"
 )
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error) {
 	pretty.Println(userLogin)
-	filter := &models.UserListFilter{
+	filter := &models.UserFilter{
 		Email: &models.StringFilter{
 			Comparison: models.ComparisonTypeEqual,
 			And:        nil,
@@ -25,12 +24,12 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 	}
 	users, _ := models.ListAnyGenerics(ctx, models.User{}, filter, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
 	mySigningKey := []byte("9t78ifugkyjhbrto98y2rgi4eu")
-	
+
 	type MyCustomClaims struct {
 		Foo string `json:"foo"`
 		jwt.StandardClaims
 	}
-	
+
 	for _, user := range users.Users {
 		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
 			// Create the Claims
@@ -42,7 +41,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 					Subject:   user.ID,
 				},
 			}
-			
+
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 			ss, err := token.SignedString(mySigningKey)
 			if err == nil {

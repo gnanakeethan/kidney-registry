@@ -80,7 +80,7 @@ func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonF
 }
 
 func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.Person, error) {
-	return models.GetAnyById(&models.Person{ID: id})
+	return models.GetAnyById(models.Person{ID: id})
 }
 
 // Person returns generated.PersonResolver implementation.

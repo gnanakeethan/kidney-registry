@@ -7,11 +7,10 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-	
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {
@@ -108,7 +107,7 @@ func (r *personInvestigationResolver) DeletedAt(ctx context.Context, obj *models
 }
 
 func (r *queryResolver) GetPersonInvestigation(ctx context.Context, id string) (*models.PersonInvestigation, error) {
-	return models.GetAnyById(&models.PersonInvestigation{ID: id})
+	return models.GetAnyById(models.PersonInvestigation{ID: id})
 }
 
 func (r *queryResolver) ListPersonInvestigations(ctx context.Context, personID string, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error) {

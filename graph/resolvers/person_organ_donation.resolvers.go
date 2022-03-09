@@ -61,7 +61,7 @@ func (r *personOrganDonationResolver) DischargedDate(ctx context.Context, obj *m
 }
 
 func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonation, error) {
-	return models.GetAnyById(&models.PersonOrganDonation{ID: id})
+	return models.GetAnyById(models.PersonOrganDonation{ID: id})
 }
 
 func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {

@@ -7,15 +7,15 @@ type UserList {
     pagination: Pagination
 }
 
-input UserListFilter {
+input UserFilter {
     id : StringFilter
     name: StringFilter
     email: StringFilter
-    and: UserListFilter
-    or: UserListFilter
+    and: UserFilter
+    or: UserFilter
 }
 
 
 extend type Query {
-    users(filter: UserListFilter, perPage: Int, currentPage: Int): UserList
+    users(filter: UserFilter, perPage: Int, currentPage: Int): UserList
 }

@@ -439,17 +439,17 @@ type StringFilter struct {
 	Value      *string        `json:"value"`
 }
 
+type UserFilter struct {
+	ID    *StringFilter `json:"id"`
+	Name  *StringFilter `json:"name"`
+	Email *StringFilter `json:"email"`
+	And   *UserFilter   `json:"and"`
+	Or    *UserFilter   `json:"or"`
+}
+
 type UserList struct {
 	Users      []*User     `json:"users"`
 	Pagination *Pagination `json:"pagination"`
-}
-
-type UserListFilter struct {
-	ID    *StringFilter   `json:"id"`
-	Name  *StringFilter   `json:"name"`
-	Email *StringFilter   `json:"email"`
-	And   *UserListFilter `json:"and"`
-	Or    *UserListFilter `json:"or"`
 }
 
 type UserLogin struct {
