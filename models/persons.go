@@ -109,7 +109,7 @@ func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit
 	}
 	pagination := getPagination(currentPage, totalItems, perPage)
 	return &PersonList{
-		Persons:    persons,
+		Items:      persons,
 		Pagination: pagination,
 	}, nil
 }

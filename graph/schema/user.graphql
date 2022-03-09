@@ -1,9 +1,20 @@
 type User {
     id: ID!
     name: String!
+    Roles: [Role!]!
 }
+type Role {
+    id: ID!
+    name: String!
+}
+
+type UserRole {
+    user: User!
+    role: Role!
+}
+
 type UserList {
-    users: [User!]!
+    items: [User!]!
     pagination: Pagination
 }
 

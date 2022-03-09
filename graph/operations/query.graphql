@@ -1,6 +1,6 @@
-query ListUsers ($filter: UserListFilter,$perPage: Int){
+query ListUsers ($filter: UserFilter,$perPage: Int){
     users(filter: $filter,perPage: $perPage){
-        users {
+        items {
             name
             id
         }
@@ -19,7 +19,7 @@ query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int, $sortBy: [St
             currentPage
             itemsPerPage
         }
-        persons {
+        items {
             ...PersonFields
             CreatedAt
             UpdatedAt
@@ -35,9 +35,9 @@ query GetPatient ($id: ID!){
     }
 }
 
-query ListPeople ($filter: UserListFilter,$perPage: Int) {
+query ListPeople ($filter: UserFilter,$perPage: Int) {
     users(filter: $filter,perPage: $perPage){
-        users {
+        items {
             name
             id
         }
@@ -53,7 +53,7 @@ query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $p
         pagination {
             ...Pagination
         }
-        histories {
+        items {
             ...PersonMedicalHistoryFields
         }
     }

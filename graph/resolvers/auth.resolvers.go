@@ -14,7 +14,7 @@ import (
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error) {
 	pretty.Println(userLogin)
-	filter := &models.UserFilter{
+	filter := models.UserFilter{
 		Email: &models.StringFilter{
 			Comparison: models.ComparisonTypeEqual,
 			And:        nil,
@@ -22,7 +22,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 			Value:      StringPointer(userLogin.Email),
 		},
 	}
-	users, _ := models.ListAnyGenerics(ctx, models.User{}, filter, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
+	users, _ := models.ListAnyGenerics(ctx, models.User{}, &filter, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
 	mySigningKey := []byte("9t78ifugkyjhbrto98y2rgi4eu")
 
 	type MyCustomClaims struct {
@@ -30,8 +30,10 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		jwt.StandardClaims
 	}
 
-	for _, user := range users.Users {
+	for _, user := range users.Items {
+		pretty.Println("password checking", userLogin.Password, user.Password)
 		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
+			pretty.Println("password matched", userLogin.Password, user.Password)
 			// Create the Claims
 			claims := MyCustomClaims{
 				"bar",
@@ -44,6 +46,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 			ss, err := token.SignedString(mySigningKey)
+			pretty.Println(err)
 			if err == nil {
 				return &models.UserToken{
 					Token: ss,
@@ -53,6 +56,8 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 			} else {
 				return nil, err
 			}
+		} else {
+			pretty.Println(err)
 		}
 	}
 	return nil, nil

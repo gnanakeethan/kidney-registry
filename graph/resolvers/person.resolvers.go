@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -72,7 +73,7 @@ func (r *personResolver) UpdatedAt(ctx context.Context, obj *models.Person) (*st
 
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error) {
 	if len(sortBy) == 0 || len(orderBy) == 0 {
-		sortBy = append(sortBy, StringPointer("Order"))
+		sortBy = append(sortBy, StringPointer("CreatedAt"))
 		orderByAc := models.OrderByAsc
 		orderBy = append(orderBy, &orderByAc)
 	}

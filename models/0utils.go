@@ -57,8 +57,14 @@ func extractQuery[F Model, T FilterInput](ctx context.Context, object F, filter 
 
 func extractFilter[T FilterInput](prefix string, filterInterface T) *orm.Condition {
 	condition := orm.NewCondition()
-	fields := reflect.VisibleFields(reflect.TypeOf(filterInterface))
 	v := reflect.ValueOf(filterInterface)
+	var fields []reflect.StructField
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+		fields = reflect.VisibleFields(reflect.TypeOf(filterInterface).Elem())
+	} else {
+		fields = reflect.VisibleFields(reflect.TypeOf(filterInterface))
+	}
 	for _, j := range fields {
 		fieldValInterface := v.FieldByName(j.Name).Interface()
 		pretty.Println(j.Name, fieldValInterface)
@@ -245,7 +251,7 @@ type ListOutput interface {
 
 func GetAnyById[T Model](v T) (*T, error) {
 	o := orm.NewOrm()
-	if err := o.Read(v); err == nil {
+	if err := o.Read(&v); err == nil {
 		return &v, nil
 	} else {
 		return nil, err
@@ -256,16 +262,14 @@ func ListAnyGenerics[T Model, F FilterInput, G ListOutput](ctx context.Context, 
 	var list []*T
 	query, currentPage, perPage, preloads := extractQuery(ctx, object, filter, page, limit)
 	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAllGenerics(object, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	qs, _, err := GetAnyAllGenerics(object, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
 	if err != nil {
 		return listOutput, err
 	}
 	if _, err := qs.All(&list, preloads...); err != nil {
 		return listOutput, err
 	}
-	pretty.Println(totalItems)
 	reflect.ValueOf(listOutput).Elem().FieldByName("Items").Set(reflect.ValueOf(list))
-	pretty.Println(listOutput)
 	return listOutput, nil
 }
 

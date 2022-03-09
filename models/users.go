@@ -10,10 +10,26 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
+type UserRole struct {
+	Id   string `orm:"column(id);pk"`
+	Role *Role  `orm:"column(role_id);rel(fk)"`
+	User *User  `orm:"column(user_id);rel(fk)"`
+}
+
+type Role struct {
+	Id          string  `orm:"column(id);pk"`
+	Name        string  `orm:"column(name)"`
+	Description string  `orm:"column(description)"`
+	Users       []*User `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
+}
+
 type User struct {
-	ID        string    `orm:"column(id);pk"`
-	Username  string    `orm:"column(username)"`
-	Password  string    `orm:"column(password)"`
+	ID          string  `orm:"column(id);pk"`
+	Email       string  `orm:"column(email)"`
+	Name        string  `orm:"column(name)"`
+	Password    string  `orm:"column(password)"`
+	RolesLoaded []*Role `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
+	
 	CreatedAt time.Time `orm:"column(created_at);type(timestamp);auto_now_add;null"`
 	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp);auto_now;null"`
 	DeletedAt time.Time `orm:"column(deleted_at);null"`
@@ -23,8 +39,15 @@ func (t *User) TableName() string {
 	return "users"
 }
 
+func (t *Role) TableName() string {
+	return "roles"
+}
+func (t *UserRole) TableName() string {
+	return "user_role"
+}
+
 func init() {
-	orm.RegisterModel(new(User))
+	orm.RegisterModel(new(User), new(Role), new(UserRole))
 }
 
 // AddUsers insert a new User into database and returns

@@ -3,6 +3,13 @@ import { localStorage, persist, PersistentStore } from '@macfja/svelte-persisten
 import { writable } from 'svelte/store';
 
 export interface AuthState {
+	user?: {
+		name: string;
+		id: string;
+		Roles: {
+			name: string;
+		}[];
+	};
 	loggedIn: boolean;
 	redirectPage: string;
 	token: string;

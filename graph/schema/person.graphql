@@ -47,7 +47,7 @@ enum RecordStatus {
     REMOVED
 }
 type PersonList {
-    persons: [Person!]!
+    items: [Person!]!
     pagination: Pagination
 }
 input PersonComparison {

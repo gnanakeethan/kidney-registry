@@ -56,7 +56,7 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath="data.listPersonMedicalHistories.histories"
+		rootAccessPath="data.listPersonMedicalHistories.items"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">
 			<!--			<a href="/patients/view/{Patient.ID}">View Patient</a>-->

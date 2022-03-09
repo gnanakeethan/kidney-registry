@@ -333,7 +333,7 @@ type PersonInvestigationList struct {
 }
 
 type PersonList struct {
-	Persons    []*Person   `json:"persons"`
+	Items      []*Person   `json:"items"`
 	Pagination *Pagination `json:"pagination"`
 }
 
@@ -364,7 +364,7 @@ type PersonMedicalHistoryInput struct {
 }
 
 type PersonMedicalHistoryList struct {
-	Histories  []*PersonMedicalHistory `json:"histories"`
+	Items      []*PersonMedicalHistory `json:"items"`
 	Pagination *Pagination             `json:"pagination"`
 }
 
@@ -448,7 +448,7 @@ type UserFilter struct {
 }
 
 type UserList struct {
-	Users      []*User     `json:"users"`
+	Items      []*User     `json:"items"`
 	Pagination *Pagination `json:"pagination"`
 }
 

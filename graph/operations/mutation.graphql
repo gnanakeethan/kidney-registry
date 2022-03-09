@@ -4,6 +4,10 @@ mutation UserLogin ($userLogin:UserLogin!) {
             name
             id
             __typename
+            Roles {
+                id
+                name
+            }
         }
         error {
             status

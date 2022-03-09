@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+	import { goto } from '$app/navigation';
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
@@ -56,7 +57,6 @@
 </script>
 
 <script lang="ts">
-	import { userType } from '$lib/state/auth';
 	import { createClient, setClient } from '@urql/svelte';
 	import { ENV } from '$lib/environment/environment';
 	import { auth, authState } from '../lib/state/auth';
@@ -77,6 +77,14 @@
 		requestPolicy: 'cache-and-network'
 	});
 	setClient(client);
+
+	function logout() {
+		auth.token = '';
+		auth.loggedIn = false;
+		auth.user = null;
+		authState.set(auth);
+		goto('/auth/login');
+	}
 </script>
 
 <div
@@ -86,7 +94,12 @@
 		<KidneyOutline class="rotate-180 fill-current text-2xl" />
 		<div class="font-raleway text-2xl font-extrabold">Registry</div>
 	</a>
-	<div class=" flex-grow"><span>&nbsp;</span></div>
+	<div class="w-full flex-grow text-lg font-bold">
+		<div class="mx-auto w-1/2">
+			{auth.user?.name ?? ''}
+			<span class="mx-2 capitalize">({auth.user?.Roles.map((i) => i.name).join(',')})</span>
+		</div>
+	</div>
 	<div class="relative mx-4 flex flex-row items-center">
 		<input
 			class="bg-light-gray block h-8 w-32 flex-grow border-gray-300 pl-4 pr-12 font-sans text-xs text-sm focus:border-none focus:ring-0"
@@ -144,15 +157,22 @@
 			{/if}
 		</div>
 	</div>
-	<div class="mx-4">
-		<a href="/{$userType}/profile">
+	<div class="mx-4 flex flex-row items-center">
+		<a href="/profile">
 			<img
 				alt="descriptive"
-				class="hidden h-full w-8 rounded-full md:block"
+				class="hidden h-full w-10 rounded-full md:block"
 				src="https://picsum.photos/seed/profile/90/90"
 			/>
 		</a>
 	</div>
+	<button
+		class="mx-2 rounded bg-yellow-400 px-2 py-1 text-white"
+		on:click={() => {
+			logout();
+		}}
+		>Logout
+	</button>
 </div>
 <div
 	class="text-system flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50"

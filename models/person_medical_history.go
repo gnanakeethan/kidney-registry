@@ -87,7 +87,7 @@ func GetListMedicalHistory(ctx context.Context, filter *PersonMedicalHistoryFilt
 	}
 	pagination := getPagination(currentPage, totalItems, perPage)
 	return &PersonMedicalHistoryList{
-		Histories:  PersonMedicalHistories,
+		Items:      PersonMedicalHistories,
 		Pagination: pagination,
 	}, nil
 }
