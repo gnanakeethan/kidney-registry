@@ -103,7 +103,7 @@ func (r *personResolver) MedicalHistory(ctx context.Context, obj *models.Person,
 	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
 }
 
-func (r *personResolver) OrganDonation(ctx context.Context, obj *models.Person, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {
+func (r *personResolver) OrganDonations(ctx context.Context, obj *models.Person, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {
 	if filter == nil {
 		filter = &models.PersonOrganDonationFilter{}
 	}

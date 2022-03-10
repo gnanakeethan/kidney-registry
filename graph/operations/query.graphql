@@ -71,15 +71,6 @@ query GetPatientOverview($id: ID!){
                 ...PersonFollowUpFields
             }
         }
-        OrganDonations {
-            pagination {
-                ...Pagination
-            }
-            items {
-                ...PersonOrganDonationFields
-            }
-        }
-        
     }
 }
 
