@@ -28,5 +28,5 @@ input UserFilter {
 
 
 extend type Query {
-    users(filter: UserFilter, perPage: Int, currentPage: Int): UserList
+    users(filter: UserFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): UserList
 }

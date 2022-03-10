@@ -44,7 +44,7 @@
 		rootAccessPath="data.listAllPersonFollowUps.items"
 	>
 		<!--		<svelte:fragment let:element={Patient} slot="actions">-->
-		<!--			<a href="/patients/view/{Patient.ID}">View Patient</a>-->
+		<!--			<a href="/patients-recipient/view/{Patient.ID}">View Patient</a>-->
 		<!--		</svelte:fragment>-->
 	</Table>
 </div>

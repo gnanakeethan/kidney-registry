@@ -258,7 +258,7 @@ func GetAnyById[T Model](v T) (*T, error) {
 	}
 }
 
-func ListAnyGenerics[T Model, F FilterInput, G ListOutput](ctx context.Context, object T, filter F, listOutput G, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (G, error) {
+func ListAnyGenerics[T Model, F FilterInput, G ListOutput](ctx context.Context, object T, filter F, listOutput G, page *int, limit *int, sortBy []*string, orderBy []*OrderBy,relatedSel ...interface) (G, error) {
 	var list []*T
 	query, currentPage, perPage, preloads := extractQuery(ctx, object, filter, page, limit)
 	pretty.Println(preloads)
@@ -266,7 +266,7 @@ func ListAnyGenerics[T Model, F FilterInput, G ListOutput](ctx context.Context, 
 	if err != nil {
 		return listOutput, err
 	}
-	if _, err := qs.All(&list, preloads...); err != nil {
+	if _, err := qs.RelatedSel(relatedSel...).All(&list, preloads...); err != nil {
 		return listOutput, err
 	}
 	reflect.ValueOf(listOutput).Elem().FieldByName("Items").Set(reflect.ValueOf(list))

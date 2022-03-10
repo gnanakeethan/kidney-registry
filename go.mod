@@ -7,7 +7,6 @@ require github.com/beego/beego/v2 v2.0.1
 require (
 	github.com/99designs/gqlgen v0.16.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.2
 	github.com/kr/pretty v0.3.0
 	github.com/lib/pq v1.0.0

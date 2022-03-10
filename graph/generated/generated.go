@@ -373,7 +373,7 @@ type ComplexityRoot struct {
 		ListPersonWorkups           func(childComplexity int, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListWorkups                 func(childComplexity int, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		PersonMedicalHistory        func(childComplexity int, id string) int
-		Users                       func(childComplexity int, filter *models.UserFilter, perPage *int, currentPage *int) int
+		Users                       func(childComplexity int, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 	}
 
 	Role struct {
@@ -543,7 +543,7 @@ type QueryResolver interface {
 	ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error)
 	GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error)
 	ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error)
-	Users(ctx context.Context, filter *models.UserFilter, perPage *int, currentPage *int) (*models.UserList, error)
+	Users(ctx context.Context, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.UserList, error)
 	GetWorkup(ctx context.Context, id string) (*models.Workup, error)
 	ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.WorkupList, error)
 }
@@ -2324,7 +2324,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserFilter), args["perPage"].(*int), args["currentPage"].(*int)), true
+		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
 	case "Role.id":
 		if e.complexity.Role.Id == nil {
@@ -3280,7 +3280,7 @@ input UserFilter {
 
 
 extend type Query {
-    users(filter: UserFilter, perPage: Int, currentPage: Int): UserList
+    users(filter: UserFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): UserList
 }`, BuiltIn: false},
 	{Name: "graph/schema/workup.graphql", Input: `type Workup implements DynamicFormInterface{
     ID          : ID!
@@ -4618,23 +4618,41 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 	}
 	args["filter"] = arg0
 	var arg1 *int
-	if tmp, ok := rawArgs["perPage"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("perPage"))
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
 		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["perPage"] = arg1
+	args["page"] = arg1
 	var arg2 *int
-	if tmp, ok := rawArgs["currentPage"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("currentPage"))
+	if tmp, ok := rawArgs["limit"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
 		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["currentPage"] = arg2
+	args["limit"] = arg2
+	var arg3 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg3, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg3
+	var arg4 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
 	return args, nil
 }
 
@@ -11922,7 +11940,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Users(rctx, args["filter"].(*models.UserFilter), args["perPage"].(*int), args["currentPage"].(*int))
+		return ec.resolvers.Query().Users(rctx, args["filter"].(*models.UserFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

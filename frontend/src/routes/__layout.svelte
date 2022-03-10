@@ -33,7 +33,7 @@
 			{ name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
 			{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
 			{ name: 'Examinations', route: '/examinations', icon: SearchIcon },
-			{ name: 'Patients', route: '/patients', icon: PatientIcon },
+			{ name: 'Patients', route: '/patients-recipient', icon: PatientIcon },
 			{ name: 'Doctors', route: '/doctors', icon: DoctorIcon },
 			{ name: 'Users', route: '/users', icon: UserIcon }
 			// { name: '', route: '/i', icon: DoctorIcon }

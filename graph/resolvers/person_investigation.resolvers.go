@@ -115,7 +115,7 @@ func (r *queryResolver) ListPersonInvestigations(ctx context.Context, personID s
 		filter = &models.PersonInvestigationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListPersonInvestigations(ctx, filter, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
 }
 
 func (r *queryResolver) ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error) {

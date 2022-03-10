@@ -8,7 +8,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -16,6 +18,7 @@ import (
 func (r *mutationResolver) CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error) {
 	workup, _ := models.GetWorkupsById(input.Workup.ID)
 	personWorkup := &models.PersonWorkup{
+		ID:        ksuid.New().String(),
 		Person:    &models.Person{ID: input.Person.ID},
 		Procedure: workup.Procedure,
 		Details:   workup.Details,
@@ -104,7 +107,7 @@ func (r *queryResolver) ListPersonWorkups(ctx context.Context, personID string, 
 		filter = &models.PersonWorkupFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListPersonWorkups(ctx, filter, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonWorkup{}, filter, &models.PersonWorkupList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonWorkup returns generated.PersonWorkupResolver implementation.

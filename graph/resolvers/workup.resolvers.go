@@ -20,7 +20,7 @@ func (r *queryResolver) ListWorkups(ctx context.Context, filter *models.WorkupFi
 	sortBy = append(sortBy, StringPointer("Order"))
 	orderByAc := models.OrderByAsc
 	orderBy = append(orderBy, &orderByAc)
-	return models.ListWorkups(ctx, filter, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Workup{}, filter, &models.WorkupList{}, page, limit, sortBy, orderBy)
 }
 
 func (r *workupResolver) Details(ctx context.Context, obj *models.Workup) (*models.FormDetails, error) {

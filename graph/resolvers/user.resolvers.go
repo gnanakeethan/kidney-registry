@@ -5,25 +5,15 @@ package resolvers
 
 import (
 	"context"
-	"time"
-
+	
 	"github.com/beego/beego/v2/client/orm"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/google/uuid"
 )
 
-func (r *queryResolver) Users(ctx context.Context, filter *models.UserFilter, perPage *int, currentPage *int) (*models.UserList, error) {
-	userList := &models.UserList{}
-	for i := 0; i < 5; i++ {
-		user := &models.User{
-			ID:    uuid.Must(uuid.NewUUID()).String(),
-			Email: uuid.Must(uuid.NewUUID()).String(),
-		}
-		time.Sleep(500 * time.Millisecond)
-		userList.Items = append(userList.Items, user)
-	}
-	return userList, nil
+func (r *queryResolver) Users(ctx context.Context, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.UserList, error) {
+	return models.ListAnyGenerics(ctx, models.User{}, filter, &models.UserList{}, page, limit, sortBy, orderBy)
 }
 
 func (r *userResolver) Roles(ctx context.Context, obj *models.User) ([]*models.Role, error) {
