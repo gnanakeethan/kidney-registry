@@ -25,13 +25,13 @@
 	});
 
 	let columns = [
-		// { key: 'ID', name: 'ID' },
 		{ key: 'FirstName', name: 'First Name' },
 		{ key: 'LastName', name: 'Last Name' },
 		{ key: 'Phn', name: 'Phn' },
+		{ key: 'Status', name: 'Status' },
 		{ key: 'CreatedAt', name: 'Created Date' }
 	];
-	let displayedColumns = ['Phn', 'Address', 'FirstName', 'LastName', 'CreatedAt'];
+	let displayedColumns = ['Phn', 'Address', 'FirstName', 'LastName', 'CreatedAt', 'Status'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);
@@ -48,7 +48,7 @@
 		rootAccessPath="data.listPatients.items"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">
-			<a href="/patients-recipient/view/{Patient.ID}/history">View Patient</a>
+			<a href="/patients-recipient/view/{Patient.ID}/overview">View Patient</a>
 		</svelte:fragment>
 	</Table>
 </div>

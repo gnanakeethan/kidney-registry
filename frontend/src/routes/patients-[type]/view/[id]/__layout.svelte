@@ -51,7 +51,7 @@
 			routes: [
 				{
 					name: 'Overview',
-					route: '/patients-' + $patientType + '/view/' + $recipientId + '/overview/',
+					route: '/patients-' + $patientType + '/view/' + $recipientId + '/overview',
 					icon: SearchIcon
 				},
 				{
@@ -116,7 +116,7 @@
 	<Topbar {...props} />
 </div>
 <div class="flex flex-row">
-	{#if $activeUrl !== '/patients-' + $patientType + '/view/' + $recipientId + '/overview/'}
+	{#if $activeUrl !== '/patients-' + $patientType + '/view/' + $recipientId + '/overview'}
 		<div
 			class="flex max-w-[140px] flex-col break-words border-b border-dashed bg-yellow-100 p-3 transition-all"
 		>
