@@ -720,20 +720,36 @@ func (e OrderBy) MarshalGQL(w io.Writer) {
 type PatientStatus string
 
 const (
-	PatientStatusActive   PatientStatus = "ACTIVE"
-	PatientStatusInactive PatientStatus = "INACTIVE"
-	PatientStatusNa       PatientStatus = "NA"
+	PatientStatusActive                          PatientStatus = "ACTIVE"
+	PatientStatusInactive                        PatientStatus = "INACTIVE"
+	PatientStatusNa                              PatientStatus = "NA"
+	PatientStatusWorkingUp                       PatientStatus = "WORKING_UP"
+	PatientStatusSuspended                       PatientStatus = "SUSPENDED"
+	PatientStatusPermanentlyUnfit                PatientStatus = "PERMANENTLY_UNFIT"
+	PatientStatusDeceasedWillAwaitingTransplant  PatientStatus = "DECEASED_WILL_AWAITING_TRANSPLANT"
+	PatientStatusDeceasedPostCadavericTransplant PatientStatus = "DECEASED_POST_CADAVERIC_TRANSPLANT"
+	PatientStatusReceivedLiveTransplant          PatientStatus = "RECEIVED_LIVE_TRANSPLANT"
+	PatientStatusCadavericDonor                  PatientStatus = "CADAVERIC_DONOR"
+	PatientStatusLiveDonor                       PatientStatus = "LIVE_DONOR"
 )
 
 var AllPatientStatus = []PatientStatus{
 	PatientStatusActive,
 	PatientStatusInactive,
 	PatientStatusNa,
+	PatientStatusWorkingUp,
+	PatientStatusSuspended,
+	PatientStatusPermanentlyUnfit,
+	PatientStatusDeceasedWillAwaitingTransplant,
+	PatientStatusDeceasedPostCadavericTransplant,
+	PatientStatusReceivedLiveTransplant,
+	PatientStatusCadavericDonor,
+	PatientStatusLiveDonor,
 }
 
 func (e PatientStatus) IsValid() bool {
 	switch e {
-	case PatientStatusActive, PatientStatusInactive, PatientStatusNa:
+	case PatientStatusActive, PatientStatusInactive, PatientStatusNa, PatientStatusWorkingUp, PatientStatusSuspended, PatientStatusPermanentlyUnfit, PatientStatusDeceasedWillAwaitingTransplant, PatientStatusDeceasedPostCadavericTransplant, PatientStatusReceivedLiveTransplant, PatientStatusCadavericDonor, PatientStatusLiveDonor:
 		return true
 	}
 	return false

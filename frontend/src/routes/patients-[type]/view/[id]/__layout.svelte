@@ -98,6 +98,11 @@
 					name: 'New Workup',
 					route: '/patients-' + $patientType + '/view/' + $recipientId + '/workups/new',
 					icon: SearchIcon
+				},
+				{
+					name: 'Edit',
+					route: '/patients-' + $patientType + '/view/' + $recipientId + '/edit',
+					icon: EditIcon
 				}
 			]
 		};
@@ -110,15 +115,67 @@
 			icon: UserIcon
 		});
 	}
+	let topbarColor = '';
+	$: if ($recipient != null) {
+		switch ($recipient.Status) {
+			case 'ACTIVE': {
+				topbarColor = 'bg-blue-200';
+				break;
+			}
+			case 'INACTIVE': {
+				topbarColor = 'bg-gray-200/75';
+				break;
+			}
+			case 'NA': {
+				break;
+			}
+			case 'WORKING_UP': {
+				topbarColor = 'bg-green-200';
+				break;
+			}
+			case 'SUSPENDED': {
+				topbarColor = 'bg-red-200';
+
+				break;
+			}
+			case 'PERMANENTLY_UNFIT': {
+				topbarColor = 'bg-red-900/10';
+				break;
+			}
+			case 'DECEASED_WILL_AWAITING_TRANSPLANT': {
+				topbarColor = 'bg-indigo-300/50';
+				break;
+			}
+			case 'DECEASED_POST_CADAVERIC_TRANSPLANT': {
+				topbarColor = 'bg-indigo-300';
+				break;
+			}
+			case 'RECEIVED_LIVE_TRANSPLANT': {
+				topbarColor = 'bg-yellow-200';
+				break;
+			}
+			case 'RECEIVED_CADAVERIC_TRANSPLANT': {
+				topbarColor = 'bg-yellow-300/50';
+				break;
+			}
+			case 'CADAVERIC_DONOR': {
+				break;
+			}
+			case 'LIVE_DONOR': {
+				break;
+			}
+		}
+	}
+	$: console.log(topbarColor);
 </script>
 
-<div class="bg-yellow-100">
+<div class={topbarColor}>
 	<Topbar {...props} />
 </div>
 <div class="flex flex-row">
 	{#if $activeUrl !== '/patients-' + $patientType + '/view/' + $recipientId + '/overview'}
 		<div
-			class="flex max-w-[140px] flex-col break-words border-b border-dashed bg-yellow-100 p-3 transition-all"
+			class="flex max-w-[140px] flex-col break-words border-b border-dashed {topbarColor} p-3 transition-all"
 		>
 			<span class="mx-auto text-xl font-bold">{$recipient.PersonType}</span> <br />
 			<div class="mx-auto h-20 w-20">

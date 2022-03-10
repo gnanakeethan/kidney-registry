@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { recipient, recipientId } from '$lib/state/recipient';
+	import { recipientId, recipientOverview } from '$lib/state/recipient';
 
 	import { operationStore, query } from '@urql/svelte';
 	// import { Person } from 'lib/graphql/generated';
@@ -16,11 +16,11 @@
 		if (data) {
 			const person = data.getPatient;
 			if (person) {
-				recipient.set(person);
+				recipientOverview.set(person);
 				console.log('EXTENDED PERSON', person);
 			}
 		}
 	});
 </script>
 
-{JSON.toString($recipient)}
+{JSON.stringify($recipientOverview)}

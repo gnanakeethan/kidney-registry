@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 
 export const recipientId = writable<string>('');
 export const recipient = writable<object>({});
+export const recipientOverview = writable<object>({});
 export const patientType = writable<string>('');
 
 export const lastRecipientId: PersistentStore<string> = persist(

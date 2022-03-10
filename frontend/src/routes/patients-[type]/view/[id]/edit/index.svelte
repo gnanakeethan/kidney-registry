@@ -142,6 +142,39 @@
 			},
 			{
 				type: 'select', // required
+				name: 'Status', //required
+				value: $recipient.MaritalStatus,
+				attributes: {
+					id: 'Status', // required
+					classes: ['form-input rounded w-full'], // optional
+					label: 'Patient Status', // optional
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{ value: 'ACTIVE', title: 'Active' },
+						{ value: 'INACTIVE', title: 'Inactive' },
+						{ value: 'NA', title: 'N/A' },
+						{ value: 'WORKING_UP', title: 'Working Up' },
+						{ value: 'SUSPENDED', title: 'Suspended' },
+						{ value: 'PERMANENTLY_UNFIT', title: 'Permanently Unfit' },
+						{
+							value: 'DECEASED_WILL_AWAITING_TRANSPLANT',
+							title: 'Deceased Will Awaiting Transplant'
+						},
+						{
+							value: 'DECEASED_POST_CADAVERIC_TRANSPLANT',
+							title: 'Deceased Post Cadaveric Transplant'
+						},
+						{ value: 'RECEIVED_LIVE_TRANSPLANT', title: 'Received Live Transplant' },
+						{ value: 'CADAVERIC_DONOR', title: 'Cadaveric Donor' },
+						{ value: 'LIVE_DONOR', title: 'Live Donor' }
+					]
+				}, // optional
+				rules: [] // optional
+			},
+			{
+				type: 'select', // required
 				name: 'Gender', // required
 				value: $recipient.Gender,
 				attributes: {
@@ -238,7 +271,7 @@
 			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Patient</div>
+			<div class="text-xl font-bold">Edit Patient {$recipient.FirstName}</div>
 			<Field {fields} bind:values bind:isValidForm />
 			{message}
 			<button

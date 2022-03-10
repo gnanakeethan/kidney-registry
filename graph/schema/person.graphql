@@ -18,6 +18,7 @@ type Person  {
     Age                    : String
     CreatedAt              : String
     UpdatedAt              : String
+    BloodGroup             : BloodGroup
     Examinations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
     Investigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
     FollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
@@ -46,11 +47,30 @@ enum PatientStatus {
     ACTIVE
     INACTIVE
     NA
+    WORKING_UP
+    SUSPENDED
+    PERMANENTLY_UNFIT
+    DECEASED_WILL_AWAITING_TRANSPLANT
+    DECEASED_POST_CADAVERIC_TRANSPLANT
+    RECEIVED_LIVE_TRANSPLANT
+    CADAVERIC_DONOR
+    LIVE_DONOR
 }
 enum RecordStatus {
     DRAFT
     PUBLISHED
     REMOVED
+}
+enum BloodGroup {
+    A_POS
+    A_NEG
+    B_POS
+    B_NEG
+    O_POS
+    O_NEG
+    AB_POS
+    AB_NEG
+    NA
 }
 type PersonList {
     items: [Person!]!
@@ -99,6 +119,7 @@ input PersonInput {
     PersonType             : PatientType
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
+    BloodGroup             : BloodGroup
     CreatedAt              : String
     UpdatedAt              : String
 }
