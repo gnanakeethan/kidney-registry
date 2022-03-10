@@ -62,7 +62,7 @@
 		console.log(donorSet);
 		console.log($lastRecipientId);
 		console.log($lastRecipient);
-		goto('/patients-donor/view/' + donorId + '/history/');
+		goto('/patients-donor/view/' + donorId + '/overview/');
 	}
 </script>
 

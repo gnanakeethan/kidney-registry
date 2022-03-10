@@ -143,7 +143,7 @@
 			{
 				type: 'select', // required
 				name: 'Status', //required
-				value: $recipient.MaritalStatus,
+				value: $recipient.Status,
 				attributes: {
 					id: 'Status', // required
 					classes: ['form-input rounded w-full'], // optional
@@ -197,6 +197,31 @@
 							value: 'FEMALE',
 							title: 'Female'
 						}
+					]
+				}, // optional
+				rules: [] // optional
+			},
+			{
+				type: 'select', // required
+				name: 'BloodGroup', // required
+				value: $recipient.BloodGroup ?? 'NA',
+				attributes: {
+					id: 'BloodGroup', // required
+					classes: ['form-input rounded w-full'], // optional
+					label: 'BloodGroup', // optional
+					disabled: false // optional
+				},
+				extra: {
+					options: [
+						{ value: 'NA', title: 'N/A' },
+						{ value: 'A_POS', title: 'A_POS' },
+						{ value: 'A_NEG', title: 'A_NEG' },
+						{ value: 'B_POS', title: 'B_POS' },
+						{ value: 'B_NEG', title: 'B_NEG' },
+						{ value: 'O_POS', title: 'O_POS' },
+						{ value: 'O_NEG', title: 'O_NEG' },
+						{ value: 'AB_POS', title: 'AB_POS' },
+						{ value: 'AB_NEG', title: 'AB_NEG' }
 					]
 				}, // optional
 				rules: [] // optional

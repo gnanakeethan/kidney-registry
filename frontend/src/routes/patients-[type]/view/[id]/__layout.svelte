@@ -173,31 +173,29 @@
 	<Topbar {...props} />
 </div>
 <div class="flex flex-row">
-	{#if $activeUrl !== '/patients-' + $patientType + '/view/' + $recipientId + '/overview'}
-		<div
-			class="flex max-w-[140px] flex-col break-words border-b border-dashed {topbarColor} p-3 transition-all"
-		>
-			<span class="mx-auto text-xl font-bold">{$recipient.PersonType}</span> <br />
-			<div class="mx-auto h-20 w-20">
-				{#if $recipient.Gender === 'FEMALE'}
-					<FemaleIcon class="h-20 text-6xl" />
-				{:else}
-					<MaleIcon class="text-6xl" />
-				{/if}
-			</div>
-			<div>
-				<span class="text-gray-700">Patient Name: <br /></span>
-				<span class="text-wrap font-bold">{$recipient.FirstName} {$recipient.LastName}</span>
-				<br />
-				<br />
-				<span class="text-gray-800">Date of Birth : <br /></span>
-				<span class="font-bold">{$recipient.DateOfBirth} <br /> ({$recipient.Age})</span><br />
-				<br />
-				<span class="text-gray-800">Phn : <br /></span>
-				<span class="font-bold">{$recipient.Phn}</span> <br />
-			</div>
+	<div
+		class="flex max-w-[140px] flex-col break-words border-b border-dashed {topbarColor} p-3 transition-all"
+	>
+		<span class="mx-auto text-xl font-bold">{$recipient.PersonType}</span> <br />
+		<div class="mx-auto h-20 w-20">
+			{#if $recipient.Gender === 'FEMALE'}
+				<FemaleIcon class="h-20 text-6xl" />
+			{:else}
+				<MaleIcon class="text-6xl" />
+			{/if}
 		</div>
-	{/if}
+		<div>
+			<span class="text-gray-700">Patient Name: <br /></span>
+			<span class="text-wrap font-bold">{$recipient.FirstName} {$recipient.LastName}</span>
+			<br />
+			<br />
+			<span class="text-gray-800">Date of Birth : <br /></span>
+			<span class="font-bold">{$recipient.DateOfBirth} <br /> ({$recipient.Age})</span><br />
+			<br />
+			<span class="text-gray-800">Phn : <br /></span>
+			<span class="font-bold">{$recipient.Phn}</span> <br />
+		</div>
+	</div>
 	<div class="flex-grow">
 		<div
 			class="h-full w-full overflow-scroll border-r border-l border-dashed border-neutral-500"
