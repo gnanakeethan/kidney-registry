@@ -5,9 +5,8 @@ package resolvers
 
 import (
 	"context"
-	
+
 	"github.com/beego/beego/v2/client/orm"
-	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )

@@ -8,12 +8,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-	
-	"github.com/kr/pretty"
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
@@ -34,7 +33,7 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	if input.Donation != nil {
 		personFollowUp.Donation = &models.PersonOrganDonation{ID: PointerString(input.Donation.ID)}
 	}
-	
+
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}
@@ -69,10 +68,6 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 
 func (r *mutationResolver) UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
 	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
-	return nil, nil
 }
 
 func (r *personFollowUpResolver) DialysisPlan(ctx context.Context, obj *models.PersonFollowUp) (*models.DialysisPlan, error) {

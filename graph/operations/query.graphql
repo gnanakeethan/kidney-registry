@@ -1,5 +1,5 @@
-query ListUsers ($filter: UserFilter,$perPage: Int){
-    users(filter: $filter,perPage: $perPage){
+query ListUsers ($filter: UserFilter){
+    users(filter: $filter){
         items {
             name
             id
@@ -35,8 +35,56 @@ query GetPatient ($id: ID!){
     }
 }
 
-query ListPeople ($filter: UserFilter,$perPage: Int) {
-    users(filter: $filter,perPage: $perPage){
+query GetPatientOverview($id: ID!){
+    getPatient(ID: $id){
+        ...PersonFields
+        Age
+        MedicalHistory {
+            pagination {
+                ...Pagination
+            }
+            items {
+                ...PersonMedicalHistoryFields
+            }
+        }
+        Investigations {
+            pagination {
+                ...Pagination
+            }
+            items {
+                ...PersonInvestigationFields
+            }
+        }
+        Examinations {
+            pagination {
+                ...Pagination
+            }
+            items {
+                ...PersonExaminationFields
+            }
+        }
+        FollowUps {
+            pagination {
+                ...Pagination
+            }
+            items {
+                ...PersonFollowUpFields
+            }
+        }
+        OrganDonations {
+            pagination {
+                ...Pagination
+            }
+            items {
+                ...PersonOrganDonationFields
+            }
+        }
+        
+    }
+}
+
+query ListPeople ($filter: UserFilter) {
+    users(filter: $filter){
         items {
             name
             id

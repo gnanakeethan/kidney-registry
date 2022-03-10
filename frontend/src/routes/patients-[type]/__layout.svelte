@@ -28,7 +28,7 @@
 			{ name: 'New Patient', route: '/patients-recipient/new', icon: NewIcon }
 		]
 	};
-	$: if ($recipientId !== '' && $recipientId !== null) {
+	$: if ($recipientId !== '' && $recipientId !== null && $patientType !== 'donor') {
 		props.routes[2] = {
 			name: 'View ' + $patientType,
 			route: '/patients-' + $patientType + '/view/' + $recipientId,
@@ -38,9 +38,14 @@
 		props.routes.splice(2, 1);
 	}
 	$: if ($patientType === 'donor') {
-		props.routes[3] = {
+		props.routes[2] = {
 			name: 'View Recipient',
 			route: '/patients-recipient/view/' + $lastRecipientId,
+			icon: UserIcon
+		};
+		props.routes[3] = {
+			name: 'View ' + $patientType,
+			route: '/patients-' + $patientType + '/view/' + $recipientId,
 			icon: UserIcon
 		};
 	} else {
