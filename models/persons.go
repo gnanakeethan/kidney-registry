@@ -25,6 +25,7 @@ type Person struct {
 	MaritalStatus       MaritalStatus `orm:"column(marital_status)"`
 	ContactNo           string        `orm:"column(contact_no);null"`
 	PersonType          PatientType   `orm:"column(person_type);null"`
+	BloodGroup          BloodGroup    `orm:"column(blood_group);null"`
 	Status              PatientStatus `orm:"column(status);null"`
 	RecordStatus        RecordStatus  `orm:"column(record_status);null"`
 	CreatedAt           time.Time     `orm:"column(created_at);type(timestamp);auto_now_add;null"`
@@ -116,7 +117,10 @@ func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit
 
 func UpdatePatient(input *PersonInput) (*Person, error) {
 	location, _ := time.LoadLocation("Asia/Colombo")
-	dateOfBirth, _ := time.ParseInLocation("2006-01-02", *input.DateOfBirth, location)
+	dateOfBirth := time.Time{}
+	if input.DateOfBirth != nil {
+		dateOfBirth, _ = time.ParseInLocation("2006-01-02", *input.DateOfBirth, location)
+	}
 	pretty.Println(input)
 	person := &Person{
 		ID:                  input.ID,
@@ -134,6 +138,7 @@ func UpdatePatient(input *PersonInput) (*Person, error) {
 		Weight:              *input.Weight,
 		Height:              *input.Height,
 		ContactNo:           *input.ContactNo,
+		BloodGroup:          *input.BloodGroup,
 	}
 	pretty.Println(person)
 	if err := UpdatePersonsById(person); err == nil {
@@ -162,6 +167,7 @@ func AddPatient(input *PersonInput) (*Person, error) {
 		Weight:              *input.Weight,
 		Height:              *input.Height,
 		ContactNo:           *input.ContactNo,
+		BloodGroup:          *input.BloodGroup,
 	}
 	pretty.Println(person)
 	if _, err := AddPersons(person); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {

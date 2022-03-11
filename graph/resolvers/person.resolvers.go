@@ -5,13 +5,15 @@ package resolvers
 
 import (
 	"context"
+	"fmt"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.Person, error) {
@@ -135,3 +137,13 @@ func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.Pers
 func (r *Resolver) Person() generated.PersonResolver { return &personResolver{r} }
 
 type personResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *personResolver) BloodGroup(ctx context.Context, obj *models.Person) (*models.BloodGroup, error) {
+	panic(fmt.Errorf("not implemented"))
+}

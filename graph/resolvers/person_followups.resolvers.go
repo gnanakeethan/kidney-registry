@@ -8,11 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
@@ -33,11 +34,15 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	if input.Donation != nil {
 		personFollowUp.Donation = &models.PersonOrganDonation{ID: PointerString(input.Donation.ID)}
 	}
-
+	
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}
 	if _, err := models.AddPersonFollowUps(personFollowUp); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
+		if personFollowUp.Person, err = models.GetPersonsById(personFollowUp.Person.ID); err == nil {
+			personFollowUp.Person.Status = models.PatientStatus(personFollowUp.CaseStatus)
+			models.UpdatePersonsById(personFollowUp.Person)
+		}
 		for _, medicineInput := range input.Medicines {
 			startDate, _ := time.Parse("2006-01-01", PointerString(medicineInput.StartDate))
 			endDate, _ := time.Parse("2006-01-01", PointerString(medicineInput.EndDate))

@@ -93,6 +93,7 @@ input PersonFilter {
     Height                 : FloatFilter
     Gender                 : StringFilter
     MaritalStatus          : StringFilter
+    Status: StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
     and                    : PersonFilter

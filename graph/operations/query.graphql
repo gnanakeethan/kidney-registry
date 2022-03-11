@@ -39,7 +39,7 @@ query GetPatientOverview($id: ID!){
     getPatient(ID: $id){
         ...PersonFields
         Age
-        MedicalHistory {
+        MedicalHistory(orderBy:[desc],sortBy:["CreatedAt"]) {
             pagination {
                 ...Pagination
             }
@@ -47,7 +47,7 @@ query GetPatientOverview($id: ID!){
                 ...PersonMedicalHistoryFields
             }
         }
-        Investigations {
+        Investigations(orderBy:[desc],sortBy:["CreatedAt"]) {
             pagination {
                 ...Pagination
             }
@@ -55,7 +55,7 @@ query GetPatientOverview($id: ID!){
                 ...PersonInvestigationFields
             }
         }
-        Examinations {
+        Examinations(orderBy:[desc],sortBy:["CreatedAt"]) {
             pagination {
                 ...Pagination
             }
@@ -63,7 +63,7 @@ query GetPatientOverview($id: ID!){
                 ...PersonExaminationFields
             }
         }
-        FollowUps {
+        FollowUps(orderBy:[desc],sortBy: ["CreatedAt"]) {
             pagination {
                 ...Pagination
             }

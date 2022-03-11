@@ -191,6 +191,7 @@ type ComplexityRoot struct {
 	Person struct {
 		Address             func(childComplexity int) int
 		Age                 func(childComplexity int) int
+		BloodGroup          func(childComplexity int) int
 		ContactNo           func(childComplexity int) int
 		CreatedAt           func(childComplexity int) int
 		DateOfBirth         func(childComplexity int) int
@@ -474,6 +475,7 @@ type PersonResolver interface {
 	Age(ctx context.Context, obj *models.Person) (*string, error)
 	CreatedAt(ctx context.Context, obj *models.Person) (*string, error)
 	UpdatedAt(ctx context.Context, obj *models.Person) (*string, error)
+
 	Examinations(ctx context.Context, obj *models.Person, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error)
 	Investigations(ctx context.Context, obj *models.Person, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error)
 	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
@@ -1281,6 +1283,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Person.Age(childComplexity), true
+
+	case "Person.BloodGroup":
+		if e.complexity.Person.BloodGroup == nil {
+			break
+		}
+
+		return e.complexity.Person.BloodGroup(childComplexity), true
 
 	case "Person.ContactNo":
 		if e.complexity.Person.ContactNo == nil {
@@ -2897,6 +2906,7 @@ type MenuItem {
     Age                    : String
     CreatedAt              : String
     UpdatedAt              : String
+    BloodGroup             : BloodGroup
     Examinations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
     Investigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
     FollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
@@ -2939,6 +2949,17 @@ enum RecordStatus {
     PUBLISHED
     REMOVED
 }
+enum BloodGroup {
+    A_POS
+    A_NEG
+    B_POS
+    B_NEG
+    O_POS
+    O_NEG
+    AB_POS
+    AB_NEG
+    NA
+}
 type PersonList {
     items: [Person!]!
     pagination: Pagination
@@ -2960,6 +2981,7 @@ input PersonFilter {
     Height                 : FloatFilter
     Gender                 : StringFilter
     MaritalStatus          : StringFilter
+    Status: StringFilter
     ContactNo              : StringFilter
     PersonType             : StringFilter
     and                    : PersonFilter
@@ -2986,6 +3008,7 @@ input PersonInput {
     PersonType             : PatientType
     Status                 : PatientStatus
     RecordStatus           : RecordStatus
+    BloodGroup             : BloodGroup
     CreatedAt              : String
     UpdatedAt              : String
 }
@@ -8483,6 +8506,38 @@ func (ec *executionContext) _Person_UpdatedAt(ctx context.Context, field graphql
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Person_BloodGroup(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Person",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BloodGroup, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(models.BloodGroup)
+	fc.Result = res
+	return ec.marshalOBloodGroup2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐBloodGroup(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_Examinations(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -15347,6 +15402,14 @@ func (ec *executionContext) unmarshalInputPersonFilter(ctx context.Context, obj 
 			if err != nil {
 				return it, err
 			}
+		case "Status":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Status"))
+			it.Status, err = ec.unmarshalOStringFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐStringFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "ContactNo":
 			var err error
 
@@ -15812,6 +15875,14 @@ func (ec *executionContext) unmarshalInputPersonInput(ctx context.Context, obj i
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("RecordStatus"))
 			it.RecordStatus, err = ec.unmarshalORecordStatus2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRecordStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "BloodGroup":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("BloodGroup"))
+			it.BloodGroup, err = ec.unmarshalOBloodGroup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐBloodGroup(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -18011,6 +18082,13 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 				return innerFunc(ctx)
 
 			})
+		case "BloodGroup":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Person_BloodGroup(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
 		case "Examinations":
 			field := field
 
@@ -21370,6 +21448,32 @@ func (ec *executionContext) unmarshalOAttributesInput2ᚖgithubᚗcomᚋgnanakee
 	}
 	res, err := ec.unmarshalInputAttributesInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOBloodGroup2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐBloodGroup(ctx context.Context, v interface{}) (models.BloodGroup, error) {
+	var res models.BloodGroup
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOBloodGroup2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐBloodGroup(ctx context.Context, sel ast.SelectionSet, v models.BloodGroup) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOBloodGroup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐBloodGroup(ctx context.Context, v interface{}) (*models.BloodGroup, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.BloodGroup)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOBloodGroup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐBloodGroup(ctx context.Context, sel ast.SelectionSet, v *models.BloodGroup) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

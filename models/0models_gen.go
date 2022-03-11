@@ -224,6 +224,7 @@ type PersonFilter struct {
 	Height              *FloatFilter  `json:"Height"`
 	Gender              *StringFilter `json:"Gender"`
 	MaritalStatus       *StringFilter `json:"MaritalStatus"`
+	Status              *StringFilter `json:"Status"`
 	ContactNo           *StringFilter `json:"ContactNo"`
 	PersonType          *StringFilter `json:"PersonType"`
 	And                 *PersonFilter `json:"and"`
@@ -303,6 +304,7 @@ type PersonInput struct {
 	PersonType          *PatientType   `json:"PersonType"`
 	Status              *PatientStatus `json:"Status"`
 	RecordStatus        *RecordStatus  `json:"RecordStatus"`
+	BloodGroup          *BloodGroup    `json:"BloodGroup"`
 	CreatedAt           *string        `json:"CreatedAt"`
 	UpdatedAt           *string        `json:"UpdatedAt"`
 }
@@ -480,6 +482,61 @@ type WorkupInput struct {
 type WorkupList struct {
 	Items      []*Workup   `json:"items"`
 	Pagination *Pagination `json:"pagination"`
+}
+
+type BloodGroup string
+
+const (
+	BloodGroupAPos  BloodGroup = "A_POS"
+	BloodGroupANeg  BloodGroup = "A_NEG"
+	BloodGroupBPos  BloodGroup = "B_POS"
+	BloodGroupBNeg  BloodGroup = "B_NEG"
+	BloodGroupOPos  BloodGroup = "O_POS"
+	BloodGroupONeg  BloodGroup = "O_NEG"
+	BloodGroupAbPos BloodGroup = "AB_POS"
+	BloodGroupAbNeg BloodGroup = "AB_NEG"
+	BloodGroupNa    BloodGroup = "NA"
+)
+
+var AllBloodGroup = []BloodGroup{
+	BloodGroupAPos,
+	BloodGroupANeg,
+	BloodGroupBPos,
+	BloodGroupBNeg,
+	BloodGroupOPos,
+	BloodGroupONeg,
+	BloodGroupAbPos,
+	BloodGroupAbNeg,
+	BloodGroupNa,
+}
+
+func (e BloodGroup) IsValid() bool {
+	switch e {
+	case BloodGroupAPos, BloodGroupANeg, BloodGroupBPos, BloodGroupBNeg, BloodGroupOPos, BloodGroupONeg, BloodGroupAbPos, BloodGroupAbNeg, BloodGroupNa:
+		return true
+	}
+	return false
+}
+
+func (e BloodGroup) String() string {
+	return string(e)
+}
+
+func (e *BloodGroup) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = BloodGroup(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid BloodGroup", str)
+	}
+	return nil
+}
+
+func (e BloodGroup) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type ComparisonType string

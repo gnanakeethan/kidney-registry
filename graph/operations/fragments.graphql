@@ -116,6 +116,7 @@ fragment PersonFields on Person {
     PersonType
     Status
     RecordStatus
+    BloodGroup
 }
 
 fragment PersonMedicalHistoryFields on PersonMedicalHistory {
