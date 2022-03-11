@@ -7,7 +7,6 @@
 		PersonFilter
 	} from '$lib/graphql/generated';
 	import { NotificationsStatus } from '$lib/state/notifications';
-	import { recipient } from '$lib/state/recipient';
 	import { operationStore, query } from '@urql/svelte';
 
 	let showFilter = false;
@@ -28,7 +27,6 @@
 		{
 			type: 'select', // required
 			name: 'Status', //required
-			value: $recipient.MaritalStatus,
 			attributes: {
 				id: 'Status', // required
 				classes: ['form-input rounded w-full'], // optional
@@ -37,6 +35,7 @@
 			},
 			extra: {
 				options: [
+					{ value: '', title: '' },
 					{ value: 'ACTIVE', title: 'Active' },
 					{ value: 'INACTIVE', title: 'Inactive' },
 					{ value: 'NA', title: 'N/A' },
@@ -69,6 +68,59 @@
 			// filter.Status.value = values.Status;
 		}
 	}
+
+	function getColor(Status: string) {
+		let topbarColor = '';
+		switch (Status) {
+			case 'ACTIVE': {
+				topbarColor = 'bg-blue-200';
+				break;
+			}
+			case 'INACTIVE': {
+				topbarColor = 'bg-gray-200/75';
+				break;
+			}
+			case 'NA': {
+				break;
+			}
+			case 'WORKING_UP': {
+				topbarColor = 'bg-green-200';
+				break;
+			}
+			case 'SUSPENDED': {
+				topbarColor = 'bg-red-200';
+
+				break;
+			}
+			case 'PERMANENTLY_UNFIT': {
+				topbarColor = 'bg-red-900/10';
+				break;
+			}
+			case 'DECEASED_WILL_AWAITING_TRANSPLANT': {
+				topbarColor = 'bg-indigo-300/50';
+				break;
+			}
+			case 'DECEASED_POST_CADAVERIC_TRANSPLANT': {
+				topbarColor = 'bg-indigo-300';
+				break;
+			}
+			case 'RECEIVED_LIVE_TRANSPLANT': {
+				topbarColor = 'bg-yellow-200';
+				break;
+			}
+			case 'RECEIVED_CADAVERIC_TRANSPLANT': {
+				topbarColor = 'bg-yellow-300/50';
+				break;
+			}
+			case 'CADAVERIC_DONOR': {
+				break;
+			}
+			case 'LIVE_DONOR': {
+				break;
+			}
+		}
+		return topbarColor;
+	}
 </script>
 
 <div class="col-span-6 row-span-2 m-4 rounded">
@@ -81,7 +133,7 @@
 
 		<div class="flex flex-wrap p-2">
 			{#each $patients.data.listPatients.items as patient}
-				<div class="flex flex-col m-2 bg-gray-200 p-2 rounded border border-black">
+				<div class="flex flex-col m-2 {getColor(patient.Status)} p-2 rounded border border-black">
 					<span>Name: {patient.FirstName} {patient.LastName}</span>
 					<span>PHN: {patient.Phn}</span>
 					<span>Age: {patient.Age}</span>

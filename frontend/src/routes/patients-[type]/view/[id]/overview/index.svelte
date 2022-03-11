@@ -34,6 +34,7 @@
 						{#if $recipientOverview.FollowUps.items[0].CaseStatus !== ''}
 							<span class="font-bold">
 								Case Status: {$recipientOverview?.FollowUps?.items[0].CaseStatus} <br />
+								Recorded On: {$recipientOverview?.FollowUps?.items[0].CreatedAt} <br />
 							</span>
 						{/if}
 						{#if $recipientOverview?.FollowUps.items[0].OtherFindings !== ''}
@@ -98,7 +99,7 @@
 						class=" rounded bg-green-500 p-2 text-white shadow"
 						href="/patients-{$patientType}/view/{$recipientOverview.ID}/investigations/new"
 					>
-						Create New
+						Request Investigation
 					</a>
 				</div>
 			{/if}
@@ -134,7 +135,7 @@
 						class=" rounded bg-green-500 p-2 text-white shadow"
 						href="/patients-{$patientType}/view/{$recipientOverview.ID}/examinations/new"
 					>
-						Create New
+						New Examination
 					</a>
 				</div>
 			{/if}
