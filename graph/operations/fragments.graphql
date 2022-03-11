@@ -140,7 +140,7 @@ fragment PersonInvestigationFields on PersonInvestigation {
         ID
     }
     Person {
-        ID
+        ...PersonFields
     }
     Description
     Details {

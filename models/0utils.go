@@ -76,6 +76,7 @@ func extractFilter[T FilterInput](prefix string, filterInterface T) *orm.Conditi
 				pretty.Println("TYPE", fieldVal.Type().String())
 				pretty.Println("INTERFACE", fieldVal.Interface())
 				fieldValType := fieldVal.Type().String()
+				comparison = fieldVal.FieldByName("Comparison").String()
 				if StringInSlice(fieldValType, []string{"models.StringFilter", "models.FloatFilter", "models.IntFilter"}) {
 					notCustom = true
 				}

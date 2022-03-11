@@ -56,16 +56,64 @@
 				]
 			}, // optional
 			rules: [] // optional
+		},
+		{
+			type: 'input',
+			name: 'Phn',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'PHN',
+				id: 'phn',
+				classes: ['form-input rounded w-full']
+			}
+		},
+		{
+			type: 'input',
+			name: 'FirstName',
+			value: '',
+			prefix: {
+				classes: ['flex flex-col items-center justify-between w-full py-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'First Name',
+				id: 'firstname',
+				classes: ['form-input rounded w-full'],
+				placeholder: "Patient's First Name"
+			}
 		}
 	];
 	let values = {};
 	let isValidForm = true;
 	$: if (values != {}) {
 		console.log(values);
-		if (values.Status !== undefined && values.Status !== '') {
+		if (values.Status !== undefined && values.Status !== null && values.Status !== '') {
 			filter.Status = { comparison: ComparisonType.Equal, value: values.Status };
-
 			// filter.Status.value = values.Status;
+		} else if (values.Status !== undefined || values.Status !== null || values.Status === '') {
+			delete filter.Status;
+			console.log(filter);
+			filter = filter;
+		}
+		if (values.Phn !== undefined && values.Phn !== null && values.Phn !== '') {
+			filter.Phn = { comparison: ComparisonType.StartsWith, value: values.Phn };
+		} else if (values.Phn !== undefined || values.Phn === '' || values.Phn === null) {
+			delete filter.Phn;
+			filter = filter;
+		}
+		if (values.FirstName !== undefined && values.FirstName !== null && values.FirstName !== '') {
+			filter.FirstName = { comparison: ComparisonType.StartsWith, value: values.FirstName };
+		} else if (
+			values.FirstName !== undefined ||
+			values.FirstName === '' ||
+			values.FirstName === null
+		) {
+			delete filter.FirstName;
+			filter = filter;
 		}
 	}
 
@@ -124,13 +172,12 @@
 </script>
 
 <div class="col-span-6 row-span-2 m-4 rounded">
+	<Field bind:isValidForm bind:values {fields} />
 	{#if $patients.fetching}
 		<p>Loading...</p>
 	{:else if $patients.error}
 		<p>Oh no... {$patients.error.message}</p>
 	{:else}
-		<Field {fields} bind:values bind:isValidForm />
-
 		<div class="flex flex-wrap p-2">
 			{#each $patients.data.listPatients.items as patient}
 				<div class="flex flex-col m-2 {getColor(patient.Status)} p-2 rounded border border-black">
@@ -150,7 +197,7 @@
 			{/each}
 		</div>
 	{/if}
-	<a class="bg-green-400 px-4 py-2" href="/patients-recipient/new">New Patient</a>
+	<a class="py- bg-green-400 px-4" href="/patients-recipient/new">New Patient</a>
 	<!--	Messages : <input-->
 	<!--		bind:value={$NotificationsStatus.messages}-->
 	<!--		max="100"-->

@@ -7,10 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
@@ -108,7 +109,7 @@ func (r *queryResolver) ListAllPersonExaminations(ctx context.Context, filter *m
 	if filter == nil {
 		filter = &models.PersonExaminationFilter{}
 	}
-	return models.ListPersonExaminations(ctx, filter, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonExamination returns generated.PersonExaminationResolver implementation.

@@ -25,9 +25,11 @@
 	let columns = [
 		{ key: 'CreatedAt', name: 'Recorded On' },
 		{ key: 'Details.Name', name: 'Investigation Name' },
+		{ key: 'Person.Phn', name: 'PHN' },
+		{ key: 'Person.FirstName', name: 'First Name' },
 		{ key: 'ID', name: 'Investigation Name' }
 	];
-	let displayedColumns = ['CreatedAt', 'Details.Name'];
+	let displayedColumns = ['CreatedAt', 'Person.Phn', 'Person.FirstName', 'Details.Name'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);

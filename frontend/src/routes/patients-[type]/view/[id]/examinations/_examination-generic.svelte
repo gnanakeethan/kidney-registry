@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { recipient } from '$lib/state/recipient';
 	import { activeUrl } from '$lib/state/SidebarStore';
@@ -110,6 +110,8 @@
 				console.log(values);
 				newPersonExamination({ input: values }).then((result) => {
 					console.log(result);
+					alert('Saved =>' + result.data.createPersonExamination.ID);
+					goto('/patients-recipient/view/' + $recipient.ID);
 				});
 			} catch (e) {
 				alert('Please fill all the required fields');
