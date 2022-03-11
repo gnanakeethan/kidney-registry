@@ -194,6 +194,9 @@
 			<br />
 			<span class="text-gray-800">Phn : <br /></span>
 			<span class="font-bold">{$recipient.Phn}</span> <br />
+			<br />
+			<span class="text-gray-800">Blood Group : <br /></span>
+			<span class="font-bold">{$recipient.BloodGroup}</span> <br />
 		</div>
 	</div>
 	<div class="flex-grow">

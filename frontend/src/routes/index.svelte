@@ -150,6 +150,7 @@
 			{/each}
 		</div>
 	{/if}
+	<a class="bg-green-400 px-4 py-2" href="/patients-recipient/new">New Patient</a>
 	<!--	Messages : <input-->
 	<!--		bind:value={$NotificationsStatus.messages}-->
 	<!--		max="100"-->
