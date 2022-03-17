@@ -39,11 +39,11 @@
 		console.log(workups);
 		setTimeout(() => {
 			workupId = workups.data.listWorkups.items[currentWorkup - 1].ID;
-		}, 200);
+		}, 500);
 	}
 
 	function Followup() {
-		goto('/patients-recipient/view/' + $recipientId + '/followups/new');
+		goto('/patients-recipient/view/' + $recipientId + '/followups/create');
 	}
 </script>
 

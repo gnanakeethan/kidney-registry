@@ -17,7 +17,7 @@
 	});
 	export let examinationId = '';
 	let examination: Examination;
-
+	let formSet = false;
 	if (examinationId != '') {
 		const result = query(
 			operationStore(GetExaminationDocument, {
@@ -27,6 +27,7 @@
 			if (data?.getExamination) {
 				examination = data?.getExamination;
 				console.log(examination);
+				formSet = true;
 			}
 		});
 	}
@@ -34,7 +35,7 @@
 	let values = {};
 	export let i = 0;
 	export let others = 1;
-	$: formSet = !!$recipient.ID && !!examination?.ID;
+
 	let baseFields = [];
 	let fields = [];
 	$: if (examination !== undefined) {

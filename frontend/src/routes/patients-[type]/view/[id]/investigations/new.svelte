@@ -43,7 +43,7 @@
 	}
 
 	function Followup() {
-		goto('/patients-recipient/view/' + $recipientId + '/followups/new');
+		goto('/patients-recipient/view/' + $recipientId + '/followups/create');
 	}
 </script>
 

@@ -16,6 +16,7 @@
 	});
 	export let workupId = '';
 	let workup: Workup;
+	let formSet = !!$recipient.ID;
 
 	if (workupId != '') {
 		const result = query(
@@ -26,6 +27,46 @@
 			if (data?.getWorkup) {
 				workup = data?.getWorkup;
 				console.log(workup);
+				fields = [...baseFields];
+				fields.push(
+					{
+						type: 'input',
+						name: 'Person.ID',
+						value: $recipient.ID,
+						prefix: {
+							classes: ['hidden flex flex-col items-center justify-between']
+						},
+						attributes: {
+							type: 'text',
+							label: 'ID',
+							id: 'recipient_id',
+							readonly: true,
+							classes: ['form-input bg-gray-200 rounded my-2']
+						}
+					},
+					{
+						type: 'input',
+						name: 'Workup.ID',
+						value: workup.ID,
+						prefix: {
+							classes: ['hidden flex flex-col items-center justify-between']
+						},
+						attributes: {
+							type: 'text',
+							label: 'ID',
+							id: 'recipient_id',
+							readonly: true,
+							classes: ['form-input bg-gray-200 rounded my-2']
+						}
+					}
+				);
+				workup.Procedure.fields.forEach((field) => {
+					if (!field.name.startsWith('Results.')) {
+						field.name = 'Results.' + field.name;
+					}
+					fields = [...fields, field];
+				});
+				formSet = true;
 			}
 		});
 	}
@@ -33,53 +74,8 @@
 	let values = {};
 	export let i = 0;
 	export let others = 1;
-	$: formSet = !!$recipient.ID && !!workup?.ID;
 	let baseFields = [];
 	let fields = [];
-	$: if (workup !== undefined) {
-		fields = [...baseFields];
-		workup.Procedure.fields.forEach((field) => {
-			if (!field.name.startsWith('Results.')) {
-				field.name = 'Results.' + field.name;
-			}
-			fields = [...fields, field];
-		});
-	}
-
-	$: if (formSet && workup !== undefined && workup.ID !== undefined) {
-		baseFields = [
-			{
-				type: 'input',
-				name: 'Person.ID',
-				value: $recipient.ID,
-				prefix: {
-					classes: ['hidden flex flex-col items-center justify-between']
-				},
-				attributes: {
-					type: 'text',
-					label: 'ID',
-					id: 'recipient_id',
-					readonly: true,
-					classes: ['form-input bg-gray-200 rounded my-2']
-				}
-			},
-			{
-				type: 'input',
-				name: 'Workup.ID',
-				value: workup.ID,
-				prefix: {
-					classes: ['hidden flex flex-col items-center justify-between']
-				},
-				attributes: {
-					type: 'text',
-					label: 'ID',
-					id: 'recipient_id',
-					readonly: true,
-					classes: ['form-input bg-gray-200 rounded my-2']
-				}
-			}
-		];
-	}
 	let isValidForm = false;
 
 	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {

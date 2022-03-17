@@ -71,7 +71,7 @@
 				},
 				{
 					name: 'New Followup',
-					route: '/patients-' + $patientType + '/view/' + $recipientId + '/followups/new',
+					route: '/patients-' + $patientType + '/view/' + $recipientId + '/followups/create',
 					icon: NewIcon
 				},
 				{

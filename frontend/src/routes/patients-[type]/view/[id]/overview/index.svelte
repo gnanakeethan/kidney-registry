@@ -53,7 +53,7 @@
 				<div class="m-2">
 					<a
 						class=" rounded bg-green-500 p-2 text-white shadow"
-						href="/patients-{$patientType}/view/{$recipientOverview.ID}/followups/new"
+						href="/patients-{$patientType}/view/{$recipientOverview.ID}/followups/create"
 					>
 						New Follow Up
 					</a>
