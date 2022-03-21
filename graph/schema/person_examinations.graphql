@@ -1,4 +1,4 @@
-type PersonExamination implements DynamicFormInterface{
+type PersonExamination implements DynamicFormInterface @hasPermissionAgainst(action: "read"){
     ID : ID!
     Examination : Examination
     Person: Person

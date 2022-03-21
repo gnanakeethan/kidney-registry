@@ -1,7 +1,7 @@
-directive @hasPermission(method: String!,route: String!) on OBJECT | FIELD_DEFINITION
-directive @hasPermissionArgument(method: String!,route: String!) on ARGUMENT_DEFINITION
+directive @hasPermission(action: String!,object: String!) on OBJECT | FIELD_DEFINITION
+directive @hasPermissionArgument(action: String!,object: String!) on ARGUMENT_DEFINITION
+directive @hasPermissionAgainst(action:String!) on OBJECT
 directive @hasRole(role: String!) on FIELD_DEFINITION
-
 
 type Attributes {
     id: String

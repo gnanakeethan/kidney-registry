@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"time"
 	
 	"github.com/SermoDigital/jose/crypto"
 	"github.com/SermoDigital/jose/jws"
@@ -46,6 +47,26 @@ func ForContext(ctx rootCtx.Context) *models.User {
 	return nil
 }
 
+func GenerateToken(user *models.User, validTime int64) (string, error) {
+	expires := time.Now().Add(time.Duration(validTime) * time.Second)
+	claims := jws.Claims{
+		"exp": expires,
+		"iat": time.Now(),
+		"sub": user.ID,
+		"nbf": time.Now(),
+		"iss": "kidney-registry",
+	}
+	bytes, _ := ioutil.ReadFile("conf/jose.priv")
+	
+	rsaPrivate, _ := crypto.ParseRSAPrivateKeyFromPEM(bytes)
+	jwt := jws.NewJWT(claims, crypto.SigningMethodRS256)
+	if rawToken, err := jwt.Serialize(rsaPrivate); err == nil {
+		return string(rawToken), nil
+	} else {
+		return "", err
+	}
+}
+
 func ValidateToken(token string) *models.User {
 	user := &models.User{}
 	o := orm.NewOrm()
@@ -59,8 +80,8 @@ func ValidateToken(token string) *models.User {
 	}
 	if err = jwtF.Verify(rsaPublic, crypto.SigningMethodRS256); err == nil {
 		user.ID, _ = jwtF.Claims().Get("sub").(string)
-		if userf, err := models.GetAnyById(user); err == nil {
-			user = *userf
+		if userf, err := models.GetAnyById(*user); err == nil {
+			user = userf
 			o.LoadRelated(user, "RolesLoaded")
 			for _, role := range user.RolesLoaded {
 				o.LoadRelated(role, "Permissions")

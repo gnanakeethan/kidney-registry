@@ -5,12 +5,13 @@ package resolvers
 
 import (
 	"context"
-	"time"
-
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/golang-jwt/jwt"
 	"github.com/kr/pretty"
-	passlib "gopkg.in/hlandau/passlib.v1"
+	"gopkg.in/hlandau/passlib.v1"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/middleware"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error) {
@@ -24,30 +25,20 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		},
 	}
 	users, _ := models.ListAnyGenerics(ctx, models.User{}, &filter, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
-	mySigningKey := []byte("9t78ifugkyjhbrto98y2rgi4eu")
-
 	type MyCustomClaims struct {
 		Foo string `json:"foo"`
 		jwt.StandardClaims
 	}
-
+	
 	for _, user := range users.Items {
 		pretty.Println("password checking", userLogin.Password, user.Password)
 		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
 			pretty.Println("password matched", userLogin.Password, user.Password)
 			// Create the Claims
-			claims := jwt.StandardClaims{
-				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-				Issuer:    "kidney-registry",
-				Subject:   user.ID,
-			}
-
-			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-			ss, err := token.SignedString(mySigningKey)
-			pretty.Println(err)
-			if err == nil {
+			
+			if token, err := middleware.GenerateToken(user, 86400); err == nil {
 				return &models.UserToken{
-					Token: ss,
+					Token: token,
 					Error: nil,
 					User:  user,
 				}, nil

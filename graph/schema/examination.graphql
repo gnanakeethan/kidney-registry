@@ -26,7 +26,6 @@ type ExaminationList {
 }
 
 extend type Query {
-    getExamination(id: ID!): Examination
-    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
+    getExamination(id: ID!): Examination @hasPermission(action: "read", object: "Examination")
+    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList @hasPermission(action: "read", object: "Examination")
 }

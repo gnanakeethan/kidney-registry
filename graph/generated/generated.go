@@ -54,8 +54,9 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
-	HasPermission         func(ctx context.Context, obj interface{}, next graphql.Resolver, method string, route string) (res interface{}, err error)
-	HasPermissionArgument func(ctx context.Context, obj interface{}, next graphql.Resolver, method string, route string) (res interface{}, err error)
+	HasPermission         func(ctx context.Context, obj interface{}, next graphql.Resolver, action string, object string) (res interface{}, err error)
+	HasPermissionAgainst  func(ctx context.Context, obj interface{}, next graphql.Resolver, action string) (res interface{}, err error)
+	HasPermissionArgument func(ctx context.Context, obj interface{}, next graphql.Resolver, action string, object string) (res interface{}, err error)
 	HasRole               func(ctx context.Context, obj interface{}, next graphql.Resolver, role string) (res interface{}, err error)
 }
 
@@ -2643,10 +2644,10 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/0common.graphql", Input: `directive @hasPermission(method: String!,route: String!) on OBJECT | FIELD_DEFINITION
-directive @hasPermissionArgument(method: String!,route: String!) on ARGUMENT_DEFINITION
+	{Name: "graph/schema/0common.graphql", Input: `directive @hasPermission(action: String!,object: String!) on OBJECT | FIELD_DEFINITION
+directive @hasPermissionArgument(action: String!,object: String!) on ARGUMENT_DEFINITION
+directive @hasPermissionAgainst(action:String!) on OBJECT
 directive @hasRole(role: String!) on FIELD_DEFINITION
-
 
 type Attributes {
     id: String
@@ -2843,9 +2844,8 @@ type ExaminationList {
 }
 
 extend type Query {
-    getExamination(id: ID!): Examination
-    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList
+    getExamination(id: ID!): Examination @hasPermission(action: "read", object: "Examination")
+    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList @hasPermission(action: "read", object: "Examination")
 }`, BuiltIn: false},
 	{Name: "graph/schema/investigation.graphql", Input: `type Investigation implements DynamicFormInterface{
     ID          : ID!
@@ -3031,7 +3031,7 @@ extend type Mutation {
     updatePatient(input:PersonInput) : Person
     addPatient(input:PersonInput) : Person
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_examinations.graphql", Input: `type PersonExamination implements DynamicFormInterface{
+	{Name: "graph/schema/person_examinations.graphql", Input: `type PersonExamination implements DynamicFormInterface @hasPermissionAgainst(action: "read"){
     ID : ID!
     Examination : Examination
     Person: Person
@@ -3436,27 +3436,42 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) dir_hasPermissionArgument_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) dir_hasPermissionAgainst_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["method"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("method"))
+	if tmp, ok := rawArgs["action"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("action"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["method"] = arg0
+	args["action"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) dir_hasPermissionArgument_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["action"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("action"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["action"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["route"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("route"))
+	if tmp, ok := rawArgs["object"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("object"))
 		arg1, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["route"] = arg1
+	args["object"] = arg1
 	return args, nil
 }
 
@@ -3464,23 +3479,23 @@ func (ec *executionContext) dir_hasPermission_args(ctx context.Context, rawArgs 
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["method"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("method"))
+	if tmp, ok := rawArgs["action"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("action"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["method"] = arg0
+	args["action"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["route"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("route"))
+	if tmp, ok := rawArgs["object"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("object"))
 		arg1, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["route"] = arg1
+	args["object"] = arg1
 	return args, nil
 }
 
@@ -7154,8 +7169,32 @@ func (ec *executionContext) _Mutation_createPersonExamination(ctx context.Contex
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().CreatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermissionAgainst == nil {
+				return nil, errors.New("directive hasPermissionAgainst is not implemented")
+			}
+			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.PersonExamination); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7193,8 +7232,32 @@ func (ec *executionContext) _Mutation_updatePersonExamination(ctx context.Contex
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().UpdatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermissionAgainst == nil {
+				return nil, errors.New("directive hasPermissionAgainst is not implemented")
+			}
+			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.PersonExamination); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9224,8 +9287,32 @@ func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, fi
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Items, nil
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return obj.Items, nil
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermissionAgainst == nil {
+				return nil, errors.New("directive hasPermissionAgainst is not implemented")
+			}
+			return ec.directives.HasPermissionAgainst(ctx, obj, directive0, action)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.([]*models.PersonExamination); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11780,8 +11867,36 @@ func (ec *executionContext) _Query_getExamination(ctx context.Context, field gra
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetExamination(rctx, args["id"].(string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetExamination(rctx, args["id"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			object, err := ec.unmarshalNString2string(ctx, "Examination")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermission == nil {
+				return nil, errors.New("directive hasPermission is not implemented")
+			}
+			return ec.directives.HasPermission(ctx, nil, directive0, action, object)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.Examination); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Examination`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11819,8 +11934,36 @@ func (ec *executionContext) _Query_listExaminations(ctx context.Context, field g
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListExaminations(rctx, args["filter"].(*models.ExaminationFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().ListExaminations(rctx, args["filter"].(*models.ExaminationFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			object, err := ec.unmarshalNString2string(ctx, "Examination")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermission == nil {
+				return nil, errors.New("directive hasPermission is not implemented")
+			}
+			return ec.directives.HasPermission(ctx, nil, directive0, action, object)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.ExaminationList); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.ExaminationList`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12014,8 +12157,32 @@ func (ec *executionContext) _Query_getPersonExamination(ctx context.Context, fie
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetPersonExamination(rctx, args["ID"].(string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetPersonExamination(rctx, args["ID"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermissionAgainst == nil {
+				return nil, errors.New("directive hasPermissionAgainst is not implemented")
+			}
+			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.PersonExamination); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)

@@ -100,6 +100,32 @@ func init() {
 		}
 		return nil, fmt.Errorf("Access denied against %s %s", method, route)
 	}
+	c.Directives.HasPermissionAgainst = func(ctx context.Context, obj interface{}, next graphql.Resolver, method string) (interface{}, error) {
+		user := middleware.ForContext(ctx)
+		if user == nil {
+			return nil, fmt.Errorf("not authenticated")
+		}
+		for _, role := range user.RolesLoaded {
+			if role.Slug == "consultant" {
+				return next(ctx)
+			}
+		}
+		value := reflect.ValueOf(obj)
+		pretty.Println("FIELD DEF ", obj, value)
+		if obj != nil && !value.IsZero() && !value.IsNil() && value.IsValid() {
+			if value.Kind() == reflect.Ptr {
+				value = value.Elem()
+			}
+			if value.Kind() == reflect.Struct {
+				if value.FieldByName("Id").IsValid() {
+					if value.FieldByName("Id").String() == user.ID {
+						return next(ctx)
+					}
+				}
+			}
+		}
+		return nil, fmt.Errorf("Access denied against %s", method)
+	}
 	
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{}))
 	srv.AddTransport(transport.POST{})
