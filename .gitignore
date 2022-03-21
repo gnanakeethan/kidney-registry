@@ -4,3 +4,4 @@ swagger/
 routers/comments*
 data/*
 .idea/sonarlint
+conf/jose.*
