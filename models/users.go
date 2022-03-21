@@ -19,6 +19,7 @@ type UserRole struct {
 type Role struct {
 	Id          string        `orm:"column(id);pk"`
 	Name        string        `orm:"column(name)"`
+	Slug        string        `orm:"column(slug)"`
 	Description string        `orm:"column(description)"`
 	Users       []*User       `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
 	Permissions []*Permission `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.RolePermission)"`

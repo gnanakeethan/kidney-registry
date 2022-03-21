@@ -22,6 +22,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gorilla/websocket"
+	"github.com/kr/pretty"
 	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/graph/middleware"
@@ -42,12 +43,12 @@ func init() {
 			return nil, fmt.Errorf("not authenticated")
 		}
 		for _, role := range user.RolesLoaded {
-			if role.Name == "consultant" {
+			if role.Slug == "consultant" {
 				return next(ctx)
 			}
 		}
 		for _, perm := range user.Permissions {
-			if strings.ToUpper(perm.Route) == strings.ToUpper(route) && strings.ToUpper(perm.Method) == strings.ToUpper(method) {
+			if strings.ToUpper(perm.Slug) == strings.ToUpper(route) && strings.ToUpper(perm.Action) == strings.ToUpper(method) {
 				return next(ctx)
 			}
 		}
@@ -59,7 +60,7 @@ func init() {
 			}
 			if value.Kind() == reflect.Struct {
 				if value.FieldByName("Id").IsValid() {
-					if value.FieldByName("Id").String() == user.Id {
+					if value.FieldByName("Id").String() == user.ID {
 						return next(ctx)
 					}
 				}
@@ -73,34 +74,27 @@ func init() {
 		if user == nil {
 			return nil, fmt.Errorf("not authenticated")
 		}
-		for _, role := range user.Roles {
-			if role.Name == "superadmin" {
+		for _, role := range user.RolesLoaded {
+			if role.Slug == "consultant" {
 				return next(ctx)
 			}
 		}
 		for _, perm := range user.Permissions {
-			if strings.ToUpper(perm.Route) == strings.ToUpper(route) && strings.ToUpper(perm.Method) == strings.ToUpper(method) {
+			if strings.ToUpper(perm.Slug) == strings.ToUpper(route) && strings.ToUpper(perm.Action) == strings.ToUpper(method) {
 				return next(ctx)
 			}
 		}
 		value := reflect.ValueOf(obj)
-		pretty.Println("ARGS", obj, value)
+		pretty.Println("FIELD DEF ", obj, value)
 		if obj != nil && !value.IsZero() && !value.IsNil() && value.IsValid() {
 			if value.Kind() == reflect.Ptr {
 				value = value.Elem()
 			}
 			if value.Kind() == reflect.Struct {
 				if value.FieldByName("Id").IsValid() {
-					if value.FieldByName("Id").String() == user.Id {
+					if value.FieldByName("Id").String() == user.ID {
 						return next(ctx)
 					}
-				}
-			}
-			if value.Kind() == reflect.Map {
-				
-				pretty.Println(value.MapIndex(reflect.ValueOf("id")).Interface().(string))
-				if value.MapIndex(reflect.ValueOf("id")).Interface().(string) == user.Id {
-					return next(ctx)
 				}
 			}
 		}
