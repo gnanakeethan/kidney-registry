@@ -5,6 +5,7 @@ package resolvers
 
 import (
 	"context"
+	"time"
 
 	"github.com/gnanakeethan/kidney-registry/models"
 	"github.com/golang-jwt/jwt"
@@ -35,13 +36,10 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
 			pretty.Println("password matched", userLogin.Password, user.Password)
 			// Create the Claims
-			claims := MyCustomClaims{
-				"bar",
-				jwt.StandardClaims{
-					ExpiresAt: 15000,
-					Issuer:    "kidney-registry",
-					Subject:   user.ID,
-				},
+			claims := jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+				Issuer:    "kidney-registry",
+				Subject:   user.ID,
 			}
 
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

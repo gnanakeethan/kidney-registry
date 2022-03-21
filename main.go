@@ -27,9 +27,8 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
 		AllowCredentials: true,
 	}))
-	beego.InsertFilter("*", beego.BeforeRouter, middleware.Middleware)
 	beego.BConfig.Listen.HTTPAddr = "0.0.0.0"
-	beego.Run()
+	beego.RunWithMiddleWares("", middleware.Middleware)
 }
 
 func envConfig(configField, defaultValue string) string {

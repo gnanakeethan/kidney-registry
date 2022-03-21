@@ -17,26 +17,48 @@ type UserRole struct {
 }
 
 type Role struct {
+	Id          string        `orm:"column(id);pk"`
+	Name        string        `orm:"column(name)"`
+	Description string        `orm:"column(description)"`
+	Users       []*User       `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
+	Permissions []*Permission `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.RolePermission)"`
+}
+
+type Permission struct {
 	Id          string  `orm:"column(id);pk"`
 	Name        string  `orm:"column(name)"`
+	Slug        string  `orm:"column(slug)"`
+	Action      string  `orm:"column(action)"`
 	Description string  `orm:"column(description)"`
-	Users       []*User `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
+	Roles       []*Role `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.RolePermission)"`
+}
+type RolePermission struct {
+	Id         string      `orm:"column(id);pk"`
+	Permission *Permission `orm:"column(permission_id);rel(fk)"`
+	Role       *Role       `orm:"column(role_id);rel(fk)"`
 }
 
 type User struct {
-	ID          string  `orm:"column(id);pk"`
-	Email       string  `orm:"column(email)"`
-	Name        string  `orm:"column(name)"`
-	Password    string  `orm:"column(password)"`
-	RolesLoaded []*Role `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
-	
-	CreatedAt time.Time `orm:"column(created_at);type(timestamp);auto_now_add;null"`
-	UpdatedAt time.Time `orm:"column(updated_at);type(timestamp);auto_now;null"`
-	DeletedAt time.Time `orm:"column(deleted_at);null"`
+	ID          string        `orm:"column(id);pk"`
+	Email       string        `orm:"column(email)"`
+	Name        string        `orm:"column(name)"`
+	Password    string        `orm:"column(password)"`
+	RolesLoaded []*Role       `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.UserRole)"`
+	Permissions []*Permission `orm:"-"`
+	CreatedAt   time.Time     `orm:"column(created_at);type(timestamp);auto_now_add;null"`
+	UpdatedAt   time.Time     `orm:"column(updated_at);type(timestamp);auto_now;null"`
+	DeletedAt   time.Time     `orm:"column(deleted_at);null"`
 }
 
 func (t *User) TableName() string {
 	return "users"
+}
+
+func (t *RolePermission) TableName() string {
+	return "role_permissions"
+}
+func (t *Permission) TableName() string {
+	return "permissions"
 }
 
 func (t *Role) TableName() string {
@@ -47,7 +69,7 @@ func (t *UserRole) TableName() string {
 }
 
 func init() {
-	orm.RegisterModel(new(User), new(Role), new(UserRole))
+	orm.RegisterModel(new(User), new(Role), new(UserRole), new(RolePermission), new(Permission))
 }
 
 // AddUsers insert a new User into database and returns

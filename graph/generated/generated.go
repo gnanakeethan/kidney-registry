@@ -54,6 +54,9 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	HasPermission         func(ctx context.Context, obj interface{}, next graphql.Resolver, method string, route string) (res interface{}, err error)
+	HasPermissionArgument func(ctx context.Context, obj interface{}, next graphql.Resolver, method string, route string) (res interface{}, err error)
+	HasRole               func(ctx context.Context, obj interface{}, next graphql.Resolver, role string) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
@@ -2640,7 +2643,12 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/0common.graphql", Input: `type Attributes {
+	{Name: "graph/schema/0common.graphql", Input: `directive @hasPermission(method: String!,route: String!) on OBJECT | FIELD_DEFINITION
+directive @hasPermissionArgument(method: String!,route: String!) on ARGUMENT_DEFINITION
+directive @hasRole(role: String!) on FIELD_DEFINITION
+
+
+type Attributes {
     id: String
     max: Int
     min: Int
@@ -3427,6 +3435,69 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) dir_hasPermissionArgument_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["method"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("method"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["method"] = arg0
+	var arg1 string
+	if tmp, ok := rawArgs["route"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("route"))
+		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["route"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) dir_hasPermission_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["method"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("method"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["method"] = arg0
+	var arg1 string
+	if tmp, ok := rawArgs["route"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("route"))
+		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["route"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["role"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["role"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation_addPatient_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
