@@ -23,11 +23,11 @@
 	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
-		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'Details.Name', name: 'Examination Name' },
-		{ key: 'ID', name: 'Examination Name' }
+		{ key: 'node.CreatedAt', name: 'Recorded On' },
+		{ key: 'node.Details.Name', name: 'Examination Name' },
+		{ key: 'node.ID', name: 'Examination Name' }
 	];
-	let displayedColumns = ['CreatedAt', 'Details.Name'];
+	let displayedColumns = ['node.CreatedAt', 'node.Details.Name'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);
@@ -44,8 +44,9 @@
 		rootAccessPath="data.listPersonExaminations.items"
 	>
 		<svelte:fragment let:element={examination} slot="actions">
-			<a href="/patients-recipient/view/{examination.Person.ID}/examinations/{examination.ID}"
-				>View</a
+			<a
+				href="/patients-recipient/view/{examination.node.Person.ID}/examinations/{examination.node
+					.ID}">View</a
 			>
 		</svelte:fragment>
 	</Table>

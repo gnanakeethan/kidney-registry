@@ -34,7 +34,7 @@
 		})
 	).subscribe(({ data, error }) => {
 		if (data) {
-			const person = data.getPatient;
+			const person = data.getPatient.node;
 			if (person) {
 				recipient.set(person);
 				// console.log($recipient);

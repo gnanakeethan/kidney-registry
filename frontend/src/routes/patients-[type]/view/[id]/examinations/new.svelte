@@ -12,7 +12,7 @@
 	let examsLength = 0;
 	examinations.subscribe((data) => {
 		examsLength = data?.data?.listExaminations.items.length;
-		let exam1 = data?.data?.listExaminations.items[0];
+		let exam1 = data?.data?.listExaminations.items[0].node;
 		examinationId = exam1?.ID;
 		currentExamination = 1;
 	});
@@ -40,7 +40,7 @@
 		await sleep(200);
 		// setTimeout(() => {
 
-		examinationId = examinations.data.listExaminations.items[currentExamination - 1].ID;
+		examinationId = examinations.data.listExaminations.items[currentExamination - 1].node.ID;
 		// }, 200);/
 	}
 
@@ -64,8 +64,8 @@
 	<select class="form-select" name="" id="" bind:value={examinationId}>
 		{#each $examinations.data.listExaminations.items as examination}
 			<!--{examination.Details.Name} <br>-->
-			<option disabled={examinationId !== ''} value={examination.ID}
-				>{examination.Details.Name}</option
+			<option disabled={examinationId !== ''} value={examination.node.ID}
+				>{examination.node.Details.Name}</option
 			>
 		{/each}
 	</select>

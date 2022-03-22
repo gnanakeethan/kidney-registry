@@ -3054,7 +3054,7 @@ input ExaminationFilter {
     Order: IntFilter
 }
 type ExaminationList implements Connection {
-    items: [Edge]
+    items: [ExaminationEdge]
     pagination: Pagination
 }
 
@@ -6324,9 +6324,9 @@ func (ec *executionContext) _ExaminationList_items(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]models.Edge)
+	res := resTmp.([]*models.ExaminationEdge)
 	fc.Result = res
-	return ec.marshalOEdge2ᚕgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx, field.Selections, res)
+	return ec.marshalOExaminationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ExaminationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationList) (ret graphql.Marshaler) {
@@ -23377,14 +23377,21 @@ func (ec *executionContext) unmarshalODialysisPlanInput2ᚖgithubᚗcomᚋgnanak
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOEdge2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx context.Context, sel ast.SelectionSet, v models.Edge) graphql.Marshaler {
+func (ec *executionContext) marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx context.Context, sel ast.SelectionSet, v *models.Error) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._Edge(ctx, sel, v)
+	return ec._Error(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOEdge2ᚕgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx context.Context, sel ast.SelectionSet, v []models.Edge) graphql.Marshaler {
+func (ec *executionContext) marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx context.Context, sel ast.SelectionSet, v *models.Examination) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Examination(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOExaminationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationEdge(ctx context.Context, sel ast.SelectionSet, v []*models.ExaminationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -23411,7 +23418,7 @@ func (ec *executionContext) marshalOEdge2ᚕgithubᚗcomᚋgnanakeethanᚋkidney
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOEdge2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -23423,20 +23430,6 @@ func (ec *executionContext) marshalOEdge2ᚕgithubᚗcomᚋgnanakeethanᚋkidney
 	wg.Wait()
 
 	return ret
-}
-
-func (ec *executionContext) marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx context.Context, sel ast.SelectionSet, v *models.Error) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Error(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx context.Context, sel ast.SelectionSet, v *models.Examination) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Examination(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationEdge(ctx context.Context, sel ast.SelectionSet, v *models.ExaminationEdge) graphql.Marshaler {

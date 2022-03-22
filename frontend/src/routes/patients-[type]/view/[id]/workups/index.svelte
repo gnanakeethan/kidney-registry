@@ -23,11 +23,11 @@
 	$: filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
-		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'Details.Name', name: 'Workup Name' },
-		{ key: 'ID', name: 'Workup Name' }
+		{ key: 'node.CreatedAt', name: 'Recorded On' },
+		{ key: 'node.Details.Name', name: 'Workup Name' },
+		{ key: 'node.ID', name: 'Workup Name' }
 	];
-	let displayedColumns = ['CreatedAt', 'Details.Name'];
+	let displayedColumns = ['node.CreatedAt', 'node.Details.Name'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);

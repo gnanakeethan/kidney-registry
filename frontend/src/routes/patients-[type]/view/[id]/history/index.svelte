@@ -23,12 +23,12 @@
 	$: filters = { ID: $recipientId, orderBy: ['desc', 'desc'], sortBy: ['StartDate', 'CreatedAt'] };
 
 	let columns = [
-		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'StartDate', name: 'Occurance Date (if any)' },
-		{ key: 'ID', name: 'ID' },
-		{ key: 'Type', name: 'Type' },
-		{ key: 'Reason', name: 'Reason' },
-		{ key: 'Description', name: 'Description' }
+		{ key: 'node.CreatedAt', name: 'Recorded On' },
+		{ key: 'node.StartDate', name: 'Occurance Date (if any)' },
+		{ key: 'node.ID', name: 'ID' },
+		{ key: 'node.Type', name: 'Type' },
+		{ key: 'node.Reason', name: 'Reason' },
+		{ key: 'node.Description', name: 'Description' }
 		// { key: 'UpdatedAt', name: 'Updated On' }
 		// { key: 'FirstName', name: 'First Name' },
 		// { key: 'LastName', name: 'Last Name' },
@@ -36,12 +36,12 @@
 	];
 	let displayedColumns = [
 		// 'ID',
-		'StartDate',
-		'Type',
-		'Reason',
-		'Description',
-		'CreatedAt',
-		'UpdatedAt'
+		'node.StartDate',
+		'node.Type',
+		'node.Reason',
+		'node.Description',
+		'node.CreatedAt',
+		'node.UpdatedAt'
 	];
 	let element: User;
 	let selectedRows = [];
@@ -57,9 +57,5 @@
 		{displayedColumns}
 		{filters}
 		rootAccessPath="data.listPersonMedicalHistories.items"
-	>
-		<svelte:fragment let:element={Patient} slot="actions">
-			<!--			<a href="/patients-recipient/view/{Patient.ID}">View Patient</a>-->
-		</svelte:fragment>
-	</Table>
+	/>
 </div>

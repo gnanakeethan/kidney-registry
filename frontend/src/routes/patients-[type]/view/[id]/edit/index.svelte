@@ -275,7 +275,7 @@
 			message = 'Saving Data....';
 			updatePatient({ patientInput: values }).then((result) => {
 				console.log(result);
-				goto('/patients-recipient/view/' + result.data.updatePatient.ID);
+				goto('/patients-recipient/view/' + result.data.updatePatient.node.ID);
 			});
 		} else {
 			message =

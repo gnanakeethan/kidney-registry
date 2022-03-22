@@ -38,23 +38,24 @@
 	});
 
 	let columns = [
-		{ key: 'Donor.ID', name: 'ID' },
-		{ key: 'Donor.FirstName', name: 'First Name' },
-		{ key: 'Donor.LastName', name: 'Last Name' },
-		{ key: 'Donor.Phn', name: 'Phn' },
-		{ key: 'CreatedAt', name: 'Created Date' }
+		{ key: 'node.Donor.ID', name: 'ID' },
+		{ key: 'node.Donor.FirstName', name: 'First Name' },
+		{ key: 'node.Donor.LastName', name: 'Last Name' },
+		{ key: 'node.Donor.Phn', name: 'Phn' },
+		{ key: 'node.CreatedAt', name: 'Created Date' }
 	];
 	let displayedColumns = [
 		// 'Donor.ID',
-		'Donor.FirstName',
-		'Donor.LastName',
-		'Donor.Phn'
+		'node.Donor.FirstName',
+		'node.Donor.LastName',
+		'node.Donor.Phn'
 	];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);
 
 	function openDonor(donorId) {
+		console.log('DONOR ID', donorId);
 		lastRecipientId.set($recipientId);
 		lastRecipient.set($recipient);
 		recipientId.set(donorId);
@@ -77,7 +78,8 @@
 		rootAccessPath="data.listPersonOrganDonations.items"
 	>
 		<svelte:fragment let:element={Patient} slot="actions">
-			<a on:click={() => openDonor(Patient.Donor.ID)}>View Donor</a>
+			{JSON.stringify(Patient)}
+			<a on:click={() => openDonor(Patient.node.Donor.ID)}>View Donor</a>
 		</svelte:fragment>
 	</Table>
 </div>

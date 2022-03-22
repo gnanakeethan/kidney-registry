@@ -25,7 +25,7 @@ input ExaminationFilter {
     Order: IntFilter
 }
 type ExaminationList implements Connection {
-    items: [Edge]
+    items: [ExaminationEdge]
     pagination: Pagination
 }
 

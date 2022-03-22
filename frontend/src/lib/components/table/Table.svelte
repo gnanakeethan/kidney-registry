@@ -24,16 +24,24 @@
 	function loadUp() {
 		dtSource.currentRows.then((data) => {
 			for (let i = 0; i < accessPath.length; i++) {
-				console.log(data);
-				if (data !== undefined && data !== null && data[accessPath[i]] !== undefined) {
+				console.log('data loaded:', data);
+				if (
+					data !== undefined &&
+					data !== null &&
+					data[accessPath[i]] !== undefined &&
+					data[accessPath[i]] !== null
+				) {
 					if (data['pagination'] !== undefined) {
 						pagination = data['pagination'];
 					}
 					data = data[accessPath[i]];
-					currentRows = data;
 				} else {
 					break;
 				}
+			}
+			if (data !== undefined && data !== null && Array.isArray(data)) {
+				console.log('latestData', data);
+				currentRows = data;
 			}
 			loading = false;
 		});
@@ -90,6 +98,8 @@
 	});
 
 	function getValue(key, element) {
+		console.log('ELEMENT', element);
+		console.log('KEY', key);
 		const keyItems = key.split('.');
 		let data = element;
 		for (let i = 0; i < keyItems.length; i++) {

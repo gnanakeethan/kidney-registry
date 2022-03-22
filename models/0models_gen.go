@@ -93,8 +93,8 @@ type ExaminationInput struct {
 }
 
 type ExaminationList struct {
-	Items      []Edge      `json:"items"`
-	Pagination *Pagination `json:"pagination"`
+	Items      []*ExaminationEdge `json:"items"`
+	Pagination *Pagination        `json:"pagination"`
 }
 
 func (ExaminationList) IsConnection() {}

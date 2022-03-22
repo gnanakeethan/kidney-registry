@@ -25,7 +25,7 @@
 			})
 		).subscribe(({ data }) => {
 			if (data?.getExamination) {
-				examination = data?.getExamination;
+				examination = data?.getExamination.node;
 				console.log(examination);
 				formSet = true;
 			}

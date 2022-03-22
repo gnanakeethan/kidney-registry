@@ -22,13 +22,18 @@
 	$: filters = { orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
-		{ key: 'CreatedAt', name: 'Recorded On' },
-		{ key: 'Details.Name', name: 'Examination Name' },
-		{ key: 'Person.FirstName', name: 'Patient First Name' },
-		{ key: 'Person.LastName', name: 'Patient Last Name' },
-		{ key: 'ID', name: 'Examination Name' }
+		{ key: 'node.CreatedAt', name: 'Recorded On' },
+		{ key: 'node.Details.Name', name: 'Examination Name' },
+		{ key: 'node.Person.FirstName', name: 'Patient First Name' },
+		{ key: 'node.Person.LastName', name: 'Patient Last Name' },
+		{ key: 'node.ID', name: 'Examination Name' }
 	];
-	let displayedColumns = ['CreatedAt', 'Details.Name', 'Person.FirstName', 'Person.LastName'];
+	let displayedColumns = [
+		'node.CreatedAt',
+		'node.Details.Name',
+		'node.Person.FirstName',
+		'node.Person.LastName'
+	];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);
@@ -45,7 +50,7 @@
 		rootAccessPath="data.listAllPersonExaminations.items"
 	>
 		<svelte:fragment let:element={examination} slot="actions">
-			<a href="/patients-recipient/view/{examination.Person.ID}/examinations/{examination.ID}"
+			<a href="/patients-recipient/view/{examination.node.Person.ID}/examinations/{examination.ID}"
 				>View</a
 			>
 		</svelte:fragment>

@@ -5,12 +5,11 @@ package resolvers
 
 import (
 	"context"
-	
-	"github.com/kr/pretty"
-	"gopkg.in/hlandau/passlib.v1"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/middleware"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
+	passlib "gopkg.in/hlandau/passlib.v1"
 )
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error) {
@@ -23,7 +22,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 			Value:      StringPointer(userLogin.Email),
 		},
 	}
-	
+
 	users, _ := models.ListAnyGenerics(ctx, models.User{}, &filter, models.UserEdge{}, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
 	for _, userF := range users.Items {
 		user := userF.Node
@@ -31,7 +30,7 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
 			pretty.Println("password matched", userLogin.Password, user.Password)
 			// Create the Claims
-			
+
 			if token, err := middleware.GenerateToken(user, 86400); err == nil {
 				pretty.Println(token)
 				return &models.UserToken{

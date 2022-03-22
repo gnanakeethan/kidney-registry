@@ -181,15 +181,15 @@
 		<div class="flex flex-wrap p-2">
 			{#each $patients.data.listPatients.items as patient}
 				<div class="flex flex-col m-2 {getColor(patient.Status)} p-2 rounded border border-black">
-					<span>Name: {patient.FirstName} {patient.LastName}</span>
-					<span>PHN: {patient.Phn}</span>
-					<span>Age: {patient.Age}</span>
-					<span>Gender: {patient.Gender}</span>
-					<span>BloodGroup: {patient.BloodGroup ?? ''}</span>
-					<span>Status: {patient.Status}</span>
+					<span>Name: {patient.node.FirstName} {patient.node.LastName}</span>
+					<span>PHN: {patient.node.Phn}</span>
+					<span>Age: {patient.node.Age}</span>
+					<span>Gender: {patient.node.Gender}</span>
+					<span>BloodGroup: {patient.node.BloodGroup ?? ''}</span>
+					<span>Status: {patient.node.Status}</span>
 					<a
 						class="bg-green-400 text-white rounded py-2 px-4 m-2"
-						href="/patients-recipient/view/{patient.ID}"
+						href="/patients-recipient/view/{patient.node.ID}"
 					>
 						View Patient
 					</a>
