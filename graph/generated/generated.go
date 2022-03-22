@@ -101,6 +101,11 @@ type ComplexityRoot struct {
 		UpdatedAt func(childComplexity int) int
 	}
 
+	ExaminationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	ExaminationList struct {
 		Items      func(childComplexity int) int
 		Pagination func(childComplexity int) int
@@ -135,6 +140,11 @@ type ComplexityRoot struct {
 		Order     func(childComplexity int) int
 		Procedure func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
+	}
+
+	InvestigationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	InvestigationList struct {
@@ -222,6 +232,10 @@ type ComplexityRoot struct {
 		Workup              func(childComplexity int, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 	}
 
+	PersonEdge struct {
+		Node func(childComplexity int) int
+	}
+
 	PersonExamination struct {
 		CreatedAt   func(childComplexity int) int
 		DeletedAt   func(childComplexity int) int
@@ -233,6 +247,11 @@ type ComplexityRoot struct {
 		Procedure   func(childComplexity int) int
 		Results     func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
+	}
+
+	PersonExaminationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	PersonExaminationList struct {
@@ -253,6 +272,11 @@ type ComplexityRoot struct {
 		Person            func(childComplexity int) int
 		Referrals         func(childComplexity int) int
 		UpdatedAt         func(childComplexity int) int
+	}
+
+	PersonFollowUpEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	PersonFollowUpList struct {
@@ -287,6 +311,11 @@ type ComplexityRoot struct {
 		ValidDays     func(childComplexity int) int
 	}
 
+	PersonInvestigationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	PersonInvestigationList struct {
 		Items      func(childComplexity int) int
 		Pagination func(childComplexity int) int
@@ -310,6 +339,11 @@ type ComplexityRoot struct {
 		UpdatedAt   func(childComplexity int) int
 	}
 
+	PersonMedicalHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	PersonMedicalHistoryList struct {
 		Items      func(childComplexity int) int
 		Pagination func(childComplexity int) int
@@ -325,6 +359,11 @@ type ComplexityRoot struct {
 		PerformedDate  func(childComplexity int) int
 		PlannedDate    func(childComplexity int) int
 		Recipient      func(childComplexity int) int
+	}
+
+	PersonOrganDonationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	PersonOrganDonationList struct {
@@ -343,6 +382,11 @@ type ComplexityRoot struct {
 		Results     func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 		Workup      func(childComplexity int) int
+	}
+
+	PersonWorkupEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	PersonWorkupList struct {
@@ -401,6 +445,11 @@ type ComplexityRoot struct {
 		Roles func(childComplexity int) int
 	}
 
+	UserEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	UserList struct {
 		Items      func(childComplexity int) int
 		Pagination func(childComplexity int) int
@@ -425,6 +474,11 @@ type ComplexityRoot struct {
 		Order     func(childComplexity int) int
 		Procedure func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
+	}
+
+	WorkupEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	WorkupList struct {
@@ -452,25 +506,25 @@ type InvestigationResolver interface {
 type MutationResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
 	UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error)
-	NewPatient(ctx context.Context) (*models.Person, error)
-	UpdatePatient(ctx context.Context, input *models.PersonInput) (*models.Person, error)
-	AddPatient(ctx context.Context, input *models.PersonInput) (*models.Person, error)
-	CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error)
-	UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error)
+	NewPatient(ctx context.Context) (*models.PersonEdge, error)
+	UpdatePatient(ctx context.Context, input *models.PersonInput) (*models.PersonEdge, error)
+	AddPatient(ctx context.Context, input *models.PersonInput) (*models.PersonEdge, error)
+	CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExaminationEdge, error)
+	UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExaminationEdge, error)
 	DeletePersonExamination(ctx context.Context, id string) (*string, error)
-	CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error)
-	UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error)
-	CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error)
-	UpdatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error)
+	CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUpEdge, error)
+	UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUpEdge, error)
+	CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigationEdge, error)
+	UpdatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigationEdge, error)
 	DeletePersonInvestigation(ctx context.Context, id string) (*string, error)
-	CreatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error)
-	UpdatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error)
+	CreatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistoryEdge, error)
+	UpdatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistoryEdge, error)
 	DeletePersonMedicalHistory(ctx context.Context, id string) (*string, error)
-	CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error)
-	UpdatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error)
+	CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonationEdge, error)
+	UpdatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonationEdge, error)
 	DeletePersonOrganDonation(ctx context.Context, id string) (*string, error)
-	CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error)
-	UpdatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error)
+	CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkupEdge, error)
+	UpdatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkupEdge, error)
 	DeletePersonWorkup(ctx context.Context, id string) (*string, error)
 }
 type PersonResolver interface {
@@ -480,13 +534,13 @@ type PersonResolver interface {
 	CreatedAt(ctx context.Context, obj *models.Person) (*string, error)
 	UpdatedAt(ctx context.Context, obj *models.Person) (*string, error)
 
-	Examinations(ctx context.Context, obj *models.Person, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error)
-	Investigations(ctx context.Context, obj *models.Person, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error)
-	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
-	MedicalHistory(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
-	OrganDonations(ctx context.Context, obj *models.Person, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error)
-	Workup(ctx context.Context, obj *models.Person, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error)
-	Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
+	Examinations(ctx context.Context, obj *models.Person, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	Investigations(ctx context.Context, obj *models.Person, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	MedicalHistory(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	OrganDonations(ctx context.Context, obj *models.Person, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	Workup(ctx context.Context, obj *models.Person, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 }
 type PersonExaminationResolver interface {
 	Details(ctx context.Context, obj *models.PersonExamination) (*models.FormDetails, error)
@@ -538,30 +592,30 @@ type PersonWorkupResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
-	GetExamination(ctx context.Context, id string) (*models.Examination, error)
-	ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error)
-	GetInvestigation(ctx context.Context, id string) (*models.Investigation, error)
-	ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.InvestigationList, error)
+	GetExamination(ctx context.Context, id string) (*models.ExaminationEdge, error)
+	ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	GetInvestigation(ctx context.Context, id string) (*models.InvestigationEdge, error)
+	ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 	ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error)
-	GetPatient(ctx context.Context, id string) (*models.Person, error)
-	GetPersonExamination(ctx context.Context, id string) (*models.PersonExamination, error)
-	ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error)
-	ListAllPersonExaminations(ctx context.Context, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error)
-	GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error)
-	ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
-	ListAllPersonFollowUps(ctx context.Context, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error)
-	GetPersonInvestigation(ctx context.Context, id string) (*models.PersonInvestigation, error)
-	ListPersonInvestigations(ctx context.Context, personID string, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error)
-	ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error)
-	PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error)
-	ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error)
-	GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonation, error)
-	ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error)
-	GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error)
-	ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error)
+	GetPatient(ctx context.Context, id string) (*models.PersonEdge, error)
+	GetPersonExamination(ctx context.Context, id string) (*models.PersonExaminationEdge, error)
+	ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	ListAllPersonExaminations(ctx context.Context, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUpEdge, error)
+	ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	ListAllPersonFollowUps(ctx context.Context, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	GetPersonInvestigation(ctx context.Context, id string) (*models.PersonInvestigationEdge, error)
+	ListPersonInvestigations(ctx context.Context, personID string, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistoryEdge, error)
+	ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonationEdge, error)
+	ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
+	GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkupEdge, error)
+	ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 	Users(ctx context.Context, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.UserList, error)
-	GetWorkup(ctx context.Context, id string) (*models.Workup, error)
-	ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.WorkupList, error)
+	GetWorkup(ctx context.Context, id string) (*models.WorkupEdge, error)
+	ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 }
 type SubscriptionResolver interface {
 	Error(ctx context.Context) (<-chan *models.Error, error)
@@ -768,6 +822,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Examination.UpdatedAt(childComplexity), true
 
+	case "ExaminationEdge.cursor":
+		if e.complexity.ExaminationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ExaminationEdge.Cursor(childComplexity), true
+
+	case "ExaminationEdge.node":
+		if e.complexity.ExaminationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ExaminationEdge.Node(childComplexity), true
+
 	case "ExaminationList.items":
 		if e.complexity.ExaminationList.Items == nil {
 			break
@@ -914,6 +982,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Investigation.UpdatedAt(childComplexity), true
+
+	case "InvestigationEdge.cursor":
+		if e.complexity.InvestigationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.InvestigationEdge.Cursor(childComplexity), true
+
+	case "InvestigationEdge.node":
+		if e.complexity.InvestigationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.InvestigationEdge.Node(childComplexity), true
 
 	case "InvestigationList.items":
 		if e.complexity.InvestigationList.Items == nil {
@@ -1498,6 +1580,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Person.Workup(childComplexity, args["filter"].(*models.PersonWorkupFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
+	case "PersonEdge.node":
+		if e.complexity.PersonEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonEdge.Node(childComplexity), true
+
 	case "PersonExamination.CreatedAt":
 		if e.complexity.PersonExamination.CreatedAt == nil {
 			break
@@ -1567,6 +1656,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonExamination.UpdatedAt(childComplexity), true
+
+	case "PersonExaminationEdge.cursor":
+		if e.complexity.PersonExaminationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PersonExaminationEdge.Cursor(childComplexity), true
+
+	case "PersonExaminationEdge.node":
+		if e.complexity.PersonExaminationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonExaminationEdge.Node(childComplexity), true
 
 	case "PersonExaminationList.items":
 		if e.complexity.PersonExaminationList.Items == nil {
@@ -1665,6 +1768,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonFollowUp.UpdatedAt(childComplexity), true
+
+	case "PersonFollowUpEdge.cursor":
+		if e.complexity.PersonFollowUpEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PersonFollowUpEdge.Cursor(childComplexity), true
+
+	case "PersonFollowUpEdge.node":
+		if e.complexity.PersonFollowUpEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonFollowUpEdge.Node(childComplexity), true
 
 	case "PersonFollowUpList.items":
 		if e.complexity.PersonFollowUpList.Items == nil {
@@ -1827,6 +1944,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonInvestigation.ValidDays(childComplexity), true
 
+	case "PersonInvestigationEdge.cursor":
+		if e.complexity.PersonInvestigationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PersonInvestigationEdge.Cursor(childComplexity), true
+
+	case "PersonInvestigationEdge.node":
+		if e.complexity.PersonInvestigationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonInvestigationEdge.Node(childComplexity), true
+
 	case "PersonInvestigationList.items":
 		if e.complexity.PersonInvestigationList.Items == nil {
 			break
@@ -1925,6 +2056,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonMedicalHistory.UpdatedAt(childComplexity), true
 
+	case "PersonMedicalHistoryEdge.cursor":
+		if e.complexity.PersonMedicalHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PersonMedicalHistoryEdge.Cursor(childComplexity), true
+
+	case "PersonMedicalHistoryEdge.node":
+		if e.complexity.PersonMedicalHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonMedicalHistoryEdge.Node(childComplexity), true
+
 	case "PersonMedicalHistoryList.items":
 		if e.complexity.PersonMedicalHistoryList.Items == nil {
 			break
@@ -2001,6 +2146,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonOrganDonation.Recipient(childComplexity), true
+
+	case "PersonOrganDonationEdge.cursor":
+		if e.complexity.PersonOrganDonationEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PersonOrganDonationEdge.Cursor(childComplexity), true
+
+	case "PersonOrganDonationEdge.node":
+		if e.complexity.PersonOrganDonationEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonOrganDonationEdge.Node(childComplexity), true
 
 	case "PersonOrganDonationList.items":
 		if e.complexity.PersonOrganDonationList.Items == nil {
@@ -2085,6 +2244,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PersonWorkup.Workup(childComplexity), true
+
+	case "PersonWorkupEdge.cursor":
+		if e.complexity.PersonWorkupEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PersonWorkupEdge.Cursor(childComplexity), true
+
+	case "PersonWorkupEdge.node":
+		if e.complexity.PersonWorkupEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PersonWorkupEdge.Node(childComplexity), true
 
 	case "PersonWorkupList.items":
 		if e.complexity.PersonWorkupList.Items == nil {
@@ -2430,7 +2603,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Subscription.Error(childComplexity), true
 
-	case "User.id":
+	case "User.ID":
 		if e.complexity.User.ID == nil {
 			break
 		}
@@ -2450,6 +2623,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.Roles(childComplexity), true
+
+	case "UserEdge.cursor":
+		if e.complexity.UserEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.UserEdge.Cursor(childComplexity), true
+
+	case "UserEdge.node":
+		if e.complexity.UserEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.UserEdge.Node(childComplexity), true
 
 	case "UserList.items":
 		if e.complexity.UserList.Items == nil {
@@ -2549,6 +2736,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Workup.UpdatedAt(childComplexity), true
 
+	case "WorkupEdge.cursor":
+		if e.complexity.WorkupEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkupEdge.Cursor(childComplexity), true
+
+	case "WorkupEdge.node":
+		if e.complexity.WorkupEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkupEdge.Node(childComplexity), true
+
 	case "WorkupList.items":
 		if e.complexity.WorkupList.Items == nil {
 			break
@@ -2645,10 +2846,20 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "graph/schema/0common.graphql", Input: `directive @hasPermission(action: String!,object: String!) on OBJECT | FIELD_DEFINITION
-directive @hasPermissionAgainst(action:String!,type:String!) on OBJECT | FIELD_DEFINITION
+directive @hasPermissionAgainst(action:String!,type:String!) on OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
 directive @hasPermissionArgument(action: String!,object: String!) on ARGUMENT_DEFINITION
 directive @hasRole(role: String!) on FIELD_DEFINITION
 
+interface Node {
+    ID: ID!
+}
+interface Edge {
+    node: Node
+}
+interface Connection {
+    items: [Edge]
+    pagination: Pagination
+}
 type Attributes {
     id: String
     max: Int
@@ -2816,7 +3027,7 @@ type UserToken {
 extend type Mutation {
     userLogin(userLogin: UserLogin!): UserToken!
 }`, BuiltIn: false},
-	{Name: "graph/schema/examination.graphql", Input: `type Examination implements DynamicFormInterface {
+	{Name: "graph/schema/examination.graphql", Input: `type Examination implements DynamicFormInterface & Node{
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -2824,6 +3035,10 @@ extend type Mutation {
     CreatedAt: String
     UpdatedAt: String
     DeletedAt: String
+}
+type ExaminationEdge implements Edge {
+    node: Examination
+    cursor: Pagination
 }
 input ExaminationInput{
     ID          : ID!
@@ -2838,16 +3053,16 @@ input ExaminationInput{
 input ExaminationFilter {
     Order: IntFilter
 }
-type ExaminationList {
-    items: [Examination]
+type ExaminationList implements Connection {
+    items: [Edge]
     pagination: Pagination
 }
 
 extend type Query {
-    getExamination(id: ID!): Examination @hasPermission(action: "read", object: "Examination")
-    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList @hasPermission(action: "read", object: "Examination")
+    getExamination(id: ID!): ExaminationEdge @hasPermission(action: "read", object: "Examination")
+    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/investigation.graphql", Input: `type Investigation implements DynamicFormInterface{
+	{Name: "graph/schema/investigation.graphql", Input: `type Investigation implements DynamicFormInterface & Node {
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -2869,15 +3084,19 @@ input InvestigationInput{
 input InvestigationFilter {
     Order: IntFilter
 }
-type InvestigationList {
-    items: [Investigation]
+type InvestigationList implements Connection {
+    items: [InvestigationEdge]
     pagination: Pagination
 }
 
+type InvestigationEdge implements Edge {
+    node: Investigation
+    cursor: Pagination
+}
 extend type Query {
-    getInvestigation(id: ID!): Investigation
+    getInvestigation(id: ID!): InvestigationEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listInvestigations(filter: InvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): InvestigationList
+    listInvestigations(filter: InvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
 	{Name: "graph/schema/menu.graphql", Input: `type DashboardMenus {
     sidebarTop: Menu
@@ -2894,7 +3113,7 @@ type MenuItem {
     route: String
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/person.graphql", Input: `type Person @hasPermissionAgainst(action: "read",type:"PersonObject")  {
+	{Name: "graph/schema/person.graphql", Input: `type Person implements Node @hasPermissionAgainst(action: "read",type:"PersonObject") {
     ID                     : ID!
     FirstName              : String
     LastName               : String
@@ -2915,12 +3134,12 @@ type MenuItem {
     CreatedAt              : String
     UpdatedAt              : String
     BloodGroup             : BloodGroup
-    Examinations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
-    Investigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
-    FollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
-    MedicalHistory(filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    OrganDonations(filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonOrganDonationList
-    Workup(filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
+    Examinations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    Investigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    FollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    MedicalHistory(filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    OrganDonations(filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    Workup(filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }
 enum Gender {
     MALE
@@ -2968,9 +3187,12 @@ enum BloodGroup {
     AB_NEG
     NA
 }
-type PersonList {
-    items: [Person!]!
+type PersonList implements Connection{
+    items: [PersonEdge]
     pagination: Pagination
+}
+type PersonEdge implements Edge {
+    node: Person
 }
 input PersonComparison {
     comparison: ComparisonType!
@@ -3023,15 +3245,15 @@ input PersonInput {
 
 extend type Query {
     listPatients(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]) : PersonList
-    getPatient(ID: ID!) : Person
+    getPatient(ID: ID!) : PersonEdge
 }
 
 extend type Mutation {
-    newPatient: Person
-    updatePatient(input:PersonInput) : Person
-    addPatient(input:PersonInput) : Person
+    newPatient: PersonEdge
+    updatePatient(input:PersonInput) : PersonEdge
+    addPatient(input:PersonInput) : PersonEdge
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_examinations.graphql", Input: `type PersonExamination implements DynamicFormInterface @hasPermissionAgainst(action: "read",type: "PersonExaminationObject") {
+	{Name: "graph/schema/person_examinations.graphql", Input: `type PersonExamination implements Node & DynamicFormInterface @hasPermissionAgainst(action: "read",type: "PersonExaminationObject") {
     ID : ID!
     Examination : Examination
     Person: Person
@@ -3061,22 +3283,27 @@ input PersonExaminationFilter {
     UpdatedAt: StringFilter
     DeletedAt: StringFilter
 }
-type PersonExaminationList {
-    items: [PersonExamination]
+type PersonExaminationList implements Connection{
+    items: [PersonExaminationEdge]
     pagination: Pagination
 }
+
+type PersonExaminationEdge implements Edge{
+    node: PersonExamination
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonExamination(input: PersonExaminationInput!): PersonExamination
-    updatePersonExamination(input: PersonExaminationInput!): PersonExamination
+    createPersonExamination(input: PersonExaminationInput!): PersonExaminationEdge
+    updatePersonExamination(input: PersonExaminationInput!): PersonExaminationEdge
     deletePersonExamination(ID: ID!): ID
 }
 extend type Query {
-    getPersonExamination(ID: ID!): PersonExamination
-    listPersonExaminations(PersonID: ID!,filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
-    listAllPersonExaminations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
+    getPersonExamination(ID: ID!): PersonExaminationEdge
+    listPersonExaminations(PersonID: ID!,filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    listAllPersonExaminations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_followups.graphql", Input: `type PersonFollowUp {
-    ID: String!
+	{Name: "graph/schema/person_followups.graphql", Input: `type PersonFollowUp implements Node{
+    ID: ID!
     Description: String
     Complaints: String
     CaseStatus: String
@@ -3149,22 +3376,27 @@ type PersonFollowUpMedicine{
 #extend type Person {
 #    followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
 #}
-type PersonFollowUpList {
-    items: [PersonFollowUp]
+type PersonFollowUpList implements Connection{
+    items: [PersonFollowUpEdge]
     pagination: Pagination
 }
 
+type PersonFollowUpEdge implements Edge{
+    node: PersonFollowUp
+    cursor: Pagination
+}
+
 extend type Mutation {
-    createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
-    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUpEdge
+    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUpEdge
     #    deletePersonFollowUp(ID: ID!): PersonFollowUp
 }
 extend type Query {
-    getPersonFollowUp(ID: ID!): PersonFollowUp
-    listPersonFollowUps(PersonID: ID!,filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
-    listAllPersonFollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
+    getPersonFollowUp(ID: ID!): PersonFollowUpEdge
+    listPersonFollowUps(PersonID: ID!,filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    listAllPersonFollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_investigation.graphql", Input: `type PersonInvestigation implements DynamicFormInterface{
+	{Name: "graph/schema/person_investigation.graphql", Input: `type PersonInvestigation implements DynamicFormInterface & Node{
     ID : ID!
     Investigation : Investigation
     Person: Person
@@ -3200,23 +3432,27 @@ input PersonInvestigationFilter {
     UpdatedAt: StringFilter
     DeletedAt: StringFilter
 }
-type PersonInvestigationList {
-    items: [PersonInvestigation]
+type PersonInvestigationList implements Connection{
+    items: [PersonInvestigationEdge]
     pagination: Pagination
 }
+type PersonInvestigationEdge implements Edge{
+    node: PersonInvestigation
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonInvestigation(input: PersonInvestigationInput!): PersonInvestigation
-    updatePersonInvestigation(input: PersonInvestigationInput!): PersonInvestigation
+    createPersonInvestigation(input: PersonInvestigationInput!): PersonInvestigationEdge
+    updatePersonInvestigation(input: PersonInvestigationInput!): PersonInvestigationEdge
     deletePersonInvestigation(ID: ID!): ID
 }
 extend type Query {
-    getPersonInvestigation(ID: ID!): PersonInvestigation
+    getPersonInvestigation(ID: ID!): PersonInvestigationEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listPersonInvestigations(PersonID: ID!,filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
-    listAllPersonInvestigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
+    listPersonInvestigations(PersonID: ID!,filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    listAllPersonInvestigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_medical_history.graphql", Input: `type PersonMedicalHistory {
-    ID: ID
+	{Name: "graph/schema/person_medical_history.graphql", Input: `type PersonMedicalHistory implements Node{
+    ID: ID!
     Person: Person!
     Description: String
     Reason: String
@@ -3259,23 +3495,28 @@ input PersonMedicalHistoryInput{
     Type: HistoryType!
 }
 extend type Person {
-    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonMedicalHistoryList
+    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int,sortBy:[String], orderBy:[OrderBy])              : Connection
 }
-type PersonMedicalHistoryList {
-    items: [PersonMedicalHistory]
+type PersonMedicalHistoryList implements Connection{
+    items: [PersonMedicalHistoryEdge]
     pagination: Pagination
 }
 
+type PersonMedicalHistoryEdge implements Edge{
+    node: PersonMedicalHistory
+    cursor: Pagination
+}
+
 extend type Mutation {
-    createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
-    updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
+    createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistoryEdge
+    updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistoryEdge
     deletePersonMedicalHistory(ID: ID!): ID
 }
 extend type Query {
-    personMedicalHistory(ID: ID!): PersonMedicalHistory
-    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    personMedicalHistory(ID: ID!): PersonMedicalHistoryEdge
+    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_organ_donation.graphql", Input: `type PersonOrganDonation{
+	{Name: "graph/schema/person_organ_donation.graphql", Input: `type PersonOrganDonation implements Node{
     ID: ID!
     Donor: Person
     Recipient: Person
@@ -3307,21 +3548,25 @@ input PersonOrganDonationFilter{
     AcuteRejection: Boolean
 }
 
-type  PersonOrganDonationList {
-    items: [PersonOrganDonation]
+type  PersonOrganDonationList implements Connection{
+    items: [PersonOrganDonationEdge]
     pagination: Pagination
 }
+type PersonOrganDonationEdge implements Edge{
+    node: PersonOrganDonation
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonation
-    updatePersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonation
+    createPersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonationEdge
+    updatePersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonationEdge
     deletePersonOrganDonation(ID: ID!): ID
 }
 extend type Query {
-    getPersonOrganDonation(ID: ID!): PersonOrganDonation
+    getPersonOrganDonation(ID: ID!): PersonOrganDonationEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listPersonOrganDonations(PersonID: ID!,filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonOrganDonationList
+    listPersonOrganDonations(PersonID: ID!,filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/person_workups.graphql", Input: `type PersonWorkup implements DynamicFormInterface{
+	{Name: "graph/schema/person_workups.graphql", Input: `type PersonWorkup implements DynamicFormInterface & Node {
     ID : ID!
     Workup : Workup
     Person: Person
@@ -3350,22 +3595,26 @@ input PersonWorkupFilter {
     UpdatedAt: StringFilter
     DeletedAt: StringFilter
 }
-type PersonWorkupList {
-    items: [PersonWorkup]
+type PersonWorkupList implements Connection{
+    items: [PersonWorkupEdge]
     pagination: Pagination
 }
+
+type PersonWorkupEdge implements Edge {
+    node: PersonWorkup
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonWorkup(input: PersonWorkupInput!): PersonWorkup
-    updatePersonWorkup(input: PersonWorkupInput!): PersonWorkup
+    createPersonWorkup(input: PersonWorkupInput!): PersonWorkupEdge
+    updatePersonWorkup(input: PersonWorkupInput!): PersonWorkupEdge
     deletePersonWorkup(ID: ID!): ID
 }
 extend type Query {
-    getPersonWorkup(ID: ID!): PersonWorkup
-    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
+    getPersonWorkup(ID: ID!): PersonWorkupEdge
+    listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
-	{Name: "graph/schema/user.graphql", Input: `type User {
-    id: ID!
+	{Name: "graph/schema/user.graphql", Input: `type User implements Node {
+    ID: ID!
     name: String!
     Roles: [Role!]!
 }
@@ -3379,8 +3628,14 @@ type UserRole {
     role: Role!
 }
 
-type UserList {
-    items: [User!]!
+
+type UserEdge implements Edge {
+    node: User!
+    cursor: Pagination
+}
+
+type UserList implements Connection{
+    items: [UserEdge]
     pagination: Pagination
 }
 
@@ -3396,7 +3651,7 @@ input UserFilter {
 extend type Query {
     users(filter: UserFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): UserList
 }`, BuiltIn: false},
-	{Name: "graph/schema/workup.graphql", Input: `type Workup implements DynamicFormInterface{
+	{Name: "graph/schema/workup.graphql", Input: `type Workup implements Node & DynamicFormInterface{
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -3418,15 +3673,19 @@ input WorkupInput{
 input WorkupFilter {
     Order: IntFilter
 }
-type WorkupList {
-    items: [Workup]
+type WorkupList implements Connection{
+    items: [WorkupEdge]
     pagination: Pagination
+}
+type WorkupEdge implements Edge{
+    node: Workup
+    cursor: Pagination
 }
 
 extend type Query {
-    getWorkup(id: ID!): Workup
+    getWorkup(id: ID!): WorkupEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listWorkups(filter: WorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): WorkupList
+    listWorkups(filter: WorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -5974,6 +6233,70 @@ func (ec *executionContext) _Examination_DeletedAt(ctx context.Context, field gr
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _ExaminationEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "ExaminationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Examination)
+	fc.Result = res
+	return ec.marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ExaminationEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "ExaminationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _ExaminationList_items(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6001,9 +6324,9 @@ func (ec *executionContext) _ExaminationList_items(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Examination)
+	res := resTmp.([]models.Edge)
 	fc.Result = res
-	return ec.marshalOExamination2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, field.Selections, res)
+	return ec.marshalOEdge2ᚕgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ExaminationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.ExaminationList) (ret graphql.Marshaler) {
@@ -6649,6 +6972,70 @@ func (ec *executionContext) _Investigation_DeletedAt(ctx context.Context, field 
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _InvestigationEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.InvestigationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvestigationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Investigation)
+	fc.Result = res
+	return ec.marshalOInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _InvestigationEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.InvestigationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "InvestigationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _InvestigationList_items(ctx context.Context, field graphql.CollectedField, obj *models.InvestigationList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6676,9 +7063,9 @@ func (ec *executionContext) _InvestigationList_items(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Investigation)
+	res := resTmp.([]*models.InvestigationEdge)
 	fc.Result = res
-	return ec.marshalOInvestigation2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx, field.Selections, res)
+	return ec.marshalOInvestigationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _InvestigationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.InvestigationList) (ret graphql.Marshaler) {
@@ -7060,36 +7447,8 @@ func (ec *executionContext) _Mutation_newPatient(ctx context.Context, field grap
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().NewPatient(rctx)
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.Person); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Person`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().NewPatient(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7098,9 +7457,9 @@ func (ec *executionContext) _Mutation_newPatient(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Person)
+	res := resTmp.(*models.PersonEdge)
 	fc.Result = res
-	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
+	return ec.marshalOPersonEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7127,36 +7486,8 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().UpdatePatient(rctx, args["input"].(*models.PersonInput))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.Person); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Person`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatient(rctx, args["input"].(*models.PersonInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7165,9 +7496,9 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Person)
+	res := resTmp.(*models.PersonEdge)
 	fc.Result = res
-	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
+	return ec.marshalOPersonEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_addPatient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7194,36 +7525,8 @@ func (ec *executionContext) _Mutation_addPatient(ctx context.Context, field grap
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().AddPatient(rctx, args["input"].(*models.PersonInput))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.Person); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Person`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddPatient(rctx, args["input"].(*models.PersonInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7232,9 +7535,9 @@ func (ec *executionContext) _Mutation_addPatient(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Person)
+	res := resTmp.(*models.PersonEdge)
 	fc.Result = res
-	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
+	return ec.marshalOPersonEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createPersonExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7261,36 +7564,8 @@ func (ec *executionContext) _Mutation_createPersonExamination(ctx context.Contex
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().CreatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonExaminationObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.PersonExamination); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7299,9 +7574,9 @@ func (ec *executionContext) _Mutation_createPersonExamination(ctx context.Contex
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonExamination)
+	res := resTmp.(*models.PersonExaminationEdge)
 	fc.Result = res
-	return ec.marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, field.Selections, res)
+	return ec.marshalOPersonExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePersonExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7328,36 +7603,8 @@ func (ec *executionContext) _Mutation_updatePersonExamination(ctx context.Contex
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().UpdatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonExaminationObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.PersonExamination); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePersonExamination(rctx, args["input"].(models.PersonExaminationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7366,9 +7613,9 @@ func (ec *executionContext) _Mutation_updatePersonExamination(ctx context.Contex
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonExamination)
+	res := resTmp.(*models.PersonExaminationEdge)
 	fc.Result = res
-	return ec.marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, field.Selections, res)
+	return ec.marshalOPersonExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deletePersonExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7444,9 +7691,9 @@ func (ec *executionContext) _Mutation_createPersonFollowUp(ctx context.Context, 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonFollowUp)
+	res := resTmp.(*models.PersonFollowUpEdge)
 	fc.Result = res
-	return ec.marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
+	return ec.marshalOPersonFollowUpEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePersonFollowUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7483,9 +7730,9 @@ func (ec *executionContext) _Mutation_updatePersonFollowUp(ctx context.Context, 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonFollowUp)
+	res := resTmp.(*models.PersonFollowUpEdge)
 	fc.Result = res
-	return ec.marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
+	return ec.marshalOPersonFollowUpEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createPersonInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7522,9 +7769,9 @@ func (ec *executionContext) _Mutation_createPersonInvestigation(ctx context.Cont
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonInvestigation)
+	res := resTmp.(*models.PersonInvestigationEdge)
 	fc.Result = res
-	return ec.marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, field.Selections, res)
+	return ec.marshalOPersonInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePersonInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7561,9 +7808,9 @@ func (ec *executionContext) _Mutation_updatePersonInvestigation(ctx context.Cont
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonInvestigation)
+	res := resTmp.(*models.PersonInvestigationEdge)
 	fc.Result = res
-	return ec.marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, field.Selections, res)
+	return ec.marshalOPersonInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deletePersonInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7639,9 +7886,9 @@ func (ec *executionContext) _Mutation_createPersonMedicalHistory(ctx context.Con
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistory)
+	res := resTmp.(*models.PersonMedicalHistoryEdge)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, field.Selections, res)
+	return ec.marshalOPersonMedicalHistoryEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePersonMedicalHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7678,9 +7925,9 @@ func (ec *executionContext) _Mutation_updatePersonMedicalHistory(ctx context.Con
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistory)
+	res := resTmp.(*models.PersonMedicalHistoryEdge)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, field.Selections, res)
+	return ec.marshalOPersonMedicalHistoryEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deletePersonMedicalHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7756,9 +8003,9 @@ func (ec *executionContext) _Mutation_createPersonOrganDonation(ctx context.Cont
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonOrganDonation)
+	res := resTmp.(*models.PersonOrganDonationEdge)
 	fc.Result = res
-	return ec.marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx, field.Selections, res)
+	return ec.marshalOPersonOrganDonationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePersonOrganDonation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7795,9 +8042,9 @@ func (ec *executionContext) _Mutation_updatePersonOrganDonation(ctx context.Cont
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonOrganDonation)
+	res := resTmp.(*models.PersonOrganDonationEdge)
 	fc.Result = res
-	return ec.marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx, field.Selections, res)
+	return ec.marshalOPersonOrganDonationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deletePersonOrganDonation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7873,9 +8120,9 @@ func (ec *executionContext) _Mutation_createPersonWorkup(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonWorkup)
+	res := resTmp.(*models.PersonWorkupEdge)
 	fc.Result = res
-	return ec.marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, field.Selections, res)
+	return ec.marshalOPersonWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePersonWorkup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7912,9 +8159,9 @@ func (ec *executionContext) _Mutation_updatePersonWorkup(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonWorkup)
+	res := resTmp.(*models.PersonWorkupEdge)
 	fc.Result = res
-	return ec.marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, field.Selections, res)
+	return ec.marshalOPersonWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deletePersonWorkup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -8808,9 +9055,9 @@ func (ec *executionContext) _Person_Examinations(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonExaminationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_Investigations(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -8847,9 +9094,9 @@ func (ec *executionContext) _Person_Investigations(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonInvestigationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonInvestigationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_FollowUps(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -8886,9 +9133,9 @@ func (ec *executionContext) _Person_FollowUps(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonFollowUpList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonFollowUpList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_MedicalHistory(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -8925,9 +9172,9 @@ func (ec *executionContext) _Person_MedicalHistory(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistoryList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistoryList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_OrganDonations(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -8964,9 +9211,9 @@ func (ec *executionContext) _Person_OrganDonations(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonOrganDonationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonOrganDonationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_Workup(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -9003,9 +9250,9 @@ func (ec *executionContext) _Person_Workup(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonWorkupList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonWorkupList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Person_histories(ctx context.Context, field graphql.CollectedField, obj *models.Person) (ret graphql.Marshaler) {
@@ -9042,9 +9289,69 @@ func (ec *executionContext) _Person_histories(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistoryList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistoryList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return obj.Node, nil
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			action, err := ec.unmarshalNString2string(ctx, "read")
+			if err != nil {
+				return nil, err
+			}
+			typeArg, err := ec.unmarshalNString2string(ctx, "PersonObject")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasPermissionAgainst == nil {
+				return nil, errors.New("directive hasPermissionAgainst is not implemented")
+			}
+			return ec.directives.HasPermissionAgainst(ctx, obj, directive0, action, typeArg)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.Person); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Person`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Person)
+	fc.Result = res
+	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonExamination_ID(ctx context.Context, field graphql.CollectedField, obj *models.PersonExamination) (ret graphql.Marshaler) {
@@ -9398,7 +9705,7 @@ func (ec *executionContext) _PersonExamination_DeletedAt(ctx context.Context, fi
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonExaminationList) (ret graphql.Marshaler) {
+func (ec *executionContext) _PersonExaminationEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonExaminationEdge) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -9406,7 +9713,7 @@ func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, fi
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "PersonExaminationList",
+		Object:     "PersonExaminationEdge",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -9417,7 +9724,7 @@ func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, fi
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return obj.Items, nil
+			return obj.Node, nil
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			action, err := ec.unmarshalNString2string(ctx, "read")
@@ -9441,10 +9748,10 @@ func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, fi
 		if tmp == nil {
 			return nil, nil
 		}
-		if data, ok := tmp.([]*models.PersonExamination); ok {
+		if data, ok := tmp.(*models.PersonExamination); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9453,9 +9760,73 @@ func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.PersonExamination)
+	res := resTmp.(*models.PersonExamination)
 	fc.Result = res
-	return ec.marshalOPersonExamination2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, field.Selections, res)
+	return ec.marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonExaminationEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.PersonExaminationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonExaminationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonExaminationList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonExaminationList) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonExaminationList",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.PersonExaminationEdge)
+	fc.Result = res
+	return ec.marshalOPersonExaminationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonExaminationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonExaminationList) (ret graphql.Marshaler) {
@@ -9522,7 +9893,7 @@ func (ec *executionContext) _PersonFollowUp_ID(ctx context.Context, field graphq
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonFollowUp_Description(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUp) (ret graphql.Marshaler) {
@@ -9905,6 +10276,70 @@ func (ec *executionContext) _PersonFollowUp_UpdatedAt(ctx context.Context, field
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PersonFollowUpEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUpEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonFollowUpEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonFollowUp)
+	fc.Result = res
+	return ec.marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonFollowUpEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUpEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonFollowUpEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _PersonFollowUpList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUpList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -9932,9 +10367,9 @@ func (ec *executionContext) _PersonFollowUpList_items(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.PersonFollowUp)
+	res := resTmp.([]*models.PersonFollowUpEdge)
 	fc.Result = res
-	return ec.marshalOPersonFollowUp2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
+	return ec.marshalOPersonFollowUpEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonFollowUpList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonFollowUpList) (ret graphql.Marshaler) {
@@ -10675,6 +11110,70 @@ func (ec *executionContext) _PersonInvestigation_DeletedAt(ctx context.Context, 
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PersonInvestigationEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonInvestigationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonInvestigation)
+	fc.Result = res
+	return ec.marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonInvestigationEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonInvestigationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _PersonInvestigationList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigationList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10702,9 +11201,9 @@ func (ec *executionContext) _PersonInvestigationList_items(ctx context.Context, 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.PersonInvestigation)
+	res := resTmp.([]*models.PersonInvestigationEdge)
 	fc.Result = res
-	return ec.marshalOPersonInvestigation2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, field.Selections, res)
+	return ec.marshalOPersonInvestigationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonInvestigationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonInvestigationList) (ret graphql.Marshaler) {
@@ -10756,50 +11255,19 @@ func (ec *executionContext) _PersonList_items(ctx context.Context, field graphql
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return obj.Items, nil
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, obj, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.([]*models.Person); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/gnanakeethan/kidney-registry/models.Person`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Person)
+	res := resTmp.([]*models.PersonEdge)
 	fc.Result = res
-	return ec.marshalNPerson2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonᚄ(ctx, field.Selections, res)
+	return ec.marshalOPersonEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonList) (ret graphql.Marshaler) {
@@ -10859,11 +11327,14 @@ func (ec *executionContext) _PersonMedicalHistory_ID(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOID2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistory_Person(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistory) (ret graphql.Marshaler) {
@@ -11185,6 +11656,70 @@ func (ec *executionContext) _PersonMedicalHistory_UpdatedAt(ctx context.Context,
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PersonMedicalHistoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistoryEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonMedicalHistoryEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonMedicalHistory)
+	fc.Result = res
+	return ec.marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonMedicalHistoryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistoryEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonMedicalHistoryEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _PersonMedicalHistoryList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistoryList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -11212,9 +11747,9 @@ func (ec *executionContext) _PersonMedicalHistoryList_items(ctx context.Context,
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.PersonMedicalHistory)
+	res := resTmp.([]*models.PersonMedicalHistoryEdge)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistory2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, field.Selections, res)
+	return ec.marshalOPersonMedicalHistoryEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonMedicalHistoryList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonMedicalHistoryList) (ret graphql.Marshaler) {
@@ -11596,6 +12131,70 @@ func (ec *executionContext) _PersonOrganDonation_AcuteRejection(ctx context.Cont
 	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PersonOrganDonationEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonOrganDonationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonOrganDonationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonOrganDonation)
+	fc.Result = res
+	return ec.marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonOrganDonationEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.PersonOrganDonationEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonOrganDonationEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _PersonOrganDonationList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonOrganDonationList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -11623,9 +12222,9 @@ func (ec *executionContext) _PersonOrganDonationList_items(ctx context.Context, 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.PersonOrganDonation)
+	res := resTmp.([]*models.PersonOrganDonationEdge)
 	fc.Result = res
-	return ec.marshalOPersonOrganDonation2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx, field.Selections, res)
+	return ec.marshalOPersonOrganDonationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonOrganDonationList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonOrganDonationList) (ret graphql.Marshaler) {
@@ -12011,6 +12610,70 @@ func (ec *executionContext) _PersonWorkup_DeletedAt(ctx context.Context, field g
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PersonWorkupEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.PersonWorkupEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonWorkupEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PersonWorkup)
+	fc.Result = res
+	return ec.marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PersonWorkupEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.PersonWorkupEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PersonWorkupEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _PersonWorkupList_items(ctx context.Context, field graphql.CollectedField, obj *models.PersonWorkupList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -12038,9 +12701,9 @@ func (ec *executionContext) _PersonWorkupList_items(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.PersonWorkup)
+	res := resTmp.([]*models.PersonWorkupEdge)
 	fc.Result = res
-	return ec.marshalOPersonWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, field.Selections, res)
+	return ec.marshalOPersonWorkupEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PersonWorkupList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.PersonWorkupList) (ret graphql.Marshaler) {
@@ -12221,10 +12884,10 @@ func (ec *executionContext) _Query_getExamination(ctx context.Context, field gra
 		if tmp == nil {
 			return nil, nil
 		}
-		if data, ok := tmp.(*models.Examination); ok {
+		if data, ok := tmp.(*models.ExaminationEdge); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Examination`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.ExaminationEdge`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12233,9 +12896,9 @@ func (ec *executionContext) _Query_getExamination(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Examination)
+	res := resTmp.(*models.ExaminationEdge)
 	fc.Result = res
-	return ec.marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, field.Selections, res)
+	return ec.marshalOExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listExaminations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12262,36 +12925,8 @@ func (ec *executionContext) _Query_listExaminations(ctx context.Context, field g
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().ListExaminations(rctx, args["filter"].(*models.ExaminationFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			object, err := ec.unmarshalNString2string(ctx, "Examination")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermission == nil {
-				return nil, errors.New("directive hasPermission is not implemented")
-			}
-			return ec.directives.HasPermission(ctx, nil, directive0, action, object)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.ExaminationList); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.ExaminationList`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().ListExaminations(rctx, args["filter"].(*models.ExaminationFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12300,9 +12935,9 @@ func (ec *executionContext) _Query_listExaminations(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.ExaminationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12339,9 +12974,9 @@ func (ec *executionContext) _Query_getInvestigation(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Investigation)
+	res := resTmp.(*models.InvestigationEdge)
 	fc.Result = res
-	return ec.marshalOInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx, field.Selections, res)
+	return ec.marshalOInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listInvestigations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12378,9 +13013,9 @@ func (ec *executionContext) _Query_listInvestigations(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.InvestigationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOInvestigationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12446,36 +13081,8 @@ func (ec *executionContext) _Query_getPatient(ctx context.Context, field graphql
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().GetPatient(rctx, args["ID"].(string))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.Person); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.Person`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetPatient(rctx, args["ID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12484,9 +13091,9 @@ func (ec *executionContext) _Query_getPatient(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Person)
+	res := resTmp.(*models.PersonEdge)
 	fc.Result = res
-	return ec.marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, field.Selections, res)
+	return ec.marshalOPersonEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getPersonExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12513,36 +13120,8 @@ func (ec *executionContext) _Query_getPersonExamination(ctx context.Context, fie
 	}
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().GetPersonExamination(rctx, args["ID"].(string))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			action, err := ec.unmarshalNString2string(ctx, "read")
-			if err != nil {
-				return nil, err
-			}
-			typeArg, err := ec.unmarshalNString2string(ctx, "PersonExaminationObject")
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasPermissionAgainst == nil {
-				return nil, errors.New("directive hasPermissionAgainst is not implemented")
-			}
-			return ec.directives.HasPermissionAgainst(ctx, nil, directive0, action, typeArg)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.PersonExamination); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/gnanakeethan/kidney-registry/models.PersonExamination`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetPersonExamination(rctx, args["ID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12551,9 +13130,9 @@ func (ec *executionContext) _Query_getPersonExamination(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonExamination)
+	res := resTmp.(*models.PersonExaminationEdge)
 	fc.Result = res
-	return ec.marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, field.Selections, res)
+	return ec.marshalOPersonExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonExaminations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12590,9 +13169,9 @@ func (ec *executionContext) _Query_listPersonExaminations(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonExaminationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listAllPersonExaminations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12629,9 +13208,9 @@ func (ec *executionContext) _Query_listAllPersonExaminations(ctx context.Context
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonExaminationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getPersonFollowUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12668,9 +13247,9 @@ func (ec *executionContext) _Query_getPersonFollowUp(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonFollowUp)
+	res := resTmp.(*models.PersonFollowUpEdge)
 	fc.Result = res
-	return ec.marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUp(ctx, field.Selections, res)
+	return ec.marshalOPersonFollowUpEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonFollowUps(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12707,9 +13286,9 @@ func (ec *executionContext) _Query_listPersonFollowUps(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonFollowUpList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonFollowUpList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listAllPersonFollowUps(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12746,9 +13325,9 @@ func (ec *executionContext) _Query_listAllPersonFollowUps(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonFollowUpList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonFollowUpList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getPersonInvestigation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12785,9 +13364,9 @@ func (ec *executionContext) _Query_getPersonInvestigation(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonInvestigation)
+	res := resTmp.(*models.PersonInvestigationEdge)
 	fc.Result = res
-	return ec.marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, field.Selections, res)
+	return ec.marshalOPersonInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonInvestigations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12824,9 +13403,9 @@ func (ec *executionContext) _Query_listPersonInvestigations(ctx context.Context,
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonInvestigationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonInvestigationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listAllPersonInvestigations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12863,9 +13442,9 @@ func (ec *executionContext) _Query_listAllPersonInvestigations(ctx context.Conte
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonInvestigationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonInvestigationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_personMedicalHistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12902,9 +13481,9 @@ func (ec *executionContext) _Query_personMedicalHistory(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistory)
+	res := resTmp.(*models.PersonMedicalHistoryEdge)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, field.Selections, res)
+	return ec.marshalOPersonMedicalHistoryEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonMedicalHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12941,9 +13520,9 @@ func (ec *executionContext) _Query_listPersonMedicalHistories(ctx context.Contex
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonMedicalHistoryList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonMedicalHistoryList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getPersonOrganDonation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -12980,9 +13559,9 @@ func (ec *executionContext) _Query_getPersonOrganDonation(ctx context.Context, f
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonOrganDonation)
+	res := resTmp.(*models.PersonOrganDonationEdge)
 	fc.Result = res
-	return ec.marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx, field.Selections, res)
+	return ec.marshalOPersonOrganDonationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonOrganDonations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -13019,9 +13598,9 @@ func (ec *executionContext) _Query_listPersonOrganDonations(ctx context.Context,
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonOrganDonationList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonOrganDonationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getPersonWorkup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -13058,9 +13637,9 @@ func (ec *executionContext) _Query_getPersonWorkup(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonWorkup)
+	res := resTmp.(*models.PersonWorkupEdge)
 	fc.Result = res
-	return ec.marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, field.Selections, res)
+	return ec.marshalOPersonWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listPersonWorkups(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -13097,9 +13676,9 @@ func (ec *executionContext) _Query_listPersonWorkups(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.PersonWorkupList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOPersonWorkupList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -13175,9 +13754,9 @@ func (ec *executionContext) _Query_getWorkup(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.Workup)
+	res := resTmp.(*models.WorkupEdge)
 	fc.Result = res
-	return ec.marshalOWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx, field.Selections, res)
+	return ec.marshalOWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_listWorkups(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -13214,9 +13793,9 @@ func (ec *executionContext) _Query_listWorkups(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*models.WorkupList)
+	res := resTmp.(models.Connection)
 	fc.Result = res
-	return ec.marshalOWorkupList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupList(ctx, field.Selections, res)
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -13405,7 +13984,7 @@ func (ec *executionContext) _Subscription_error(ctx context.Context, field graph
 	}
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_ID(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -13510,6 +14089,73 @@ func (ec *executionContext) _User_Roles(ctx context.Context, field graphql.Colle
 	return ec.marshalNRole2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRoleᚄ(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _UserEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.UserEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.UserEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _UserList_items(ctx context.Context, field graphql.CollectedField, obj *models.UserList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -13535,14 +14181,11 @@ func (ec *executionContext) _UserList_items(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.([]*models.User)
+	res := resTmp.([]*models.UserEdge)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalOUserEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.UserList) (ret graphql.Marshaler) {
@@ -13973,6 +14616,70 @@ func (ec *executionContext) _Workup_DeletedAt(ctx context.Context, field graphql
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _WorkupEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.WorkupEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WorkupEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Workup)
+	fc.Result = res
+	return ec.marshalOWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WorkupEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.WorkupEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WorkupEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _WorkupList_items(ctx context.Context, field graphql.CollectedField, obj *models.WorkupList) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -14000,9 +14707,9 @@ func (ec *executionContext) _WorkupList_items(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*models.Workup)
+	res := resTmp.([]*models.WorkupEdge)
 	fc.Result = res
-	return ec.marshalOWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx, field.Selections, res)
+	return ec.marshalOWorkupEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _WorkupList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.WorkupList) (ret graphql.Marshaler) {
@@ -17383,6 +18090,92 @@ func (ec *executionContext) unmarshalInputWorkupInput(ctx context.Context, obj i
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _Connection(ctx context.Context, sel ast.SelectionSet, obj models.Connection) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case models.ExaminationList:
+		return ec._ExaminationList(ctx, sel, &obj)
+	case *models.ExaminationList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ExaminationList(ctx, sel, obj)
+	case models.InvestigationList:
+		return ec._InvestigationList(ctx, sel, &obj)
+	case *models.InvestigationList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._InvestigationList(ctx, sel, obj)
+	case models.PersonList:
+		return ec._PersonList(ctx, sel, &obj)
+	case *models.PersonList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonList(ctx, sel, obj)
+	case models.PersonExaminationList:
+		return ec._PersonExaminationList(ctx, sel, &obj)
+	case *models.PersonExaminationList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonExaminationList(ctx, sel, obj)
+	case models.PersonFollowUpList:
+		return ec._PersonFollowUpList(ctx, sel, &obj)
+	case *models.PersonFollowUpList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonFollowUpList(ctx, sel, obj)
+	case models.PersonInvestigationList:
+		return ec._PersonInvestigationList(ctx, sel, &obj)
+	case *models.PersonInvestigationList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonInvestigationList(ctx, sel, obj)
+	case models.PersonMedicalHistoryList:
+		return ec._PersonMedicalHistoryList(ctx, sel, &obj)
+	case *models.PersonMedicalHistoryList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonMedicalHistoryList(ctx, sel, obj)
+	case models.PersonOrganDonationList:
+		return ec._PersonOrganDonationList(ctx, sel, &obj)
+	case *models.PersonOrganDonationList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonOrganDonationList(ctx, sel, obj)
+	case models.PersonWorkupList:
+		return ec._PersonWorkupList(ctx, sel, &obj)
+	case *models.PersonWorkupList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonWorkupList(ctx, sel, obj)
+	case models.UserList:
+		return ec._UserList(ctx, sel, &obj)
+	case *models.UserList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._UserList(ctx, sel, obj)
+	case models.WorkupList:
+		return ec._WorkupList(ctx, sel, &obj)
+	case *models.WorkupList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._WorkupList(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 func (ec *executionContext) _DynamicFormInterface(ctx context.Context, sel ast.SelectionSet, obj models.DynamicFormInterface) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
@@ -17422,6 +18215,178 @@ func (ec *executionContext) _DynamicFormInterface(ctx context.Context, sel ast.S
 			return graphql.Null
 		}
 		return ec._PersonWorkup(ctx, sel, obj)
+	case models.Workup:
+		return ec._Workup(ctx, sel, &obj)
+	case *models.Workup:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Workup(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
+func (ec *executionContext) _Edge(ctx context.Context, sel ast.SelectionSet, obj models.Edge) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case models.ExaminationEdge:
+		return ec._ExaminationEdge(ctx, sel, &obj)
+	case *models.ExaminationEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ExaminationEdge(ctx, sel, obj)
+	case models.InvestigationEdge:
+		return ec._InvestigationEdge(ctx, sel, &obj)
+	case *models.InvestigationEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._InvestigationEdge(ctx, sel, obj)
+	case models.PersonEdge:
+		return ec._PersonEdge(ctx, sel, &obj)
+	case *models.PersonEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonEdge(ctx, sel, obj)
+	case models.PersonExaminationEdge:
+		return ec._PersonExaminationEdge(ctx, sel, &obj)
+	case *models.PersonExaminationEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonExaminationEdge(ctx, sel, obj)
+	case models.PersonFollowUpEdge:
+		return ec._PersonFollowUpEdge(ctx, sel, &obj)
+	case *models.PersonFollowUpEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonFollowUpEdge(ctx, sel, obj)
+	case models.PersonInvestigationEdge:
+		return ec._PersonInvestigationEdge(ctx, sel, &obj)
+	case *models.PersonInvestigationEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonInvestigationEdge(ctx, sel, obj)
+	case models.PersonMedicalHistoryEdge:
+		return ec._PersonMedicalHistoryEdge(ctx, sel, &obj)
+	case *models.PersonMedicalHistoryEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonMedicalHistoryEdge(ctx, sel, obj)
+	case models.PersonOrganDonationEdge:
+		return ec._PersonOrganDonationEdge(ctx, sel, &obj)
+	case *models.PersonOrganDonationEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonOrganDonationEdge(ctx, sel, obj)
+	case models.PersonWorkupEdge:
+		return ec._PersonWorkupEdge(ctx, sel, &obj)
+	case *models.PersonWorkupEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonWorkupEdge(ctx, sel, obj)
+	case models.UserEdge:
+		return ec._UserEdge(ctx, sel, &obj)
+	case *models.UserEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._UserEdge(ctx, sel, obj)
+	case models.WorkupEdge:
+		return ec._WorkupEdge(ctx, sel, &obj)
+	case *models.WorkupEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._WorkupEdge(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
+func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj models.Node) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case models.Examination:
+		return ec._Examination(ctx, sel, &obj)
+	case *models.Examination:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Examination(ctx, sel, obj)
+	case models.Investigation:
+		return ec._Investigation(ctx, sel, &obj)
+	case *models.Investigation:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Investigation(ctx, sel, obj)
+	case models.Person:
+		return ec._Person(ctx, sel, &obj)
+	case *models.Person:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Person(ctx, sel, obj)
+	case models.PersonExamination:
+		return ec._PersonExamination(ctx, sel, &obj)
+	case *models.PersonExamination:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonExamination(ctx, sel, obj)
+	case models.PersonFollowUp:
+		return ec._PersonFollowUp(ctx, sel, &obj)
+	case *models.PersonFollowUp:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonFollowUp(ctx, sel, obj)
+	case models.PersonInvestigation:
+		return ec._PersonInvestigation(ctx, sel, &obj)
+	case *models.PersonInvestigation:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonInvestigation(ctx, sel, obj)
+	case models.PersonMedicalHistory:
+		return ec._PersonMedicalHistory(ctx, sel, &obj)
+	case *models.PersonMedicalHistory:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonMedicalHistory(ctx, sel, obj)
+	case models.PersonOrganDonation:
+		return ec._PersonOrganDonation(ctx, sel, &obj)
+	case *models.PersonOrganDonation:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonOrganDonation(ctx, sel, obj)
+	case models.PersonWorkup:
+		return ec._PersonWorkup(ctx, sel, &obj)
+	case *models.PersonWorkup:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._PersonWorkup(ctx, sel, obj)
+	case models.User:
+		return ec._User(ctx, sel, &obj)
+	case *models.User:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._User(ctx, sel, obj)
 	case models.Workup:
 		return ec._Workup(ctx, sel, &obj)
 	case *models.Workup:
@@ -17654,7 +18619,7 @@ func (ec *executionContext) _Error(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
-var examinationImplementors = []string{"Examination", "DynamicFormInterface"}
+var examinationImplementors = []string{"Examination", "DynamicFormInterface", "Node"}
 
 func (ec *executionContext) _Examination(ctx context.Context, sel ast.SelectionSet, obj *models.Examination) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, examinationImplementors)
@@ -17777,7 +18742,42 @@ func (ec *executionContext) _Examination(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
-var examinationListImplementors = []string{"ExaminationList"}
+var examinationEdgeImplementors = []string{"ExaminationEdge", "Edge"}
+
+func (ec *executionContext) _ExaminationEdge(ctx context.Context, sel ast.SelectionSet, obj *models.ExaminationEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, examinationEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ExaminationEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._ExaminationEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._ExaminationEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var examinationListImplementors = []string{"ExaminationList", "Connection"}
 
 func (ec *executionContext) _ExaminationList(ctx context.Context, sel ast.SelectionSet, obj *models.ExaminationList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, examinationListImplementors)
@@ -17959,7 +18959,7 @@ func (ec *executionContext) _FormDetails(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
-var investigationImplementors = []string{"Investigation", "DynamicFormInterface"}
+var investigationImplementors = []string{"Investigation", "DynamicFormInterface", "Node"}
 
 func (ec *executionContext) _Investigation(ctx context.Context, sel ast.SelectionSet, obj *models.Investigation) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, investigationImplementors)
@@ -18082,7 +19082,42 @@ func (ec *executionContext) _Investigation(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var investigationListImplementors = []string{"InvestigationList"}
+var investigationEdgeImplementors = []string{"InvestigationEdge", "Edge"}
+
+func (ec *executionContext) _InvestigationEdge(ctx context.Context, sel ast.SelectionSet, obj *models.InvestigationEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, investigationEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("InvestigationEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._InvestigationEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._InvestigationEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var investigationListImplementors = []string{"InvestigationList", "Connection"}
 
 func (ec *executionContext) _InvestigationList(ctx context.Context, sel ast.SelectionSet, obj *models.InvestigationList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, investigationListImplementors)
@@ -18494,7 +19529,7 @@ func (ec *executionContext) _Pagination(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
-var personImplementors = []string{"Person"}
+var personImplementors = []string{"Person", "Node"}
 
 func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, obj *models.Person) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personImplementors)
@@ -18817,7 +19852,35 @@ func (ec *executionContext) _Person(ctx context.Context, sel ast.SelectionSet, o
 	return out
 }
 
-var personExaminationImplementors = []string{"PersonExamination", "DynamicFormInterface"}
+var personEdgeImplementors = []string{"PersonEdge", "Edge"}
+
+func (ec *executionContext) _PersonEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personExaminationImplementors = []string{"PersonExamination", "Node", "DynamicFormInterface"}
 
 func (ec *executionContext) _PersonExamination(ctx context.Context, sel ast.SelectionSet, obj *models.PersonExamination) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personExaminationImplementors)
@@ -18971,7 +20034,42 @@ func (ec *executionContext) _PersonExamination(ctx context.Context, sel ast.Sele
 	return out
 }
 
-var personExaminationListImplementors = []string{"PersonExaminationList"}
+var personExaminationEdgeImplementors = []string{"PersonExaminationEdge", "Edge"}
+
+func (ec *executionContext) _PersonExaminationEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonExaminationEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personExaminationEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonExaminationEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonExaminationEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonExaminationEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personExaminationListImplementors = []string{"PersonExaminationList", "Connection"}
 
 func (ec *executionContext) _PersonExaminationList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonExaminationList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personExaminationListImplementors)
@@ -19006,7 +20104,7 @@ func (ec *executionContext) _PersonExaminationList(ctx context.Context, sel ast.
 	return out
 }
 
-var personFollowUpImplementors = []string{"PersonFollowUp"}
+var personFollowUpImplementors = []string{"PersonFollowUp", "Node"}
 
 func (ec *executionContext) _PersonFollowUp(ctx context.Context, sel ast.SelectionSet, obj *models.PersonFollowUp) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personFollowUpImplementors)
@@ -19144,7 +20242,42 @@ func (ec *executionContext) _PersonFollowUp(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var personFollowUpListImplementors = []string{"PersonFollowUpList"}
+var personFollowUpEdgeImplementors = []string{"PersonFollowUpEdge", "Edge"}
+
+func (ec *executionContext) _PersonFollowUpEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonFollowUpEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personFollowUpEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonFollowUpEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonFollowUpEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonFollowUpEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personFollowUpListImplementors = []string{"PersonFollowUpList", "Connection"}
 
 func (ec *executionContext) _PersonFollowUpList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonFollowUpList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personFollowUpListImplementors)
@@ -19259,7 +20392,7 @@ func (ec *executionContext) _PersonFollowUpMedicine(ctx context.Context, sel ast
 	return out
 }
 
-var personInvestigationImplementors = []string{"PersonInvestigation", "DynamicFormInterface"}
+var personInvestigationImplementors = []string{"PersonInvestigation", "DynamicFormInterface", "Node"}
 
 func (ec *executionContext) _PersonInvestigation(ctx context.Context, sel ast.SelectionSet, obj *models.PersonInvestigation) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personInvestigationImplementors)
@@ -19454,7 +20587,42 @@ func (ec *executionContext) _PersonInvestigation(ctx context.Context, sel ast.Se
 	return out
 }
 
-var personInvestigationListImplementors = []string{"PersonInvestigationList"}
+var personInvestigationEdgeImplementors = []string{"PersonInvestigationEdge", "Edge"}
+
+func (ec *executionContext) _PersonInvestigationEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonInvestigationEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personInvestigationEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonInvestigationEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonInvestigationEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonInvestigationEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personInvestigationListImplementors = []string{"PersonInvestigationList", "Connection"}
 
 func (ec *executionContext) _PersonInvestigationList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonInvestigationList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personInvestigationListImplementors)
@@ -19489,7 +20657,7 @@ func (ec *executionContext) _PersonInvestigationList(ctx context.Context, sel as
 	return out
 }
 
-var personListImplementors = []string{"PersonList"}
+var personListImplementors = []string{"PersonList", "Connection"}
 
 func (ec *executionContext) _PersonList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personListImplementors)
@@ -19506,9 +20674,6 @@ func (ec *executionContext) _PersonList(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "pagination":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._PersonList_pagination(ctx, field, obj)
@@ -19527,7 +20692,7 @@ func (ec *executionContext) _PersonList(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
-var personMedicalHistoryImplementors = []string{"PersonMedicalHistory"}
+var personMedicalHistoryImplementors = []string{"PersonMedicalHistory", "Node"}
 
 func (ec *executionContext) _PersonMedicalHistory(ctx context.Context, sel ast.SelectionSet, obj *models.PersonMedicalHistory) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personMedicalHistoryImplementors)
@@ -19544,6 +20709,9 @@ func (ec *executionContext) _PersonMedicalHistory(ctx context.Context, sel ast.S
 
 			out.Values[i] = innerFunc(ctx)
 
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "Person":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._PersonMedicalHistory_Person(ctx, field, obj)
@@ -19661,7 +20829,42 @@ func (ec *executionContext) _PersonMedicalHistory(ctx context.Context, sel ast.S
 	return out
 }
 
-var personMedicalHistoryListImplementors = []string{"PersonMedicalHistoryList"}
+var personMedicalHistoryEdgeImplementors = []string{"PersonMedicalHistoryEdge", "Edge"}
+
+func (ec *executionContext) _PersonMedicalHistoryEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonMedicalHistoryEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personMedicalHistoryEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonMedicalHistoryEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonMedicalHistoryEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonMedicalHistoryEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personMedicalHistoryListImplementors = []string{"PersonMedicalHistoryList", "Connection"}
 
 func (ec *executionContext) _PersonMedicalHistoryList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonMedicalHistoryList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personMedicalHistoryListImplementors)
@@ -19696,7 +20899,7 @@ func (ec *executionContext) _PersonMedicalHistoryList(ctx context.Context, sel a
 	return out
 }
 
-var personOrganDonationImplementors = []string{"PersonOrganDonation"}
+var personOrganDonationImplementors = []string{"PersonOrganDonation", "Node"}
 
 func (ec *executionContext) _PersonOrganDonation(ctx context.Context, sel ast.SelectionSet, obj *models.PersonOrganDonation) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personOrganDonationImplementors)
@@ -19823,7 +21026,42 @@ func (ec *executionContext) _PersonOrganDonation(ctx context.Context, sel ast.Se
 	return out
 }
 
-var personOrganDonationListImplementors = []string{"PersonOrganDonationList"}
+var personOrganDonationEdgeImplementors = []string{"PersonOrganDonationEdge", "Edge"}
+
+func (ec *executionContext) _PersonOrganDonationEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonOrganDonationEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personOrganDonationEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonOrganDonationEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonOrganDonationEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonOrganDonationEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personOrganDonationListImplementors = []string{"PersonOrganDonationList", "Connection"}
 
 func (ec *executionContext) _PersonOrganDonationList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonOrganDonationList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personOrganDonationListImplementors)
@@ -19858,7 +21096,7 @@ func (ec *executionContext) _PersonOrganDonationList(ctx context.Context, sel as
 	return out
 }
 
-var personWorkupImplementors = []string{"PersonWorkup", "DynamicFormInterface"}
+var personWorkupImplementors = []string{"PersonWorkup", "DynamicFormInterface", "Node"}
 
 func (ec *executionContext) _PersonWorkup(ctx context.Context, sel ast.SelectionSet, obj *models.PersonWorkup) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personWorkupImplementors)
@@ -20022,7 +21260,42 @@ func (ec *executionContext) _PersonWorkup(ctx context.Context, sel ast.Selection
 	return out
 }
 
-var personWorkupListImplementors = []string{"PersonWorkupList"}
+var personWorkupEdgeImplementors = []string{"PersonWorkupEdge", "Edge"}
+
+func (ec *executionContext) _PersonWorkupEdge(ctx context.Context, sel ast.SelectionSet, obj *models.PersonWorkupEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, personWorkupEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PersonWorkupEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonWorkupEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PersonWorkupEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var personWorkupListImplementors = []string{"PersonWorkupList", "Connection"}
 
 func (ec *executionContext) _PersonWorkupList(ctx context.Context, sel ast.SelectionSet, obj *models.PersonWorkupList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, personWorkupListImplementors)
@@ -20718,7 +21991,7 @@ func (ec *executionContext) _Subscription(ctx context.Context, sel ast.Selection
 	}
 }
 
-var userImplementors = []string{"User"}
+var userImplementors = []string{"User", "Node"}
 
 func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *models.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
@@ -20728,9 +22001,9 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("User")
-		case "id":
+		case "ID":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._User_id(ctx, field, obj)
+				return ec._User_ID(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -20779,7 +22052,45 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
-var userListImplementors = []string{"UserList"}
+var userEdgeImplementors = []string{"UserEdge", "Edge"}
+
+func (ec *executionContext) _UserEdge(ctx context.Context, sel ast.SelectionSet, obj *models.UserEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UserEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._UserEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._UserEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var userListImplementors = []string{"UserList", "Connection"}
 
 func (ec *executionContext) _UserList(ctx context.Context, sel ast.SelectionSet, obj *models.UserList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userListImplementors)
@@ -20796,9 +22107,6 @@ func (ec *executionContext) _UserList(ctx context.Context, sel ast.SelectionSet,
 
 			out.Values[i] = innerFunc(ctx)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "pagination":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._UserList_pagination(ctx, field, obj)
@@ -20903,7 +22211,7 @@ func (ec *executionContext) _UserToken(ctx context.Context, sel ast.SelectionSet
 	return out
 }
 
-var workupImplementors = []string{"Workup", "DynamicFormInterface"}
+var workupImplementors = []string{"Workup", "Node", "DynamicFormInterface"}
 
 func (ec *executionContext) _Workup(ctx context.Context, sel ast.SelectionSet, obj *models.Workup) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, workupImplementors)
@@ -21026,7 +22334,42 @@ func (ec *executionContext) _Workup(ctx context.Context, sel ast.SelectionSet, o
 	return out
 }
 
-var workupListImplementors = []string{"WorkupList"}
+var workupEdgeImplementors = []string{"WorkupEdge", "Edge"}
+
+func (ec *executionContext) _WorkupEdge(ctx context.Context, sel ast.SelectionSet, obj *models.WorkupEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workupEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WorkupEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._WorkupEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._WorkupEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var workupListImplementors = []string{"WorkupList", "Connection"}
 
 func (ec *executionContext) _WorkupList(ctx context.Context, sel ast.SelectionSet, obj *models.WorkupList) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, workupListImplementors)
@@ -21549,50 +22892,6 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNPerson2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Person) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
 func (ec *executionContext) marshalNPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPerson(ctx context.Context, sel ast.SelectionSet, v *models.Person) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -21705,50 +23004,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.User) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUser(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
 }
 
 func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {
@@ -22100,6 +23355,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx context.Context, sel ast.SelectionSet, v models.Connection) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Connection(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalODialysisPlan2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐDialysisPlan(ctx context.Context, sel ast.SelectionSet, v *models.DialysisPlan) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -22115,14 +23377,14 @@ func (ec *executionContext) unmarshalODialysisPlanInput2ᚖgithubᚗcomᚋgnanak
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx context.Context, sel ast.SelectionSet, v *models.Error) graphql.Marshaler {
+func (ec *executionContext) marshalOEdge2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx context.Context, sel ast.SelectionSet, v models.Edge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._Error(ctx, sel, v)
+	return ec._Edge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOExamination2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx context.Context, sel ast.SelectionSet, v []*models.Examination) graphql.Marshaler {
+func (ec *executionContext) marshalOEdge2ᚕgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx context.Context, sel ast.SelectionSet, v []models.Edge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -22149,7 +23411,7 @@ func (ec *executionContext) marshalOExamination2ᚕᚖgithubᚗcomᚋgnanakeetha
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx, sel, v[i])
+			ret[i] = ec.marshalOEdge2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -22163,11 +23425,25 @@ func (ec *executionContext) marshalOExamination2ᚕᚖgithubᚗcomᚋgnanakeetha
 	return ret
 }
 
+func (ec *executionContext) marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx context.Context, sel ast.SelectionSet, v *models.Error) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Error(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExamination(ctx context.Context, sel ast.SelectionSet, v *models.Examination) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Examination(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationEdge(ctx context.Context, sel ast.SelectionSet, v *models.ExaminationEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ExaminationEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOExaminationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationFilter(ctx context.Context, v interface{}) (*models.ExaminationFilter, error) {
@@ -22184,13 +23460,6 @@ func (ec *executionContext) unmarshalOExaminationInput2ᚖgithubᚗcomᚋgnanake
 	}
 	res, err := ec.unmarshalInputExaminationInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐExaminationList(ctx context.Context, sel ast.SelectionSet, v *models.ExaminationList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ExaminationList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOExaminationResults2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐResultsModel(ctx context.Context, v interface{}) (models.ResultsModel, error) {
@@ -22385,16 +23654,6 @@ func (ec *executionContext) marshalOHistoryType2githubᚗcomᚋgnanakeethanᚋki
 	return v
 }
 
-func (ec *executionContext) unmarshalOID2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalID(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalID(v)
-	return res
-}
-
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -22445,7 +23704,14 @@ func (ec *executionContext) unmarshalOIntFilter2ᚖgithubᚗcomᚋgnanakeethan�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOInvestigation2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx context.Context, sel ast.SelectionSet, v []*models.Investigation) graphql.Marshaler {
+func (ec *executionContext) marshalOInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx context.Context, sel ast.SelectionSet, v *models.Investigation) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Investigation(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOInvestigationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationEdge(ctx context.Context, sel ast.SelectionSet, v []*models.InvestigationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -22472,7 +23738,7 @@ func (ec *executionContext) marshalOInvestigation2ᚕᚖgithubᚗcomᚋgnanakeet
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx, sel, v[i])
+			ret[i] = ec.marshalOInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -22486,11 +23752,11 @@ func (ec *executionContext) marshalOInvestigation2ᚕᚖgithubᚗcomᚋgnanakeet
 	return ret
 }
 
-func (ec *executionContext) marshalOInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigation(ctx context.Context, sel ast.SelectionSet, v *models.Investigation) graphql.Marshaler {
+func (ec *executionContext) marshalOInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationEdge(ctx context.Context, sel ast.SelectionSet, v *models.InvestigationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._Investigation(ctx, sel, v)
+	return ec._InvestigationEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOInvestigationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationFilter(ctx context.Context, v interface{}) (*models.InvestigationFilter, error) {
@@ -22507,13 +23773,6 @@ func (ec *executionContext) unmarshalOInvestigationInput2ᚖgithubᚗcomᚋgnana
 	}
 	res, err := ec.unmarshalInputInvestigationInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOInvestigationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐInvestigationList(ctx context.Context, sel ast.SelectionSet, v *models.InvestigationList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._InvestigationList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOInvestigationResults2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐResultsModel(ctx context.Context, v interface{}) (models.ResultsModel, error) {
@@ -22832,7 +24091,7 @@ func (ec *executionContext) marshalOPerson2ᚖgithubᚗcomᚋgnanakeethanᚋkidn
 	return ec._Person(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPersonExamination2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx context.Context, sel ast.SelectionSet, v []*models.PersonExamination) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -22859,7 +24118,7 @@ func (ec *executionContext) marshalOPersonExamination2ᚕᚖgithubᚗcomᚋgnana
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx, sel, v[i])
+			ret[i] = ec.marshalOPersonEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -22873,11 +24132,66 @@ func (ec *executionContext) marshalOPersonExamination2ᚕᚖgithubᚗcomᚋgnana
 	return ret
 }
 
+func (ec *executionContext) marshalOPersonEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PersonEdge(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOPersonExamination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExamination(ctx context.Context, sel ast.SelectionSet, v *models.PersonExamination) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._PersonExamination(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPersonExaminationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonExaminationEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPersonExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOPersonExaminationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonExaminationEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PersonExaminationEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonExaminationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationFilter(ctx context.Context, v interface{}) (*models.PersonExaminationFilter, error) {
@@ -22886,13 +24200,6 @@ func (ec *executionContext) unmarshalOPersonExaminationFilter2ᚖgithubᚗcomᚋ
 	}
 	res, err := ec.unmarshalInputPersonExaminationFilter(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOPersonExaminationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonExaminationList(ctx context.Context, sel ast.SelectionSet, v *models.PersonExaminationList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._PersonExaminationList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFilter(ctx context.Context, v interface{}) (*models.PersonFilter, error) {
@@ -22951,19 +24258,60 @@ func (ec *executionContext) marshalOPersonFollowUp2ᚖgithubᚗcomᚋgnanakeetha
 	return ec._PersonFollowUp(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOPersonFollowUpEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonFollowUpEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPersonFollowUpEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOPersonFollowUpEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonFollowUpEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PersonFollowUpEdge(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOPersonFollowUpFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpFilter(ctx context.Context, v interface{}) (*models.PersonFollowUpFilter, error) {
 	if v == nil {
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputPersonFollowUpFilter(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOPersonFollowUpList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpList(ctx context.Context, sel ast.SelectionSet, v *models.PersonFollowUpList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._PersonFollowUpList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonFollowUpMedicineInput2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonFollowUpMedicineInput(ctx context.Context, v interface{}) ([]*models.PersonFollowUpMedicineInput, error) {
@@ -23002,7 +24350,14 @@ func (ec *executionContext) unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethan
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPersonInvestigation2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx context.Context, sel ast.SelectionSet, v []*models.PersonInvestigation) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx context.Context, sel ast.SelectionSet, v *models.PersonInvestigation) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PersonInvestigation(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPersonInvestigationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonInvestigationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -23029,7 +24384,7 @@ func (ec *executionContext) marshalOPersonInvestigation2ᚕᚖgithubᚗcomᚋgna
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx, sel, v[i])
+			ret[i] = ec.marshalOPersonInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -23043,11 +24398,11 @@ func (ec *executionContext) marshalOPersonInvestigation2ᚕᚖgithubᚗcomᚋgna
 	return ret
 }
 
-func (ec *executionContext) marshalOPersonInvestigation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigation(ctx context.Context, sel ast.SelectionSet, v *models.PersonInvestigation) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonInvestigationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonInvestigationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._PersonInvestigation(ctx, sel, v)
+	return ec._PersonInvestigationEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonInvestigationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationFilter(ctx context.Context, v interface{}) (*models.PersonInvestigationFilter, error) {
@@ -23058,13 +24413,6 @@ func (ec *executionContext) unmarshalOPersonInvestigationFilter2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPersonInvestigationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInvestigationList(ctx context.Context, sel ast.SelectionSet, v *models.PersonInvestigationList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._PersonInvestigationList(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalOPersonList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonList(ctx context.Context, sel ast.SelectionSet, v *models.PersonList) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -23072,7 +24420,14 @@ func (ec *executionContext) marshalOPersonList2ᚖgithubᚗcomᚋgnanakeethanᚋ
 	return ec._PersonList(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPersonMedicalHistory2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx context.Context, sel ast.SelectionSet, v []*models.PersonMedicalHistory) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx context.Context, sel ast.SelectionSet, v *models.PersonMedicalHistory) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PersonMedicalHistory(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPersonMedicalHistoryEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonMedicalHistoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -23099,7 +24454,7 @@ func (ec *executionContext) marshalOPersonMedicalHistory2ᚕᚖgithubᚗcomᚋgn
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx, sel, v[i])
+			ret[i] = ec.marshalOPersonMedicalHistoryEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -23113,11 +24468,11 @@ func (ec *executionContext) marshalOPersonMedicalHistory2ᚕᚖgithubᚗcomᚋgn
 	return ret
 }
 
-func (ec *executionContext) marshalOPersonMedicalHistory2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistory(ctx context.Context, sel ast.SelectionSet, v *models.PersonMedicalHistory) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonMedicalHistoryEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonMedicalHistoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._PersonMedicalHistory(ctx, sel, v)
+	return ec._PersonMedicalHistoryEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonMedicalHistoryFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryFilter(ctx context.Context, v interface{}) (*models.PersonMedicalHistoryFilter, error) {
@@ -23128,14 +24483,14 @@ func (ec *executionContext) unmarshalOPersonMedicalHistoryFilter2ᚖgithubᚗcom
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPersonMedicalHistoryList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonMedicalHistoryList(ctx context.Context, sel ast.SelectionSet, v *models.PersonMedicalHistoryList) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx context.Context, sel ast.SelectionSet, v *models.PersonOrganDonation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._PersonMedicalHistoryList(ctx, sel, v)
+	return ec._PersonOrganDonation(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPersonOrganDonation2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx context.Context, sel ast.SelectionSet, v []*models.PersonOrganDonation) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonOrganDonationEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonOrganDonationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -23162,7 +24517,7 @@ func (ec *executionContext) marshalOPersonOrganDonation2ᚕᚖgithubᚗcomᚋgna
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx, sel, v[i])
+			ret[i] = ec.marshalOPersonOrganDonationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -23176,11 +24531,11 @@ func (ec *executionContext) marshalOPersonOrganDonation2ᚕᚖgithubᚗcomᚋgna
 	return ret
 }
 
-func (ec *executionContext) marshalOPersonOrganDonation2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonation(ctx context.Context, sel ast.SelectionSet, v *models.PersonOrganDonation) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonOrganDonationEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonOrganDonationEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._PersonOrganDonation(ctx, sel, v)
+	return ec._PersonOrganDonationEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonOrganDonationFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationFilter(ctx context.Context, v interface{}) (*models.PersonOrganDonationFilter, error) {
@@ -23199,14 +24554,14 @@ func (ec *executionContext) unmarshalOPersonOrganDonationInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPersonOrganDonationList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonOrganDonationList(ctx context.Context, sel ast.SelectionSet, v *models.PersonOrganDonationList) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx context.Context, sel ast.SelectionSet, v *models.PersonWorkup) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._PersonOrganDonationList(ctx, sel, v)
+	return ec._PersonWorkup(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOPersonWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx context.Context, sel ast.SelectionSet, v []*models.PersonWorkup) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonWorkupEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx context.Context, sel ast.SelectionSet, v []*models.PersonWorkupEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -23233,7 +24588,7 @@ func (ec *executionContext) marshalOPersonWorkup2ᚕᚖgithubᚗcomᚋgnanakeeth
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx, sel, v[i])
+			ret[i] = ec.marshalOPersonWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -23247,11 +24602,11 @@ func (ec *executionContext) marshalOPersonWorkup2ᚕᚖgithubᚗcomᚋgnanakeeth
 	return ret
 }
 
-func (ec *executionContext) marshalOPersonWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkup(ctx context.Context, sel ast.SelectionSet, v *models.PersonWorkup) graphql.Marshaler {
+func (ec *executionContext) marshalOPersonWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupEdge(ctx context.Context, sel ast.SelectionSet, v *models.PersonWorkupEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._PersonWorkup(ctx, sel, v)
+	return ec._PersonWorkupEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOPersonWorkupFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupFilter(ctx context.Context, v interface{}) (*models.PersonWorkupFilter, error) {
@@ -23260,13 +24615,6 @@ func (ec *executionContext) unmarshalOPersonWorkupFilter2ᚖgithubᚗcomᚋgnana
 	}
 	res, err := ec.unmarshalInputPersonWorkupFilter(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOPersonWorkupList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonWorkupList(ctx context.Context, sel ast.SelectionSet, v *models.PersonWorkupList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._PersonWorkupList(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOPrefix2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPrefix(ctx context.Context, sel ast.SelectionSet, v *models.Prefix) graphql.Marshaler {
@@ -23398,22 +24746,7 @@ func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidney
 	return ec._User(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx context.Context, v interface{}) (*models.UserFilter, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputUserFilter(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOUserList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserList(ctx context.Context, sel ast.SelectionSet, v *models.UserList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._UserList(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx context.Context, sel ast.SelectionSet, v []*models.Workup) graphql.Marshaler {
+func (ec *executionContext) marshalOUserEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v []*models.UserEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -23440,7 +24773,7 @@ func (ec *executionContext) marshalOWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋk
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx, sel, v[i])
+			ret[i] = ec.marshalOUserEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -23454,11 +24787,81 @@ func (ec *executionContext) marshalOWorkup2ᚕᚖgithubᚗcomᚋgnanakeethanᚋk
 	return ret
 }
 
+func (ec *executionContext) marshalOUserEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v *models.UserEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._UserEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx context.Context, v interface{}) (*models.UserFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUserFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOUserList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserList(ctx context.Context, sel ast.SelectionSet, v *models.UserList) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._UserList(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx context.Context, sel ast.SelectionSet, v *models.Workup) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Workup(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOWorkupEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupEdge(ctx context.Context, sel ast.SelectionSet, v []*models.WorkupEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOWorkupEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupEdge(ctx context.Context, sel ast.SelectionSet, v *models.WorkupEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._WorkupEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOWorkupFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupFilter(ctx context.Context, v interface{}) (*models.WorkupFilter, error) {
@@ -23475,13 +24878,6 @@ func (ec *executionContext) unmarshalOWorkupInput2ᚖgithubᚗcomᚋgnanakeethan
 	}
 	res, err := ec.unmarshalInputWorkupInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOWorkupList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkupList(ctx context.Context, sel ast.SelectionSet, v *models.WorkupList) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._WorkupList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOWorkupResults2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐResultsModel(ctx context.Context, v interface{}) (models.ResultsModel, error) {

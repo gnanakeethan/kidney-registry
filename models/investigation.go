@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -9,7 +8,6 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
-	"github.com/kr/pretty"
 )
 
 type Investigation struct {
@@ -22,6 +20,9 @@ type Investigation struct {
 	DeletedAt time.Time      `orm:"column(deleted_at);null"`
 }
 
+func (t Investigation) IsNode() {
+	fmt.Println("This is an item")
+}
 func (Investigation) IsDynamicFormInterface() {}
 
 func (t *Investigation) TableName() string {
@@ -49,28 +50,6 @@ func GetInvestigationsById(id string) (v *Investigation, err error) {
 		return v, nil
 	}
 	return nil, err
-}
-
-func ListInvestigations(ctx context.Context, filter *InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*InvestigationList, error) {
-	investigation, investigations := Investigation{}, []*Investigation{}
-	filterPtr := InvestigationFilter{}
-	if filter != nil {
-		filterPtr = *filter
-	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, investigation, filterPtr, page, limit)
-	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(investigation, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := qs.All(&investigations, preloads...); err != nil {
-		return nil, err
-	}
-	pagination := getPagination(currentPage, totalItems, perPage)
-	return &InvestigationList{
-		Items:      investigations,
-		Pagination: pagination,
-	}, nil
 }
 
 // GetAllInvestigations retrieves all Investigation matches certain condition. Returns empty list if

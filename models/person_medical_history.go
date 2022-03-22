@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"fmt"
 	"time"
 	
@@ -23,6 +22,9 @@ type PersonMedicalHistory struct {
 	Type        HistoryType `orm:"column(type);null"`
 }
 
+func (t PersonMedicalHistory) IsNode() {
+	fmt.Println("This is an item")
+}
 func (t *PersonMedicalHistory) TableName() string {
 	return "person_medical_history"
 }
@@ -68,28 +70,6 @@ func GetPersonMedicalHistoryById(id string) (v *PersonMedicalHistory, err error)
 		return v, nil
 	}
 	return nil, err
-}
-
-func GetListMedicalHistory(ctx context.Context, filter *PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonMedicalHistoryList, error) {
-	var PersonMedicalHistories []*PersonMedicalHistory
-	PersonMedicalHistory := PersonMedicalHistory{}
-	filterPtr := PersonMedicalHistoryFilter{}
-	if filter != nil {
-		filterPtr = *filter
-	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, PersonMedicalHistory, filterPtr, page, limit)
-	qs, totalItems, err := GetAnyAll(PersonMedicalHistory, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := qs.All(&PersonMedicalHistories, preloads...); err != nil {
-		return nil, err
-	}
-	pagination := getPagination(currentPage, totalItems, perPage)
-	return &PersonMedicalHistoryList{
-		Items:      PersonMedicalHistories,
-		Pagination: pagination,
-	}, nil
 }
 
 // DeletePersonMedicalHistory deletes PersonMedicalHistory by ID and returns error if

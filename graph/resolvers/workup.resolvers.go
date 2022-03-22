@@ -12,15 +12,16 @@ import (
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *queryResolver) GetWorkup(ctx context.Context, id string) (*models.Workup, error) {
-	return models.GetAnyById(models.Workup{ID: id})
+func (r *queryResolver) GetWorkup(ctx context.Context, id string) (*models.WorkupEdge, error) {
+	workup, err := models.GetAnyById(models.Workup{ID: id})
+	return &models.WorkupEdge{Node: workup}, err
 }
 
-func (r *queryResolver) ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.WorkupList, error) {
+func (r *queryResolver) ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	sortBy = append(sortBy, StringPointer("Order"))
 	orderByAc := models.OrderByAsc
 	orderBy = append(orderBy, &orderByAc)
-	return models.ListAnyGenerics(ctx, models.Workup{}, filter, &models.WorkupList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Workup{}, filter, models.WorkupEdge{}, &models.WorkupList{}, page, limit, sortBy, orderBy)
 }
 
 func (r *workupResolver) Details(ctx context.Context, obj *models.Workup) (*models.FormDetails, error) {

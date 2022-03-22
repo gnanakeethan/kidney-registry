@@ -1,5 +1,5 @@
-type User {
-    id: ID!
+type User implements Node {
+    ID: ID!
     name: String!
     Roles: [Role!]!
 }
@@ -13,8 +13,14 @@ type UserRole {
     role: Role!
 }
 
-type UserList {
-    items: [User!]!
+
+type UserEdge implements Edge {
+    node: User!
+    cursor: Pagination
+}
+
+type UserList implements Connection{
+    items: [UserEdge]
     pagination: Pagination
 }
 

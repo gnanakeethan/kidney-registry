@@ -10,12 +10,18 @@ import (
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
-func (r *mutationResolver) CreatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error) {
-	return models.AddPersonMedicalHistory(input)
+func (r *mutationResolver) CreatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistoryEdge, error) {
+	model, err := models.AddPersonMedicalHistory(input)
+	return &models.PersonMedicalHistoryEdge{
+		Node: model,
+	}, err
 }
 
-func (r *mutationResolver) UpdatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistory, error) {
-	return models.AddPersonMedicalHistory(input)
+func (r *mutationResolver) UpdatePersonMedicalHistory(ctx context.Context, input models.PersonMedicalHistoryInput) (*models.PersonMedicalHistoryEdge, error) {
+	model, err := models.AddPersonMedicalHistory(input)
+	return &models.PersonMedicalHistoryEdge{
+		Node: model,
+	}, err
 }
 
 func (r *mutationResolver) DeletePersonMedicalHistory(ctx context.Context, id string) (*string, error) {
@@ -26,12 +32,12 @@ func (r *mutationResolver) DeletePersonMedicalHistory(ctx context.Context, id st
 	}
 }
 
-func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error) {
+func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
 }
 
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
@@ -66,16 +72,17 @@ func (r *personMedicalHistoryResolver) UpdatedAt(ctx context.Context, obj *model
 	return &date, nil
 }
 
-func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistory, error) {
-	return models.GetAnyById(models.PersonMedicalHistory{ID: id})
+func (r *queryResolver) PersonMedicalHistory(ctx context.Context, id string) (*models.PersonMedicalHistoryEdge, error) {
+	personMedicalHistory, err := models.GetAnyById(models.PersonMedicalHistory{ID: id})
+	return &models.PersonMedicalHistoryEdge{Node: personMedicalHistory}, err
 }
 
-func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonMedicalHistoryList, error) {
+func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonMedicalHistory returns generated.PersonMedicalHistoryResolver implementation.

@@ -21,6 +21,9 @@ type PersonRelations struct {
 	DeletedAt time.Time `orm:"column(deleted_at);null"`
 }
 
+func (t PersonRelations) IsNode() {
+	fmt.Println("This is an item")
+}
 func (t *PersonRelations) TableName() string {
 	return "person_relations"
 }

@@ -12,6 +12,9 @@ fragment PersonWorkupFields on PersonWorkup {
     }
     Person {
         ID
+        FirstName
+        LastName
+        Phn
     }
     Description
     Details {
@@ -49,6 +52,9 @@ fragment PersonExaminationFields on PersonExamination {
     }
     Person {
         ID
+        FirstName
+        LastName
+        Phn
     }
     Description
     Details {
@@ -122,6 +128,9 @@ fragment PersonFields on Person {
 fragment PersonMedicalHistoryFields on PersonMedicalHistory {
     ID
     Person {
+        FirstName
+        LastName
+        Phn
         ID
     }
     Description
@@ -140,7 +149,10 @@ fragment PersonInvestigationFields on PersonInvestigation {
         ID
     }
     Person {
-        ...PersonFields
+        ID
+        FirstName
+        LastName
+        Phn
     }
     Description
     Details {
@@ -163,10 +175,14 @@ fragment PersonInvestigationFields on PersonInvestigation {
 fragment  PersonOrganDonationFields on  PersonOrganDonation{
     ID
     Donor {
-        ...PersonFields
+        FirstName
+        LastName
+        Phn
     }
     Recipient {
-        ...PersonFields
+        FirstName
+        LastName
+        Phn
     }
     DonationType
     PlannedDate

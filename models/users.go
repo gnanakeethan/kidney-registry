@@ -62,6 +62,10 @@ type User struct {
 	DeletedAt   time.Time     `orm:"column(deleted_at);null"`
 }
 
+func (t User) IsNode() {
+	fmt.Println("This is an item")
+}
+
 func (t *User) TableName() string {
 	return "users"
 }

@@ -29,6 +29,10 @@ func (t *PersonFollowUpsMedicine) TableName() string {
 	return "person_follow_ups_medicines"
 }
 
+func (t PersonFollowUpsMedicine) IsNode() {
+	fmt.Println("This is an item")
+}
+
 func init() {
 	orm.RegisterModel(new(PersonFollowUpsMedicine))
 }

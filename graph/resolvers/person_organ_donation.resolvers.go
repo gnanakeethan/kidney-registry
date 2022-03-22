@@ -13,7 +13,7 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
-func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
+func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonationEdge, error) {
 	pretty.Println(input.Donor)
 	donor, err := models.AddPatient(input.Donor)
 
@@ -31,12 +31,18 @@ func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input 
 		AcuteRejection: PointerBool(input.AcuteRejection),
 	}
 	if _, err = models.AddPersonOrganDonation(&personOrganDonation); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return &personOrganDonation, nil
+		return &models.PersonOrganDonationEdge{
+				Node: &personOrganDonation,
+			},
+			nil
 	}
-	return &personOrganDonation, err
+	return &models.PersonOrganDonationEdge{
+			Node: &personOrganDonation,
+		},
+		nil
 }
 
-func (r *mutationResolver) UpdatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonation, error) {
+func (r *mutationResolver) UpdatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonationEdge, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -60,16 +66,17 @@ func (r *personOrganDonationResolver) DischargedDate(ctx context.Context, obj *m
 	return StringPointer(formatDate(obj.DischargedDate)), nil
 }
 
-func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonation, error) {
-	return models.GetAnyById(models.PersonOrganDonation{ID: id})
+func (r *queryResolver) GetPersonOrganDonation(ctx context.Context, id string) (*models.PersonOrganDonationEdge, error) {
+	personOrganDonation, err := models.GetAnyById(models.PersonOrganDonation{ID: id})
+	return &models.PersonOrganDonationEdge{Node: personOrganDonation}, err
 }
 
-func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonOrganDonationList, error) {
+func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonOrganDonationFilter{}
 	}
 	filter.Recipient = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonOrganDonation{}, filter, &models.PersonOrganDonationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonOrganDonation{}, filter, models.PersonOrganDonationEdge{}, &models.PersonOrganDonationList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonOrganDonation returns generated.PersonOrganDonationResolver implementation.

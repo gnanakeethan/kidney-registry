@@ -1,14 +1,19 @@
 query ListUsers ($filter: UserFilter){
     users(filter: $filter){
         items {
-            name
-            id
+            node {
+                ...UserFields
+            }
         }
         pagination {
             itemsPerPage
             totalItems
         }
     }
+}
+fragment UserFields on User {
+    ID
+    name
 }
 
 query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
@@ -20,56 +25,72 @@ query ListPatients ($filter: PersonFilter, $page: Int, $limit: Int, $sortBy: [St
             itemsPerPage
         }
         items {
-            ...PersonFields
-            CreatedAt
-            UpdatedAt
-            Age
+            node {
+                ...PersonFields
+                Age
+            }
+        }
+    }
+}
+fragment PersonExtended on Person {
+    Age
+    CreatedAt
+    UpdatedAt
+    MedicalHistory(orderBy:[desc],sortBy:["CreatedAt"]) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            node {
+                ...PersonMedicalHistoryFields
+            }
+        }
+    }
+    Investigations(orderBy:[desc],sortBy:["CreatedAt"]) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            node {
+                ...PersonInvestigationFields
+            }
+        }
+    }
+    Examinations(orderBy:[desc],sortBy:["CreatedAt"]) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            node {
+                ...PersonExaminationFields
+            }
+        }
+    }
+    FollowUps(orderBy:[desc],sortBy: ["CreatedAt"]) {
+        pagination {
+            ...Pagination
+        }
+        items {
+            node {
+                ...PersonFollowUpFields
+            }
         }
     }
 }
 
 query GetPatient ($id: ID!){
     getPatient(ID: $id) {
-        ...PersonFields
-        Age
+        node {
+            ...PersonFields
+            ...PersonExtended
+        }
     }
 }
 
 query GetPatientOverview($id: ID!){
     getPatient(ID: $id){
-        ...PersonFields
-        Age
-        MedicalHistory(orderBy:[desc],sortBy:["CreatedAt"]) {
-            pagination {
-                ...Pagination
-            }
-            items {
-                ...PersonMedicalHistoryFields
-            }
-        }
-        Investigations(orderBy:[desc],sortBy:["CreatedAt"]) {
-            pagination {
-                ...Pagination
-            }
-            items {
-                ...PersonInvestigationFields
-            }
-        }
-        Examinations(orderBy:[desc],sortBy:["CreatedAt"]) {
-            pagination {
-                ...Pagination
-            }
-            items {
-                ...PersonExaminationFields
-            }
-        }
-        FollowUps(orderBy:[desc],sortBy: ["CreatedAt"]) {
-            pagination {
-                ...Pagination
-            }
-            items {
-                ...PersonFollowUpFields
-            }
+        node {
+            ...PersonFields
         }
     }
 }
@@ -77,8 +98,9 @@ query GetPatientOverview($id: ID!){
 query ListPeople ($filter: UserFilter) {
     users(filter: $filter){
         items {
-            name
-            id
+            node {
+                ...UserFields
+            }
         }
         pagination {
             itemsPerPage
@@ -93,7 +115,9 @@ query ListPersonMedicalHistory ($ID: ID!,$filter: PersonMedicalHistoryFilter, $p
             ...Pagination
         }
         items {
-            ...PersonMedicalHistoryFields
+            node {
+                ...PersonMedicalHistoryFields
+            }
         }
     }
 }
@@ -105,7 +129,9 @@ query ListPersonFollowUp ($ID: ID!,$filter: PersonFollowUpFilter, $page: Int, $l
             ...Pagination
         }
         items {
-            ...PersonFollowUpFields
+            node {
+                ...PersonFollowUpFields
+            }
         }
     }
 }
@@ -116,7 +142,9 @@ query ListAllPersonFollowUp ($filter: PersonFollowUpFilter, $page: Int, $limit: 
             ...Pagination
         }
         items {
-            ...PersonFollowUpFields
+            node {
+                ...PersonFollowUpFields
+            }
         }
     }
 }
@@ -125,24 +153,34 @@ query ListAllPersonFollowUp ($filter: PersonFollowUpFilter, $page: Int, $limit: 
 query ListExaminations {
     listExaminations {
         items {
-            ID
-            Order
-            Details {
-                Name
+            node {
+                ...ExaminationFields
             }
         }
+    }
+}
+fragment ExaminationFields on Examination {
+    ID
+    Order
+    Details {
+        Name
+    }
+}
+
+fragment InvestigationFields on Investigation {
+    ID
+    Order
+    Details {
+        Name
     }
 }
 
 query GetExamination ($id: ID!){
     getExamination(id: $id) {
-        ID
-        Details {
-            Name
-            Inline
-            Description
+        node {
+            ...ExaminationFields
+            ...ProcedureFragment
         }
-        ...ProcedureFragment
     }
 }
 
@@ -150,11 +188,8 @@ query GetExamination ($id: ID!){
 query ListInvestigations {
     listInvestigations {
         items {
-            ID
-            Order
-            Details {
-                Name
-                ValidDays
+            node {
+                ...InvestigationFields
             }
         }
     }
@@ -162,14 +197,10 @@ query ListInvestigations {
 
 query GetInvestigation ($id: ID!){
     getInvestigation(id: $id) {
-        ID
-        Details {
-            Name
-            Inline
-            Description
-            ValidDays
+        node {
+            ...InvestigationFields
+            ...ProcedureFragment
         }
-        ...ProcedureFragment
     }
 }
 
@@ -180,7 +211,9 @@ query ListPersonExamination ($ID: ID!,$filter: PersonExaminationFilter, $page: I
             ...Pagination
         }
         items {
-            ...PersonExaminationFields
+            node {
+                ...PersonExaminationFields
+            }
         }
     }
 }
@@ -191,18 +224,18 @@ query ListAllPersonExamination ($filter: PersonExaminationFilter, $page: Int, $l
             ...Pagination
         }
         items {
-            ...PersonExaminationFields
-            Person {
-                FirstName
-                LastName
+            node {
+                ...PersonExaminationFields
             }
         }
     }
 }
 query GetPersonExamination ($id: ID!){
     getPersonExamination(ID: $id) {
-        ...PersonExaminationFields
-        ...ProcedureFragment
+        node {
+            ...PersonExaminationFields
+            ...ProcedureFragment
+        }
     }
 }
 query ListPersonInvestigation ($ID: ID!,$filter: PersonInvestigationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
@@ -211,7 +244,9 @@ query ListPersonInvestigation ($ID: ID!,$filter: PersonInvestigationFilter, $pag
             ...Pagination
         }
         items {
-            ...PersonInvestigationFields
+            node {
+                ...PersonInvestigationFields
+            }
         }
     }
 }
@@ -221,14 +256,18 @@ query ListAllPersonInvestigation ($filter: PersonInvestigationFilter, $page: Int
             ...Pagination
         }
         items {
-            ...PersonInvestigationFields
+            node {
+                ...PersonInvestigationFields
+            }
         }
     }
 }
 query GetPersonInvestigation ($id: ID!){
     getPersonInvestigation(ID: $id) {
-        ...PersonInvestigationFields
-        ...ProcedureFragment
+        node {
+            ...PersonInvestigationFields
+            ...ProcedureFragment
+        }
     }
 }
 query ListPersonWorkup ($ID: ID!,$filter: PersonWorkupFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
@@ -237,14 +276,18 @@ query ListPersonWorkup ($ID: ID!,$filter: PersonWorkupFilter, $page: Int, $limit
             ...Pagination
         }
         items {
-            ...PersonWorkupFields
+            node {
+                ...PersonWorkupFields
+            }
         }
     }
 }
 query GetPersonWorkup ($id: ID!){
     getPersonWorkup(ID: $id) {
-        ...PersonWorkupFields
-        ...ProcedureFragment
+        node {
+            ...PersonWorkupFields
+            ...ProcedureFragment
+        }
     }
 }
 query ListPersonOrganDonation ($ID: ID!,$filter: PersonOrganDonationFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
@@ -253,13 +296,24 @@ query ListPersonOrganDonation ($ID: ID!,$filter: PersonOrganDonationFilter, $pag
             ...Pagination
         }
         items {
-            ...PersonOrganDonationFields
+            node {
+                ...PersonOrganDonationFields
+            }
         }
     }
 }
 query GetPersonOrganDonation ($id: ID!){
     getPersonOrganDonation(ID: $id) {
-        ...PersonOrganDonationFields
+        node {
+            ...PersonOrganDonationFields
+        }
+    }
+}
+fragment WorkupFields on Workup {
+    ID
+    Order
+    Details {
+        Name
     }
 }
 
@@ -267,11 +321,8 @@ query GetPersonOrganDonation ($id: ID!){
 query ListWorkups {
     listWorkups {
         items {
-            ID
-            Order
-            Details {
-                Name
-                ValidDays
+            node {
+                ...WorkupFields
             }
         }
     }
@@ -279,13 +330,9 @@ query ListWorkups {
 
 query GetWorkup ($id: ID!){
     getWorkup(id: $id) {
-        ID
-        Details {
-            Name
-            Inline
-            Description
-            ValidDays
+        node {
+            ...WorkupFields
+            ...ProcedureFragment
         }
-        ...ProcedureFragment
     }
 }

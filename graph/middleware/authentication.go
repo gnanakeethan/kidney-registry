@@ -82,8 +82,7 @@ func ValidateToken(token string) *models.User {
 	pretty.Println("TOKEN:", token)
 	if err = w.Validate(rsaPublic, crypto.SigningMethodRS256); err == nil {
 		user.ID, _ = w.Claims().Get("sub").(string)
-		if userf, err := models.GetAnyById(*user); err == nil {
-			user = userf
+		if user, err = models.GetAnyById(models.User{ID: user.ID}); err == nil {
 			o.LoadRelated(user, "RolesLoaded")
 			for _, role := range user.RolesLoaded {
 				o.LoadRelated(role, "Permissions")

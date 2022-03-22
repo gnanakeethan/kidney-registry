@@ -1,4 +1,4 @@
-type PersonInvestigation implements DynamicFormInterface{
+type PersonInvestigation implements DynamicFormInterface & Node{
     ID : ID!
     Investigation : Investigation
     Person: Person
@@ -34,18 +34,22 @@ input PersonInvestigationFilter {
     UpdatedAt: StringFilter
     DeletedAt: StringFilter
 }
-type PersonInvestigationList {
-    items: [PersonInvestigation]
+type PersonInvestigationList implements Connection{
+    items: [PersonInvestigationEdge]
     pagination: Pagination
 }
+type PersonInvestigationEdge implements Edge{
+    node: PersonInvestigation
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonInvestigation(input: PersonInvestigationInput!): PersonInvestigation
-    updatePersonInvestigation(input: PersonInvestigationInput!): PersonInvestigation
+    createPersonInvestigation(input: PersonInvestigationInput!): PersonInvestigationEdge
+    updatePersonInvestigation(input: PersonInvestigationInput!): PersonInvestigationEdge
     deletePersonInvestigation(ID: ID!): ID
 }
 extend type Query {
-    getPersonInvestigation(ID: ID!): PersonInvestigation
+    getPersonInvestigation(ID: ID!): PersonInvestigationEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listPersonInvestigations(PersonID: ID!,filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
-    listAllPersonInvestigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
+    listPersonInvestigations(PersonID: ID!,filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    listAllPersonInvestigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

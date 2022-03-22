@@ -241,6 +241,7 @@ func GetAnyAll(object interface{}, query *orm.Condition, sortby []*string, order
 
 type Model interface {
 	Examination | Investigation | Person | PersonExamination | PersonInvestigation | PersonMedicalHistory | PersonOrganDonation | PersonWorkup | User | Workup | PersonFollowUp
+	IsNode()
 }
 type FilterInput interface {
 	any | ExaminationFilter | InvestigationFilter | PersonFilter | PersonExaminationFilter | PersonFollowUpFilter | PersonInvestigationFilter | PersonMedicalHistoryFilter | PersonOrganDonationFilter | PersonWorkupFilter | WorkupFilter | UserFilter
@@ -248,6 +249,9 @@ type FilterInput interface {
 
 type ListOutput interface {
 	*ExaminationList | *PersonList | *PersonExaminationList | *PersonFollowUpList | *PersonInvestigationList | *PersonMedicalHistoryList | *PersonOrganDonationList | *PersonWorkupList | *UserList | *WorkupList | *InvestigationList
+}
+type EdgeType interface {
+	ExaminationEdge | InvestigationEdge | PersonEdge | PersonExaminationEdge | PersonInvestigationEdge | PersonMedicalHistoryEdge | PersonOrganDonationEdge | PersonWorkupEdge | UserEdge | WorkupEdge | PersonFollowUpEdge
 }
 
 func GetAnyById[T Model](v T) (*T, error) {
@@ -259,18 +263,27 @@ func GetAnyById[T Model](v T) (*T, error) {
 	}
 }
 
-func ListAnyGenerics[T Model, F FilterInput, G ListOutput](ctx context.Context, object T, filter F, listOutput G, page *int, limit *int, sortBy []*string, orderBy []*OrderBy, relatedSel ...interface{}) (G, error) {
+func ListAnyGenerics[T Model, F FilterInput, G EdgeType, H ListOutput](ctx context.Context, object T, filter F, edgeType G, listOutput H, page *int, limit *int, sortBy []*string, orderBy []*OrderBy, relatedSel ...interface{}) (H, error) {
 	var list []*T
 	query, currentPage, perPage, preloads := extractQuery(ctx, object, filter, page, limit)
 	pretty.Println(preloads)
 	qs, _, err := GetAnyAllGenerics(object, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
+	if listOutput == nil {
+		return nil, errors.New("ListOutput is nil")
+	}
 	if err != nil {
 		return listOutput, err
 	}
 	if _, err := qs.RelatedSel(relatedSel...).All(&list, preloads...); err != nil {
 		return listOutput, err
 	}
-	reflect.ValueOf(listOutput).Elem().FieldByName("Items").Set(reflect.ValueOf(list))
+	var listEdges []*G
+	for _, v := range list {
+		edgeType := new(G)
+		reflect.ValueOf(edgeType).Elem().FieldByName("Node").Set(reflect.ValueOf(v))
+		listEdges = append(listEdges, edgeType)
+	}
+	reflect.ValueOf(listOutput).Elem().FieldByName("Items").Set(reflect.ValueOf(listEdges))
 	return listOutput, nil
 }
 

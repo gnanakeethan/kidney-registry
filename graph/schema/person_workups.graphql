@@ -1,4 +1,4 @@
-type PersonWorkup implements DynamicFormInterface{
+type PersonWorkup implements DynamicFormInterface & Node {
     ID : ID!
     Workup : Workup
     Person: Person
@@ -27,17 +27,21 @@ input PersonWorkupFilter {
     UpdatedAt: StringFilter
     DeletedAt: StringFilter
 }
-type PersonWorkupList {
-    items: [PersonWorkup]
+type PersonWorkupList implements Connection{
+    items: [PersonWorkupEdge]
     pagination: Pagination
 }
+
+type PersonWorkupEdge implements Edge {
+    node: PersonWorkup
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonWorkup(input: PersonWorkupInput!): PersonWorkup
-    updatePersonWorkup(input: PersonWorkupInput!): PersonWorkup
+    createPersonWorkup(input: PersonWorkupInput!): PersonWorkupEdge
+    updatePersonWorkup(input: PersonWorkupInput!): PersonWorkupEdge
     deletePersonWorkup(ID: ID!): ID
 }
 extend type Query {
-    getPersonWorkup(ID: ID!): PersonWorkup
-    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
+    getPersonWorkup(ID: ID!): PersonWorkupEdge
+    listPersonWorkups(PersonID: ID!,filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

@@ -2,7 +2,7 @@ mutation UserLogin ($userLogin:UserLogin!) {
     userLogin(userLogin: $userLogin) {
         user {
             name
-            id
+            ID
             __typename
             Roles {
                 id
@@ -19,90 +19,120 @@ mutation UserLogin ($userLogin:UserLogin!) {
 
 mutation NewPatient {
     newPatient {
-        ...PersonFields
+        node {
+            ...PersonFields
+        }
     }
 }
 mutation NewPersonFollowUp($input: PersonFollowUpInput!) {
     createPersonFollowUp(input: $input) {
-        ...PersonFollowUpFields
+        node {
+            ...PersonFollowUpFields
+        }
     }
 }
 mutation UpdatePersonFollowUp($input: PersonFollowUpInput!) {
     updatePersonFollowUp(input: $input) {
-        ...PersonFollowUpFields
+        node {
+            ...PersonFollowUpFields
+        }
     }
 }
 
 mutation UpdatePatient($patientInput: PersonInput!) {
     updatePatient(input: $patientInput) {
-        ...PersonFields
-        Age
+        node {
+            ...PersonFields
+            ...PersonExtended
+        }
     }
 }
 
 mutation AddPatient($patientInput: PersonInput!) {
     addPatient(input: $patientInput) {
-        ...PersonFields
-        Age
+        node {
+            ...PersonFields
+            ...PersonExtended
+        }
     }
 }
 
 
 mutation NewHistory($input: PersonMedicalHistoryInput!) {
     createPersonMedicalHistory(input: $input) {
-        ...PersonMedicalHistoryFields
+        node {
+            ...PersonMedicalHistoryFields
+        }
     }
 }
 
 
 mutation NewPersonExamination($input: PersonExaminationInput!) {
     createPersonExamination(input: $input) {
-        ...PersonExaminationFields
+        node {
+            ...PersonExaminationFields
+        }
     }
 }
 
 mutation NewPersonInvestigation($input: PersonInvestigationInput!) {
     createPersonInvestigation(input: $input) {
-        ...PersonInvestigationFields
+        node {
+            ...PersonInvestigationFields
+        }
     }
 }
 mutation UpdatePersonInvestigation($input: PersonInvestigationInput!) {
     updatePersonInvestigation(input: $input) {
-        ...PersonInvestigationFields
+        node {
+            ...PersonInvestigationFields
+        }
     }
 }
 
 
 mutation NewPersonWorkup($input: PersonWorkupInput!) {
     createPersonWorkup(input: $input) {
-        ...PersonWorkupFields
+        node {
+            ...PersonWorkupFields
+        }
     }
 }
 mutation UpdatePersonWorkup($input: PersonWorkupInput!) {
     updatePersonWorkup(input: $input) {
-        ...PersonWorkupFields
+        node {
+            ...PersonWorkupFields
+        }
     }
 }
 
 
 mutation NewPersonWorkup($input: PersonWorkupInput!) {
     createPersonWorkup(input: $input) {
-        ...PersonWorkupFields
+        node {
+            ...PersonWorkupFields
+        }
     }
 }
 mutation UpdatePersonWorkup($input: PersonWorkupInput!) {
     updatePersonWorkup(input: $input) {
-        ...PersonWorkupFields
+        node {
+            ...PersonWorkupFields
+        }
     }
 }
 
 mutation CreatePersonOrganDonation($input: PersonOrganDonationInput!) {
     createPersonOrganDonation(input: $input) {
-        ...PersonOrganDonationFields
+        node {
+            ...PersonOrganDonationFields
+        }
     }
 }
 mutation UpdatePersonOrganDonation($input: PersonOrganDonationInput!) {
     updatePersonOrganDonation(input: $input) {
-        ...PersonOrganDonationFields
+        node {
+            ...PersonOrganDonationFields
+        }
     }
 }

@@ -1,4 +1,4 @@
-type PersonExamination implements DynamicFormInterface @hasPermissionAgainst(action: "read",type: "PersonExaminationObject") {
+type PersonExamination implements Node & DynamicFormInterface @hasPermissionAgainst(action: "read",type: "PersonExaminationObject") {
     ID : ID!
     Examination : Examination
     Person: Person
@@ -28,17 +28,22 @@ input PersonExaminationFilter {
     UpdatedAt: StringFilter
     DeletedAt: StringFilter
 }
-type PersonExaminationList {
-    items: [PersonExamination]
+type PersonExaminationList implements Connection{
+    items: [PersonExaminationEdge]
     pagination: Pagination
 }
+
+type PersonExaminationEdge implements Edge{
+    node: PersonExamination
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonExamination(input: PersonExaminationInput!): PersonExamination
-    updatePersonExamination(input: PersonExaminationInput!): PersonExamination
+    createPersonExamination(input: PersonExaminationInput!): PersonExaminationEdge
+    updatePersonExamination(input: PersonExaminationInput!): PersonExaminationEdge
     deletePersonExamination(ID: ID!): ID
 }
 extend type Query {
-    getPersonExamination(ID: ID!): PersonExamination
-    listPersonExaminations(PersonID: ID!,filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
-    listAllPersonExaminations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
+    getPersonExamination(ID: ID!): PersonExaminationEdge
+    listPersonExaminations(PersonID: ID!,filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    listAllPersonExaminations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

@@ -15,7 +15,7 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
-func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
+func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUpEdge, error) {
 	pretty.Println(input)
 	personFollowUp := &models.PersonFollowUp{
 		ID:                input.ID,
@@ -64,13 +64,15 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 			}
 			models.AddPersonFollowUpsMedicines(&medicine)
 		}
-		return personFollowUp, nil
+		return &models.PersonFollowUpEdge{
+			Node: personFollowUp,
+		}, nil
 	} else {
 		return nil, err
 	}
 }
 
-func (r *mutationResolver) UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUp, error) {
+func (r *mutationResolver) UpdatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUpEdge, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -89,23 +91,24 @@ func (r *personFollowUpResolver) UpdatedAt(ctx context.Context, obj *models.Pers
 	return StringPointer(formatDateTime(obj.UpdatedAt)), nil
 }
 
-func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUp, error) {
-	return models.GetAnyById(models.PersonFollowUp{ID: id})
+func (r *queryResolver) GetPersonFollowUp(ctx context.Context, id string) (*models.PersonFollowUpEdge, error) {
+	personFollowUp, err := models.GetAnyById(models.PersonFollowUp{ID: id})
+	return &models.PersonFollowUpEdge{Node: personFollowUp}, err
 }
 
-func (r *queryResolver) ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
+func (r *queryResolver) ListPersonFollowUps(ctx context.Context, personID string, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonFollowUpFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, models.PersonFollowUpEdge{}, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy)
 }
 
-func (r *queryResolver) ListAllPersonFollowUps(ctx context.Context, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonFollowUpList, error) {
+func (r *queryResolver) ListAllPersonFollowUps(ctx context.Context, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonFollowUpFilter{}
 	}
-	return models.ListPersonFollowUps(ctx, filter, page, limit, sortBy, orderBy)
+	return nil, nil
 }
 
 // PersonFollowUp returns generated.PersonFollowUpResolver implementation.

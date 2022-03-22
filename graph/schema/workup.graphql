@@ -1,4 +1,4 @@
-type Workup implements DynamicFormInterface{
+type Workup implements Node & DynamicFormInterface{
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -20,13 +20,17 @@ input WorkupInput{
 input WorkupFilter {
     Order: IntFilter
 }
-type WorkupList {
-    items: [Workup]
+type WorkupList implements Connection{
+    items: [WorkupEdge]
     pagination: Pagination
+}
+type WorkupEdge implements Edge{
+    node: Workup
+    cursor: Pagination
 }
 
 extend type Query {
-    getWorkup(id: ID!): Workup
+    getWorkup(id: ID!): WorkupEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listWorkups(filter: WorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): WorkupList
+    listWorkups(filter: WorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

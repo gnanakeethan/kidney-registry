@@ -1,5 +1,5 @@
-type PersonMedicalHistory {
-    ID: ID
+type PersonMedicalHistory implements Node{
+    ID: ID!
     Person: Person!
     Description: String
     Reason: String
@@ -42,19 +42,24 @@ input PersonMedicalHistoryInput{
     Type: HistoryType!
 }
 extend type Person {
-    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonMedicalHistoryList
+    histories(filter: PersonMedicalHistoryFilter, page:Int, limit:Int,sortBy:[String], orderBy:[OrderBy])              : Connection
 }
-type PersonMedicalHistoryList {
-    items: [PersonMedicalHistory]
+type PersonMedicalHistoryList implements Connection{
+    items: [PersonMedicalHistoryEdge]
     pagination: Pagination
 }
 
+type PersonMedicalHistoryEdge implements Edge{
+    node: PersonMedicalHistory
+    cursor: Pagination
+}
+
 extend type Mutation {
-    createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
-    updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistory
+    createPersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistoryEdge
+    updatePersonMedicalHistory(input: PersonMedicalHistoryInput!): PersonMedicalHistoryEdge
     deletePersonMedicalHistory(ID: ID!): ID
 }
 extend type Query {
-    personMedicalHistory(ID: ID!): PersonMedicalHistory
-    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    personMedicalHistory(ID: ID!): PersonMedicalHistoryEdge
+    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

@@ -119,7 +119,7 @@ func init() {
 			pretty.Println("HAS PERMISSION ", method, typed, "NIL")
 			return nil, fmt.Errorf("not authenticated")
 		} else {
-			pretty.Println("HAS PERMISSION ", method, typed)
+			pretty.Println("HAS PERMISSION ", method, typed, obj)
 			
 		}
 		user := middleware.ForContext(ctx)

@@ -8,8 +8,20 @@ import (
 	"strconv"
 )
 
+type Connection interface {
+	IsConnection()
+}
+
 type DynamicFormInterface interface {
 	IsDynamicFormInterface()
+}
+
+type Edge interface {
+	IsEdge()
+}
+
+type Node interface {
+	IsNode()
 }
 
 type Attributes struct {
@@ -59,6 +71,13 @@ type Error struct {
 	Status int    `json:"status"`
 }
 
+type ExaminationEdge struct {
+	Node   *Examination `json:"node"`
+	Cursor *Pagination  `json:"cursor"`
+}
+
+func (ExaminationEdge) IsEdge() {}
+
 type ExaminationFilter struct {
 	Order *IntFilter `json:"Order"`
 }
@@ -74,9 +93,11 @@ type ExaminationInput struct {
 }
 
 type ExaminationList struct {
-	Items      []*Examination `json:"items"`
-	Pagination *Pagination    `json:"pagination"`
+	Items      []Edge      `json:"items"`
+	Pagination *Pagination `json:"pagination"`
 }
+
+func (ExaminationList) IsConnection() {}
 
 type Extra struct {
 	Items   []*Items `json:"items"`
@@ -133,6 +154,13 @@ type IntFilter struct {
 	Value      *int           `json:"value"`
 }
 
+type InvestigationEdge struct {
+	Node   *Investigation `json:"node"`
+	Cursor *Pagination    `json:"cursor"`
+}
+
+func (InvestigationEdge) IsEdge() {}
+
 type InvestigationFilter struct {
 	Order *IntFilter `json:"Order"`
 }
@@ -148,9 +176,11 @@ type InvestigationInput struct {
 }
 
 type InvestigationList struct {
-	Items      []*Investigation `json:"items"`
-	Pagination *Pagination      `json:"pagination"`
+	Items      []*InvestigationEdge `json:"items"`
+	Pagination *Pagination          `json:"pagination"`
 }
+
+func (InvestigationList) IsConnection() {}
 
 type Items struct {
 	ID    *string `json:"id"`
@@ -189,6 +219,19 @@ type PersonComparison struct {
 	Value      *string        `json:"value"`
 }
 
+type PersonEdge struct {
+	Node *Person `json:"node"`
+}
+
+func (PersonEdge) IsEdge() {}
+
+type PersonExaminationEdge struct {
+	Node   *PersonExamination `json:"node"`
+	Cursor *Pagination        `json:"cursor"`
+}
+
+func (PersonExaminationEdge) IsEdge() {}
+
 type PersonExaminationFilter struct {
 	Examination *ExaminationFilter `json:"Examination"`
 	Person      *PersonFilter      `json:"Person"`
@@ -207,9 +250,11 @@ type PersonExaminationInput struct {
 }
 
 type PersonExaminationList struct {
-	Items      []*PersonExamination `json:"items"`
-	Pagination *Pagination          `json:"pagination"`
+	Items      []*PersonExaminationEdge `json:"items"`
+	Pagination *Pagination              `json:"pagination"`
 }
+
+func (PersonExaminationList) IsConnection() {}
 
 type PersonFilter struct {
 	ID                  *StringFilter `json:"ID"`
@@ -232,6 +277,13 @@ type PersonFilter struct {
 	Or                  *PersonFilter `json:"or"`
 	OrNot               *PersonFilter `json:"orNot"`
 }
+
+type PersonFollowUpEdge struct {
+	Node   *PersonFollowUp `json:"node"`
+	Cursor *Pagination     `json:"cursor"`
+}
+
+func (PersonFollowUpEdge) IsEdge() {}
 
 type PersonFollowUpFilter struct {
 	ID                *StringFilter              `json:"ID"`
@@ -260,9 +312,11 @@ type PersonFollowUpInput struct {
 }
 
 type PersonFollowUpList struct {
-	Items      []*PersonFollowUp `json:"items"`
-	Pagination *Pagination       `json:"pagination"`
+	Items      []*PersonFollowUpEdge `json:"items"`
+	Pagination *Pagination           `json:"pagination"`
 }
+
+func (PersonFollowUpList) IsConnection() {}
 
 type PersonFollowUpMedicine struct {
 	ID           string  `json:"ID"`
@@ -309,6 +363,13 @@ type PersonInput struct {
 	UpdatedAt           *string        `json:"UpdatedAt"`
 }
 
+type PersonInvestigationEdge struct {
+	Node   *PersonInvestigation `json:"node"`
+	Cursor *Pagination          `json:"cursor"`
+}
+
+func (PersonInvestigationEdge) IsEdge() {}
+
 type PersonInvestigationFilter struct {
 	Person          *PersonFilter `json:"Person"`
 	InvestigationID *StringFilter `json:"InvestigationId"`
@@ -330,14 +391,25 @@ type PersonInvestigationInput struct {
 }
 
 type PersonInvestigationList struct {
-	Items      []*PersonInvestigation `json:"items"`
-	Pagination *Pagination            `json:"pagination"`
+	Items      []*PersonInvestigationEdge `json:"items"`
+	Pagination *Pagination                `json:"pagination"`
 }
 
+func (PersonInvestigationList) IsConnection() {}
+
 type PersonList struct {
-	Items      []*Person   `json:"items"`
-	Pagination *Pagination `json:"pagination"`
+	Items      []*PersonEdge `json:"items"`
+	Pagination *Pagination   `json:"pagination"`
 }
+
+func (PersonList) IsConnection() {}
+
+type PersonMedicalHistoryEdge struct {
+	Node   *PersonMedicalHistory `json:"node"`
+	Cursor *Pagination           `json:"cursor"`
+}
+
+func (PersonMedicalHistoryEdge) IsEdge() {}
 
 type PersonMedicalHistoryFilter struct {
 	ID          *StringFilter               `json:"ID"`
@@ -366,9 +438,18 @@ type PersonMedicalHistoryInput struct {
 }
 
 type PersonMedicalHistoryList struct {
-	Items      []*PersonMedicalHistory `json:"items"`
-	Pagination *Pagination             `json:"pagination"`
+	Items      []*PersonMedicalHistoryEdge `json:"items"`
+	Pagination *Pagination                 `json:"pagination"`
 }
+
+func (PersonMedicalHistoryList) IsConnection() {}
+
+type PersonOrganDonationEdge struct {
+	Node   *PersonOrganDonation `json:"node"`
+	Cursor *Pagination          `json:"cursor"`
+}
+
+func (PersonOrganDonationEdge) IsEdge() {}
 
 type PersonOrganDonationFilter struct {
 	ID             *string       `json:"ID"`
@@ -393,9 +474,18 @@ type PersonOrganDonationInput struct {
 }
 
 type PersonOrganDonationList struct {
-	Items      []*PersonOrganDonation `json:"items"`
-	Pagination *Pagination            `json:"pagination"`
+	Items      []*PersonOrganDonationEdge `json:"items"`
+	Pagination *Pagination                `json:"pagination"`
 }
+
+func (PersonOrganDonationList) IsConnection() {}
+
+type PersonWorkupEdge struct {
+	Node   *PersonWorkup `json:"node"`
+	Cursor *Pagination   `json:"cursor"`
+}
+
+func (PersonWorkupEdge) IsEdge() {}
 
 type PersonWorkupFilter struct {
 	Person    *PersonFilter `json:"Person"`
@@ -414,9 +504,11 @@ type PersonWorkupInput struct {
 }
 
 type PersonWorkupList struct {
-	Items      []*PersonWorkup `json:"items"`
-	Pagination *Pagination     `json:"pagination"`
+	Items      []*PersonWorkupEdge `json:"items"`
+	Pagination *Pagination         `json:"pagination"`
 }
+
+func (PersonWorkupList) IsConnection() {}
 
 type Prefix struct {
 	Classes *string `json:"classes"`
@@ -441,6 +533,13 @@ type StringFilter struct {
 	Value      *string        `json:"value"`
 }
 
+type UserEdge struct {
+	Node   *User       `json:"node"`
+	Cursor *Pagination `json:"cursor"`
+}
+
+func (UserEdge) IsEdge() {}
+
 type UserFilter struct {
 	ID    *StringFilter `json:"id"`
 	Name  *StringFilter `json:"name"`
@@ -450,9 +549,11 @@ type UserFilter struct {
 }
 
 type UserList struct {
-	Items      []*User     `json:"items"`
+	Items      []*UserEdge `json:"items"`
 	Pagination *Pagination `json:"pagination"`
 }
+
+func (UserList) IsConnection() {}
 
 type UserLogin struct {
 	Email    string `json:"email"`
@@ -464,6 +565,13 @@ type UserToken struct {
 	Error *Error `json:"error"`
 	User  *User  `json:"user"`
 }
+
+type WorkupEdge struct {
+	Node   *Workup     `json:"node"`
+	Cursor *Pagination `json:"cursor"`
+}
+
+func (WorkupEdge) IsEdge() {}
 
 type WorkupFilter struct {
 	Order *IntFilter `json:"Order"`
@@ -480,9 +588,11 @@ type WorkupInput struct {
 }
 
 type WorkupList struct {
-	Items      []*Workup   `json:"items"`
-	Pagination *Pagination `json:"pagination"`
+	Items      []*WorkupEdge `json:"items"`
+	Pagination *Pagination   `json:"pagination"`
 }
+
+func (WorkupList) IsConnection() {}
 
 type BloodGroup string
 

@@ -20,6 +20,9 @@ type PersonAllergy struct {
 	DeletedAt time.Time  `orm:"column(deleted_at);null"`
 }
 
+func (t PersonAllergy) IsNode() {
+	fmt.Println("This is an item")
+}
 func (t *PersonAllergy) TableName() string {
 	return "person_allergy"
 }

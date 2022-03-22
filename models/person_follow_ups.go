@@ -1,12 +1,10 @@
 package models
 
 import (
-	"context"
 	"fmt"
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
-	"github.com/kr/pretty"
 )
 
 type PersonFollowUp struct {
@@ -25,6 +23,9 @@ type PersonFollowUp struct {
 	Donation          *PersonOrganDonation `orm:"column(donation_id);rel(fk);null"`
 }
 
+func (t PersonFollowUp) IsNode() {
+	fmt.Println("This is an item")
+}
 func (t *PersonFollowUp) TableName() string {
 	return "person_follow_ups"
 }
@@ -50,28 +51,6 @@ func GetPersonFollowUpsById(id string) (v *PersonFollowUp, err error) {
 		return v, nil
 	}
 	return nil, err
-}
-
-func ListPersonFollowUps(ctx context.Context, filter *PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonFollowUpList, error) {
-	personFollowUp, personFollowUps := PersonFollowUp{}, []*PersonFollowUp{}
-	filterPtr := PersonFollowUpFilter{}
-	if filter != nil {
-		filterPtr = *filter
-	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, personFollowUp, filterPtr, page, limit)
-	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(personFollowUp, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := qs.All(&personFollowUps, preloads...); err != nil {
-		return nil, err
-	}
-	pagination := getPagination(currentPage, totalItems, perPage)
-	return &PersonFollowUpList{
-		Items:      personFollowUps,
-		Pagination: pagination,
-	}, nil
 }
 
 // UpdatePersonFollowUps updates PersonFollowUp by ID and returns error if

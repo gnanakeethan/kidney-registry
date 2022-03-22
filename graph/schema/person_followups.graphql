@@ -1,5 +1,5 @@
-type PersonFollowUp {
-    ID: String!
+type PersonFollowUp implements Node{
+    ID: ID!
     Description: String
     Complaints: String
     CaseStatus: String
@@ -72,18 +72,23 @@ type PersonFollowUpMedicine{
 #extend type Person {
 #    followUps(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy])              : PersonFollowUpList
 #}
-type PersonFollowUpList {
-    items: [PersonFollowUp]
+type PersonFollowUpList implements Connection{
+    items: [PersonFollowUpEdge]
     pagination: Pagination
 }
 
+type PersonFollowUpEdge implements Edge{
+    node: PersonFollowUp
+    cursor: Pagination
+}
+
 extend type Mutation {
-    createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
-    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUp
+    createPersonFollowUp(input: PersonFollowUpInput!): PersonFollowUpEdge
+    updatePersonFollowUp(input: PersonFollowUpInput!): PersonFollowUpEdge
     #    deletePersonFollowUp(ID: ID!): PersonFollowUp
 }
 extend type Query {
-    getPersonFollowUp(ID: ID!): PersonFollowUp
-    listPersonFollowUps(PersonID: ID!,filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
-    listAllPersonFollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
+    getPersonFollowUp(ID: ID!): PersonFollowUpEdge
+    listPersonFollowUps(PersonID: ID!,filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    listAllPersonFollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

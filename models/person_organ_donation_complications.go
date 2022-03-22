@@ -20,6 +20,9 @@ type PersonOrganDonationComplications struct {
 	DeletedAt   time.Time            `orm:"column(deleted_at);null"`
 }
 
+func (t PersonOrganDonationComplications) IsNode() {
+	fmt.Println("This is an item")
+}
 func (t *PersonOrganDonationComplications) TableName() string {
 	return "person_organ_donation_complications"
 }

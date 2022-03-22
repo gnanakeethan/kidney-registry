@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -9,7 +8,6 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
-	"github.com/kr/pretty"
 )
 
 type Workup struct {
@@ -24,6 +22,7 @@ type Workup struct {
 	DeletedAt   time.Time      `orm:"column(deleted_at);null"`
 }
 
+func (Workup) IsNode()                 {}
 func (Workup) IsDynamicFormInterface() {}
 
 func (t *Workup) TableName() string {
@@ -51,28 +50,6 @@ func GetWorkupsById(id string) (v *Workup, err error) {
 		return v, nil
 	}
 	return nil, err
-}
-
-func ListWorkups(ctx context.Context, filter *WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*WorkupList, error) {
-	workup, workups := Workup{}, []*Workup{}
-	filterPtr := WorkupFilter{}
-	if filter != nil {
-		filterPtr = *filter
-	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, workup, filterPtr, page, limit)
-	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(workup, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := qs.All(&workups, preloads...); err != nil {
-		return nil, err
-	}
-	pagination := getPagination(currentPage, totalItems, perPage)
-	return &WorkupList{
-		Items:      workups,
-		Pagination: pagination,
-	}, nil
 }
 
 // GetAllWorkups retrieves all Workup matches certain condition. Returns empty list if

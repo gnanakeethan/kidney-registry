@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -9,7 +8,6 @@ import (
 	"time"
 	
 	"github.com/beego/beego/v2/client/orm"
-	"github.com/kr/pretty"
 )
 
 type PersonExamination struct {
@@ -25,6 +23,9 @@ type PersonExamination struct {
 	DeletedAt   time.Time      `orm:"column(deleted_at);null"`
 }
 
+func (t PersonExamination) IsNode() {
+	fmt.Println("This is an item")
+}
 func (PersonExamination) IsDynamicFormInterface() {}
 
 func (t *PersonExamination) TableName() string {
@@ -52,28 +53,6 @@ func GetPersonExaminationsById(id string) (v *PersonExamination, err error) {
 		return v, nil
 	}
 	return nil, err
-}
-
-func ListPersonExaminations(ctx context.Context, filter *PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonExaminationList, error) {
-	personExamination, personExaminations := PersonExamination{}, []*PersonExamination{}
-	filterPtr := PersonExaminationFilter{}
-	if filter != nil {
-		filterPtr = *filter
-	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, personExamination, filterPtr, page, limit)
-	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(personExamination, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := qs.RelatedSel("Person").All(&personExaminations, preloads...); err != nil {
-		return nil, err
-	}
-	pagination := getPagination(currentPage, totalItems, perPage)
-	return &PersonExaminationList{
-		Items:      personExaminations,
-		Pagination: pagination,
-	}, nil
 }
 
 // GetAllPersonExaminations retrieves all PersonExamination matches certain condition. Returns empty list if

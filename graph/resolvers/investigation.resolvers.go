@@ -39,17 +39,18 @@ func (r *investigationResolver) DeletedAt(ctx context.Context, obj *models.Inves
 	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
 }
 
-func (r *queryResolver) GetInvestigation(ctx context.Context, id string) (*models.Investigation, error) {
-	return models.GetAnyById(models.Investigation{ID: id})
+func (r *queryResolver) GetInvestigation(ctx context.Context, id string) (*models.InvestigationEdge, error) {
+	investigation, err := models.GetAnyById(models.Investigation{ID: id})
+	return &models.InvestigationEdge{Node: investigation}, err
 }
 
-func (r *queryResolver) ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.InvestigationList, error) {
+func (r *queryResolver) ListInvestigations(ctx context.Context, filter *models.InvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if len(sortBy) == 0 || len(orderBy) == 0 {
 		sortBy = append(sortBy, StringPointer("Order"))
 		orderByAc := models.OrderByAsc
 		orderBy = append(orderBy, &orderByAc)
 	}
-	return models.ListAnyGenerics(ctx, models.Investigation{}, filter, &models.InvestigationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Investigation{}, filter, models.InvestigationEdge{}, &models.InvestigationList{}, page, limit, sortBy, orderBy)
 }
 
 // Investigation returns generated.InvestigationResolver implementation.

@@ -14,7 +14,7 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
-func (r *mutationResolver) CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error) {
+func (r *mutationResolver) CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkupEdge, error) {
 	workup, _ := models.GetWorkupsById(input.Workup.ID)
 	personWorkup := &models.PersonWorkup{
 		ID:        ksuid.New().String(),
@@ -29,13 +29,16 @@ func (r *mutationResolver) CreatePersonWorkup(ctx context.Context, input models.
 		personWorkup.Results.Set(string(results))
 	}
 	if _, err := models.AddPersonWorkups(personWorkup); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return personWorkup, nil
+		return &models.PersonWorkupEdge{
+				Node: personWorkup,
+			},
+			nil
 	} else {
 		return nil, err
 	}
 }
 
-func (r *mutationResolver) UpdatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkup, error) {
+func (r *mutationResolver) UpdatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkupEdge, error) {
 	personWorkup := &models.PersonWorkup{
 		ID:        PointerString(input.ID),
 		Person:    &models.Person{ID: input.Person.ID},
@@ -46,7 +49,10 @@ func (r *mutationResolver) UpdatePersonWorkup(ctx context.Context, input models.
 		personWorkup.Results.Set(string(results))
 	}
 	if err := models.UpdatePersonWorkupById(personWorkup); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return personWorkup, nil
+		return &models.PersonWorkupEdge{
+				Node: personWorkup,
+			},
+			nil
 	} else {
 		return nil, err
 	}
@@ -97,16 +103,17 @@ func (r *personWorkupResolver) DeletedAt(ctx context.Context, obj *models.Person
 	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
 }
 
-func (r *queryResolver) GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkup, error) {
-	return models.GetAnyById(models.PersonWorkup{ID: id})
+func (r *queryResolver) GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkupEdge, error) {
+	personWorkup, err := models.GetAnyById(models.PersonWorkup{ID: id})
+	return &models.PersonWorkupEdge{Node: personWorkup}, err
 }
 
-func (r *queryResolver) ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonWorkupList, error) {
+func (r *queryResolver) ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonWorkupFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonWorkup{}, filter, &models.PersonWorkupList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonWorkup{}, filter, models.PersonWorkupEdge{}, &models.PersonWorkupList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonWorkup returns generated.PersonWorkupResolver implementation.

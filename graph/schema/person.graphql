@@ -1,4 +1,4 @@
-type Person @hasPermissionAgainst(action: "read",type:"PersonObject")  {
+type Person implements Node @hasPermissionAgainst(action: "read",type:"PersonObject") {
     ID                     : ID!
     FirstName              : String
     LastName               : String
@@ -19,12 +19,12 @@ type Person @hasPermissionAgainst(action: "read",type:"PersonObject")  {
     CreatedAt              : String
     UpdatedAt              : String
     BloodGroup             : BloodGroup
-    Examinations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonExaminationList
-    Investigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonInvestigationList
-    FollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonFollowUpList
-    MedicalHistory(filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    OrganDonations(filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonOrganDonationList
-    Workup(filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonWorkupList
+    Examinations(filter: PersonExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    Investigations(filter: PersonInvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    FollowUps(filter: PersonFollowUpFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    MedicalHistory(filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    OrganDonations(filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+    Workup(filter: PersonWorkupFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }
 enum Gender {
     MALE
@@ -72,9 +72,12 @@ enum BloodGroup {
     AB_NEG
     NA
 }
-type PersonList {
-    items: [Person!]!
+type PersonList implements Connection{
+    items: [PersonEdge]
     pagination: Pagination
+}
+type PersonEdge implements Edge {
+    node: Person
 }
 input PersonComparison {
     comparison: ComparisonType!
@@ -127,11 +130,11 @@ input PersonInput {
 
 extend type Query {
     listPatients(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]) : PersonList
-    getPatient(ID: ID!) : Person
+    getPatient(ID: ID!) : PersonEdge
 }
 
 extend type Mutation {
-    newPatient: Person
-    updatePatient(input:PersonInput) : Person
-    addPatient(input:PersonInput) : Person
+    newPatient: PersonEdge
+    updatePatient(input:PersonInput) : PersonEdge
+    addPatient(input:PersonInput) : PersonEdge
 }

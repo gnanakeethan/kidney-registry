@@ -38,17 +38,18 @@ func (r *examinationResolver) DeletedAt(ctx context.Context, obj *models.Examina
 	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
 }
 
-func (r *queryResolver) GetExamination(ctx context.Context, id string) (*models.Examination, error) {
-	return models.GetExaminationsById(id)
+func (r *queryResolver) GetExamination(ctx context.Context, id string) (*models.ExaminationEdge, error) {
+	examination, err := models.GetAnyById(models.Examination{ID: id})
+	return &models.ExaminationEdge{Node: examination}, err
 }
 
-func (r *queryResolver) ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.ExaminationList, error) {
+func (r *queryResolver) ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if len(sortBy) == 0 || len(orderBy) == 0 {
 		sortBy = append(sortBy, StringPointer("Order"))
 		orderByAc := models.OrderByAsc
 		orderBy = append(orderBy, &orderByAc)
 	}
-	return models.ListAnyGenerics(ctx, models.Examination{}, filter, &models.ExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Examination{}, filter, models.ExaminationEdge{}, &models.ExaminationList{}, page, limit, sortBy, orderBy)
 }
 
 // Examination returns generated.ExaminationResolver implementation.

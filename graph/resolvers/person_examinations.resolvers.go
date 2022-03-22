@@ -13,7 +13,7 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
-func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
+func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExaminationEdge, error) {
 	examination, _ := models.GetExaminationsById(input.Examination.ID)
 	personExamination := &models.PersonExamination{
 		ID:          ksuid.New().String(),
@@ -28,13 +28,13 @@ func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input mo
 		personExamination.Results.Set(string(results))
 	}
 	if _, err := models.AddPersonExaminations(personExamination); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return personExamination, nil
+		return &models.PersonExaminationEdge{Node: personExamination}, nil
 	} else {
 		return nil, err
 	}
 }
 
-func (r *mutationResolver) UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExamination, error) {
+func (r *mutationResolver) UpdatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExaminationEdge, error) {
 	personExamination := &models.PersonExamination{
 		ID:          PointerString(input.ID),
 		Person:      &models.Person{ID: input.Person.ID},
@@ -45,7 +45,7 @@ func (r *mutationResolver) UpdatePersonExamination(ctx context.Context, input mo
 		personExamination.Results.Set(string(results))
 	}
 	if err := models.UpdatePersonExaminationById(personExamination); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return personExamination, nil
+		return &models.PersonExaminationEdge{Node: personExamination}, nil
 	} else {
 		return nil, err
 	}
@@ -92,23 +92,24 @@ func (r *personExaminationResolver) DeletedAt(ctx context.Context, obj *models.P
 	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
 }
 
-func (r *queryResolver) GetPersonExamination(ctx context.Context, id string) (*models.PersonExamination, error) {
-	return models.GetAnyById(models.PersonExamination{ID: id})
+func (r *queryResolver) GetPersonExamination(ctx context.Context, id string) (*models.PersonExaminationEdge, error) {
+	personExamination, err := models.GetAnyById(models.PersonExamination{ID: id})
+	return &models.PersonExaminationEdge{Node: personExamination}, err
 }
 
-func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
+func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID string, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonExaminationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
 }
 
-func (r *queryResolver) ListAllPersonExaminations(ctx context.Context, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonExaminationList, error) {
+func (r *queryResolver) ListAllPersonExaminations(ctx context.Context, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonExaminationFilter{}
 	}
-	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonExamination returns generated.PersonExaminationResolver implementation.

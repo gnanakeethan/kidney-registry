@@ -13,7 +13,7 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
-func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {
+func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigationEdge, error) {
 	investigation, _ := models.GetInvestigationsById(input.Investigation.ID)
 	personInvestigation := &models.PersonInvestigation{
 		ID:            ksuid.New().String(),
@@ -31,13 +31,15 @@ func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input 
 		personInvestigation.Results.Set(string(results))
 	}
 	if _, err := models.AddPersonInvestigations(personInvestigation); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return personInvestigation, nil
+		return &models.PersonInvestigationEdge{
+			Node: personInvestigation,
+		}, nil
 	} else {
 		return nil, err
 	}
 }
 
-func (r *mutationResolver) UpdatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigation, error) {
+func (r *mutationResolver) UpdatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigationEdge, error) {
 	personInvestigation := &models.PersonInvestigation{
 		ID:            PointerString(input.ID),
 		Person:        &models.Person{ID: input.Person.ID},
@@ -51,7 +53,9 @@ func (r *mutationResolver) UpdatePersonInvestigation(ctx context.Context, input 
 		personInvestigation.Results.Set(string(results))
 	}
 	if err := models.UpdatePersonInvestigationById(personInvestigation); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
-		return personInvestigation, nil
+		return &models.PersonInvestigationEdge{
+			Node: personInvestigation,
+		}, nil
 	} else {
 		return nil, err
 	}
@@ -106,20 +110,21 @@ func (r *personInvestigationResolver) DeletedAt(ctx context.Context, obj *models
 	return StringPointer(obj.DeletedAt.Format(time.RFC3339)), nil
 }
 
-func (r *queryResolver) GetPersonInvestigation(ctx context.Context, id string) (*models.PersonInvestigation, error) {
-	return models.GetAnyById(models.PersonInvestigation{ID: id})
+func (r *queryResolver) GetPersonInvestigation(ctx context.Context, id string) (*models.PersonInvestigationEdge, error) {
+	personInvestigation, err := models.GetAnyById(models.PersonInvestigation{ID: id})
+	return &models.PersonInvestigationEdge{Node: personInvestigation}, err
 }
 
-func (r *queryResolver) ListPersonInvestigations(ctx context.Context, personID string, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error) {
+func (r *queryResolver) ListPersonInvestigations(ctx context.Context, personID string, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonInvestigationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
 }
 
-func (r *queryResolver) ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonInvestigationList, error) {
-	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
+func (r *queryResolver) ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
+	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
 }
 
 // PersonInvestigation returns generated.PersonInvestigationResolver implementation.

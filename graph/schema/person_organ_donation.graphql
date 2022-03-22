@@ -1,4 +1,4 @@
-type PersonOrganDonation{
+type PersonOrganDonation implements Node{
     ID: ID!
     Donor: Person
     Recipient: Person
@@ -30,17 +30,21 @@ input PersonOrganDonationFilter{
     AcuteRejection: Boolean
 }
 
-type  PersonOrganDonationList {
-    items: [PersonOrganDonation]
+type  PersonOrganDonationList implements Connection{
+    items: [PersonOrganDonationEdge]
     pagination: Pagination
 }
+type PersonOrganDonationEdge implements Edge{
+    node: PersonOrganDonation
+    cursor: Pagination
+}
 extend type Mutation {
-    createPersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonation
-    updatePersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonation
+    createPersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonationEdge
+    updatePersonOrganDonation(input: PersonOrganDonationInput!): PersonOrganDonationEdge
     deletePersonOrganDonation(ID: ID!): ID
 }
 extend type Query {
-    getPersonOrganDonation(ID: ID!): PersonOrganDonation
+    getPersonOrganDonation(ID: ID!): PersonOrganDonationEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listPersonOrganDonations(PersonID: ID!,filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonOrganDonationList
+    listPersonOrganDonations(PersonID: ID!,filter: PersonOrganDonationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

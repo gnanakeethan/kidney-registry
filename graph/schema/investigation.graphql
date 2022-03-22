@@ -1,4 +1,4 @@
-type Investigation implements DynamicFormInterface{
+type Investigation implements DynamicFormInterface & Node {
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -20,13 +20,17 @@ input InvestigationInput{
 input InvestigationFilter {
     Order: IntFilter
 }
-type InvestigationList {
-    items: [Investigation]
+type InvestigationList implements Connection {
+    items: [InvestigationEdge]
     pagination: Pagination
 }
 
+type InvestigationEdge implements Edge {
+    node: Investigation
+    cursor: Pagination
+}
 extend type Query {
-    getInvestigation(id: ID!): Investigation
+    getInvestigation(id: ID!): InvestigationEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
-    listInvestigations(filter: InvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): InvestigationList
+    listInvestigations(filter: InvestigationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

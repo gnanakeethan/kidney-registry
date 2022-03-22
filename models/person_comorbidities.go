@@ -19,6 +19,9 @@ type PersonComorbidities struct {
 	DeletedAt     time.Time      `orm:"column(deleted_at);null"`
 }
 
+func (t PersonComorbidities) IsNode() {
+	fmt.Println("This is an item")
+}
 func (t *PersonComorbidities) TableName() string {
 	return "person_comorbidities"
 }

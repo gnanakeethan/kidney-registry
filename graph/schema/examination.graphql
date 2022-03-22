@@ -1,4 +1,4 @@
-type Examination implements DynamicFormInterface {
+type Examination implements DynamicFormInterface & Node{
     ID          : ID!
     Details   : FormDetails
     Procedure : Procedure
@@ -6,6 +6,10 @@ type Examination implements DynamicFormInterface {
     CreatedAt: String
     UpdatedAt: String
     DeletedAt: String
+}
+type ExaminationEdge implements Edge {
+    node: Examination
+    cursor: Pagination
 }
 input ExaminationInput{
     ID          : ID!
@@ -20,12 +24,12 @@ input ExaminationInput{
 input ExaminationFilter {
     Order: IntFilter
 }
-type ExaminationList {
-    items: [Examination]
+type ExaminationList implements Connection {
+    items: [Edge]
     pagination: Pagination
 }
 
 extend type Query {
-    getExamination(id: ID!): Examination @hasPermission(action: "read", object: "Examination")
-    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): ExaminationList @hasPermission(action: "read", object: "Examination")
+    getExamination(id: ID!): ExaminationEdge @hasPermission(action: "read", object: "Examination")
+    listExaminations(filter: ExaminationFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }

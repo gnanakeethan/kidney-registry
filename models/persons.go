@@ -1,7 +1,6 @@
 package models
 
 import (
-	"context"
 	"fmt"
 	"math/rand"
 	"time"
@@ -35,6 +34,9 @@ type Person struct {
 
 func (t *Person) TableName() string {
 	return "persons"
+}
+func (t Person) IsNode() {
+	fmt.Println("This is an item")
 }
 
 func init() {
@@ -91,28 +93,6 @@ func DeletePersons(id string) (err error) {
 		}
 	}
 	return
-}
-
-func GetListPatients(ctx context.Context, filter *PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*OrderBy) (*PersonList, error) {
-	person, persons := Person{}, []*Person{}
-	filterPtr := PersonFilter{}
-	if filter != nil {
-		filterPtr = *filter
-	}
-	query, currentPage, perPage, preloads := extractQuery(ctx, person, filterPtr, page, limit)
-	pretty.Println(preloads)
-	qs, totalItems, err := GetAnyAll(person, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := qs.All(&persons, preloads...); err != nil {
-		return nil, err
-	}
-	pagination := getPagination(currentPage, totalItems, perPage)
-	return &PersonList{
-		Items:      persons,
-		Pagination: pagination,
-	}, nil
 }
 
 func UpdatePatient(input *PersonInput) (*Person, error) {
