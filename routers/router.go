@@ -116,7 +116,8 @@ func init() {
 	}
 	c.Directives.HasPermissionAgainst = func(ctx context.Context, obj interface{}, next graphql.Resolver, method, typed string) (interface{}, error) {
 		if obj == nil {
-			pretty.Println("HAS PERMISSION OBJ:", obj, method, typed)
+			pretty.Println("HAS PERMISSION ", method, typed, "NIL")
+			return nil, fmt.Errorf("not authenticated")
 		} else {
 			pretty.Println("HAS PERMISSION ", method, typed)
 			
