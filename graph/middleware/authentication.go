@@ -29,7 +29,6 @@ func Middleware(next http.Handler) http.Handler {
 		authorization := r.Header.Get("Authorization")
 		if len(authorization) >= 7 {
 			authorization = authorization[7:]
-			pretty.Println(authorization)
 			user := ValidateToken(authorization)
 			ctx := rootCtx.WithValue(r.Context(), userCtxKey.name, user)
 			next.ServeHTTP(w, r.WithContext(ctx))
@@ -75,12 +74,14 @@ func ValidateToken(token string) *models.User {
 	currentDir += "/"
 	bytes, _ := ioutil.ReadFile(currentDir + "conf/jose.pub")
 	rsaPublic, _ := crypto.ParseRSAPublicKeyFromPEM(bytes)
-	jwtF, err := jws.ParseJWT([]byte(token))
+	pretty.Println("KEY", rsaPublic.Size())
+	w, err := jws.ParseJWT([]byte(token))
 	if err != nil {
 		return nil
 	}
-	if err = jwtF.Verify(rsaPublic, crypto.SigningMethodRS256); err == nil {
-		user.ID, _ = jwtF.Claims().Get("sub").(string)
+	pretty.Println("TOKEN:", token)
+	if err = w.Validate(rsaPublic, crypto.SigningMethodRS256); err == nil {
+		user.ID, _ = w.Claims().Get("sub").(string)
 		if userf, err := models.GetAnyById(*user); err == nil {
 			user = userf
 			o.LoadRelated(user, "RolesLoaded")

@@ -114,7 +114,13 @@ func init() {
 		}
 		return nil, fmt.Errorf("Access denied against %s %s", method, route)
 	}
-	c.Directives.HasPermissionAgainst = func(ctx context.Context, obj interface{}, next graphql.Resolver, method string) (interface{}, error) {
+	c.Directives.HasPermissionAgainst = func(ctx context.Context, obj interface{}, next graphql.Resolver, method, typed string) (interface{}, error) {
+		if obj == nil {
+			pretty.Println("HAS PERMISSION OBJ:", obj, method, typed)
+		} else {
+			pretty.Println("HAS PERMISSION ", method, typed)
+			
+		}
 		user := middleware.ForContext(ctx)
 		if user == nil {
 			return nil, fmt.Errorf("not authenticated")
@@ -125,7 +131,6 @@ func init() {
 			}
 		}
 		value := reflect.ValueOf(obj)
-		pretty.Println("FIELD DEF ", obj, value)
 		if obj != nil && !value.IsZero() && !value.IsNil() && value.IsValid() {
 			if value.Kind() == reflect.Ptr {
 				value = value.Elem()

@@ -5,7 +5,7 @@ import "github.com/beego/beego/v2/client/orm"
 type ReadOnlyUsers struct {
 	ID       string `orm:"column(id);pk"`
 	User     *User  `orm:"column(user_id);rel(fk)"`
-	RecordID string `orm:"column(record_id);rel(fk)"`
+	RecordID string `orm:"column(record_id);"`
 }
 
 func (t *ReadOnlyUsers) TableName() string {
@@ -24,12 +24,12 @@ type JsonFields struct {
 type ReadWriteUsers struct {
 	ID       string     `orm:"column(id);pk"`
 	User     *User      `orm:"column(user_id);rel(fk)"`
-	RecordID string     `orm:"column(record_id);rel(fk)"`
+	RecordID string     `orm:"column(record_id);"`
 	Fields   JsonFields `orm:"column(fields);type(json)"`
 }
 
 func (t *ReadWriteUsers) TableName() string {
-	return "read_only_users"
+	return "read_write_users"
 }
 
 func init() {

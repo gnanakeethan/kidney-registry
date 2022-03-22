@@ -1,4 +1,4 @@
-type Person @hasPermissionAgainst(action: "read")  {
+type Person @hasPermissionAgainst(action: "read",type:"PersonObject")  {
     ID                     : ID!
     FirstName              : String
     LastName               : String
@@ -126,8 +126,8 @@ input PersonInput {
 }
 
 extend type Query {
-    listPatients(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]) : PersonList @hasPermission(action: "read", object: "person")
-    getPatient(ID: ID!) : Person @hasPermission(object: "person", action: "read")
+    listPatients(filter: PersonFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]) : PersonList
+    getPatient(ID: ID!) : Person
 }
 
 extend type Mutation {

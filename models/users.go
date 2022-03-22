@@ -80,7 +80,7 @@ func (t *UserRole) TableName() string {
 }
 
 func init() {
-	orm.RegisterModel(new(User), new(Role), new(UserRole), new(RolePermission), new(Permission))
+	orm.RegisterModel(new(User), new(Role), new(UserRole), new(RolePermission), new(Permission), new(PermissionField), new(Field))
 }
 
 // AddUsers insert a new User into database and returns
