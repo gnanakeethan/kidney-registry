@@ -27,15 +27,16 @@ type contextKey struct {
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorization := r.Header.Get("Authorization")
-		if len(authorization) == 0 {
-			next.ServeHTTP(w, r)
+		if len(authorization) >= 7 {
+			authorization = authorization[7:]
+			pretty.Println(authorization)
+			user := ValidateToken(authorization)
+			ctx := rootCtx.WithValue(r.Context(), userCtxKey.name, user)
+			next.ServeHTTP(w, r.WithContext(ctx))
 			return
 		}
-		authorization = authorization[7:]
-		user := ValidateToken(authorization)
-		pretty.Println(user)
-		ctx := rootCtx.WithValue(r.Context(), userCtxKey.name, user)
-		next.ServeHTTP(w, r.WithContext(ctx))
+		next.ServeHTTP(w, r)
+		return
 	})
 }
 

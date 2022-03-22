@@ -11,13 +11,13 @@ import (
 )
 
 type UserRole struct {
-	Id   string `orm:"column(id);pk"`
+	ID   string `orm:"column(id);pk"`
 	Role *Role  `orm:"column(role_id);rel(fk)"`
 	User *User  `orm:"column(user_id);rel(fk)"`
 }
 
 type Role struct {
-	Id          string        `orm:"column(id);pk"`
+	ID          string        `orm:"column(id);pk"`
 	Name        string        `orm:"column(name)"`
 	Slug        string        `orm:"column(slug)"`
 	Description string        `orm:"column(description)"`
@@ -26,17 +26,28 @@ type Role struct {
 }
 
 type Permission struct {
-	Id          string  `orm:"column(id);pk"`
-	Name        string  `orm:"column(name)"`
-	Slug        string  `orm:"column(slug)"`
-	Action      string  `orm:"column(action)"`
-	Description string  `orm:"column(description)"`
-	Roles       []*Role `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.RolePermission)"`
+	ID          string   `orm:"column(id);pk"`
+	Name        string   `orm:"column(name)"`
+	Slug        string   `orm:"column(slug)"`
+	Object      string   `orm:"column(object)"`
+	Action      string   `orm:"column(action)"`
+	Description string   `orm:"column(description)"`
+	Roles       []*Role  `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.RolePermission)"`
+	Fields      []*Field `orm:"rel(m2m);rel_through(github.com/gnanakeethan/kidney-registry/models.PermissionField)"`
 }
 type RolePermission struct {
-	Id         string      `orm:"column(id);pk"`
+	ID         string      `orm:"column(id);pk"`
 	Permission *Permission `orm:"column(permission_id);rel(fk)"`
 	Role       *Role       `orm:"column(role_id);rel(fk)"`
+}
+type PermissionField struct {
+	ID         string      `orm:"column(id);pk"`
+	Permission *Permission `orm:"column(permission_id);rel(fk)"`
+	Field      *Field      `orm:"column(field_id);rel(fk)"`
+}
+type Field struct {
+	ID   string `orm:"column(id);pk"`
+	Name string `orm:"column(name)"`
 }
 
 type User struct {
@@ -54,9 +65,8 @@ type User struct {
 func (t *User) TableName() string {
 	return "users"
 }
-
 func (t *RolePermission) TableName() string {
-	return "role_permissions"
+	return "role_permission"
 }
 func (t *Permission) TableName() string {
 	return "permissions"

@@ -37,6 +37,20 @@ func init() {
 		UsersF:    []*models.User{},
 		Observers: map[string]chan *models.User{},
 	}}
+	c.Directives.HasRole = func(ctx context.Context, obj interface{}, next graphql.Resolver, roleString string) (interface{}, error) {
+		user := middleware.ForContext(ctx)
+		if user == nil {
+			return nil, fmt.Errorf("not authenticated")
+		}
+		for _, role := range user.RolesLoaded {
+			if role.Slug == "consultant" {
+				return next(ctx)
+			} else if role.Slug == roleString {
+				return next(ctx)
+			}
+		}
+		return nil, fmt.Errorf("Access denied as a %s", roleString)
+	}
 	c.Directives.HasPermission = func(ctx context.Context, obj interface{}, next graphql.Resolver, method, route string) (interface{}, error) {
 		user := middleware.ForContext(ctx)
 		if user == nil {
@@ -121,13 +135,21 @@ func init() {
 					if value.FieldByName("Id").String() == user.ID {
 						return next(ctx)
 					}
+				} else if value.FieldByName("ReadOnlyUsers").IsValid() {
+					if value.FieldByName("ReadOnlyUsers").Kind() == reflect.Slice {
+						for _, readOnlyUser := range value.FieldByName("ReadOnlyUsers").Interface().([]*models.User) {
+							if readOnlyUser.ID == user.ID {
+								return next(ctx)
+							}
+						}
+					}
 				}
 			}
 		}
 		return nil, fmt.Errorf("Access denied against %s", method)
 	}
 	
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{}))
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second,

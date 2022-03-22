@@ -6,7 +6,6 @@ package resolvers
 import (
 	"context"
 	
-	"github.com/golang-jwt/jwt"
 	"github.com/kr/pretty"
 	"gopkg.in/hlandau/passlib.v1"
 	
@@ -15,7 +14,7 @@ import (
 )
 
 func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserLogin) (*models.UserToken, error) {
-	pretty.Println(userLogin)
+	// pretty.Println(userLogin)
 	filter := models.UserFilter{
 		Email: &models.StringFilter{
 			Comparison: models.ComparisonTypeEqual,
@@ -25,11 +24,6 @@ func (r *mutationResolver) UserLogin(ctx context.Context, userLogin models.UserL
 		},
 	}
 	users, _ := models.ListAnyGenerics(ctx, models.User{}, &filter, &models.UserList{}, IntToPointer(0), IntToPointer(1), nil, nil)
-	type MyCustomClaims struct {
-		Foo string `json:"foo"`
-		jwt.StandardClaims
-	}
-	
 	for _, user := range users.Items {
 		pretty.Println("password checking", userLogin.Password, user.Password)
 		if _, err := passlib.Verify(userLogin.Password, user.Password); err == nil {
