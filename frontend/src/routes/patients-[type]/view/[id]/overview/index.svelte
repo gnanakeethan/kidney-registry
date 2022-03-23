@@ -72,10 +72,12 @@
 								Requested On: {$recipientOverview?.Investigations?.items[0].node.CreatedAt}
 								<br />
 								{#if $recipientOverview?.Investigations?.items[0].ExpectedDate !== '0001-01-01'}
-									Expected On: {$recipientOverview?.Investigations?.items[0].node.ExpectedDate} <br />
+									Expected On: {$recipientOverview?.Investigations?.items[0].node.ExpectedDate}
+									<br />
 								{/if}
 								{#if $recipientOverview?.Investigations?.items[0].ObtainedDate !== '0001-01-01'}
-									Obtained On: {$recipientOverview?.Investigations?.items[0].node.ObtainedDate} <br />
+									Obtained On: {$recipientOverview?.Investigations?.items[0].node.ObtainedDate}
+									<br />
 								{:else}
 									Not Yet Received <br />
 								{/if}
