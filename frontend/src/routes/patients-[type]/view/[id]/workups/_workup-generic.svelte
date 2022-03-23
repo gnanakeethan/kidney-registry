@@ -25,7 +25,7 @@
 			})
 		).subscribe(({ data }) => {
 			if (data?.getWorkup) {
-				workup = data?.getWorkup;
+				workup = data?.getWorkup.node;
 				console.log(workup);
 				fields = [...baseFields];
 				fields.push(

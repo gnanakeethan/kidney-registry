@@ -56,7 +56,7 @@
 	<select class="form-select" name="" id="" bind:value={workupId}>
 		{#each $workups.data.listWorkups.items as workup}
 			<!--{workup.Details.Name} <br>-->
-			<option disabled={workupId !== ''} value={workup.ID}>{workup.Details.Name}</option>
+			<option disabled={workupId !== ''} value={workup.node.ID}>{workup.node.Details.Name}</option>
 		{/each}
 	</select>
 	<button on:click={() => Clear()} class="bg-yellow-400 p-4 m-2">Clear Selection</button>
