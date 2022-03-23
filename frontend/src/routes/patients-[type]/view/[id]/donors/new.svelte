@@ -23,7 +23,7 @@
 	});
 	onMount(() => {
 		newPatient<NewPatientDocument>(null).then((root: { data: NewPatientDocument }) => {
-			let patient = root.data.newPatient;
+			let patient = root.data.newPatient.node;
 			Object.entries(patient).forEach(([key, value]) => {
 				key = 'Donor.' + key;
 				values[key] = value;

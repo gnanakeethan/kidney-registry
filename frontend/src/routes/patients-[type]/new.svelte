@@ -21,7 +21,7 @@
 	});
 	onMount(() => {
 		newPatient<NewPatientDocument>(null).then((root: { data: NewPatientDocument }) => {
-			let patient = root.data.newPatient;
+			let patient = root.data.newPatient.node;
 			values = patient;
 			console.log(values);
 			formSet = true;
