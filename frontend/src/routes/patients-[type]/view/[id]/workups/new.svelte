@@ -19,7 +19,7 @@
 	let examsLength = 0;
 	workups.subscribe((data) => {
 		examsLength = data?.data?.listWorkups.items.length;
-		let exam1 = data?.data?.listWorkups.items[0];
+		let exam1 = data?.data?.listWorkups.items[0].node;
 		workupId = exam1?.ID;
 		currentWorkup = 1;
 	});
@@ -38,7 +38,7 @@
 
 		console.log(workups);
 		setTimeout(() => {
-			workupId = workups.data.listWorkups.items[currentWorkup - 1].ID;
+			workupId = workups.data.listWorkups.items[currentWorkup - 1].node.ID;
 		}, 500);
 	}
 
