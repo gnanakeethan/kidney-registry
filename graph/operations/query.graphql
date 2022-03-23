@@ -91,6 +91,7 @@ query GetPatientOverview($id: ID!){
     getPatient(ID: $id){
         node {
             ...PersonFields
+            ...PersonExtended
         }
     }
 }
