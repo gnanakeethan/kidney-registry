@@ -50,6 +50,7 @@ type AttributesInput struct {
 }
 
 type Component struct {
+	Name        string `json:"name"`
 	Component   string `json:"component"`
 	ComponentID string `json:"component_id"`
 }

@@ -8,6 +8,7 @@ type Configuration {
     components: [Component!]!
 }
 type Component {
+    name: String!
     component: String!
     component_id: String!
 }

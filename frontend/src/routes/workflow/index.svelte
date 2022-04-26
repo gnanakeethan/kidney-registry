@@ -2,7 +2,8 @@
 	import { GraphQLQueryRepository } from '../../lib/api/query-repository';
 	import { DataSourceConnector } from '../../lib/api/table-datasource';
 	import Table from '../../lib/components/table/Table.svelte';
-	import { ListPatientsDocument, Person } from '../../lib/graphql/generated';
+	import { Person } from '../../lib/graphql/generated';
+	import { auth } from '../../lib/state/auth';
 
 	interface User {
 		name: string;
@@ -11,13 +12,13 @@
 
 	let filters = {
 		filter: {
-			PersonType: { comparison: 'EQUAL', value: 'RECIPIENT' }
+			User: { id: { comparison: 'EQUAL', value: auth.user.id } }
 		},
-		orderBy: ['desc'],
-		sortBy: ['CreatedAt']
+		orderBy: [],
+		sortBy: []
 	};
 	const queryRepository = new GraphQLQueryRepository<Person>();
-	let dataSource = new DataSourceConnector<Person>(queryRepository, ListPatientsDocument);
+	let dataSource = new DataSourceConnector<Person>(queryRepository, ListWorkflowsDocument, filters);
 	let loading = true;
 	dataSource.loadCurrentPage({}).then((data) => {
 		console.log(data);

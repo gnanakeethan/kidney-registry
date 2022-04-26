@@ -79,6 +79,7 @@ type ComplexityRoot struct {
 	Component struct {
 		Component   func(childComplexity int) int
 		ComponentID func(childComplexity int) int
+		Name        func(childComplexity int) int
 	}
 
 	Configuration struct {
@@ -771,6 +772,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Component.ComponentID(childComplexity), true
+
+	case "Component.name":
+		if e.complexity.Component.Name == nil {
+			break
+		}
+
+		return e.complexity.Component.Name(childComplexity), true
 
 	case "Configuration.components":
 		if e.complexity.Configuration.Components == nil {
@@ -2668,7 +2676,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Role.ID(childComplexity), true
 
-	case "Role.Name":
+	case "Role.name":
 		if e.complexity.Role.Name == nil {
 			break
 		}
@@ -2689,7 +2697,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.ID(childComplexity), true
 
-	case "User.Name":
+	case "User.name":
 		if e.complexity.User.Name == nil {
 			break
 		}
@@ -3750,7 +3758,7 @@ extend type Query {
 }`, BuiltIn: false},
 	{Name: "graph/schema/user.graphql", Input: `type User implements Node {
     ID: ID!
-    Name: String!
+    name: String!
     Roles: [Role!]!
 }
 input UserInput {
@@ -3758,7 +3766,7 @@ input UserInput {
 }
 type Role {
     ID: ID!
-    Name: String!
+    name: String!
 }
 
 type UserRole {
@@ -3799,6 +3807,7 @@ type Configuration {
     components: [Component!]!
 }
 type Component {
+    name: String!
     component: String!
     component_id: String!
 }
@@ -6023,6 +6032,41 @@ func (ec *executionContext) _Attributes_image(ctx context.Context, field graphql
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Component_name(ctx context.Context, field graphql.CollectedField, obj *models.Component) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Component",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Component_component(ctx context.Context, field graphql.CollectedField, obj *models.Component) (ret graphql.Marshaler) {
@@ -14336,7 +14380,7 @@ func (ec *executionContext) _Role_ID(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Role_Name(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
+func (ec *executionContext) _Role_name(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -14451,7 +14495,7 @@ func (ec *executionContext) _User_ID(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_Name(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -19379,6 +19423,16 @@ func (ec *executionContext) _Component(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Component")
+		case "name":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Component_name(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "component":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Component_component(ctx, field, obj)
@@ -22930,9 +22984,9 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "Name":
+		case "name":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Role_Name(ctx, field, obj)
+				return ec._Role_name(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -22991,9 +23045,9 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "Name":
+		case "name":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._User_Name(ctx, field, obj)
+				return ec._User_name(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)

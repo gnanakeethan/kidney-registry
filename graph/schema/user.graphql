@@ -1,6 +1,6 @@
 type User implements Node {
     ID: ID!
-    Name: String!
+    name: String!
     Roles: [Role!]!
 }
 input UserInput {
@@ -8,7 +8,7 @@ input UserInput {
 }
 type Role {
     ID: ID!
-    Name: String!
+    name: String!
 }
 
 type UserRole {

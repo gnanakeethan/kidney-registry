@@ -337,3 +337,31 @@ query GetWorkup ($id: ID!){
         }
     }
 }
+fragment WorkflowFields on Workflow {
+    ID
+    Name
+    Configuration {
+        components {
+            component
+            component_id
+        }
+    }
+}
+
+query ListWorkflows {
+    listWorkflows {
+        items {
+            node {
+                ...WorkflowFields
+            }
+        }
+    }
+}
+
+query GetWorkflow ($id: ID!){
+    getWorkflow(id: $id) {
+        node {
+            ...WorkflowFields
+        }
+    }
+}
