@@ -7,7 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -49,7 +49,7 @@ func (r *queryResolver) ListExaminations(ctx context.Context, filter *models.Exa
 		orderByAc := models.OrderByAsc
 		orderBy = append(orderBy, &orderByAc)
 	}
-	return models.ListAnyGenerics(ctx, models.Examination{}, filter, models.ExaminationEdge{}, &models.ExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Examination{}, filter, models.ExaminationEdge{}, &models.ExaminationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // Examination returns generated.ExaminationResolver implementation.

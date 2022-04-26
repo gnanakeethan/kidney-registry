@@ -153,6 +153,7 @@ func GetPreloads(ctx context.Context, object interface{}) []string {
 		graphql.CollectFieldsCtx(ctx, nil),
 		"",
 	)
+	pretty.Println(fields)
 	fieldsFiltered := []string{}
 	visibleFieldsStructs := reflect.VisibleFields(reflect.TypeOf(object))
 	visibleFields := []string{}
@@ -263,10 +264,11 @@ func GetAnyById[T Model](v T) (*T, error) {
 	}
 }
 
-func ListAnyGenerics[T Model, F FilterInput, G EdgeType, H ListOutput](ctx context.Context, object T, filter F, edgeType G, listOutput H, page *int, limit *int, sortBy []*string, orderBy []*OrderBy, relatedSel ...interface{}) (H, error) {
+func ListAnyGenerics[T Model, F FilterInput, G EdgeType, H ListOutput](ctx context.Context, object T, filter F, edgeType G, listOutput H, page *int, limit *int, sortBy []*string, orderBy []*OrderBy, preloads []string, relatedSel ...interface{}) (H, error) {
+	// func ListAnyGenerics(ctx context.Context, object T, filter F, edgeType G, listOutput H, page *int, limit *int, sortBy []*string, orderBy []*OrderBy, , relatedSel ...interface{}) (H, error) {
 	var list []*T
-	query, currentPage, perPage, preloads := extractQuery(ctx, object, filter, page, limit)
-	pretty.Println(preloads)
+	query, currentPage, perPage, preload := extractQuery(ctx, object, filter, page, limit)
+	preload = append(preload, preloads...)
 	qs, _, err := GetAnyAllGenerics(object, query, sortBy, orderBy, (currentPage-1)*perPage, perPage)
 	if listOutput == nil {
 		return nil, errors.New("ListOutput is nil")
@@ -274,7 +276,7 @@ func ListAnyGenerics[T Model, F FilterInput, G EdgeType, H ListOutput](ctx conte
 	if err != nil {
 		return listOutput, err
 	}
-	if _, err := qs.RelatedSel(relatedSel...).All(&list, preloads...); err != nil {
+	if _, err := qs.RelatedSel(relatedSel...).All(&list, preload...); err != nil {
 		return listOutput, err
 	}
 	var listEdges []*G

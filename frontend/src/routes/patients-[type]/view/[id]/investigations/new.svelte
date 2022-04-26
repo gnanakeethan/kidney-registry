@@ -20,7 +20,7 @@
 	investigations.subscribe((data) => {
 		examsLength = data?.data?.listInvestigations.items.length;
 		let exam1 = data?.data?.listInvestigations.items[0];
-		investigationId = exam1?.ID;
+		investigationId = exam1?.node.ID;
 		currentInvestigation = 1;
 	});
 
@@ -38,12 +38,19 @@
 
 		console.log(investigations);
 		setTimeout(() => {
-			investigationId = investigations.data.listInvestigations.items[currentInvestigation - 1].ID;
+			investigationId = investigations.data.listInvestigations.items[currentInvestigation - 1].node.ID;
 		}, 200);
 	}
 
 	function Followup() {
 		goto('/patients-recipient/view/' + $recipientId + '/followups/create');
+	}
+
+	function investigationChanged(invId) {
+		investigationId = '';
+		setTimeout(() => {
+			investigationId = invId;
+		}, 100);
 	}
 </script>
 
@@ -52,21 +59,18 @@
 {:else if $investigations.error}
 	<p>Oh no... {$investigations.error.message}</p>
 {:else}
-	Select Investigation
-	<select class="form-select" name="" id="" bind:value={investigationId}>
+	<div class='flex flex-wrap'>
 		{#each $investigations.data.listInvestigations.items as investigation}
 			<!--{investigation.Details.Name} <br>-->
-			<option disabled={investigationId !== ''} value={investigation.ID}
-				>{investigation.Details.Name}</option
-			>
+			<div class='p-4 bg-gray-100'
+					 class:bg-gray-400={investigationId === investigation.node.ID}
+					 class:text-white={investigationId === investigation.node.ID}
+					 on:click={()=>investigationChanged(investigation.node.ID)}>{investigation.node.Details.Name}</div>
 		{/each}
-	</select>
-	<button on:click={() => Clear()} class="bg-yellow-400 p-4 m-2">Clear Selection</button>
-	<button on:click={() => Next()} class="bg-green-400 p-4 m-2">Next</button>
-	<button on:click={() => Followup()} class="bg-green-400 p-4 m-2">FollowUp</button>
+	</div>
 {/if}
 {#if investigationId}
-	<div class="mx-auto w-3/4">
+	<div class='mx-auto'>
 		<GenericInvestigation bind:investigationId />
 	</div>
 {/if}

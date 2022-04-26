@@ -1,11 +1,6 @@
-<script lang="ts">
+<script lang='ts'>
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import {
-		ComparisonType,
-		ListPatientsDocument,
-		ListPatientsQuery,
-		PersonFilter
-	} from '$lib/graphql/generated';
+	import { ComparisonType, ListPatientsDocument, ListPatientsQuery, PersonFilter } from '$lib/graphql/generated';
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import { operationStore, query } from '@urql/svelte';
 
@@ -29,7 +24,7 @@
 			name: 'Status', //required
 			attributes: {
 				id: 'Status', // required
-				classes: ['form-input rounded w-full'], // optional
+				classes: ['form-input rounded m-2	'], // optional
 				label: 'Patient Status', // optional
 				disabled: false // optional
 			},
@@ -62,7 +57,7 @@
 			name: 'Phn',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['m-2']
 			},
 			attributes: {
 				type: 'text',
@@ -76,14 +71,14 @@
 			name: 'FirstName',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['m-2']
 			},
 			attributes: {
 				type: 'text',
 				label: 'First Name',
 				id: 'firstname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's First Name"
+				classes: ['form-input rounded w-full min-w-100vw'],
+				placeholder: 'Patient\'s First Name'
 			}
 		}
 	];
@@ -171,16 +166,20 @@
 	}
 </script>
 
-<div class="col-span-6 row-span-2 m-4 rounded">
-	<Field bind:isValidForm bind:values {fields} />
+<div class='col-span-6 row-span-2 m-4 rounded'>
+	<Field
+		bind:isValidForm
+		bind:values
+		inline={true}
+		{fields} />
 	{#if $patients.fetching}
 		<p>Loading...</p>
 	{:else if $patients.error}
 		<p>Oh no... {$patients.error.message}</p>
-	{:else}
-		<div class="flex flex-wrap p-2">
+	{:else if $patients.data.listPatients.items !== null && $patients.data.listPatients.items.length > 0}
+		<div class='flex flex-wrap p-2'>
 			{#each $patients.data.listPatients.items as patient}
-				<div class="flex flex-col m-2 {getColor(patient.Status)} p-2 rounded border border-black">
+				<div class='flex flex-col m-2 {getColor(patient.Status)} p-2 rounded border border-black'>
 					<span>Name: {patient.node.FirstName} {patient.node.LastName}</span>
 					<span>PHN: {patient.node.Phn}</span>
 					<span>Age: {patient.node.Age}</span>
@@ -188,16 +187,18 @@
 					<span>BloodGroup: {patient.node.BloodGroup ?? ''}</span>
 					<span>Status: {patient.node.Status}</span>
 					<a
-						class="bg-green-400 text-white rounded py-2 px-4 m-2"
-						href="/patients-recipient/view/{patient.node.ID}"
+						class='bg-green-400 text-white rounded py-2 px-4 m-2'
+						href='/patients-recipient/view/{patient.node.ID}'
 					>
 						View Patient
 					</a>
 				</div>
 			{/each}
 		</div>
+	{:else}
+		No Records
 	{/if}
-	<a class="py- bg-green-400 px-4" href="/patients-recipient/new">New Patient</a>
+	<a class='py- bg-green-400 px-4' href='/patients-recipient/new'>New Patient</a>
 	<!--	Messages : <input-->
 	<!--		bind:value={$NotificationsStatus.messages}-->
 	<!--		max="100"-->

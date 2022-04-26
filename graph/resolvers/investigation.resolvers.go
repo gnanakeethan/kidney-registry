@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -50,7 +50,7 @@ func (r *queryResolver) ListInvestigations(ctx context.Context, filter *models.I
 		orderByAc := models.OrderByAsc
 		orderBy = append(orderBy, &orderByAc)
 	}
-	return models.ListAnyGenerics(ctx, models.Investigation{}, filter, models.InvestigationEdge{}, &models.InvestigationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Investigation{}, filter, models.InvestigationEdge{}, &models.InvestigationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // Investigation returns generated.InvestigationResolver implementation.

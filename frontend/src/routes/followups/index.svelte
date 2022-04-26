@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { GraphQLQueryRepository } from '$lib/api/query-repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
@@ -25,12 +25,16 @@
 		{ key: 'node.CreatedAt', name: 'Recorded On' },
 		{ key: 'node.CaseStatus', name: 'CaseStatus' },
 		{ key: 'node.Referrals', name: 'Referrals' },
+		{ key: 'node.Person.Phn', name: 'PHN' },
+		{ key: 'node.Person.FirstName', name: 'First Name' },
 		{ key: 'node.ConsultantOpinion', name: 'Consultant Opinion' }
 	];
 	let displayedColumns = [
 		'node.CreatedAt',
 		'node.CaseStatus',
 		'node.Referrals',
+		'node.Person.Phn',
+		'node.Person.FirstName',
 		'node.ConsultantOpinion',
 		'node.UpdatedAt'
 	];
@@ -39,7 +43,7 @@
 	$: console.log(selectedRows);
 </script>
 
-<div class="p-2 p-4">
+<div class='p-2 p-4'>
 	<Table
 		bind:dtSource={dataSource}
 		bind:loading
@@ -47,10 +51,10 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath="data.listAllPersonFollowUps.items"
+		rootAccessPath='data.listAllPersonFollowUps.items'
 	>
-		<!--		<svelte:fragment let:element={Patient} slot="actions">-->
-		<!--			<a href="/patients-recipient/view/{Patient.ID}">View Patient</a>-->
-		<!--		</svelte:fragment>-->
+		<svelte:fragment let:element={Patient} slot='actions'>
+			<a href='/patients-recipient/view/{Patient.ID}'>View Patient</a>
+		</svelte:fragment>
 	</Table>
 </div>

@@ -1,11 +1,11 @@
 type User implements Node {
     ID: ID!
-    name: String!
+    Name: String!
     Roles: [Role!]!
 }
 type Role {
-    id: ID!
-    name: String!
+    ID: ID!
+    Name: String!
 }
 
 type UserRole {

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
@@ -33,7 +33,7 @@
 			name: 'ID',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['m-2 hidden']
 			},
 			attributes: {
 				type: 'text',
@@ -41,46 +41,40 @@
 				id: 'recipient_id',
 				classes: ['form-input bg-gray-200 rounded w-full']
 			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
+			rules: [],
+			messages: {}
 		},
 		{
 			type: 'input',
 			name: 'Phn',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['m-2']
 			},
 			attributes: {
 				type: 'text',
 				label: 'PHN',
 				id: 'phn',
-				classes: ['form-input bg-gray-200 rounded w-full']
+				classes: ['form-input bg-gray-200 rounded w-1/2 float-right']
 			},
-			rules: ['required', 'minlen:6'],
-			messages: {
-				required: 'Firstname field is required!',
-				minlen: 'First name field must have more that 6 characters!'
-			}
+			rules: [],
+			messages: {}
 		},
 		{
 			type: 'input',
 			name: 'FirstName',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['m-2']
 			},
 			attributes: {
 				type: 'text',
 				label: 'First Name',
 				id: 'firstname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's First Name"
+				classes: ['form-input rounded w-2/3 float-right'],
+				placeholder: 'Patient\'s First Name'
 			},
-			rules: ['required', 'minlen:6'],
+			rules: [],
 			messages: {
 				required: 'Firstname field is required!',
 				minlen: 'First name field must have more that 6 characters!'
@@ -91,14 +85,14 @@
 			name: 'LastName',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['m-2']
 			},
 			attributes: {
 				type: 'text',
 				label: 'Last Name',
 				id: 'lastname',
-				classes: ['form-input rounded w-full'],
-				placeholder: "Patient's Last Name"
+				classes: ['form-input rounded w-2/3 float-right'],
+				placeholder: 'Patient\'s Last Name'
 			},
 			rules: ['required', 'minlen:6'],
 			messages: {
@@ -109,9 +103,12 @@
 		{
 			type: 'select', // required
 			name: 'MaritalStatus', //required
+			prefix: {
+				classes: ['m-2']
+			},
 			attributes: {
 				id: 'MaritalStatus', // required
-				classes: ['form-input rounded w-full'], // optional
+				classes: ['form-input rounded w-2/3 float-right'],
 				label: 'Marital Status', // optional
 				disabled: false // optional
 			},
@@ -136,9 +133,12 @@
 		{
 			type: 'select', // required
 			name: 'Gender', // required
+			prefix: {
+				classes: ['m-2']
+			},
 			attributes: {
 				id: 'Gender', // required
-				classes: ['form-input rounded w-full'], // optional
+				classes: ['form-input rounded w-2/3 float-right'],
 				label: 'Gender', // optional
 				disabled: false // optional
 			},
@@ -165,7 +165,7 @@
 			name: 'DateOfBirth',
 			value: '',
 			prefix: {
-				classes: ['flex flex-col items-center justify-between w-full py-2']
+				classes: ['']
 			},
 			attributes: {
 				type: 'date',
@@ -173,7 +173,7 @@
 				id: 'dob',
 				max: new Date().toISOString().split('T')[0],
 				min: '1900-01-01',
-				classes: ['form-input rounded w-full']
+				classes: ['form-input rounded w-2/3 float-right']
 			}
 		},
 
@@ -181,11 +181,11 @@
 			type: 'select', // required
 			name: 'Status', // required
 			value: 'ACTIVE',
-			prefix: { classes: ['mb-2 w-full'] },
+			prefix: { classes: ['m-2'] },
 
 			attributes: {
 				id: 'id-field', // required
-				classes: ['form-select'], // optional
+				classes: ['form-input rounded w-2/3 float-right'],
 				label: 'Patient Status', // optional
 				disabled: false // optional
 			},
@@ -201,9 +201,10 @@
 			type: 'select', // required
 			name: 'BloodGroup', // required
 			value: 'NA',
+			prefix: { classes: ['m-2'] },
 			attributes: {
 				id: 'BloodGroup', // required
-				classes: ['form-input rounded w-full'], // optional
+				classes: ['form-input rounded w-2/3 float-right'],
 				label: 'BloodGroup', // optional
 				disabled: false // optional
 			},
@@ -247,10 +248,10 @@
 			type: 'select', // required
 			name: 'PersonType', // required
 			value: 'RECIPIENT',
-			prefix: { classes: ['mb-2 w-full'] },
+			prefix: { classes: ['m-2'] },
 			attributes: {
 				id: 'id-field', // required
-				classes: ['form-select'], // optional
+				classes: ['form-input rounded w-2/3 float-right'],
 				label: 'Person Type', // optional
 				disabled: false // optional
 			},
@@ -269,13 +270,13 @@
 	let formSet = false;
 	let isValidForm = false;
 
-	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+	beforeNavigate(function(p1: { from: URL; to: URL | null; cancel: () => void }) {
 		const data = values as FormValues;
 		if (!isValidForm) {
 			if (
 				!confirm(
 					'Are you sure you want to navigate away from this page?\n\n' +
-						'\n\nPress OK to continue, or Cancel to stay on the current page.'
+					'\n\nPress OK to continue, or Cancel to stay on the current page.'
 				)
 			) {
 				p1.cancel();
@@ -307,18 +308,18 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap overflow-scroll bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class='flex h-full flex-wrap overflow-scroll bg-gradient-to-b from-blue-50 to-stone-50 p-2'>
 	{#if formSet}
 		<form
-			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
+			class='mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2'
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">New Patient</div>
-			<Field {fields} bind:values bind:isValidForm />
+			<div class='text-xl font-bold'>New Patient</div>
+			<Field {fields} bind:values bind:isValidForm inline={true} />
 			{message}
 			<button
-				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
-				type="submit"
+				class='float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white'
+				type='submit'
 			>
 				Register Patient
 			</button>
@@ -327,17 +328,17 @@
 </div>
 
 <style>
-	.custom-form :global(.form-group) {
-		padding: 10px;
-		margin-bottom: 10px;
-	}
+    .custom-form :global(.form-group) {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
 
-	.custom-form :global(.custom-form-group) {
-		padding: 10px;
-		color: white;
-		margin-bottom: 10px;
-	}
+    .custom-form :global(.custom-form-group) {
+        padding: 10px;
+        color: white;
+        margin-bottom: 10px;
+    }
 
-	.custom-form :global(.class-description) {
-	}
+    .custom-form :global(.class-description) {
+    }
 </style>

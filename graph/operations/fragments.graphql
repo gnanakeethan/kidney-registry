@@ -41,6 +41,8 @@ fragment PersonFollowUpFields on PersonFollowUp {
     ConsultantOpinion
     Person {
         ID
+        FirstName
+        Phn
     }
     CreatedAt
     UpdatedAt
@@ -123,6 +125,7 @@ fragment PersonFields on Person {
     Status
     RecordStatus
     BloodGroup
+    CreatedAt
 }
 
 fragment PersonMedicalHistoryFields on PersonMedicalHistory {

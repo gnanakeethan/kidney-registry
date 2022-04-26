@@ -5,14 +5,15 @@ package resolvers
 
 import (
 	"context"
-
+	
 	"github.com/beego/beego/v2/client/orm"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *queryResolver) Users(ctx context.Context, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.UserList, error) {
-	return models.ListAnyGenerics(ctx, models.User{}, filter, models.UserEdge{}, &models.UserList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.User{}, filter, models.UserEdge{}, &models.UserList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *userResolver) Roles(ctx context.Context, obj *models.User) ([]*models.Role, error) {

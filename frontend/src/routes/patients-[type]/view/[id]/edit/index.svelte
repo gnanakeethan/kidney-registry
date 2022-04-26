@@ -1,15 +1,12 @@
 <!--</script>-->
-<script lang="ts">
+<script lang='ts'>
 	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { FormValues } from '$lib/components/form-builder/lib/stores';
 	import { activeUrl } from '$lib/state/SidebarStore';
 	import { mutation } from '@urql/svelte';
 	// import { Person } from 'lib/graphql/generated';
-	import {
-		UpdatePatientDocument,
-		UpdatePatientMutation
-	} from '../../../../../lib/graphql/generated';
+	import { UpdatePatientDocument, UpdatePatientMutation } from '../../../../../lib/graphql/generated';
 
 	import { recipient } from '../../../../../lib/state/recipient';
 
@@ -30,6 +27,10 @@
 		query: UpdatePatientDocument
 	});
 	let fields = [];
+	let message = '';
+	let values = {};
+	let formSet = false;
+	let isValidForm = false;
 
 	function loadFields() {
 		values = $recipient;
@@ -84,7 +85,7 @@
 					label: 'First Name',
 					id: 'firstname',
 					classes: ['form-input rounded w-full'],
-					placeholder: "Patient's First Name"
+					placeholder: 'Patient\'s First Name'
 				},
 				rules: ['required', 'minlen:6'],
 				messages: {
@@ -104,7 +105,7 @@
 					label: 'Last Name',
 					id: 'lastname',
 					classes: ['form-input rounded w-full'],
-					placeholder: "Patient's Last Name"
+					placeholder: 'Patient\'s Last Name'
 				},
 				rules: ['required', 'minlen:6'],
 				messages: {
@@ -246,18 +247,13 @@
 		];
 	}
 
-	let message = '';
-	let values = {};
-	let formSet = false;
-	let isValidForm = false;
-
-	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+	beforeNavigate(function(p1: { from: URL; to: URL | null; cancel: () => void }) {
 		const data = values as FormValues;
 		if (!isValidForm) {
 			if (
 				!confirm(
 					'Are you sure you want to navigate away from this page?\n\n' +
-						'\n\nPress OK to continue, or Cancel to stay on the current page.'
+					'\n\nPress OK to continue, or Cancel to stay on the current page.'
 				)
 			) {
 				p1.cancel();
@@ -273,6 +269,10 @@
 		console.log(isValidForm);
 		if (isValidForm) {
 			message = 'Saving Data....';
+			for (const i of ['MedicalHistory', 'Investigations', 'Examinations', 'FollowUps']) {
+				delete values[i];
+			}
+			console.log(values);
 			updatePatient({ patientInput: values }).then((result) => {
 				console.log(result);
 				goto('/patients-recipient/view/' + result.data.updatePatient.node.ID);
@@ -288,20 +288,20 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2">
+<div class='flex h-full flex-wrap bg-gradient-to-b from-blue-50 to-stone-50 p-2'>
 	{#await awaitRecipient()}
-		<div class="mx-auto my-auto text-3xl">Loading...</div>
+		<div class='mx-auto my-auto text-3xl'>Loading...</div>
 	{:then formSet}
 		<form
-			class="mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2"
+			class='mx-auto my-auto rounded border border-neutral-300 p-4 shadow-2xl md:w-1/2'
 			on:submit|preventDefault={onSubmit}
 		>
-			<div class="text-xl font-bold">Edit Patient {$recipient.FirstName}</div>
+			<div class='text-xl font-bold'>Edit Patient {$recipient.FirstName}</div>
 			<Field {fields} bind:values bind:isValidForm />
 			{message}
 			<button
-				class="float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white"
-				type="submit"
+				class='float-right mt-4 rounded bg-green-400 py-2 px-4 uppercase text-white'
+				type='submit'
 			>
 				Save
 			</button>

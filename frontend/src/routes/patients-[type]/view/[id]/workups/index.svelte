@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { GraphQLQueryRepository } from '$lib/api/query-repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
@@ -33,7 +33,7 @@
 	$: console.log(selectedRows);
 </script>
 
-<div class="p-2 p-4">
+<div class='p-2 p-4'>
 	<Table
 		bind:dtSource={dataSource}
 		bind:loading
@@ -41,10 +41,10 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath="data.listPersonWorkups.items"
+		rootAccessPath='data.listPersonWorkups.items'
 	>
-		<svelte:fragment let:element={workup} slot="actions">
-			<a href="/patients-recipient/view/{$recipientId}/workups/{workup.ID}">View</a>
+		<svelte:fragment let:element={workup} slot='actions'>
+			<a href='/patients-recipient/view/{$recipientId}/workups/{workup.node.ID}'>View</a>
 		</svelte:fragment>
 	</Table>
 </div>

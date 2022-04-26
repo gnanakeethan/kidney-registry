@@ -6,17 +6,18 @@ package resolvers
 import (
 	"context"
 	"fmt"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonationEdge, error) {
 	pretty.Println(input.Donor)
 	donor, err := models.AddPatient(input.Donor)
-
+	
 	if err != nil {
 		panic(err)
 	}
@@ -76,7 +77,7 @@ func (r *queryResolver) ListPersonOrganDonations(ctx context.Context, personID s
 		filter = &models.PersonOrganDonationFilter{}
 	}
 	filter.Recipient = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonOrganDonation{}, filter, models.PersonOrganDonationEdge{}, &models.PersonOrganDonationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonOrganDonation{}, filter, models.PersonOrganDonationEdge{}, &models.PersonOrganDonationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // PersonOrganDonation returns generated.PersonOrganDonationResolver implementation.

@@ -7,10 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonExamination(ctx context.Context, input models.PersonExaminationInput) (*models.PersonExaminationEdge, error) {
@@ -102,14 +103,14 @@ func (r *queryResolver) ListPersonExaminations(ctx context.Context, personID str
 		filter = &models.PersonExaminationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *queryResolver) ListAllPersonExaminations(ctx context.Context, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonExaminationFilter{}
 	}
-	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // PersonExamination returns generated.PersonExaminationResolver implementation.

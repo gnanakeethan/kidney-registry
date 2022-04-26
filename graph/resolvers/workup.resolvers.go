@@ -7,7 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -21,7 +21,7 @@ func (r *queryResolver) ListWorkups(ctx context.Context, filter *models.WorkupFi
 	sortBy = append(sortBy, StringPointer("Order"))
 	orderByAc := models.OrderByAsc
 	orderBy = append(orderBy, &orderByAc)
-	return models.ListAnyGenerics(ctx, models.Workup{}, filter, models.WorkupEdge{}, &models.WorkupList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Workup{}, filter, models.WorkupEdge{}, &models.WorkupList{}, page, limit, sortBy, orderBy, nil)
 }
 
 func (r *workupResolver) Details(ctx context.Context, obj *models.Workup) (*models.FormDetails, error) {

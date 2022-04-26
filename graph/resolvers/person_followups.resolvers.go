@@ -8,11 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input models.PersonFollowUpInput) (*models.PersonFollowUpEdge, error) {
@@ -33,7 +34,7 @@ func (r *mutationResolver) CreatePersonFollowUp(ctx context.Context, input model
 	if input.Donation != nil {
 		personFollowUp.Donation = &models.PersonOrganDonation{ID: PointerString(input.Donation.ID)}
 	}
-
+	
 	if results, err := json.Marshal(input.DialysisPlan); err == nil {
 		personFollowUp.DialysisPlan.Set(string(results))
 	}
@@ -101,14 +102,14 @@ func (r *queryResolver) ListPersonFollowUps(ctx context.Context, personID string
 		filter = &models.PersonFollowUpFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, models.PersonFollowUpEdge{}, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, models.PersonFollowUpEdge{}, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *queryResolver) ListAllPersonFollowUps(ctx context.Context, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
 	if filter == nil {
 		filter = &models.PersonFollowUpFilter{}
 	}
-	return nil, nil
+	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, models.PersonFollowUpEdge{}, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // PersonFollowUp returns generated.PersonFollowUpResolver implementation.

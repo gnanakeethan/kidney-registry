@@ -5,7 +5,7 @@ package resolvers
 
 import (
 	"context"
-
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -37,7 +37,7 @@ func (r *personResolver) Histories(ctx context.Context, obj *models.Person, filt
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *personMedicalHistoryResolver) StartDate(ctx context.Context, obj *models.PersonMedicalHistory) (*string, error) {
@@ -82,7 +82,7 @@ func (r *queryResolver) ListPersonMedicalHistories(ctx context.Context, personID
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // PersonMedicalHistory returns generated.PersonMedicalHistoryResolver implementation.

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script context='module' lang='ts'>
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
@@ -8,7 +8,7 @@
 	}
 </script>
 
-<script lang="ts">
+<script lang='ts'>
 	import { beforeNavigate } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { recipient } from '$lib/state/recipient';
@@ -80,12 +80,12 @@
 	}
 	let isValidForm = false;
 
-	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+	beforeNavigate(function(p1: { from: URL; to: URL | null; cancel: () => void }) {
 		if (!isValidForm) {
 			if (
 				!confirm(
 					'Are you sure you want to navigate away from this page?\n\n' +
-						'\n\nPress OK to continue, or Cancel to stay on the current page.'
+					'\n\nPress OK to continue, or Cancel to stay on the current page.'
 				)
 			) {
 				p1.cancel();
@@ -152,7 +152,7 @@
 			})
 		).subscribe(({ data }) => {
 			if (data?.getPersonExamination) {
-				examination = data?.getPersonExamination;
+				examination = data?.getPersonExamination.node;
 				console.log(examination.Results);
 				// for (let [i, results] of examination.Results) {
 				// 	if (!i.startsWith('Results.')) {
@@ -172,15 +172,15 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap p-2 px-8">
+<div class='flex h-full flex-wrap p-2 px-8'>
 	{#if formSet}
-		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
+		<form class='w-full rounded ' on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
-				<div class="my-8 text-xl font-bold capitalize">
+				<div class='my-8 text-xl font-bold capitalize'>
 					{examination?.Details?.Name?.toString().toLowerCase()} For {$recipient.FirstName}
 				</div>
 			{/if}
-			<div class="flex w-full flex-col items-center justify-between">
+			<div class='flex w-full flex-col items-center justify-between'>
 				<Field
 					inline={examination?.Details?.Inline ?? false}
 					bind:isValidForm

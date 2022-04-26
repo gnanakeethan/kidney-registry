@@ -8,13 +8,6 @@
 	const workups = operationStore(ListWorkupsDocument);
 	query(workups);
 	let workupId = '';
-	$: if (workupId) {
-		const backup = workupId;
-		workupId = '';
-		// setTimeout(()  => {
-		workupId = backup;
-		// }, 100);
-	}
 	let currentWorkup = 0;
 	let examsLength = 0;
 	workups.subscribe((data) => {
@@ -45,6 +38,14 @@
 	function Followup() {
 		goto('/patients-recipient/view/' + $recipientId + '/followups/create');
 	}
+
+	function workupChanged() {
+		const backup = workupId;
+		workupId = '';
+		setTimeout(() => {
+			workupId = backup;
+		}, 100);
+	}
 </script>
 
 {#if $workups.fetching}
@@ -53,18 +54,18 @@
 	<p>Oh no... {$workups.error.message}</p>
 {:else}
 	Select Workup
-	<select class="form-select" name="" id="" bind:value={workupId}>
+	<select class='form-select' name='' id='' bind:value={workupId} on:change={()=>workupChanged()}>
 		{#each $workups.data.listWorkups.items as workup}
 			<!--{workup.Details.Name} <br>-->
-			<option disabled={workupId !== ''} value={workup.node.ID}>{workup.node.Details.Name}</option>
+			<option value={workup.node.ID}>{workup.node.Details.Name}</option>
 		{/each}
 	</select>
-	<button on:click={() => Clear()} class="bg-yellow-400 p-4 m-2">Clear Selection</button>
-	<button on:click={() => Next()} class="bg-green-400 p-4 m-2">Next</button>
-	<button on:click={() => Followup()} class="bg-green-400 p-4 m-2">FollowUp</button>
+	<button on:click={() => Clear()} class='bg-yellow-400 p-4 m-2'>Clear Selection</button>
+	<button on:click={() => Next()} class='bg-green-400 p-4 m-2'>Next</button>
+	<button on:click={() => Followup()} class='bg-green-400 p-4 m-2'>FollowUp</button>
 {/if}
 {#if workupId}
-	<div class="mx-auto w-3/4">
+	<div class='mx-auto w-3/4'>
 		<GenericWorkup bind:workupId />
 	</div>
 {/if}

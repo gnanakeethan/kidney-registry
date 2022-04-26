@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
+<script context='module' lang='ts'>
 	import { goto } from '$app/navigation';
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
 	import { NotificationsStatus } from '$lib/state/notifications';
-	import { minimized as minimized } from '$lib/state/SidebarStore';
+	import { minimized } from '$lib/state/SidebarStore';
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 	import MessageIcon from '~icons/ant-design/message-outlined';
 	import PatientIcon from '~icons/bi/person';
@@ -57,7 +57,7 @@
 	}
 </script>
 
-<script lang="ts">
+<script lang='ts'>
 	import { createClient, setClient } from '@urql/svelte';
 	import { ENV } from '$lib/environment/environment';
 	import { auth, authState } from '../lib/state/auth';
@@ -89,23 +89,23 @@
 </script>
 
 <div
-	class="text-system sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-gray-500"
+	class='text-system sticky top-0 z-10 flex h-[3.25rem] flex-row items-center bg-zinc-100 text-gray-500'
 >
-	<a class="flex flex-row items-center py-2 pl-4 text-neutral-600" href="/">
-		<KidneyOutline class="rotate-180 fill-current text-2xl" />
-		<div class="font-raleway text-2xl font-extrabold">Registry</div>
+	<a class='flex flex-row items-center py-2 pl-4 text-neutral-600' href='/'>
+		<KidneyOutline class='rotate-180 fill-current text-2xl' />
+		<div class='font-raleway text-2xl font-extrabold'>Registry</div>
 	</a>
-	<div class="w-full flex-grow text-lg font-bold">
-		<div class="mx-auto w-1/2">
+	<div class='w-full flex-grow text-lg font-bold'>
+		<div class='mx-auto w-1/2'>
 			{auth.user?.name ?? ''}
-			<span class="mx-2 capitalize">({auth.user?.Roles.map((i) => i.name).join(',')})</span>
+			<span class='mx-2 capitalize'>({auth.user?.Roles.map((i) => i.name).join(',')})</span>
 		</div>
 	</div>
-	<div class="relative mx-4 flex flex-row items-center">
+	<div class='relative mx-4 flex flex-row items-center'>
 		<input
-			class="bg-light-gray block h-8 w-32 flex-grow border-gray-300 pl-4 pr-12 font-sans text-xs text-sm focus:border-none focus:ring-0"
-			placeholder="Search"
-			type="text"
+			class='bg-light-gray block h-8 w-32 flex-grow border-gray-300 pl-4 pr-12 font-sans text-xs text-sm focus:border-none focus:ring-0'
+			placeholder='Search'
+			type='text'
 		/>
 	</div>
 	<div
@@ -113,7 +113,7 @@
 			? 'bg-zinc-300'
 			: ''}"
 	>
-		<a class="relative inline-block" href="/messaging">
+		<a class='relative inline-block' href='/messaging'>
 			<MessageIcon
 				class="fill-current text-xl subpixel-antialiased {$NotificationsStatus.messages > 0
 					? 'text-gray-900'
@@ -121,8 +121,8 @@
 			/>
 			{#if $NotificationsStatus.messages > 0}
 				<div
-					class="absolute top-0.5 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white"
-					style="font-size: 8px"
+					class='absolute top-0.5 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white'
+					style='font-size: 8px'
 				>
 					{$NotificationsStatus.messages > 99
 						? 99
@@ -136,7 +136,7 @@
 			? 'bg-zinc-300'
 			: ''}"
 	>
-		<div class="relative inline-block">
+		<div class='relative inline-block'>
 			<NotificationIcon
 				class="fill-current text-xl subpixel-antialiased {$NotificationsStatus.notificationCounter >
 				0
@@ -145,67 +145,68 @@
 			/>
 			{#if $NotificationsStatus.notificationCounter > 0}
 				<div
-					class="absolute top-0.5 right-1 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white"
-					style="font-size: 8px"
+					class='absolute top-0.5 right-1 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-400 p-1 text-xs font-bold leading-none text-white'
+					style='font-size: 8px'
 				>
 					{$NotificationsStatus.notificationCounter > 99
 						? 99
 						: $NotificationsStatus.notificationCounter}{$NotificationsStatus.notificationCounter >
-					99
-						? '+'
-						: ''}
+				99
+					? '+'
+					: ''}
 				</div>
 			{/if}
 		</div>
 	</div>
-	<div class="mx-4 flex flex-row items-center">
-		<a href="/profile">
+	<div class='mx-4 flex flex-row items-center'>
+		<a href='/profile'>
 			<img
-				alt="descriptive"
-				class="hidden h-full w-10 rounded-full md:block"
-				src="https://picsum.photos/seed/profile/90/90"
+				alt='descriptive'
+				class='hidden h-full w-10 rounded-full md:block'
+				src='https://picsum.photos/seed/profile/90/90'
 			/>
 		</a>
 	</div>
 	<button
-		class="mx-2 rounded bg-yellow-400 px-2 py-1 text-white"
+		class='mx-2 rounded bg-yellow-400 px-2 py-1 text-white'
 		on:click={() => {
 			logout();
 		}}
-		>Logout
+	>Logout
 	</button>
 </div>
 <div
-	class="text-system flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50"
-	style="height:calc(100vh - 3.25rem);min-height:fit-content"
+	class='text-system flex w-full flex-row bg-gradient-to-b from-blue-50 to-stone-50'
+	style='height:calc(100vh - 3.25rem);min-height:fit-content'
 >
 	<div
-		class="relative flex flex-col justify-between overflow-scroll"
-		style="min-width: fit-content"
+		class='relative flex flex-col justify-between overflow-scroll'
+		style='min-width: fit-content'
 	>
 		<Sidebar {...props} />
 		<Sidebar {...bottomProps} />
 		<div
-			class="absolute bottom-32 right-5"
+			class='absolute bottom-32 right-5'
 			on:click={() => {
 				minimized.set(!$minimized);
+				console.log($minimized);
 			}}
 		>
 			<div
-				class="fixed flex h-8 w-8 flex-row items-center justify-around rounded-full border border-dashed border-neutral-500 bg-white"
+				class='fixed flex h-8 w-8 flex-row items-center justify-around rounded-full border border-dashed border-neutral-500 bg-white'
 				class:bg-neutral-500={$minimized}
 				class:text-white={$minimized}
 			>
 				{#if $minimized}
-					<CollapsibleIcon class="rotate-90 text-xl" />
+					<CollapsibleIcon class='rotate-90 text-xl' />
 				{:else}
-					<CollapsibleIcon class="-rotate-90 text-xl" />
+					<CollapsibleIcon class='-rotate-90 text-xl' />
 				{/if}
 			</div>
 		</div>
 	</div>
 	<div
-		class="flex-grow overflow-scroll border-l border-t border-dashed border-neutral-500 bg-white"
+		class='flex-grow overflow-scroll border-l border-t border-dashed border-neutral-500 bg-white'
 	>
 		<slot />
 	</div>

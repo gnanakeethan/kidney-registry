@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { recipient, recipientId } from '$lib/state/recipient';
@@ -24,7 +24,7 @@
 			})
 		).subscribe(({ data }) => {
 			if (data?.getInvestigation) {
-				investigation = data?.getInvestigation;
+				investigation = data?.getInvestigation.node;
 				console.log(investigation);
 			}
 		});
@@ -83,7 +83,7 @@
 				name: 'ValidDays',
 				value: investigation.Details.ValidDays,
 				prefix: {
-					classes: ['w-full  items-center justify-between']
+					classes: ['']
 				},
 				attributes: {
 					type: 'text',
@@ -98,7 +98,7 @@
 				name: 'CreatedAt',
 				value: new Date().toISOString().split('T')[0],
 				prefix: {
-					classes: ['w-full items-center justify-between']
+					classes: ['']
 				},
 				attributes: {
 					type: 'date',
@@ -113,7 +113,7 @@
 				name: 'ExpectedDate',
 				value: '',
 				prefix: {
-					classes: ['w-full items-center justify-between']
+					classes: ['']
 				},
 				attributes: {
 					type: 'date',
@@ -127,7 +127,7 @@
 				name: 'ObtainedDate',
 				value: '',
 				prefix: {
-					classes: ['w-full items-center justify-between']
+					classes: ['']
 				},
 				attributes: {
 					type: 'date',
@@ -140,12 +140,12 @@
 	}
 	let isValidForm = false;
 
-	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+	beforeNavigate(function(p1: { from: URL; to: URL | null; cancel: () => void }) {
 		if (!isValidForm) {
 			if (
 				!confirm(
 					'Are you sure you want to navigate away from this page?\n\n' +
-						'\n\nPress OK to continue, or Cancel to stay on the current page.'
+					'\n\nPress OK to continue, or Cancel to stay on the current page.'
 				)
 			) {
 				p1.cancel();
@@ -200,24 +200,24 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap p-2">
+<div class='flex h-full flex-wrap p-2'>
 	{#if formSet}
-		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
+		<form class='w-full rounded ' on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
-				<div class="my-8 text-xl font-bold capitalize">
+				<div class='my-8 text-xl font-bold capitalize'>
 					{investigation?.Details?.Name?.toString()} For {$recipient.FirstName}
 				</div>
 			{/if}
-			<div class="flex w-full flex-col items-center justify-between">
+			<div class='flex flex-wrap items-center justify-between'>
 				<Field
-					inline={investigation?.Details?.Inline ?? false}
+					inline={investigation?.Details?.Inline ?? true}
 					bind:isValidForm
 					bind:values
 					{fields}
 				/>
 				{message}
-				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
-					>Save
+				<button class='self-end rounded bg-green-400 py-2 px-4 uppercase text-white' type='submit'
+				>Save
 				</button>
 			</div>
 		</form>

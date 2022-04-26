@@ -7,10 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"time"
-
+	
+	"github.com/segmentio/ksuid"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
-	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonInvestigation(ctx context.Context, input models.PersonInvestigationInput) (*models.PersonInvestigationEdge, error) {
@@ -120,11 +121,11 @@ func (r *queryResolver) ListPersonInvestigations(ctx context.Context, personID s
 		filter = &models.PersonInvestigationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &personID}}
-	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *queryResolver) ListAllPersonInvestigations(ctx context.Context, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
-	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 // PersonInvestigation returns generated.PersonInvestigationResolver implementation.

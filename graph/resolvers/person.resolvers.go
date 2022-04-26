@@ -6,12 +6,13 @@ package resolvers
 import (
 	"context"
 	"time"
-
-	"github.com/gnanakeethan/kidney-registry/graph/generated"
-	"github.com/gnanakeethan/kidney-registry/models"
+	
 	"github.com/mergestat/timediff"
 	"github.com/mergestat/timediff/locale"
 	"github.com/segmentio/ksuid"
+	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/models"
 )
 
 func (r *mutationResolver) NewPatient(ctx context.Context) (*models.PersonEdge, error) {
@@ -77,7 +78,7 @@ func (r *personResolver) Examinations(ctx context.Context, obj *models.Person, f
 		filter = &models.PersonExaminationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonExamination{}, filter, models.PersonExaminationEdge{}, &models.PersonExaminationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *personResolver) Investigations(ctx context.Context, obj *models.Person, filter *models.PersonInvestigationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
@@ -85,7 +86,7 @@ func (r *personResolver) Investigations(ctx context.Context, obj *models.Person,
 		filter = &models.PersonInvestigationFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonInvestigation{}, filter, models.PersonInvestigationEdge{}, &models.PersonInvestigationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
@@ -93,7 +94,7 @@ func (r *personResolver) FollowUps(ctx context.Context, obj *models.Person, filt
 		filter = &models.PersonFollowUpFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, models.PersonFollowUpEdge{}, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonFollowUp{}, filter, models.PersonFollowUpEdge{}, &models.PersonFollowUpList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *personResolver) MedicalHistory(ctx context.Context, obj *models.Person, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
@@ -101,7 +102,7 @@ func (r *personResolver) MedicalHistory(ctx context.Context, obj *models.Person,
 		filter = &models.PersonMedicalHistoryFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonMedicalHistory{}, filter, models.PersonMedicalHistoryEdge{}, &models.PersonMedicalHistoryList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *personResolver) OrganDonations(ctx context.Context, obj *models.Person, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
@@ -109,7 +110,7 @@ func (r *personResolver) OrganDonations(ctx context.Context, obj *models.Person,
 		filter = &models.PersonOrganDonationFilter{}
 	}
 	filter.Recipient = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonOrganDonation{}, filter, models.PersonOrganDonationEdge{}, &models.PersonOrganDonationList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonOrganDonation{}, filter, models.PersonOrganDonationEdge{}, &models.PersonOrganDonationList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *personResolver) Workup(ctx context.Context, obj *models.Person, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error) {
@@ -117,7 +118,7 @@ func (r *personResolver) Workup(ctx context.Context, obj *models.Person, filter 
 		filter = &models.PersonWorkupFilter{}
 	}
 	filter.Person = &models.PersonFilter{ID: &models.StringFilter{Comparison: "EQUAL", Value: &obj.ID}}
-	return models.ListAnyGenerics(ctx, models.PersonWorkup{}, filter, models.PersonWorkupEdge{}, &models.PersonWorkupList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.PersonWorkup{}, filter, models.PersonWorkupEdge{}, &models.PersonWorkupList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.PersonList, error) {
@@ -126,7 +127,7 @@ func (r *queryResolver) ListPatients(ctx context.Context, filter *models.PersonF
 		orderByAc := models.OrderByAsc
 		orderBy = append(orderBy, &orderByAc)
 	}
-	return models.ListAnyGenerics(ctx, models.Person{}, filter, models.PersonEdge{}, &models.PersonList{}, page, limit, sortBy, orderBy)
+	return models.ListAnyGenerics(ctx, models.Person{}, filter, models.PersonEdge{}, &models.PersonList{}, page, limit, sortBy, orderBy, []string{})
 }
 
 func (r *queryResolver) GetPatient(ctx context.Context, id string) (*models.PersonEdge, error) {

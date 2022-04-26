@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { goto } from '$app/navigation';
 	import { operationStore, query } from '@urql/svelte';
 	import { ListExaminationsDocument } from '../../../../../lib/graphql/generated';
@@ -49,10 +49,17 @@
 	}
 
 	function Investigate() {
-		goto('/patients-recipient/view/' + $recipientId + '/investigations/new');
+		goto('/patients-recipient/view/' + $recipientId + '/examinations/new');
 	}
 
 	let examination;
+
+	function examinationChanged(ID) {
+		examinationId = '';
+		setTimeout(() => {
+			examinationId = ID;
+		}, 200);
+	}
 </script>
 
 {#if $examinations.fetching}
@@ -60,23 +67,21 @@
 {:else if $examinations.error}
 	<p>Oh no... {$examinations.error.message}</p>
 {:else}
-	Select Examination
-	<select class="form-select" name="" id="" bind:value={examinationId}>
+	<div class='flex flex-wrap'>
 		{#each $examinations.data.listExaminations.items as examination}
 			<!--{examination.Details.Name} <br>-->
-			<option disabled={examinationId !== ''} value={examination.node.ID}
-				>{examination.node.Details.Name}</option
-			>
+			<div class='p-4 bg-gray-100'
+					 class:bg-gray-400={examinationId === examination.node.ID}
+					 class:text-white={examinationId === examination.node.ID}
+					 on:click={()=>examinationChanged(examination.node.ID)}>{examination.node.Details.Name}</div>
 		{/each}
-	</select>
-	<button on:click={() => Clear()} class="bg-yellow-400 p-4 m-2">Clear Selection</button>
-	<button on:click={() => Save()} class="bg-green-400 p-4 m-2">Save</button>
-	<button on:click={() => Next()} class="bg-green-400 p-4 m-2">Next</button>
-	<button on:click={() => Investigate()} class="bg-green-400 p-4 m-2">Investigate</button>
+	</div>
 {/if}
 {#if examinationId}
-	<div class="w-full px-8">
+	<div class='w-full px-8'>
 		<GenericExamination {examinationId} bind:this={examination} />
 	</div>
+	<button on:click={() => Save()} class='bg-green-400 p-4 m-2'>Save</button>
+	<button on:click={() => Investigate()} class='bg-green-400 p-4 m-2'>Investigations</button>
 {/if}
 <!--<GeneralExamination bind:examinationId />-->

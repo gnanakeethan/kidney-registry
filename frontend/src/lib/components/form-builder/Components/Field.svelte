@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { onMount } from 'svelte';
 
 	import { preprocessField } from '../lib/helpers';
@@ -97,18 +97,18 @@
 		classes={field.prefix
 			? field.prefix.classes
 				? field.prefix.classes
-				: 'form-group w-full'
-			: 'form-group w-full'}
+				: 'form-group'
+			: 'form-group'}
 	>
 		<!-- Label -->
-		<div class="flex w-full" class:flex-row={inline} class:flex-col={!inline}>
+		<div class='flex items-center' class:flex-row={inline} class:flex-col={!inline}>
 			{#if field.attributes}
 				{#if field.attributes.label}
-					<label for={field.id} class="label text-md mt-2 w-full font-bold"
-						>{field.attributes.label}</label
+					<label for={field.id} class='label text-md mx-2 font-bold'
+					>{field.attributes.label}</label
 					>
 				{/if}
-				<div class="w-full">
+				<div class='w-full items-center'>
 					{#if field.type === 'input'}
 						<Input {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'imagedetail'}
@@ -134,9 +134,9 @@
 			{/if}
 		</div>
 		{#if field.description || field.dirty}
-			<div class="flex w-full flex-row">
-				<div class="w-1/2">&nbsp;</div>
-				<div class="flex w-1/2 flex-col">
+			<div class='flex items-center flex-row'>
+				<div class='w-1/2'>&nbsp;</div>
+				<div class='flex w-1/2 flex-col'>
 					<!-- Description -->
 					{#if field.description}
 						{#if field.description.text}

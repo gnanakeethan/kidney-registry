@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { beforeNavigate, goto } from '$app/navigation';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
 	import { recipient, recipientId } from '$lib/state/recipient';
@@ -17,13 +17,21 @@
 	export let workupId = '';
 	let workup: Workup;
 	let formSet = !!$recipient.ID;
-
+	let message = '';
+	let values = {};
+	export let i = 0;
+	let baseFields = [];
+	let fields = [];
+	let isValidForm = false;
+	let prevId = '';
+	$: prevId = workupId;
 	if (workupId != '') {
 		const result = query(
 			operationStore(GetWorkupDocument, {
 				id: workupId
 			})
 		).subscribe(({ data }) => {
+			formSet = false;
 			if (data?.getWorkup) {
 				workup = data?.getWorkup.node;
 				console.log(workup);
@@ -70,20 +78,12 @@
 			}
 		});
 	}
-	let message = '';
-	let values = {};
-	export let i = 0;
-	export let others = 1;
-	let baseFields = [];
-	let fields = [];
-	let isValidForm = false;
-
-	beforeNavigate(function (p1: { from: URL; to: URL | null; cancel: () => void }) {
+	beforeNavigate(function(p1: { from: URL; to: URL | null; cancel: () => void }) {
 		if (!isValidForm) {
 			if (
 				!confirm(
 					'Are you sure you want to navigate away from this page?\n\n' +
-						'\n\nPress OK to continue, or Cancel to stay on the current page.'
+					'\n\nPress OK to continue, or Cancel to stay on the current page.'
 				)
 			) {
 				p1.cancel();
@@ -138,19 +138,19 @@
 	}
 </script>
 
-<div class="flex h-full flex-wrap p-2">
+<div class='flex h-full flex-wrap p-2'>
 	{#if formSet}
-		<form class="w-full rounded " on:submit|preventDefault={onSubmit}>
+		<form class='w-full rounded ' on:submit|preventDefault={onSubmit}>
 			{#if i === 0}
-				<div class="my-8 text-xl font-bold capitalize">
+				<div class='my-8 text-xl font-bold capitalize'>
 					{workup?.Details?.Name?.toString()} For {$recipient.FirstName}
 				</div>
 			{/if}
-			<div class="flex w-full flex-col items-center justify-between">
+			<div class='flex w-full flex-col items-center justify-between'>
 				<Field inline={workup?.Details?.Inline ?? false} bind:isValidForm bind:values {fields} />
 				{message}
-				<button class="self-end rounded bg-green-400 py-2 px-4 uppercase text-white" type="submit"
-					>Save
+				<button class='self-end rounded bg-green-400 py-2 px-4 uppercase text-white' type='submit'
+				>Save
 				</button>
 			</div>
 		</form>
