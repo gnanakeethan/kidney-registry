@@ -1,6 +1,7 @@
 type Workflow implements Node {
     ID          : ID!
     User: User!
+    Name: String!
     Configuration: Configuration!
 }
 type Configuration {
@@ -20,6 +21,7 @@ input ComponentInput {
 
 input WorkflowInput{
     ID          : ID!
+    Name: String!
     User: UserInput!
     Configuration: ConfigurationInput!
 }

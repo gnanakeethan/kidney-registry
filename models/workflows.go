@@ -6,6 +6,7 @@ import (
 
 type Workflow struct {
 	ID            string         `orm:"column(id);pk"`
+	Name          string         `orm:"column(name)"`
 	User          *User          `orm:"column(user_id);rel(fk)"`
 	Configuration orm.JsonbField `orm:"column(configuration);null"`
 }
