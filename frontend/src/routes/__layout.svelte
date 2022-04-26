@@ -36,7 +36,7 @@
 			{ name: 'Patients', route: '/patients-recipient', icon: PatientIcon },
 			{ name: 'Doctors', route: '/doctors', icon: DoctorIcon },
 			{ name: 'Users', route: '/users', icon: UserIcon },
-			{ name: 'Workflow', route: '/workflow/new', icon: UserIcon }
+			{ name: 'Workflow', route: '/workflow/', icon: UserIcon }
 			// { name: '', route: '/i', icon: DoctorIcon }
 		]
 	};

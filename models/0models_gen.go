@@ -588,14 +588,6 @@ type UserToken struct {
 	User  *User  `json:"user"`
 }
 
-type Workflow struct {
-	ID            string         `json:"ID"`
-	User          *User          `json:"User"`
-	Configuration *Configuration `json:"Configuration"`
-}
-
-func (Workflow) IsNode() {}
-
 type WorkflowEdge struct {
 	Node   *Workflow   `json:"node"`
 	Cursor *Pagination `json:"cursor"`

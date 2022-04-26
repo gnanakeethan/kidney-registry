@@ -4,28 +4,28 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type Workflows struct {
+type Workflow struct {
 	ID            string         `orm:"column(id);pk"`
-	User          *User          `orm:"column(user_id)"`
+	User          *User          `orm:"column(user_id);rel(fk)"`
 	Configuration orm.JsonbField `orm:"column(configuration);null"`
 }
 
-func (Workflows) IsNode()                 {}
-func (Workflows) IsDynamicFormInterface() {}
+func (Workflow) IsNode()                 {}
+func (Workflow) IsDynamicFormInterface() {}
 
-func (t *Workflows) TableName() string {
+func (t *Workflow) TableName() string {
 	return "workflows"
 }
 
 func init() {
-	orm.RegisterModel(new(Workflows))
+	orm.RegisterModel(new(Workflow))
 }
 
-// GetWorkflowsById retrieves Workflows by ID. Returns error if
+// GetWorkflowById retrieves Workflow by ID. Returns error if
 // ID doesn't exist
-func GetWorkflowsById(id string) (v *Workflows, err error) {
+func GetWorkflowById(id string) (v *Workflow, err error) {
 	o := orm.NewOrm()
-	v = &Workflows{ID: id}
+	v = &Workflow{ID: id}
 	if err = o.Read(v); err == nil {
 		return v, nil
 	}

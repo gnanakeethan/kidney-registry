@@ -5,7 +5,9 @@ package resolvers
 
 import (
 	"context"
+	"encoding/json"
 	
+	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
 
@@ -20,3 +22,15 @@ func (r *queryResolver) ListWorkflows(ctx context.Context, filter *models.Workfl
 	// orderBy = append(orderBy, &orderByAc)
 	return models.ListAnyGenerics(ctx, models.Workflow{}, filter, models.WorkflowEdge{}, &models.WorkflowList{}, page, limit, sortBy, orderBy, nil)
 }
+
+func (r *workflowResolver) Configuration(ctx context.Context, obj *models.Workflow) (*models.Configuration, error) {
+	configurationString := obj.Configuration.String()
+	configuration := models.Configuration{}
+	json.Unmarshal([]byte(configurationString), &configuration)
+	return &configuration, nil
+}
+
+// Workflow returns generated.WorkflowResolver implementation.
+func (r *Resolver) Workflow() generated.WorkflowResolver { return &workflowResolver{r} }
+
+type workflowResolver struct{ *Resolver }

@@ -50,6 +50,7 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	Subscription() SubscriptionResolver
 	User() UserResolver
+	Workflow() WorkflowResolver
 	Workup() WorkupResolver
 }
 
@@ -651,6 +652,9 @@ type SubscriptionResolver interface {
 }
 type UserResolver interface {
 	Roles(ctx context.Context, obj *models.User) ([]*models.Role, error)
+}
+type WorkflowResolver interface {
+	Configuration(ctx context.Context, obj *models.Workflow) (*models.Configuration, error)
 }
 type WorkupResolver interface {
 	Details(ctx context.Context, obj *models.Workup) (*models.FormDetails, error)
@@ -14888,14 +14892,14 @@ func (ec *executionContext) _Workflow_Configuration(ctx context.Context, field g
 		Object:     "Workflow",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Configuration, nil
+		return ec.resolvers.Workflow().Configuration(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -23152,7 +23156,7 @@ func (ec *executionContext) _Workflow(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = innerFunc(ctx)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "User":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -23162,18 +23166,28 @@ func (ec *executionContext) _Workflow(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = innerFunc(ctx)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "Configuration":
+			field := field
+
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Workflow_Configuration(ctx, field, obj)
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Workflow_Configuration(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
 			}
 
-			out.Values[i] = innerFunc(ctx)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -23956,6 +23970,10 @@ func (ec *executionContext) unmarshalNComponentInput2ᚕᚖgithubᚗcomᚋgnanak
 func (ec *executionContext) unmarshalNComponentInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentInput(ctx context.Context, v interface{}) (*models.ComponentInput, error) {
 	res, err := ec.unmarshalInputComponentInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNConfiguration2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConfiguration(ctx context.Context, sel ast.SelectionSet, v models.Configuration) graphql.Marshaler {
+	return ec._Configuration(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNConfiguration2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConfiguration(ctx context.Context, sel ast.SelectionSet, v *models.Configuration) graphql.Marshaler {
