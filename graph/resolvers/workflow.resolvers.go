@@ -6,7 +6,9 @@ package resolvers
 import (
 	"context"
 	"encoding/json"
-
+	
+	"github.com/kr/pretty"
+	
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
@@ -20,6 +22,7 @@ func (r *queryResolver) ListWorkflows(ctx context.Context, filter *models.Workfl
 	// sortBy = append(sortBy, StringPointer("Order"))
 	// orderByAc := models.OrderByAsc
 	// orderBy = append(orderBy, &orderByAc)
+	pretty.Println(filter)
 	return models.ListAnyGenerics(ctx, models.Workflow{}, filter, models.WorkflowEdge{}, &models.WorkflowList{}, page, limit, sortBy, orderBy, nil)
 }
 

@@ -342,14 +342,15 @@ fragment WorkflowFields on Workflow {
     Name
     Configuration {
         components {
+            name
             component
             component_id
         }
     }
 }
 
-query ListWorkflows {
-    listWorkflows {
+query ListWorkflows ($filter: WorkflowFilter, $page: Int, $limit: Int, $sortBy: [String], $orderBy: [OrderBy]) {
+    listWorkflows(filter:$filter,page: $page,limit: $limit          ,sortBy: $sortBy,orderBy: $orderBy) {
         items {
             node {
                 ...WorkflowFields

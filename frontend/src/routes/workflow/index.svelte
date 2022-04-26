@@ -2,23 +2,28 @@
 	import { GraphQLQueryRepository } from '../../lib/api/query-repository';
 	import { DataSourceConnector } from '../../lib/api/table-datasource';
 	import Table from '../../lib/components/table/Table.svelte';
-	import { Person } from '../../lib/graphql/generated';
-	import { auth } from '../../lib/state/auth';
+	import { ListWorkflowsDocument, Workflow } from '../../lib/graphql/generated';
+	import { authState } from '../../lib/state/auth';
 
 	interface User {
 		name: string;
 		ID: string;
 	}
 
-	let filters = {
-		filter: {
-			User: { id: { comparison: 'EQUAL', value: auth.user.id } }
-		},
-		orderBy: [],
-		sortBy: []
-	};
-	const queryRepository = new GraphQLQueryRepository<Person>();
-	let dataSource = new DataSourceConnector<Person>(queryRepository, ListWorkflowsDocument, filters);
+	let filters = {};
+	authState.subscribe((authStateS) => {
+		console.log(authStateS);
+		if (authStateS.user === undefined || authStateS.user === null) {
+			return;
+		}
+		filters = {
+			filter: {
+				User: { id: { comparison: 'EQUAL', value: authStateS.user.ID } }
+			}
+		};
+	});
+	const queryRepository = new GraphQLQueryRepository<Workflow>();
+	let dataSource = new DataSourceConnector<Workflow>(queryRepository, ListWorkflowsDocument);
 	let loading = true;
 	dataSource.loadCurrentPage({}).then((data) => {
 		console.log(data);
@@ -26,21 +31,12 @@
 	});
 
 	let columns = [
-		{ key: 'node.FirstName', name: 'First Name' },
-		{ key: 'node.LastName', name: 'Last Name' },
-		{ key: 'node.Phn', name: 'Phn' },
-		{ key: 'node.Status', name: 'Status' },
-		{ key: 'node.CreatedAt', name: 'Created Date' }
+		{ key: 'node.Name', name: 'Name' }
 	];
 	let displayedColumns = [
-		'node.Phn',
-		'node.Address',
-		'node.FirstName',
-		'node.LastName',
-		'node.CreatedAt',
-		'node.Status'
+		'node.Name'
 	];
-	let element: User;
+	let element: Workflow;
 	let selectedRows = [];
 	$: console.log(selectedRows);
 </script>
@@ -53,10 +49,11 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath='data.listPatients.items'
+		rootAccessPath='data.listWorkflows.items'
 	>
-		<svelte:fragment let:element={Patient} slot='actions'>
-			<a href='/patients-recipient/view/{Patient.node.ID}/overview'>View Patient</a>
+		<svelte:fragment let:element={workflow} slot='actions'>
+			{workflow.node.id}
+			<!--			<a href='/patients-recipient/view/{Patient.node.ID}/overview'>View Patient</a>-->
 		</svelte:fragment>
 	</Table>
 </div>
