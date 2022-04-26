@@ -241,18 +241,18 @@ func GetAnyAll(object interface{}, query *orm.Condition, sortby []*string, order
 }
 
 type Model interface {
-	Examination | Investigation | Person | PersonExamination | PersonInvestigation | PersonMedicalHistory | PersonOrganDonation | PersonWorkup | User | Workup | PersonFollowUp
+	Examination | Investigation | Person | PersonExamination | PersonInvestigation | PersonMedicalHistory | PersonOrganDonation | PersonWorkup | User | Workup | PersonFollowUp | Workflow
 	IsNode()
 }
 type FilterInput interface {
-	any | ExaminationFilter | InvestigationFilter | PersonFilter | PersonExaminationFilter | PersonFollowUpFilter | PersonInvestigationFilter | PersonMedicalHistoryFilter | PersonOrganDonationFilter | PersonWorkupFilter | WorkupFilter | UserFilter
+	any | ExaminationFilter | InvestigationFilter | PersonFilter | PersonExaminationFilter | PersonFollowUpFilter | PersonInvestigationFilter | PersonMedicalHistoryFilter | PersonOrganDonationFilter | PersonWorkupFilter | WorkupFilter | UserFilter | WorkflowFilter
 }
 
 type ListOutput interface {
-	*ExaminationList | *PersonList | *PersonExaminationList | *PersonFollowUpList | *PersonInvestigationList | *PersonMedicalHistoryList | *PersonOrganDonationList | *PersonWorkupList | *UserList | *WorkupList | *InvestigationList
+	*ExaminationList | *PersonList | *PersonExaminationList | *PersonFollowUpList | *PersonInvestigationList | *PersonMedicalHistoryList | *PersonOrganDonationList | *PersonWorkupList | *UserList | *WorkupList | *InvestigationList | *WorkflowList
 }
 type EdgeType interface {
-	ExaminationEdge | InvestigationEdge | PersonEdge | PersonExaminationEdge | PersonInvestigationEdge | PersonMedicalHistoryEdge | PersonOrganDonationEdge | PersonWorkupEdge | UserEdge | WorkupEdge | PersonFollowUpEdge
+	ExaminationEdge | InvestigationEdge | PersonEdge | PersonExaminationEdge | PersonInvestigationEdge | PersonMedicalHistoryEdge | PersonOrganDonationEdge | PersonWorkupEdge | UserEdge | WorkupEdge | PersonFollowUpEdge | WorkflowEdge
 }
 
 func GetAnyById[T Model](v T) (*T, error) {

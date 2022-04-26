@@ -1,0 +1,43 @@
+type Workflow implements Node {
+    ID          : ID!
+    User: User!
+    Configuration: Configuration!
+}
+type Configuration {
+    components: [Component!]!
+}
+type Component {
+    component: String!
+    component_id: String!
+}
+input ConfigurationInput {
+    components: [ComponentInput!]!
+}
+input ComponentInput {
+    component: String!
+    component_id: String!
+}
+
+input WorkflowInput{
+    ID          : ID!
+    User: UserInput!
+    Configuration: ConfigurationInput!
+}
+
+input WorkflowFilter {
+    User: UserFilter
+}
+type WorkflowList implements Connection{
+    items: [WorkflowEdge]
+    pagination: Pagination
+}
+type WorkflowEdge implements Edge{
+    node: Workflow
+    cursor: Pagination
+}
+
+extend type Query {
+    getWorkflow(id: ID!): WorkflowEdge
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listWorkflows(filter: WorkflowFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+}

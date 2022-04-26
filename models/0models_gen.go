@@ -49,6 +49,24 @@ type AttributesInput struct {
 	Classes  *string `json:"classes"`
 }
 
+type Component struct {
+	Component   string `json:"component"`
+	ComponentID string `json:"component_id"`
+}
+
+type ComponentInput struct {
+	Component   string `json:"component"`
+	ComponentID string `json:"component_id"`
+}
+
+type Configuration struct {
+	Components []*Component `json:"components"`
+}
+
+type ConfigurationInput struct {
+	Components []*ComponentInput `json:"components"`
+}
+
 type DashboardMenus struct {
 	SidebarTop    *Menu `json:"sidebarTop"`
 	SidebarBottom *Menu `json:"sidebarBottom"`
@@ -548,6 +566,10 @@ type UserFilter struct {
 	Or    *UserFilter   `json:"or"`
 }
 
+type UserInput struct {
+	ID string `json:"ID"`
+}
+
 type UserList struct {
 	Items      []*UserEdge `json:"items"`
 	Pagination *Pagination `json:"pagination"`
@@ -565,6 +587,38 @@ type UserToken struct {
 	Error *Error `json:"error"`
 	User  *User  `json:"user"`
 }
+
+type Workflow struct {
+	ID            string         `json:"ID"`
+	User          *User          `json:"User"`
+	Configuration *Configuration `json:"Configuration"`
+}
+
+func (Workflow) IsNode() {}
+
+type WorkflowEdge struct {
+	Node   *Workflow   `json:"node"`
+	Cursor *Pagination `json:"cursor"`
+}
+
+func (WorkflowEdge) IsEdge() {}
+
+type WorkflowFilter struct {
+	User *UserFilter `json:"User"`
+}
+
+type WorkflowInput struct {
+	ID            string              `json:"ID"`
+	User          *UserInput          `json:"User"`
+	Configuration *ConfigurationInput `json:"Configuration"`
+}
+
+type WorkflowList struct {
+	Items      []*WorkflowEdge `json:"items"`
+	Pagination *Pagination     `json:"pagination"`
+}
+
+func (WorkflowList) IsConnection() {}
 
 type WorkupEdge struct {
 	Node   *Workup     `json:"node"`

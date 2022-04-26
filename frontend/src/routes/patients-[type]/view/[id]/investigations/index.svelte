@@ -25,10 +25,10 @@
 
 	let columns = [
 		{ key: 'node.CreatedAt', name: 'Recorded On' },
-		{ key: 'node.Details.Name', name: 'Investigation Name' },
+		{ key: 'node.Results.Hb', name: 'HB' },
 		{ key: 'node.ID', name: 'Investigation Name' }
 	];
-	let displayedColumns = ['node.CreatedAt', 'node.Details.Name'];
+	let displayedColumns = ['node.CreatedAt', 'node.Results.Hb', 'node.Details.Name'];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);
@@ -45,7 +45,6 @@
 		rootAccessPath='data.listPersonInvestigations.items'
 	>
 		<svelte:fragment let:element={investigation} slot='actions'>
-			{investigation.node.ID}
 			<a href='/patients-recipient/view/{$recipientId}/investigations/{investigation.node.ID}'>View</a>
 		</svelte:fragment>
 	</Table>

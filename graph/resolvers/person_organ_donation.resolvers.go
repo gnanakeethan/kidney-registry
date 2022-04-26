@@ -6,18 +6,17 @@ package resolvers
 import (
 	"context"
 	"fmt"
-	
-	"github.com/kr/pretty"
-	"github.com/segmentio/ksuid"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) CreatePersonOrganDonation(ctx context.Context, input models.PersonOrganDonationInput) (*models.PersonOrganDonationEdge, error) {
 	pretty.Println(input.Donor)
 	donor, err := models.AddPatient(input.Donor)
-	
+
 	if err != nil {
 		panic(err)
 	}

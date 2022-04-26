@@ -75,6 +75,15 @@ type ComplexityRoot struct {
 		Type         func(childComplexity int) int
 	}
 
+	Component struct {
+		Component   func(childComplexity int) int
+		ComponentID func(childComplexity int) int
+	}
+
+	Configuration struct {
+		Components func(childComplexity int) int
+	}
+
 	DashboardMenus struct {
 		SidebarBottom func(childComplexity int) int
 		SidebarTop    func(childComplexity int) int
@@ -412,6 +421,7 @@ type ComplexityRoot struct {
 		GetPersonInvestigation      func(childComplexity int, id string) int
 		GetPersonOrganDonation      func(childComplexity int, id string) int
 		GetPersonWorkup             func(childComplexity int, id string) int
+		GetWorkflow                 func(childComplexity int, id string) int
 		GetWorkup                   func(childComplexity int, id string) int
 		ListAllPersonExaminations   func(childComplexity int, filter *models.PersonExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListAllPersonFollowUps      func(childComplexity int, filter *models.PersonFollowUpFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
@@ -425,6 +435,7 @@ type ComplexityRoot struct {
 		ListPersonMedicalHistories  func(childComplexity int, personID string, filter *models.PersonMedicalHistoryFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListPersonOrganDonations    func(childComplexity int, personID string, filter *models.PersonOrganDonationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListPersonWorkups           func(childComplexity int, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
+		ListWorkflows               func(childComplexity int, filter *models.WorkflowFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListWorkups                 func(childComplexity int, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		PersonMedicalHistory        func(childComplexity int, id string) int
 		Users                       func(childComplexity int, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
@@ -464,6 +475,22 @@ type ComplexityRoot struct {
 		Error func(childComplexity int) int
 		Token func(childComplexity int) int
 		User  func(childComplexity int) int
+	}
+
+	Workflow struct {
+		Configuration func(childComplexity int) int
+		ID            func(childComplexity int) int
+		User          func(childComplexity int) int
+	}
+
+	WorkflowEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowList struct {
+		Items      func(childComplexity int) int
+		Pagination func(childComplexity int) int
 	}
 
 	Workup struct {
@@ -614,6 +641,8 @@ type QueryResolver interface {
 	GetPersonWorkup(ctx context.Context, id string) (*models.PersonWorkupEdge, error)
 	ListPersonWorkups(ctx context.Context, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 	Users(ctx context.Context, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (*models.UserList, error)
+	GetWorkflow(ctx context.Context, id string) (*models.WorkflowEdge, error)
+	ListWorkflows(ctx context.Context, filter *models.WorkflowFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 	GetWorkup(ctx context.Context, id string) (*models.WorkupEdge, error)
 	ListWorkups(ctx context.Context, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 }
@@ -723,6 +752,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Attributes.Type(childComplexity), true
+
+	case "Component.component":
+		if e.complexity.Component.Component == nil {
+			break
+		}
+
+		return e.complexity.Component.Component(childComplexity), true
+
+	case "Component.component_id":
+		if e.complexity.Component.ComponentID == nil {
+			break
+		}
+
+		return e.complexity.Component.ComponentID(childComplexity), true
+
+	case "Configuration.components":
+		if e.complexity.Configuration.Components == nil {
+			break
+		}
+
+		return e.complexity.Configuration.Components(childComplexity), true
 
 	case "DashboardMenus.sidebarBottom":
 		if e.complexity.DashboardMenus.SidebarBottom == nil {
@@ -2390,6 +2440,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetPersonWorkup(childComplexity, args["ID"].(string)), true
 
+	case "Query.getWorkflow":
+		if e.complexity.Query.GetWorkflow == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getWorkflow_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetWorkflow(childComplexity, args["id"].(string)), true
+
 	case "Query.getWorkup":
 		if e.complexity.Query.GetWorkup == nil {
 			break
@@ -2546,6 +2608,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.ListPersonWorkups(childComplexity, args["PersonID"].(string), args["filter"].(*models.PersonWorkupFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
+	case "Query.listWorkflows":
+		if e.complexity.Query.ListWorkflows == nil {
+			break
+		}
+
+		args, err := ec.field_Query_listWorkflows_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ListWorkflows(childComplexity, args["filter"].(*models.WorkflowFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
+
 	case "Query.listWorkups":
 		if e.complexity.Query.ListWorkups == nil {
 			break
@@ -2582,14 +2656,14 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Users(childComplexity, args["filter"].(*models.UserFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
 
-	case "Role.id":
+	case "Role.ID":
 		if e.complexity.Role.ID == nil {
 			break
 		}
 
 		return e.complexity.Role.ID(childComplexity), true
 
-	case "Role.name":
+	case "Role.Name":
 		if e.complexity.Role.Name == nil {
 			break
 		}
@@ -2610,7 +2684,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.ID(childComplexity), true
 
-	case "User.name":
+	case "User.Name":
 		if e.complexity.User.Name == nil {
 			break
 		}
@@ -2686,6 +2760,55 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserToken.User(childComplexity), true
+
+	case "Workflow.Configuration":
+		if e.complexity.Workflow.Configuration == nil {
+			break
+		}
+
+		return e.complexity.Workflow.Configuration(childComplexity), true
+
+	case "Workflow.ID":
+		if e.complexity.Workflow.ID == nil {
+			break
+		}
+
+		return e.complexity.Workflow.ID(childComplexity), true
+
+	case "Workflow.User":
+		if e.complexity.Workflow.User == nil {
+			break
+		}
+
+		return e.complexity.Workflow.User(childComplexity), true
+
+	case "WorkflowEdge.cursor":
+		if e.complexity.WorkflowEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEdge.Cursor(childComplexity), true
+
+	case "WorkflowEdge.node":
+		if e.complexity.WorkflowEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEdge.Node(childComplexity), true
+
+	case "WorkflowList.items":
+		if e.complexity.WorkflowList.Items == nil {
+			break
+		}
+
+		return e.complexity.WorkflowList.Items(childComplexity), true
+
+	case "WorkflowList.pagination":
+		if e.complexity.WorkflowList.Pagination == nil {
+			break
+		}
+
+		return e.complexity.WorkflowList.Pagination(childComplexity), true
 
 	case "Workup.CreatedAt":
 		if e.complexity.Workup.CreatedAt == nil {
@@ -3615,12 +3738,15 @@ extend type Query {
 }`, BuiltIn: false},
 	{Name: "graph/schema/user.graphql", Input: `type User implements Node {
     ID: ID!
-    name: String!
+    Name: String!
     Roles: [Role!]!
 }
+input UserInput {
+    ID: ID!
+}
 type Role {
-    id: ID!
-    name: String!
+    ID: ID!
+    Name: String!
 }
 
 type UserRole {
@@ -3650,6 +3776,49 @@ input UserFilter {
 
 extend type Query {
     users(filter: UserFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): UserList
+}`, BuiltIn: false},
+	{Name: "graph/schema/workflow.graphql", Input: `type Workflow implements Node {
+    ID          : ID!
+    User: User!
+    Configuration: Configuration!
+}
+type Configuration {
+    components: [Component!]!
+}
+type Component {
+    component: String!
+    component_id: String!
+}
+input ConfigurationInput {
+    components: [ComponentInput!]!
+}
+input ComponentInput {
+    component: String!
+    component_id: String!
+}
+
+input WorkflowInput{
+    ID          : ID!
+    User: UserInput!
+    Configuration: ConfigurationInput!
+}
+
+input WorkflowFilter {
+    User: UserFilter
+}
+type WorkflowList implements Connection{
+    items: [WorkflowEdge]
+    pagination: Pagination
+}
+type WorkflowEdge implements Edge{
+    node: Workflow
+    cursor: Pagination
+}
+
+extend type Query {
+    getWorkflow(id: ID!): WorkflowEdge
+    #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
+    listWorkflows(filter: WorkflowFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }`, BuiltIn: false},
 	{Name: "graph/schema/workup.graphql", Input: `type Workup implements Node & DynamicFormInterface{
     ID          : ID!
@@ -4573,6 +4742,21 @@ func (ec *executionContext) field_Query_getPersonWorkup_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getWorkflow_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getWorkup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -5254,6 +5438,57 @@ func (ec *executionContext) field_Query_listPersonWorkups_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_listWorkflows_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.WorkflowFilter
+	if tmp, ok := rawArgs["filter"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
+		arg0, err = ec.unmarshalOWorkflowFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowFilter(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["filter"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["page"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["page"] = arg1
+	var arg2 *int
+	if tmp, ok := rawArgs["limit"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limit"] = arg2
+	var arg3 []*string
+	if tmp, ok := rawArgs["sortBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sortBy"))
+		arg3, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sortBy"] = arg3
+	var arg4 []*models.OrderBy
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg4, err = ec.unmarshalOOrderBy2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐOrderBy(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg4
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_listWorkups_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -5774,6 +6009,111 @@ func (ec *executionContext) _Attributes_image(ctx context.Context, field graphql
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Component_component(ctx context.Context, field graphql.CollectedField, obj *models.Component) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Component",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Component, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Component_component_id(ctx context.Context, field graphql.CollectedField, obj *models.Component) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Component",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ComponentID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Configuration_components(ctx context.Context, field graphql.CollectedField, obj *models.Configuration) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Configuration",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Components, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.Component)
+	fc.Result = res
+	return ec.marshalNComponent2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _DashboardMenus_sidebarTop(ctx context.Context, field graphql.CollectedField, obj *models.DashboardMenus) (ret graphql.Marshaler) {
@@ -13720,6 +14060,84 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	return ec.marshalOUserList2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserList(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query_getWorkflow(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_getWorkflow_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetWorkflow(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.WorkflowEdge)
+	fc.Result = res
+	return ec.marshalOWorkflowEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_listWorkflows(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_listWorkflows_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().ListWorkflows(rctx, args["filter"].(*models.WorkflowFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(models.Connection)
+	fc.Result = res
+	return ec.marshalOConnection2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConnection(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_getWorkup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -13869,7 +14287,7 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Role_id(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
+func (ec *executionContext) _Role_ID(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -13904,7 +14322,7 @@ func (ec *executionContext) _Role_id(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Role_name(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
+func (ec *executionContext) _Role_Name(ctx context.Context, field graphql.CollectedField, obj *models.Role) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -14019,7 +14437,7 @@ func (ec *executionContext) _User_ID(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_Name(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -14387,6 +14805,239 @@ func (ec *executionContext) _UserToken_user(ctx context.Context, field graphql.C
 	res := resTmp.(*models.User)
 	fc.Result = res
 	return ec.marshalOUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Workflow_ID(ctx context.Context, field graphql.CollectedField, obj *models.Workflow) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Workflow",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Workflow_User(ctx context.Context, field graphql.CollectedField, obj *models.Workflow) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Workflow",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.User, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Workflow_Configuration(ctx context.Context, field graphql.CollectedField, obj *models.Workflow) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Workflow",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Configuration, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Configuration)
+	fc.Result = res
+	return ec.marshalNConfiguration2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConfiguration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WorkflowEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.WorkflowEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WorkflowEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Workflow)
+	fc.Result = res
+	return ec.marshalOWorkflow2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflow(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WorkflowEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.WorkflowEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WorkflowEdge",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WorkflowList_items(ctx context.Context, field graphql.CollectedField, obj *models.WorkflowList) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WorkflowList",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Items, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.WorkflowEdge)
+	fc.Result = res
+	return ec.marshalOWorkflowEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _WorkflowList_pagination(ctx context.Context, field graphql.CollectedField, obj *models.WorkflowList) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "WorkflowList",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pagination, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Pagination)
+	fc.Result = res
+	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Workup_ID(ctx context.Context, field graphql.CollectedField, obj *models.Workup) (ret graphql.Marshaler) {
@@ -15943,6 +16594,60 @@ func (ec *executionContext) unmarshalInputAttributesInput(ctx context.Context, o
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("classes"))
 			it.Classes, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputComponentInput(ctx context.Context, obj interface{}) (models.ComponentInput, error) {
+	var it models.ComponentInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "component":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("component"))
+			it.Component, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "component_id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("component_id"))
+			it.ComponentID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputConfigurationInput(ctx context.Context, obj interface{}) (models.ConfigurationInput, error) {
+	var it models.ConfigurationInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "components":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("components"))
+			it.Components, err = ec.unmarshalNComponentInput2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -17961,6 +18666,29 @@ func (ec *executionContext) unmarshalInputUserFilter(ctx context.Context, obj in
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj interface{}) (models.UserInput, error) {
+	var it models.UserInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "ID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUserLogin(ctx context.Context, obj interface{}) (models.UserLogin, error) {
 	var it models.UserLogin
 	asMap := map[string]interface{}{}
@@ -17983,6 +18711,68 @@ func (ec *executionContext) unmarshalInputUserLogin(ctx context.Context, obj int
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
 			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputWorkflowFilter(ctx context.Context, obj interface{}) (models.WorkflowFilter, error) {
+	var it models.WorkflowFilter
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "User":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("User"))
+			it.User, err = ec.unmarshalOUserFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputWorkflowInput(ctx context.Context, obj interface{}) (models.WorkflowInput, error) {
+	var it models.WorkflowInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	for k, v := range asMap {
+		switch k {
+		case "ID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "User":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("User"))
+			it.User, err = ec.unmarshalNUserInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "Configuration":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Configuration"))
+			it.Configuration, err = ec.unmarshalNConfigurationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConfigurationInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -18164,6 +18954,13 @@ func (ec *executionContext) _Connection(ctx context.Context, sel ast.SelectionSe
 			return graphql.Null
 		}
 		return ec._UserList(ctx, sel, obj)
+	case models.WorkflowList:
+		return ec._WorkflowList(ctx, sel, &obj)
+	case *models.WorkflowList:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._WorkflowList(ctx, sel, obj)
 	case models.WorkupList:
 		return ec._WorkupList(ctx, sel, &obj)
 	case *models.WorkupList:
@@ -18301,6 +19098,13 @@ func (ec *executionContext) _Edge(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._UserEdge(ctx, sel, obj)
+	case models.WorkflowEdge:
+		return ec._WorkflowEdge(ctx, sel, &obj)
+	case *models.WorkflowEdge:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._WorkflowEdge(ctx, sel, obj)
 	case models.WorkupEdge:
 		return ec._WorkupEdge(ctx, sel, &obj)
 	case *models.WorkupEdge:
@@ -18387,6 +19191,13 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._User(ctx, sel, obj)
+	case models.Workflow:
+		return ec._Workflow(ctx, sel, &obj)
+	case *models.Workflow:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Workflow(ctx, sel, obj)
 	case models.Workup:
 		return ec._Workup(ctx, sel, &obj)
 	case *models.Workup:
@@ -18490,6 +19301,78 @@ func (ec *executionContext) _Attributes(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = innerFunc(ctx)
 
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var componentImplementors = []string{"Component"}
+
+func (ec *executionContext) _Component(ctx context.Context, sel ast.SelectionSet, obj *models.Component) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, componentImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Component")
+		case "component":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Component_component(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "component_id":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Component_component_id(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var configurationImplementors = []string{"Configuration"}
+
+func (ec *executionContext) _Configuration(ctx context.Context, sel ast.SelectionSet, obj *models.Configuration) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, configurationImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Configuration")
+		case "components":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Configuration_components(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -21865,6 +22748,46 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "getWorkflow":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getWorkflow(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "listWorkflows":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_listWorkflows(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "getWorkup":
 			field := field
 
@@ -21940,9 +22863,9 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Role")
-		case "id":
+		case "ID":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Role_id(ctx, field, obj)
+				return ec._Role_ID(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -21950,9 +22873,9 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "name":
+		case "Name":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Role_name(ctx, field, obj)
+				return ec._Role_Name(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -22011,9 +22934,9 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "name":
+		case "Name":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._User_name(ctx, field, obj)
+				return ec._User_Name(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -22196,6 +23119,127 @@ func (ec *executionContext) _UserToken(ctx context.Context, sel ast.SelectionSet
 		case "user":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._UserToken_user(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var workflowImplementors = []string{"Workflow", "Node"}
+
+func (ec *executionContext) _Workflow(ctx context.Context, sel ast.SelectionSet, obj *models.Workflow) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workflowImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Workflow")
+		case "ID":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Workflow_ID(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "User":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Workflow_User(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Configuration":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Workflow_Configuration(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var workflowEdgeImplementors = []string{"WorkflowEdge", "Edge"}
+
+func (ec *executionContext) _WorkflowEdge(ctx context.Context, sel ast.SelectionSet, obj *models.WorkflowEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workflowEdgeImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WorkflowEdge")
+		case "node":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._WorkflowEdge_node(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "cursor":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._WorkflowEdge_cursor(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var workflowListImplementors = []string{"WorkflowList", "Connection"}
+
+func (ec *executionContext) _WorkflowList(ctx context.Context, sel ast.SelectionSet, obj *models.WorkflowList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, workflowListImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("WorkflowList")
+		case "items":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._WorkflowList_items(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "pagination":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._WorkflowList_pagination(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)
@@ -22838,6 +23882,97 @@ func (ec *executionContext) marshalNComparisonType2githubᚗcomᚋgnanakeethan�
 	return v
 }
 
+func (ec *executionContext) marshalNComponent2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Component) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNComponent2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponent(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNComponent2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponent(ctx context.Context, sel ast.SelectionSet, v *models.Component) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Component(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNComponentInput2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentInputᚄ(ctx context.Context, v interface{}) ([]*models.ComponentInput, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*models.ComponentInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNComponentInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNComponentInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐComponentInput(ctx context.Context, v interface{}) (*models.ComponentInput, error) {
+	res, err := ec.unmarshalInputComponentInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNConfiguration2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConfiguration(ctx context.Context, sel ast.SelectionSet, v *models.Configuration) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Configuration(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNConfigurationInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐConfigurationInput(ctx context.Context, v interface{}) (*models.ConfigurationInput, error) {
+	res, err := ec.unmarshalInputConfigurationInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNError2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx context.Context, sel ast.SelectionSet, v models.Error) graphql.Marshaler {
 	return ec._Error(ctx, sel, &v)
 }
@@ -23014,6 +24149,11 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidney
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUserInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserInput(ctx context.Context, v interface{}) (*models.UserInput, error) {
+	res, err := ec.unmarshalInputUserInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUserLogin2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserLogin(ctx context.Context, v interface{}) (models.UserLogin, error) {
@@ -24800,6 +25940,69 @@ func (ec *executionContext) marshalOUserList2ᚖgithubᚗcomᚋgnanakeethanᚋki
 		return graphql.Null
 	}
 	return ec._UserList(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOWorkflow2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflow(ctx context.Context, sel ast.SelectionSet, v *models.Workflow) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Workflow(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOWorkflowEdge2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowEdge(ctx context.Context, sel ast.SelectionSet, v []*models.WorkflowEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOWorkflowEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOWorkflowEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowEdge(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._WorkflowEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOWorkflowFilter2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowFilter(ctx context.Context, v interface{}) (*models.WorkflowFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputWorkflowFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOWorkup2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkup(ctx context.Context, sel ast.SelectionSet, v *models.Workup) graphql.Marshaler {

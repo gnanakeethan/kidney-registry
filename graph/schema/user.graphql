@@ -3,6 +3,9 @@ type User implements Node {
     Name: String!
     Roles: [Role!]!
 }
+input UserInput {
+    ID: ID!
+}
 type Role {
     ID: ID!
     Name: String!

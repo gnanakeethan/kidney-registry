@@ -5,7 +5,7 @@ package resolvers
 
 import (
 	"context"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )
