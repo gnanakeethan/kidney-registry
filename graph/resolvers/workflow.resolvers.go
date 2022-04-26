@@ -6,7 +6,7 @@ package resolvers
 import (
 	"context"
 	"encoding/json"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
 )

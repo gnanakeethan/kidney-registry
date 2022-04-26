@@ -601,6 +601,7 @@ type WorkflowFilter struct {
 
 type WorkflowInput struct {
 	ID            string              `json:"ID"`
+	Name          string              `json:"Name"`
 	User          *UserInput          `json:"User"`
 	Configuration *ConfigurationInput `json:"Configuration"`
 }
