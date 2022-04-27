@@ -2,17 +2,45 @@
 	import FollowUpComponent from '../patients-[type]/view/[id]/followups/create.svelte';
 	import WorkupComponent from '../patients-[type]/view/[id]/workups/new.svelte';
 	import ExaminationComponent from '../patients-[type]/view/[id]/examinations/new.svelte';
+	import InvestigationComponent from '../patients-[type]/view/[id]/investigations/new.svelte';
 	import MedicalHistoryComponent from '../patients-[type]/view/[id]/history/new/medical.svelte';
 	import SurgicalHistoryComponent from '../patients-[type]/view/[id]/history/new/surgical.svelte';
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
+	import { operationStore, query } from '@urql/svelte';
+
+	import { ListExaminationsDocument, ListInvestigationsDocument, ListWorkupsDocument } from '$lib/graphql/generated';
+	import { capitalize } from 'lodash';
+	import { goto } from '$app/navigation';
 
 	const listOfComponents = [];
 	listOfComponents.push({ title: 'followup', value: FollowUpComponent });
 	listOfComponents.push({ title: 'workup', value: WorkupComponent });
 	listOfComponents.push({ title: 'examination', value: ExaminationComponent });
+	listOfComponents.push({ title: 'investigation', value: InvestigationComponent });
 	listOfComponents.push({ title: 'medical-history', value: MedicalHistoryComponent });
 	listOfComponents.push({ title: 'surgical-history', value: SurgicalHistoryComponent });
 	const fields = [
+		{
+			type: 'input',
+			name: 'Name',
+			value: '',
+			prefix: {
+				classes: ['m-2']
+			},
+			attributes: {
+				type: 'text',
+				label: ' Name',
+				id: 'name',
+				classes: ['form-input rounded w-full float-right'],
+				placeholder: 'Workflow Name'
+			},
+			rules: [],
+			messages: {
+				required: 'name field is required!',
+				minlen: 'name field must have more that 6 characters!'
+			}
+		},
+
 		{
 			type: 'autocomplete', // required
 			name: 'Reason', // required
@@ -35,17 +63,103 @@
 			}
 		}
 	];
+	let toggle = false;
 	let isValidForm = false;
 	let values = {};
 	$: console.log(values);
-</script>
+	let listItems = {};
+	let listItemsTemp = {};
+	const workupsQuery = operationStore(ListWorkupsDocument);
+	query(workupsQuery);
+	workupsQuery.subscribe((data) => {
+		console.log(data);
+		if (data.fetching === false && data.stale === false) {
+			listItemsTemp['workup'] = data.data.listWorkups.items;
+			listItems = listItemsTemp;
+		}
+		toggle = true;
+		console.log(listItems);
+	});
 
-<div>
-	<Field bind:isValidForm bind:values {fields} />
-	{#if values.Reason !== undefined && values.Reason.length > 0}
-		{#each values.Reason as reason}
-			{reason.title}
-			<svelte:component this={reason.value} />
-		{/each}
-	{/if}
-</div>
+	let investigations = [];
+	const investigationsQuery = operationStore(ListInvestigationsDocument);
+	query(investigationsQuery);
+	investigationsQuery.subscribe((data) => {
+		console.log(data);
+		if (data.fetching === false && data.stale === false) {
+			listItemsTemp['investigation'] = data.data.listInvestigations.items;
+			listItems = listItemsTemp;
+
+		}
+		toggle = true;
+		console.log(listItems);
+	});
+	let examinations = [];
+	const examinationsQuery = operationStore(ListExaminationsDocument);
+	query(examinationsQuery);
+	examinationsQuery.subscribe((data) => {
+		console.log(data);
+		if (data.fetching === false && data.stale === false) {
+			listItemsTemp['examination'] = data.data.listExaminations.items;
+			listItems = listItemsTemp;
+		}
+		console.log(listItems);
+		toggle = true;
+	});
+	let configuration = [];
+	$:console.log(configuration);
+
+	function newConfig(i, title) {
+		console.log(i);
+		configuration[i] = {};
+		configuration[i]['component'] = title;
+		configuration[i]['component_id'] = componentIds[i] ?? '';
+	}
+
+	function configurationChanged() {
+		console.log(configuration);
+	}
+
+	let componentIds = [];
+	const addWorkflow = mutation < AddWorkflowMutation > ({
+		query: AddWorkflowDocument
+	});
+
+	function save() {
+		for (let i = 0; i < values.Reason.length; i++) {
+			newConfig(i, values.Reason[i]);
+		}
+		console.log(configuration);
+		addPatient({ patientInput: values }).then((result) => {
+			console.log(result);
+			alert('Saved');
+			goto('/patients-recipient/view/' + result.data.addPatient.ID + '/history/new/history');
+		});
+	};
+</script>
+{#if toggle}
+
+	<div>
+		<Field bind:isValidForm bind:values {fields} inline={true} />
+		{JSON.stringify(configuration)} <br>
+		<div class='flex flex-col'>
+			{#if values.Reason !== undefined && values.Reason.length > 0}
+				{#each values.Reason as reason,i}
+					<div class='flex flex-row m-4 items-center'>
+						{#if listItems[reason.title] !== undefined && listItems[reason.title].length > 0}
+							<div class='mx-4'>Select {capitalize(reason.title)}</div>
+							<select name='' id='' bind:value={componentIds[i]} on:change={()=>configurationChanged()}
+											class='form-select'>
+								{#each listItems[reason.title] as item,j}
+									<option value={item.node.ID}>{item.node.Details.Name}</option>
+								{/each}
+							</select>
+						{/if}
+					</div>
+				{/each}
+			{/if}
+			<button class='bg-green-400 px-4 py-2 mx-4' on:click={()=> save()}>Save</button>
+		</div>
+	</div>
+
+{/if}

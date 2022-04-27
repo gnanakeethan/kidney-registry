@@ -32,3 +32,9 @@ func GetWorkflowById(id string) (v *Workflow, err error) {
 	}
 	return nil, err
 }
+
+func AddWorkflow(m *Workflow) (id int64, err error) {
+	o := orm.NewOrm()
+	id, err = o.Insert(m)
+	return
+}

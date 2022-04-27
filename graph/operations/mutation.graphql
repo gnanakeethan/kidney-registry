@@ -58,6 +58,15 @@ mutation AddPatient($patientInput: PersonInput!) {
 }
 
 
+mutation AddWorkflow($workflowInput: WorkflowInput!) {
+    addWorkflow(input: $workflowInput) {
+        node {
+            ...WorkflowFields
+        }
+    }
+}
+
+
 mutation NewHistory($input: PersonMedicalHistoryInput!) {
     createPersonMedicalHistory(input: $input) {
         node {

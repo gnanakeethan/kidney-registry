@@ -44,3 +44,9 @@ extend type Query {
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listWorkflows(filter: WorkflowFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
 }
+extend type Mutation {
+    #    newPatient: PersonEdge
+    #    updatePatient(input:PersonInput) : PersonEdge
+    #    addPatient(input:PersonInput) : PersonEdge
+    addWorkflow(input: WorkflowInput): WorkflowEdge
+}

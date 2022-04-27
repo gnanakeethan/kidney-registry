@@ -6,12 +6,31 @@ package resolvers
 import (
 	"context"
 	"encoding/json"
-	
-	"github.com/kr/pretty"
-	
+
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
+	"github.com/segmentio/ksuid"
 )
+
+func (r *mutationResolver) AddWorkflow(ctx context.Context, input *models.WorkflowInput) (*models.WorkflowEdge, error) {
+	workflow := &models.Workflow{
+		ID:   ksuid.New().String(),
+		User: &models.User{ID: input.User.ID},
+		Name: input.Name,
+	}
+	if results, err := json.Marshal(input.Configuration); err == nil {
+		workflow.Configuration.Set(string(results))
+	}
+	if _, err := models.AddWorkflow(workflow); err == nil || err.Error() == "<Ormer> last insert id is unavailable" {
+		return &models.WorkflowEdge{
+				Node: workflow,
+			},
+			nil
+	} else {
+		return nil, err
+	}
+}
 
 func (r *queryResolver) GetWorkflow(ctx context.Context, id string) (*models.WorkflowEdge, error) {
 	workflow, err := models.GetAnyById(models.Workflow{ID: id})

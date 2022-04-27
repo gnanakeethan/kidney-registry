@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script context='module' lang='ts'>
 	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
 
 	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
@@ -12,8 +12,12 @@
 	}
 </script>
 
-<script lang="ts">
+<script lang='ts'>
 	console.log('processing');
+	let workflow, segment, against = '';
+	$: console.log('WORKFLOW IDENTIFIER:', workflow);
+	$: console.log('SEGMENT:', segment);
+	$: console.log('AGAINST:', against);
 </script>
 
 <div />

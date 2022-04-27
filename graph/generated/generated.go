@@ -182,6 +182,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		AddPatient                 func(childComplexity int, input *models.PersonInput) int
+		AddWorkflow                func(childComplexity int, input *models.WorkflowInput) int
 		CreatePersonExamination    func(childComplexity int, input models.PersonExaminationInput) int
 		CreatePersonFollowUp       func(childComplexity int, input models.PersonFollowUpInput) int
 		CreatePersonInvestigation  func(childComplexity int, input models.PersonInvestigationInput) int
@@ -556,6 +557,7 @@ type MutationResolver interface {
 	CreatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkupEdge, error)
 	UpdatePersonWorkup(ctx context.Context, input models.PersonWorkupInput) (*models.PersonWorkupEdge, error)
 	DeletePersonWorkup(ctx context.Context, id string) (*string, error)
+	AddWorkflow(ctx context.Context, input *models.WorkflowInput) (*models.WorkflowEdge, error)
 }
 type PersonResolver interface {
 	DateOfBirth(ctx context.Context, obj *models.Person) (*string, error)
@@ -1141,6 +1143,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.AddPatient(childComplexity, args["input"].(*models.PersonInput)), true
+
+	case "Mutation.addWorkflow":
+		if e.complexity.Mutation.AddWorkflow == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_addWorkflow_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AddWorkflow(childComplexity, args["input"].(*models.WorkflowInput)), true
 
 	case "Mutation.createPersonExamination":
 		if e.complexity.Mutation.CreatePersonExamination == nil {
@@ -3842,6 +3856,12 @@ extend type Query {
     getWorkflow(id: ID!): WorkflowEdge
     #    listPersonMedicalHistories(PersonID: ID!,filter: PersonMedicalHistoryFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): PersonMedicalHistoryList
     listWorkflows(filter: WorkflowFilter,page:Int,limit:Int,sortBy:[String], orderBy:[OrderBy]): Connection
+}
+extend type Mutation {
+    #    newPatient: PersonEdge
+    #    updatePatient(input:PersonInput) : PersonEdge
+    #    addPatient(input:PersonInput) : PersonEdge
+    addWorkflow(input: WorkflowInput): WorkflowEdge
 }`, BuiltIn: false},
 	{Name: "graph/schema/workup.graphql", Input: `type Workup implements Node & DynamicFormInterface{
     ID          : ID!
@@ -3980,6 +4000,21 @@ func (ec *executionContext) field_Mutation_addPatient_args(ctx context.Context, 
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalOPersonInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPersonInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_addWorkflow_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.WorkflowInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalOWorkflowInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -8599,6 +8634,45 @@ func (ec *executionContext) _Mutation_deletePersonWorkup(ctx context.Context, fi
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOID2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_addWorkflow(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_addWorkflow_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AddWorkflow(rctx, args["input"].(*models.WorkflowInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.WorkflowEdge)
+	fc.Result = res
+	return ec.marshalOWorkflowEdge2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Pagination_currentPage(ctx context.Context, field graphql.CollectedField, obj *models.Pagination) (ret graphql.Marshaler) {
@@ -20441,6 +20515,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
 
+		case "addWorkflow":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_addWorkflow(ctx, field)
+			}
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, innerFunc)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -26137,6 +26218,14 @@ func (ec *executionContext) unmarshalOWorkflowFilter2ᚖgithubᚗcomᚋgnanakeet
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputWorkflowFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOWorkflowInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐWorkflowInput(ctx context.Context, v interface{}) (*models.WorkflowInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputWorkflowInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
