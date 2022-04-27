@@ -3834,9 +3834,7 @@ input ComponentInput {
 }
 
 input WorkflowInput{
-    ID          : ID!
     Name: String!
-    User: UserInput!
     Configuration: ConfigurationInput!
 }
 
@@ -18919,27 +18917,11 @@ func (ec *executionContext) unmarshalInputWorkflowInput(ctx context.Context, obj
 
 	for k, v := range asMap {
 		switch k {
-		case "ID":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "Name":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Name"))
 			it.Name, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "User":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("User"))
-			it.User, err = ec.unmarshalNUserInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -24365,11 +24347,6 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋgnanakeethanᚋkidney
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNUserInput2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserInput(ctx context.Context, v interface{}) (*models.UserInput, error) {
-	res, err := ec.unmarshalInputUserInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUserLogin2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐUserLogin(ctx context.Context, v interface{}) (models.UserLogin, error) {

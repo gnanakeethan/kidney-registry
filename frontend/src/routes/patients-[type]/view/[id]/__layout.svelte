@@ -25,9 +25,23 @@
 
 	import { operationStore, query } from '@urql/svelte';
 	// import { Person } from 'lib/graphql/generated';
-	import { GetPatientDocument, GetPatientQuery, Person } from '../../../../lib/graphql/generated';
+	import {
+		GetPatientDocument,
+		GetPatientQuery,
+		ListWorkflowsDocument,
+		Person
+	} from '../../../../lib/graphql/generated';
 	import { activeUrl } from '$lib/state/SidebarStore';
 
+	let workflows = [];
+	const workflowsQuery = operationStore(ListWorkflowsDocument);
+	query(workflowsQuery);
+	workflowsQuery.subscribe((data) => {
+		if (data.fetching === false && data.stale === false) {
+			workflows = data.data.listWorkflows.items;
+			console.log(workflows);
+		}
+	});
 	$: query<GetPatientQuery>(
 		operationStore(GetPatientDocument, {
 			id: $recipientId
@@ -205,6 +219,17 @@
 			style='height:calc(100vh - 7.8rem);min-height:fit-content;'
 		>
 			<slot />
+		</div>
+	</div>
+	<div class='flex m-2 flex-col'>
+		<div class='text-lg m-4'>Available Workflows</div>
+		<br>
+		<div class='flex flex-col'>
+			{#each workflows as workflow}
+				<div class='flex flex-row bg-green-400 p-4 text-lg'>
+					<span class='text-gray-800'>{workflow.node.Name}</span>
+				</div>
+			{/each}
 		</div>
 	</div>
 </div>

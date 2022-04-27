@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 
 	"github.com/gnanakeethan/kidney-registry/graph/generated"
+	"github.com/gnanakeethan/kidney-registry/graph/middleware"
 	"github.com/gnanakeethan/kidney-registry/models"
 	"github.com/kr/pretty"
 	"github.com/segmentio/ksuid"
@@ -16,7 +17,7 @@ import (
 func (r *mutationResolver) AddWorkflow(ctx context.Context, input *models.WorkflowInput) (*models.WorkflowEdge, error) {
 	workflow := &models.Workflow{
 		ID:   ksuid.New().String(),
-		User: &models.User{ID: input.User.ID},
+		User: middleware.ForContext(ctx),
 		Name: input.Name,
 	}
 	if results, err := json.Marshal(input.Configuration); err == nil {

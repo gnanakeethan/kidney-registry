@@ -51,9 +51,9 @@
 		{filters}
 		rootAccessPath='data.listWorkflows.items'
 	>
-		<svelte:fragment let:element={workflow} slot='actions'>
-			{workflow.node.id}
-			<!--			<a href='/patients-recipient/view/{Patient.node.ID}/overview'>View Patient</a>-->
-		</svelte:fragment>
+		<!--		<svelte:fragment let:element={workflow} slot='actions'>-->
+		<!--{workflow.node.ID}-->
+		<!--						<a href='/patients-recipient/view/{Patient.node.ID}/overview'>View Patient</a>-->
+		<!--		</svelte:fragment>-->
 	</Table>
 </div>

@@ -1,16 +1,22 @@
-<script>
-	import FollowUpComponent from '../patients-[type]/view/[id]/followups/create.svelte';
-	import WorkupComponent from '../patients-[type]/view/[id]/workups/new.svelte';
+<script lang='ts'>
+	import Field from '$lib/components/form-builder/Components/Field.svelte';
+
+	import {
+		AddWorkflowDocument,
+		AddWorkflowMutation,
+		ListExaminationsDocument,
+		ListInvestigationsDocument,
+		ListWorkupsDocument
+	} from '$lib/graphql/generated';
+	import { mutation, operationStore, query } from '@urql/svelte';
+	import { capitalize } from 'lodash';
 	import ExaminationComponent from '../patients-[type]/view/[id]/examinations/new.svelte';
-	import InvestigationComponent from '../patients-[type]/view/[id]/investigations/new.svelte';
+	import FollowUpComponent from '../patients-[type]/view/[id]/followups/create.svelte';
 	import MedicalHistoryComponent from '../patients-[type]/view/[id]/history/new/medical.svelte';
 	import SurgicalHistoryComponent from '../patients-[type]/view/[id]/history/new/surgical.svelte';
-	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { operationStore, query } from '@urql/svelte';
-
-	import { ListExaminationsDocument, ListInvestigationsDocument, ListWorkupsDocument } from '$lib/graphql/generated';
-	import { capitalize } from 'lodash';
-	import { goto } from '$app/navigation';
+	import InvestigationComponent from '../patients-[type]/view/[id]/investigations/new.svelte';
+	import WorkupComponent from '../patients-[type]/view/[id]/workups/new.svelte';
+	// import { AddWorkflowMutation } from '../../lib/graphql/generated';
 
 	const listOfComponents = [];
 	listOfComponents.push({ title: 'followup', value: FollowUpComponent });
@@ -121,19 +127,22 @@
 	}
 
 	let componentIds = [];
-	const addWorkflow = mutation < AddWorkflowMutation > ({
+	const addWorkflow = mutation<AddWorkflowMutation>({
 		query: AddWorkflowDocument
 	});
 
 	function save() {
 		for (let i = 0; i < values.Reason.length; i++) {
-			newConfig(i, values.Reason[i]);
+			newConfig(i, values.Reason[i].title);
 		}
 		console.log(configuration);
-		addPatient({ patientInput: values }).then((result) => {
+		let workflowInput = {
+			Name: values.Name,
+			Configuration: { components: configuration }
+		};
+		addWorkflow({ workflowInput }).then((result) => {
 			console.log(result);
 			alert('Saved');
-			goto('/patients-recipient/view/' + result.data.addPatient.ID + '/history/new/history');
 		});
 	};
 </script>
