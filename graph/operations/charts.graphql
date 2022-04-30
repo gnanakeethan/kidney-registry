@@ -1,0 +1,9 @@
+query PatientStatusChart {
+    patientStatusChart {
+        name
+        data {
+            group
+            value
+        }
+    }
+}

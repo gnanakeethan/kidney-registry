@@ -427,7 +427,7 @@ type ComplexityRoot struct {
 	}
 
 	PieChartData struct {
-		Label func(childComplexity int) int
+		Group func(childComplexity int) int
 		Value func(childComplexity int) int
 	}
 
@@ -2435,12 +2435,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PieChart.Name(childComplexity), true
 
-	case "PieChartData.label":
-		if e.complexity.PieChartData.Label == nil {
+	case "PieChartData.group":
+		if e.complexity.PieChartData.Group == nil {
 			break
 		}
 
-		return e.complexity.PieChartData.Label(childComplexity), true
+		return e.complexity.PieChartData.Group(childComplexity), true
 
 	case "PieChartData.value":
 		if e.complexity.PieChartData.Value == nil {
@@ -3308,7 +3308,7 @@ extend type Mutation {
 }
 
 type PieChartData {
-    label: String!
+    group: String!
     value: Int!
 }
 
@@ -13630,7 +13630,7 @@ func (ec *executionContext) _PieChart_data(ctx context.Context, field graphql.Co
 	return ec.marshalNPieChartData2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChartDataᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _PieChartData_label(ctx context.Context, field graphql.CollectedField, obj *models.PieChartData) (ret graphql.Marshaler) {
+func (ec *executionContext) _PieChartData_group(ctx context.Context, field graphql.CollectedField, obj *models.PieChartData) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -13648,7 +13648,7 @@ func (ec *executionContext) _PieChartData_label(ctx context.Context, field graph
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Label, nil
+		return obj.Group, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -23106,9 +23106,9 @@ func (ec *executionContext) _PieChartData(ctx context.Context, sel ast.Selection
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("PieChartData")
-		case "label":
+		case "group":
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._PieChartData_label(ctx, field, obj)
+				return ec._PieChartData_group(ctx, field, obj)
 			}
 
 			out.Values[i] = innerFunc(ctx)

@@ -15,9 +15,9 @@ import (
 
 func (r *queryResolver) PatientStatusChart(ctx context.Context) (*models.PieChart, error) {
 	var chart models.PieChart
-	chart.Name = "Patient Status"
+	chart.Name = "Patient Status Chart"
 	o := orm.NewOrm()
-	rows, err := o.Raw("SELECT COUNT(*) AS count, status as Label FROM persons GROUP BY status").QueryRows(&chart.Data)
+	rows, err := o.Raw("SELECT COUNT(*) AS value, status as group FROM persons GROUP BY status").QueryRows(&chart.Data)
 	if err != nil {
 		return nil, err
 	}

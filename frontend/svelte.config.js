@@ -46,7 +46,11 @@ const config = {
 		floc: false,
 		vite: {
 			server: {},
+			ssr: {
+				// noExternal: [production && '@carbon/charts'].filter(Boolean),
+			},
 			optimizeDeps: {
+				include: ['@carbon/charts'],
 				exclude: ['@urql/svelte']
 			},
 			plugins: [

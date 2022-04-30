@@ -289,6 +289,24 @@ export type ItemsInput = {
   value?: InputMaybe<Scalars['String']>;
 };
 
+export type LineChart = {
+  __typename?: 'LineChart';
+  data?: Maybe<Array<Maybe<LineChartData>>>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type LineChartData = {
+  __typename?: 'LineChartData';
+  label?: Maybe<Scalars['String']>;
+  values?: Maybe<Array<Maybe<LineChartValue>>>;
+};
+
+export type LineChartValue = {
+  __typename?: 'LineChartValue';
+  x?: Maybe<Scalars['Int']>;
+  y?: Maybe<Scalars['Int']>;
+};
+
 export enum MaritalStatus {
   Divorced = 'DIVORCED',
   Married = 'MARRIED',
@@ -943,6 +961,18 @@ export type PersonWorkupList = Connection & {
   pagination?: Maybe<Pagination>;
 };
 
+export type PieChart = {
+  __typename?: 'PieChart';
+  data: Array<PieChartData>;
+  name: Scalars['String'];
+};
+
+export type PieChartData = {
+  __typename?: 'PieChartData';
+  group: Scalars['String'];
+  value: Scalars['Int'];
+};
+
 export type Prefix = {
   __typename?: 'Prefix';
   classes?: Maybe<Scalars['String']>;
@@ -988,6 +1018,8 @@ export type Query = {
   listPersonWorkups?: Maybe<Connection>;
   listWorkflows?: Maybe<Connection>;
   listWorkups?: Maybe<Connection>;
+  patientStatusChart?: Maybe<PieChart>;
+  patientStatusChartByDate?: Maybe<PieChart>;
   personMedicalHistory?: Maybe<PersonMedicalHistoryEdge>;
   users?: Maybe<UserList>;
 };
@@ -1175,6 +1207,11 @@ export type QueryListWorkupsArgs = {
 };
 
 
+export type QueryPatientStatusChartByDateArgs = {
+  date?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryPersonMedicalHistoryArgs = {
   ID: Scalars['ID'];
 };
@@ -1281,9 +1318,7 @@ export type WorkflowFilter = {
 
 export type WorkflowInput = {
   Configuration: ConfigurationInput;
-  ID: Scalars['ID'];
   Name: Scalars['String'];
-  User: UserInput;
 };
 
 export type WorkflowList = Connection & {
@@ -1328,6 +1363,11 @@ export type WorkupList = Connection & {
   items?: Maybe<Array<Maybe<WorkupEdge>>>;
   pagination?: Maybe<Pagination>;
 };
+
+export type PatientStatusChartQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PatientStatusChartQuery = { __typename?: 'Query', patientStatusChart?: { __typename?: 'PieChart', name: string, data: Array<{ __typename?: 'PieChartData', group: string, value: number }> } | null };
 
 export type PaginationFragment = { __typename?: 'Pagination', currentPage: number, prevPage: number, nextPage: number, totalItems: number, itemsPerPage: number };
 
@@ -1715,6 +1755,7 @@ export const ExaminationFieldsFragmentDoc = {"kind":"Document","definitions":[{"
 export const InvestigationFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"InvestigationFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Investigation"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Order"}},{"kind":"Field","name":{"kind":"Name","value":"Details"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Name"}}]}}]}}]} as unknown as DocumentNode<InvestigationFieldsFragment, unknown>;
 export const WorkupFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WorkupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Workup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Order"}},{"kind":"Field","name":{"kind":"Name","value":"Details"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Name"}}]}}]}}]} as unknown as DocumentNode<WorkupFieldsFragment, unknown>;
 export const WorkflowFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WorkflowFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Workflow"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"Name"}},{"kind":"Field","name":{"kind":"Name","value":"Configuration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"components"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"component"}},{"kind":"Field","name":{"kind":"Name","value":"component_id"}}]}}]}}]}}]} as unknown as DocumentNode<WorkflowFieldsFragment, unknown>;
+export const PatientStatusChartDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PatientStatusChart"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"patientStatusChart"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"group"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]} as unknown as DocumentNode<PatientStatusChartQuery, PatientStatusChartQueryVariables>;
 export const UserLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UserLogin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userLogin"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserLogin"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userLogin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userLogin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userLogin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"Roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ID"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"error"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"string"}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<UserLoginMutation, UserLoginMutationVariables>;
 export const NewPatientDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"NewPatient"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newPatient"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonFields"}}]}}]}}]}},...PersonFieldsFragmentDoc.definitions]} as unknown as DocumentNode<NewPatientMutation, NewPatientMutationVariables>;
 export const NewPersonFollowUpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"NewPersonFollowUp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PersonFollowUpInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPersonFollowUp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonFollowUpFields"}}]}}]}}]}},...PersonFollowUpFieldsFragmentDoc.definitions]} as unknown as DocumentNode<NewPersonFollowUpMutation, NewPersonFollowUpMutationVariables>;
@@ -1756,6 +1797,7 @@ export const ListWorkupsDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GetWorkupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWorkup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getWorkup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WorkupFields"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProcedureFragment"}}]}}]}}]}},...WorkupFieldsFragmentDoc.definitions,...ProcedureFragmentFragmentDoc.definitions]} as unknown as DocumentNode<GetWorkupQuery, GetWorkupQueryVariables>;
 export const ListWorkflowsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListWorkflows"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"WorkflowFilter"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OrderBy"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listWorkflows"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WorkflowFields"}}]}}]}}]}}]}},...WorkflowFieldsFragmentDoc.definitions]} as unknown as DocumentNode<ListWorkflowsQuery, ListWorkflowsQueryVariables>;
 export const GetWorkflowDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWorkflow"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getWorkflow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WorkflowFields"}}]}}]}}]}},...WorkflowFieldsFragmentDoc.definitions]} as unknown as DocumentNode<GetWorkflowQuery, GetWorkflowQueryVariables>;
+export type PatientStatusChartQueryStore = OperationStore<PatientStatusChartQuery, PatientStatusChartQueryVariables>;
 export type UserLoginMutationStore = OperationStore<UserLoginMutation, UserLoginMutationVariables>;
 export type NewPatientMutationStore = OperationStore<NewPatientMutation, NewPatientMutationVariables>;
 export type NewPersonFollowUpMutationStore = OperationStore<NewPersonFollowUpMutation, NewPersonFollowUpMutationVariables>;

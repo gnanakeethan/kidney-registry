@@ -550,7 +550,7 @@ type PieChart struct {
 }
 
 type PieChartData struct {
-	Label string `json:"label"`
+	Group string `json:"group"`
 	Value int    `json:"value"`
 }
 
