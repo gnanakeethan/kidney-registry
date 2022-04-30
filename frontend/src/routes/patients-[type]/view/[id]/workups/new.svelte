@@ -7,9 +7,11 @@
 
 	const workups = operationStore(ListWorkupsDocument);
 	query(workups);
-	let workupId = '';
+	export let workupId = '';
 	let currentWorkup = 0;
 	let examsLength = 0;
+	export let sub = false;
+
 	workups.subscribe((data) => {
 		examsLength = data?.data?.listWorkups.items.length;
 		let exam1 = data?.data?.listWorkups.items[0].node;
@@ -36,10 +38,11 @@
 	}
 
 	function Followup() {
-		goto('/patients-recipient/view/' + $recipientId + '/followups/create');
+		if (!sub)
+			goto('/patients-recipient/view/' + $recipientId + '/followups/create');
 	}
 
-	function workupChanged() {
+	export function idChanged() {
 		const backup = workupId;
 		workupId = '';
 		setTimeout(() => {
@@ -54,7 +57,7 @@
 	<p>Oh no... {$workups.error.message}</p>
 {:else}
 	Select Workup
-	<select class='form-select' name='' id='' bind:value={workupId} on:change={()=>workupChanged()}>
+	<select class='form-select' name='' id='' bind:value={workupId} on:change={()=>idChanged()}>
 		{#each $workups.data.listWorkups.items as workup}
 			<!--{workup.Details.Name} <br>-->
 			<option value={workup.node.ID}>{workup.node.Details.Name}</option>

@@ -170,6 +170,21 @@ type ComplexityRoot struct {
 		Value func(childComplexity int) int
 	}
 
+	LineChart struct {
+		Data func(childComplexity int) int
+		Name func(childComplexity int) int
+	}
+
+	LineChartData struct {
+		Label  func(childComplexity int) int
+		Values func(childComplexity int) int
+	}
+
+	LineChartValue struct {
+		X func(childComplexity int) int
+		Y func(childComplexity int) int
+	}
+
 	Menu struct {
 		Items func(childComplexity int) int
 	}
@@ -406,6 +421,16 @@ type ComplexityRoot struct {
 		Pagination func(childComplexity int) int
 	}
 
+	PieChart struct {
+		Data func(childComplexity int) int
+		Name func(childComplexity int) int
+	}
+
+	PieChartData struct {
+		Label func(childComplexity int) int
+		Value func(childComplexity int) int
+	}
+
 	Prefix struct {
 		Classes func(childComplexity int) int
 	}
@@ -440,6 +465,8 @@ type ComplexityRoot struct {
 		ListPersonWorkups           func(childComplexity int, personID string, filter *models.PersonWorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListWorkflows               func(childComplexity int, filter *models.WorkflowFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 		ListWorkups                 func(childComplexity int, filter *models.WorkupFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
+		PatientStatusChart          func(childComplexity int) int
+		PatientStatusChartByDate    func(childComplexity int, date *string) int
 		PersonMedicalHistory        func(childComplexity int, id string) int
 		Users                       func(childComplexity int, filter *models.UserFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) int
 	}
@@ -624,6 +651,8 @@ type PersonWorkupResolver interface {
 }
 type QueryResolver interface {
 	Error(ctx context.Context) (*models.Error, error)
+	PatientStatusChart(ctx context.Context) (*models.PieChart, error)
+	PatientStatusChartByDate(ctx context.Context, date *string) (*models.PieChart, error)
 	GetExamination(ctx context.Context, id string) (*models.ExaminationEdge, error)
 	ListExaminations(ctx context.Context, filter *models.ExaminationFilter, page *int, limit *int, sortBy []*string, orderBy []*models.OrderBy) (models.Connection, error)
 	GetInvestigation(ctx context.Context, id string) (*models.InvestigationEdge, error)
@@ -1103,6 +1132,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Items.Value(childComplexity), true
+
+	case "LineChart.data":
+		if e.complexity.LineChart.Data == nil {
+			break
+		}
+
+		return e.complexity.LineChart.Data(childComplexity), true
+
+	case "LineChart.name":
+		if e.complexity.LineChart.Name == nil {
+			break
+		}
+
+		return e.complexity.LineChart.Name(childComplexity), true
+
+	case "LineChartData.label":
+		if e.complexity.LineChartData.Label == nil {
+			break
+		}
+
+		return e.complexity.LineChartData.Label(childComplexity), true
+
+	case "LineChartData.values":
+		if e.complexity.LineChartData.Values == nil {
+			break
+		}
+
+		return e.complexity.LineChartData.Values(childComplexity), true
+
+	case "LineChartValue.x":
+		if e.complexity.LineChartValue.X == nil {
+			break
+		}
+
+		return e.complexity.LineChartValue.X(childComplexity), true
+
+	case "LineChartValue.y":
+		if e.complexity.LineChartValue.Y == nil {
+			break
+		}
+
+		return e.complexity.LineChartValue.Y(childComplexity), true
 
 	case "Menu.items":
 		if e.complexity.Menu.Items == nil {
@@ -2350,6 +2421,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PersonWorkupList.Pagination(childComplexity), true
 
+	case "PieChart.data":
+		if e.complexity.PieChart.Data == nil {
+			break
+		}
+
+		return e.complexity.PieChart.Data(childComplexity), true
+
+	case "PieChart.name":
+		if e.complexity.PieChart.Name == nil {
+			break
+		}
+
+		return e.complexity.PieChart.Name(childComplexity), true
+
+	case "PieChartData.label":
+		if e.complexity.PieChartData.Label == nil {
+			break
+		}
+
+		return e.complexity.PieChartData.Label(childComplexity), true
+
+	case "PieChartData.value":
+		if e.complexity.PieChartData.Value == nil {
+			break
+		}
+
+		return e.complexity.PieChartData.Value(childComplexity), true
+
 	case "Prefix.classes":
 		if e.complexity.Prefix.Classes == nil {
 			break
@@ -2658,6 +2757,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ListWorkups(childComplexity, args["filter"].(*models.WorkupFilter), args["page"].(*int), args["limit"].(*int), args["sortBy"].([]*string), args["orderBy"].([]*models.OrderBy)), true
+
+	case "Query.patientStatusChart":
+		if e.complexity.Query.PatientStatusChart == nil {
+			break
+		}
+
+		return e.complexity.Query.PatientStatusChart(childComplexity), true
+
+	case "Query.patientStatusChartByDate":
+		if e.complexity.Query.PatientStatusChartByDate == nil {
+			break
+		}
+
+		args, err := ec.field_Query_patientStatusChartByDate_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.PatientStatusChartByDate(childComplexity, args["date"].(*string)), true
 
 	case "Query.personMedicalHistory":
 		if e.complexity.Query.PersonMedicalHistory == nil {
@@ -3183,6 +3301,33 @@ type UserToken {
 
 extend type Mutation {
     userLogin(userLogin: UserLogin!): UserToken!
+}`, BuiltIn: false},
+	{Name: "graph/schema/charts.graphql", Input: `type PieChart {
+    name: String!
+    data: [PieChartData!]!
+}
+
+type PieChartData {
+    label: String!
+    value: Int!
+}
+
+type LineChart {
+    name: String
+    data: [LineChartData]
+}
+type LineChartData {
+    label: String
+    values: [LineChartValue]
+}
+type LineChartValue {
+    x: Int
+    y: Int
+}
+
+extend type Query {
+    patientStatusChart: PieChart
+    patientStatusChartByDate(date: String): PieChart
 }`, BuiltIn: false},
 	{Name: "graph/schema/examination.graphql", Input: `type Examination implements DynamicFormInterface & Node{
     ID          : ID!
@@ -5596,6 +5741,21 @@ func (ec *executionContext) field_Query_listWorkups_args(ctx context.Context, ra
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_patientStatusChartByDate_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["date"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["date"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_personMedicalHistory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7657,6 +7817,198 @@ func (ec *executionContext) _Items_value(ctx context.Context, field graphql.Coll
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _LineChart_name(ctx context.Context, field graphql.CollectedField, obj *models.LineChart) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "LineChart",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _LineChart_data(ctx context.Context, field graphql.CollectedField, obj *models.LineChart) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "LineChart",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Data, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.LineChartData)
+	fc.Result = res
+	return ec.marshalOLineChartData2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartData(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _LineChartData_label(ctx context.Context, field graphql.CollectedField, obj *models.LineChartData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "LineChartData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Label, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _LineChartData_values(ctx context.Context, field graphql.CollectedField, obj *models.LineChartData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "LineChartData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Values, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*models.LineChartValue)
+	fc.Result = res
+	return ec.marshalOLineChartValue2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartValue(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _LineChartValue_x(ctx context.Context, field graphql.CollectedField, obj *models.LineChartValue) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "LineChartValue",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.X, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _LineChartValue_y(ctx context.Context, field graphql.CollectedField, obj *models.LineChartValue) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "LineChartValue",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Y, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Menu_items(ctx context.Context, field graphql.CollectedField, obj *models.Menu) (ret graphql.Marshaler) {
@@ -13208,6 +13560,146 @@ func (ec *executionContext) _PersonWorkupList_pagination(ctx context.Context, fi
 	return ec.marshalOPagination2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPagination(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _PieChart_name(ctx context.Context, field graphql.CollectedField, obj *models.PieChart) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PieChart",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PieChart_data(ctx context.Context, field graphql.CollectedField, obj *models.PieChart) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PieChart",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Data, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*models.PieChartData)
+	fc.Result = res
+	return ec.marshalNPieChartData2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChartDataᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PieChartData_label(ctx context.Context, field graphql.CollectedField, obj *models.PieChartData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PieChartData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Label, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PieChartData_value(ctx context.Context, field graphql.CollectedField, obj *models.PieChartData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "PieChartData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Value, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Prefix_classes(ctx context.Context, field graphql.CollectedField, obj *models.Prefix) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -13302,6 +13794,77 @@ func (ec *executionContext) _Query_error(ctx context.Context, field graphql.Coll
 	res := resTmp.(*models.Error)
 	fc.Result = res
 	return ec.marshalOError2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐError(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_patientStatusChart(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().PatientStatusChart(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PieChart)
+	fc.Result = res
+	return ec.marshalOPieChart2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChart(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_patientStatusChartByDate(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_patientStatusChartByDate_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().PatientStatusChartByDate(rctx, args["date"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.PieChart)
+	fc.Result = res
+	return ec.marshalOPieChart2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChart(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getExamination(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -20251,6 +20814,111 @@ func (ec *executionContext) _Items(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
+var lineChartImplementors = []string{"LineChart"}
+
+func (ec *executionContext) _LineChart(ctx context.Context, sel ast.SelectionSet, obj *models.LineChart) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, lineChartImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LineChart")
+		case "name":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._LineChart_name(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "data":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._LineChart_data(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var lineChartDataImplementors = []string{"LineChartData"}
+
+func (ec *executionContext) _LineChartData(ctx context.Context, sel ast.SelectionSet, obj *models.LineChartData) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, lineChartDataImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LineChartData")
+		case "label":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._LineChartData_label(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "values":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._LineChartData_values(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var lineChartValueImplementors = []string{"LineChartValue"}
+
+func (ec *executionContext) _LineChartValue(ctx context.Context, sel ast.SelectionSet, obj *models.LineChartValue) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, lineChartValueImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LineChartValue")
+		case "x":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._LineChartValue_x(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		case "y":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._LineChartValue_y(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var menuImplementors = []string{"Menu"}
 
 func (ec *executionContext) _Menu(ctx context.Context, sel ast.SelectionSet, obj *models.Menu) graphql.Marshaler {
@@ -22387,6 +23055,88 @@ func (ec *executionContext) _PersonWorkupList(ctx context.Context, sel ast.Selec
 	return out
 }
 
+var pieChartImplementors = []string{"PieChart"}
+
+func (ec *executionContext) _PieChart(ctx context.Context, sel ast.SelectionSet, obj *models.PieChart) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pieChartImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PieChart")
+		case "name":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PieChart_name(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "data":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PieChart_data(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var pieChartDataImplementors = []string{"PieChartData"}
+
+func (ec *executionContext) _PieChartData(ctx context.Context, sel ast.SelectionSet, obj *models.PieChartData) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pieChartDataImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PieChartData")
+		case "label":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PieChartData_label(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "value":
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._PieChartData_value(ctx, field, obj)
+			}
+
+			out.Values[i] = innerFunc(ctx)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var prefixImplementors = []string{"Prefix"}
 
 func (ec *executionContext) _Prefix(ctx context.Context, sel ast.SelectionSet, obj *models.Prefix) graphql.Marshaler {
@@ -22472,6 +23222,46 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_error(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "patientStatusChart":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_patientStatusChart(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "patientStatusChartByDate":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_patientStatusChartByDate(ctx, field)
 				return res
 			}
 
@@ -24270,6 +25060,60 @@ func (ec *executionContext) unmarshalNPersonWorkupInput2githubᚗcomᚋgnanakeet
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNPieChartData2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChartDataᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.PieChartData) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNPieChartData2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChartData(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNPieChartData2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChartData(ctx context.Context, sel ast.SelectionSet, v *models.PieChartData) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._PieChartData(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNRole2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Role) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -25193,6 +26037,102 @@ func (ec *executionContext) unmarshalOItemsInput2ᚖgithubᚗcomᚋgnanakeethan�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalOLineChartData2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartData(ctx context.Context, sel ast.SelectionSet, v []*models.LineChartData) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOLineChartData2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartData(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOLineChartData2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartData(ctx context.Context, sel ast.SelectionSet, v *models.LineChartData) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._LineChartData(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOLineChartValue2ᚕᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartValue(ctx context.Context, sel ast.SelectionSet, v []*models.LineChartValue) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOLineChartValue2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartValue(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOLineChartValue2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐLineChartValue(ctx context.Context, sel ast.SelectionSet, v *models.LineChartValue) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._LineChartValue(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOMaritalStatus2githubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐMaritalStatus(ctx context.Context, v interface{}) (models.MaritalStatus, error) {
 	var res models.MaritalStatus
 	err := res.UnmarshalGQL(v)
@@ -25941,6 +26881,13 @@ func (ec *executionContext) unmarshalOPersonWorkupFilter2ᚖgithubᚗcomᚋgnana
 	}
 	res, err := ec.unmarshalInputPersonWorkupFilter(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPieChart2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPieChart(ctx context.Context, sel ast.SelectionSet, v *models.PieChart) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PieChart(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOPrefix2ᚖgithubᚗcomᚋgnanakeethanᚋkidneyᚑregistryᚋmodelsᚐPrefix(ctx context.Context, sel ast.SelectionSet, v *models.Prefix) graphql.Marshaler {

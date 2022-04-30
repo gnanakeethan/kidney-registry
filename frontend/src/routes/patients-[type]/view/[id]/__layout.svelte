@@ -226,9 +226,8 @@
 		<br>
 		<div class='flex flex-col'>
 			{#each workflows as workflow}
-				<div class='flex flex-row bg-green-400 p-4 text-lg'>
-					<span class='text-gray-800'>{workflow.node.Name}</span>
-				</div>
+				<a href='/workflow/{$recipientId}-{workflow.node.ID}-0'
+					 class='flex flex-row bg-green-400 m-2 p-4 text-lg text-gray-800'>{workflow.node.Name}</a>
 			{/each}
 		</div>
 	</div>

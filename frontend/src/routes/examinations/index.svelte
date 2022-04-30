@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { GraphQLQueryRepository } from '$lib/api/query-repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
@@ -19,7 +19,8 @@
 		ListAllPersonExaminationDocument
 	);
 	let loading = true;
-	$: filters = { orderBy: ['desc'], sortBy: ['CreatedAt'] };
+	export let limit = 10;
+	$: filters = { orderBy: ['desc'], sortBy: ['CreatedAt'], limit: limit };
 
 	let columns = [
 		{ key: 'node.CreatedAt', name: 'Recorded On' },
@@ -39,7 +40,7 @@
 	$: console.log(selectedRows);
 </script>
 
-<div class="p-2 p-4">
+<div class='p-2 p-4'>
 	<Table
 		bind:dtSource={dataSource}
 		bind:loading
@@ -47,11 +48,11 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath="data.listAllPersonExaminations.items"
+		rootAccessPath='data.listAllPersonExaminations.items'
 	>
-		<svelte:fragment let:element={examination} slot="actions">
-			<a href="/patients-recipient/view/{examination.node.Person.ID}/examinations/{examination.ID}"
-				>View</a
+		<svelte:fragment let:element={examination} slot='actions'>
+			<a href='/patients-recipient/view/{examination.node.Person.ID}/examinations/{examination.ID}'
+			>View</a
 			>
 		</svelte:fragment>
 	</Table>

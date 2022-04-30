@@ -20,7 +20,9 @@
 		ListAllPersonInvestigationDocument
 	);
 	let loading = true;
-	let filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
+	export let limit = 10;
+
+	let filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'], limit };
 
 	let columns = [
 		{ key: 'node.CreatedAt', name: 'Recorded On' },

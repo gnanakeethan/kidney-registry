@@ -1,0 +1,27 @@
+type PieChart {
+    name: String!
+    data: [PieChartData!]!
+}
+
+type PieChartData {
+    label: String!
+    value: Int!
+}
+
+type LineChart {
+    name: String
+    data: [LineChartData]
+}
+type LineChartData {
+    label: String
+    values: [LineChartValue]
+}
+type LineChartValue {
+    x: Int
+    y: Int
+}
+
+extend type Query {
+    patientStatusChart: PieChart
+    patientStatusChartByDate(date: String): PieChart
+}

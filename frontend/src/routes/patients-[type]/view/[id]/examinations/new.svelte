@@ -7,7 +7,8 @@
 
 	const examinations = operationStore(ListExaminationsDocument);
 	query(examinations);
-	let examinationId = '';
+	export let examinationId = '';
+	export let sub = false;
 	let currentExamination = 0;
 	let examsLength = 0;
 	examinations.subscribe((data) => {
@@ -54,7 +55,7 @@
 
 	let examination;
 
-	function examinationChanged(ID) {
+	export function idChanged(ID) {
 		examinationId = '';
 		setTimeout(() => {
 			examinationId = ID;
@@ -73,7 +74,7 @@
 			<div class='p-4 bg-gray-100'
 					 class:bg-gray-400={examinationId === examination.node.ID}
 					 class:text-white={examinationId === examination.node.ID}
-					 on:click={()=>examinationChanged(examination.node.ID)}>{examination.node.Details.Name}</div>
+					 on:click={()=>idChanged(examination.node.ID)}>{examination.node.Details.Name}</div>
 		{/each}
 	</div>
 {/if}

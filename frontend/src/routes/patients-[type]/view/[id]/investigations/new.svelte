@@ -7,7 +7,9 @@
 
 	const investigations = operationStore(ListInvestigationsDocument);
 	query(investigations);
-	let investigationId = '';
+	export let investigationId = '';
+	export let sub = false;
+
 	$: if (investigationId) {
 		const backup = investigationId;
 		investigationId = '';
@@ -46,7 +48,7 @@
 		goto('/patients-recipient/view/' + $recipientId + '/followups/create');
 	}
 
-	function investigationChanged(invId) {
+	export function idChanged(invId) {
 		investigationId = '';
 		setTimeout(() => {
 			investigationId = invId;
@@ -65,7 +67,7 @@
 			<div class='p-4 bg-gray-100'
 					 class:bg-gray-400={investigationId === investigation.node.ID}
 					 class:text-white={investigationId === investigation.node.ID}
-					 on:click={()=>investigationChanged(investigation.node.ID)}>{investigation.node.Details.Name}</div>
+					 on:click={()=>idChanged(investigation.node.ID)}>{investigation.node.Details.Name}</div>
 		{/each}
 	</div>
 {/if}

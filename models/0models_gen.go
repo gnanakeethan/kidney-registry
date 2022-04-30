@@ -215,6 +215,21 @@ type ItemsInput struct {
 	Value *string `json:"value"`
 }
 
+type LineChart struct {
+	Name *string          `json:"name"`
+	Data []*LineChartData `json:"data"`
+}
+
+type LineChartData struct {
+	Label  *string           `json:"label"`
+	Values []*LineChartValue `json:"values"`
+}
+
+type LineChartValue struct {
+	X *int `json:"x"`
+	Y *int `json:"y"`
+}
+
 type Menu struct {
 	Items []*MenuItem `json:"items"`
 }
@@ -528,6 +543,16 @@ type PersonWorkupList struct {
 }
 
 func (PersonWorkupList) IsConnection() {}
+
+type PieChart struct {
+	Name string          `json:"name"`
+	Data []*PieChartData `json:"data"`
+}
+
+type PieChartData struct {
+	Label string `json:"label"`
+	Value int    `json:"value"`
+}
 
 type Prefix struct {
 	Classes *string `json:"classes"`

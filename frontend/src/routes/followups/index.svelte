@@ -19,7 +19,8 @@
 		ListAllPersonFollowUpDocument
 	);
 	let loading = true;
-	$: filters = { orderBy: ['desc'], sortBy: ['CreatedAt'] };
+	export let limit = 10;
+	$: filters = { orderBy: ['desc'], sortBy: ['CreatedAt'], limit: limit };
 
 	let columns = [
 		{ key: 'node.CreatedAt', name: 'Recorded On' },
