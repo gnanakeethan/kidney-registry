@@ -69,9 +69,9 @@
 <div>
 	{#if workflow}
 		<div>
-			<span
-				class='text-2xl font-bold mx-10  bg-green-200 w-full text-center'>Processing Workflow {workflow.Name} {capitalize(workflow.Configuration.components[segment].component)}
-				for {$recipient.FirstName} - Stage {parseInt(segment) + 1} of {workflow.Configuration.components.length}</span>
+			<div class='text-2xl font-bold bg-green-200 w-full text-center my-4 py-4'>Processing
+				Workflow {workflow.Name} {capitalize(workflow.Configuration.components[segment].component)}
+				for {$recipient.FirstName} - Stage {parseInt(segment) + 1} of {workflow.Configuration.components.length}</div>
 
 			<svelte:component
 				sub={true}

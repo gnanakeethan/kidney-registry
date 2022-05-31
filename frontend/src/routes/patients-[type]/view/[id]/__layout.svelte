@@ -227,7 +227,7 @@
 		<div class='flex flex-col'>
 			{#each workflows as workflow}
 				<a href='/workflow/{$recipientId}-{workflow.node.ID}-0'
-					 class='flex flex-row bg-green-400 m-2 p-4 text-lg text-gray-800'>{workflow.node.Name}</a>
+					 class='flex flex-row bg-green-400 m-2 p-2 rounded shadow'>{workflow.node.Name}</a>
 			{/each}
 		</div>
 	</div>

@@ -130,6 +130,9 @@ func init() {
 			if role.Slug == "consultant" {
 				return next(ctx)
 			}
+			if role.Slug == "mo" {
+				return next(ctx)
+			}
 		}
 		value := reflect.ValueOf(obj)
 		if obj != nil && !value.IsZero() && !value.IsNil() && value.IsValid() {

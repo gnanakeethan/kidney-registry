@@ -101,14 +101,14 @@
 			: 'form-group'}
 	>
 		<!-- Label -->
-		<div class='flex items-center' class:flex-row={inline} class:flex-col={!inline}>
+		<div class='flex' class:flex-row={inline} class:flex-col={!inline} class:items-center={inline}>
 			{#if field.attributes}
 				{#if field.attributes.label}
-					<label for={field.id} class='label text-md mx-2 font-bold'
+					<label for={field.id} class='flex-grow label text-md mx-2 font-bold'
 					>{field.attributes.label}</label
 					>
 				{/if}
-				<div class='w-full items-center'>
+				<div class='w-2/3 items-center'>
 					{#if field.type === 'input'}
 						<Input {field} on:changeValue={changeValueHander} />
 					{:else if field.type === 'imagedetail'}

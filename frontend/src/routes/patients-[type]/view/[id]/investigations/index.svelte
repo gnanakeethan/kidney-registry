@@ -24,11 +24,12 @@
 	let filters = { ID: $recipientId, orderBy: ['desc'], sortBy: ['CreatedAt'] };
 
 	let columns = [
+		{ key: 'node.Details.Name', name: 'Investigation Name' },
 		{ key: 'node.CreatedAt', name: 'Recorded On' },
 		{ key: 'node.Results.Hb', name: 'HB' },
-		{ key: 'node.ID', name: 'Investigation Name' }
+		{ key: 'node.Results.Total Cholesterol ', name: 'Total Cl' },
 	];
-	let displayedColumns = ['node.CreatedAt', 'node.Results.Hb', 'node.Details.Name'];
+	let displayedColumns = ['node.CreatedAt', 'node.Results.Hb', 'node.Details.Name','node.Results.Total Cholesterol '];
 	let element: User;
 	let selectedRows = [];
 	$: console.log(selectedRows);

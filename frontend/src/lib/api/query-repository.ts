@@ -21,6 +21,7 @@ export class GraphQLQueryRepository<T> implements QueryRepository<T> {
 		page: number,
 		perPage: number
 	): Promise<OperationResult<T>> {
+		
 		const finalVar = { page: page, limit: perPage };
 		for (const filterKey in filter) {
 			finalVar[filterKey] = filter[filterKey];

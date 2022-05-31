@@ -101,7 +101,7 @@
 			filter = filter;
 		}
 		if (values.FirstName !== undefined && values.FirstName !== null && values.FirstName !== '') {
-			filter.FirstName = { comparison: ComparisonType.StartsWith, value: values.FirstName };
+			filter.FirstName = { comparison: ComparisonType.Contains, value: values.FirstName };
 		} else if (
 			values.FirstName !== undefined ||
 			values.FirstName === '' ||
@@ -198,7 +198,6 @@
 	{:else}
 		No Records
 	{/if}
-	<a class='py- bg-green-400 px-4' href='/patients-recipient/new'>New Patient</a>
 	<!--	Messages : <input-->
 	<!--		bind:value={$NotificationsStatus.messages}-->
 	<!--		max="100"-->

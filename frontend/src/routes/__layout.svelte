@@ -7,10 +7,7 @@
 	import PatientIcon from '~icons/bi/person';
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
-	import SettingsIcon from '~icons/carbon/settings';
 	import CollapsibleIcon from '~icons/clarity/collapse-line';
-	import DoctorIcon from '~icons/healthicons/doctor-outline';
-	import PreferencesIcon from '~icons/healthicons/ui-preferences-outline';
 	import RecurringIcon from '~icons/ic/round-event-repeat';
 	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
 	import KidneyOutline from '~icons/whh/kidney';
@@ -32,8 +29,9 @@
 			{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
 			{ name: 'Examinations', route: '/examinations', icon: SearchIcon },
 			{ name: 'Patients', route: '/patients-recipient', icon: PatientIcon },
-			{ name: 'Doctors', route: '/doctors', icon: DoctorIcon },
-			{ name: 'Users', route: '/users', icon: UserIcon },
+			{ name: 'New Patient', route: '/patients-recipient/new', icon: PatientIcon },
+			// { name: 'Doctors', route: '/doctors', icon: DoctorIcon },
+			// { name: 'Users', route: '/users', icon: UserIcon },
 			{ name: 'Workflow', route: '/workflow/', icon: UserIcon }
 			// { name: '', route: '/i', icon: DoctorIcon }
 		]
@@ -41,8 +39,8 @@
 	let bottomProps = {
 		activeUrl: activePath,
 		routes: [
-			{ name: 'System Settings', route: '/settings', icon: SettingsIcon },
-			{ name: 'Preferences', route: '/preferences', icon: PreferencesIcon }
+			// { name: 'System Settings', route: '/settings', icon: SettingsIcon },
+			// { name: 'Preferences', route: '/preferences', icon: PreferencesIcon }
 		]
 	};
 

@@ -1,16 +1,10 @@
-<script lang="ts">
+<script lang='ts'>
 	import { goto } from '$app/navigation';
 
 	import { GraphQLQueryRepository } from '$lib/api/query-repository';
 	import { DataSourceConnector } from '$lib/api/table-datasource';
 	import Table from '$lib/components/table/Table.svelte';
-	import {
-		donorSet,
-		lastRecipient,
-		lastRecipientId,
-		recipient,
-		recipientId
-	} from '$lib/state/recipient';
+	import { donorSet, lastRecipient, lastRecipientId, recipient, recipientId } from '$lib/state/recipient';
 	import { ListPersonOrganDonationDocument, Person } from '../../../../../lib/graphql/generated';
 
 	interface User {
@@ -19,12 +13,12 @@
 	}
 
 	let filters = {
-		ID: $recipientId,
 		filter: {
 			// PersonType: { comparison: 'EQUAL', value: 'RECIPIENT' }
 		},
 		orderBy: ['desc'],
-		sortBy: ['CreatedAt']
+		sortBy: ['CreatedAt'],
+		ID: $recipientId
 	};
 	const queryRepository = new GraphQLQueryRepository<Person>();
 	let dataSource = new DataSourceConnector<Person>(
@@ -67,7 +61,7 @@
 	}
 </script>
 
-<div class="p-2 p-4">
+<div class='p-2 p-4'>
 	<Table
 		bind:dtSource={dataSource}
 		bind:loading
@@ -75,10 +69,10 @@
 		{columns}
 		{displayedColumns}
 		{filters}
-		rootAccessPath="data.listPersonOrganDonations.items"
+		rootAccessPath='data.listPersonOrganDonations.items'
 	>
-		<svelte:fragment let:element={Patient} slot="actions">
-			{JSON.stringify(Patient)}
+		<svelte:fragment let:element={Patient} slot='actions'>
+			
 			<a on:click={() => openDonor(Patient.node.Donor.ID)}>View Donor</a>
 		</svelte:fragment>
 	</Table>

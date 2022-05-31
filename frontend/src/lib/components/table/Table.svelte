@@ -106,7 +106,7 @@
 			if (data !== undefined && data !== null && data[keyItems[i]] !== undefined) {
 				data = data[keyItems[i]];
 			} else {
-				break;
+				return '';
 			}
 		}
 		return data;

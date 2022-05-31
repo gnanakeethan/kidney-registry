@@ -3,10 +3,7 @@
 
 	import { operationStore, query } from '@urql/svelte';
 	// import { Person } from 'lib/graphql/generated';
-	import {
-		GetPatientOverviewDocument,
-		GetPatientOverviewQuery
-	} from '../../../../../lib/graphql/generated';
+	import { GetPatientOverviewDocument, GetPatientOverviewQuery } from '../../../../../lib/graphql/generated';
 	import { patientType } from '../../../../../lib/state/recipient';
 
 	$: query<GetPatientOverviewQuery>(
@@ -27,7 +24,7 @@
 <div class='flex min-h-full flex-col bg-gray-200 p-4'>
 	{#if $recipientOverview}
 		<div class='p-2'>
-			{#if $recipientOverview.FollowUps !== undefined && $recipientOverview.FollowUps.items.length > 0}
+			{#if $recipientOverview.FollowUps !== undefined &&  $recipientOverview.FollowUps.items !== null && $recipientOverview.FollowUps.items.length > 0}
 				<div class='flex flex-col bg-white p-4'>
 					<span class='text-lg'> Latest Follow Up : </span>
 					<span class='align mx-2 flex-grow text-lg text-gray-700'>
@@ -61,26 +58,26 @@
 			{/if}
 		</div>
 		<div class='p-2'>
-			{#if $recipientOverview.Investigations !== undefined && $recipientOverview.Investigations.items.length > 0}
+			{#if $recipientOverview.Investigations !== undefined &&$recipientOverview.Investigations.items !== null && $recipientOverview.Investigations.items.length > 0}
 				<div class='flex flex-col bg-white p-4'>
 					<span class='text-lg'> Latest Investigation : </span>
 					<div class='align mx-2 my-2 text-lg text-gray-700'>
 						{#if $recipientOverview.Investigations.items[0].node.Details.Description}
 							<div class='font-bold'>
-								Type: {$recipientOverview?.Investigations?.items[0].node.Details.Name}
-								<br />
-								Requested On: {$recipientOverview?.Investigations?.items[0].node.CreatedAt}
-								<br />
-								{#if $recipientOverview?.Investigations?.items[0].ExpectedDate !== '0001-01-01'}
-									Expected On: {$recipientOverview?.Investigations?.items[0].node.ExpectedDate}
-									<br />
-								{/if}
-								{#if $recipientOverview?.Investigations?.items[0].ObtainedDate !== '0001-01-01'}
-									Obtained On: {$recipientOverview?.Investigations?.items[0].node.ObtainedDate}
-									<br />
-								{:else}
-									Not Yet Received <br />
-								{/if}
+								<div class='mt-2'>Type: {$recipientOverview?.Investigations?.items[0].node.Details.Name}</div>
+								<div class='mt-2'>Requested On: {$recipientOverview?.Investigations?.items[0].node.CreatedAt}</div>
+								<div class='mt-2'>
+									{#if $recipientOverview?.Investigations?.items[0].ExpectedDate !== '0001-01-01'}
+										Expected On: {$recipientOverview?.Investigations?.items[0].node.ExpectedDate}
+									{/if}
+								</div>
+								<div class='mt-2'>
+									{#if $recipientOverview?.Investigations?.items[0].ObtainedDate !== '0001-01-01'}
+										Obtained On: {$recipientOverview?.Investigations?.items[0].node.ObtainedDate}
+									{:else}
+										Not Yet Received <br />
+									{/if}
+								</div>
 							</div>
 							<div class='m-2'>
 								<a
@@ -107,20 +104,19 @@
 			{/if}
 		</div>
 		<div class='p-2'>
-			{#if $recipientOverview.Examinations !== undefined && $recipientOverview.Examinations.items.length > 0}
+			{#if $recipientOverview.Examinations !== undefined &&$recipientOverview.Examinations.items !== null && $recipientOverview.Examinations.items.length > 0}
 				<div class='flex flex-col bg-white p-4'>
 					<span class='text-lg'> Latest Examination : </span>
 					<div class='align mx-2 my-2 text-lg text-gray-700'>
 						{#if $recipientOverview.Examinations.items[0].node.Details.Description}
 							<div class='font-bold'>
-								Type: {$recipientOverview?.Examinations?.items[0].node.Details.Name}
-								<br />
-								Completed On: {$recipientOverview?.Examinations?.items[0].node.CreatedAt}
+								<div class='mt-2'>Type: {$recipientOverview?.Examinations?.items[0].node.Details.Name}</div>
+								<div class='mt-2'>Completed On: {$recipientOverview?.Examinations?.items[0].node.CreatedAt}</div>
 								<br />
 							</div>
-							<div class='m-2'>
+							<div class='mt-2'>
 								<a
-									class=' rounded bg-green-500 p-2 text-white shadow'
+									class=' rounded bg-green-400 p-2 text-white shadow-xl'
 									href='/patients-{$patientType}/view/{$recipientOverview.ID}/examinations/{$recipientOverview
 										?.Examinations?.items[0].node.ID}'
 								>
