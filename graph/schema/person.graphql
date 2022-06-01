@@ -1,6 +1,7 @@
 type Person implements Node @hasPermissionAgainst(action: "read",type:"PersonObject") {
     ID                     : ID!
     FirstName              : String
+    NIC                    :  String!
     LastName               : String
     Address                : String
     DateOfBirth            : String
@@ -85,6 +86,7 @@ input PersonComparison {
 }
 input PersonFilter {
     ID                     : StringFilter
+    NIC                    : StringFilter
     FirstName              : StringFilter
     LastName               : StringFilter
     Address                : StringFilter
@@ -107,6 +109,7 @@ input PersonFilter {
 
 input PersonInput {
     ID                     : ID!
+    NIC                    : String!
     Age                    : String
     FirstName              : String
     LastName               : String

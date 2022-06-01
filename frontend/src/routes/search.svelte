@@ -68,6 +68,20 @@
 		},
 		{
 			type: 'input',
+			name: 'NIC',
+			value: '',
+			prefix: {
+				classes: ['m-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'NIC',
+				id: 'NIC',
+				classes: ['form-input rounded w-full']
+			}
+		},
+		{
+			type: 'input',
 			name: 'FirstName',
 			value: '',
 			prefix: {
@@ -98,6 +112,12 @@
 			filter.Phn = { comparison: ComparisonType.StartsWith, value: values.Phn };
 		} else if (values.Phn !== undefined || values.Phn === '' || values.Phn === null) {
 			delete filter.Phn;
+			filter = filter;
+		}
+		if (values.NIC !== undefined && values.NIC !== null && values.NIC !== '') {
+			filter.NIC = { comparison: ComparisonType.StartsWith, value: values.NIC };
+		} else if (values.NIC !== undefined || values.NIC === '' || values.NIC === null) {
+			delete filter.NIC;
 			filter = filter;
 		}
 		if (values.FirstName !== undefined && values.FirstName !== null && values.FirstName !== '') {
@@ -182,6 +202,7 @@
 				<div class='flex flex-col m-2 {getColor(patient.Status)} p-2 rounded border border-black'>
 					<span>Name: {patient.node.FirstName} {patient.node.LastName}</span>
 					<span>PHN: {patient.node.Phn}</span>
+					<span>NIC: {patient.node.NIC}</span>
 					<span>Age: {patient.node.Age}</span>
 					<span>Gender: {patient.node.Gender}</span>
 					<span>BloodGroup: {patient.node.BloodGroup ?? ''}</span>

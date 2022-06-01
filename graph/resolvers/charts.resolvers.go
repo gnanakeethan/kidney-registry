@@ -6,11 +6,10 @@ package resolvers
 import (
 	"context"
 	"fmt"
-	
+
 	"github.com/beego/beego/v2/client/orm"
-	"github.com/kr/pretty"
-	
 	"github.com/gnanakeethan/kidney-registry/models"
+	"github.com/kr/pretty"
 )
 
 func (r *queryResolver) PatientStatusChart(ctx context.Context) (*models.PieChart, error) {

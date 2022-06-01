@@ -13,6 +13,7 @@ type Person struct {
 	ID                  string        `orm:"column(id);pk"`
 	FirstName           string        `orm:"column(first_name)"`
 	LastName            string        `orm:"column(last_name);null"`
+	NIC                 string        `orm:"column(nic);unique"`
 	Address             string        `orm:"column(address);null"`
 	DateOfBirth         time.Time     `orm:"column(date_of_birth);type(timestamp);null"`
 	Ethnicity           string        `orm:"column(ethnicity);null"`
@@ -136,6 +137,7 @@ func AddPatient(input *PersonInput) (*Person, error) {
 		Gender:              *input.Gender,
 		MaritalStatus:       *input.MaritalStatus,
 		Phn:                 time.Now().Format("20060102") + randString(3),
+		NIC:                 input.Nic,
 		PersonType:          *input.PersonType,
 		Status:              *input.Status,
 		RecordStatus:        *input.RecordStatus,

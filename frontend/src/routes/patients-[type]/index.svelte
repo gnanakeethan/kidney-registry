@@ -28,11 +28,13 @@
 		{ key: 'node.FirstName', name: 'First Name' },
 		{ key: 'node.LastName', name: 'Last Name' },
 		{ key: 'node.Phn', name: 'Phn' },
+		{ key: 'node.NIC', name: 'NIC' },
 		{ key: 'node.Status', name: 'Status' },
 		{ key: 'node.CreatedAt', name: 'Created Date' }
 	];
 	let displayedColumns = [
 		'node.Phn',
+		'node.NIC',
 		'node.Address',
 		'node.FirstName',
 		'node.LastName',

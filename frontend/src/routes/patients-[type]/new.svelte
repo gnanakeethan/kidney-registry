@@ -62,6 +62,22 @@
 		},
 		{
 			type: 'input',
+			name: 'NIC',
+			value: '',
+			prefix: {
+				classes: ['m-2']
+			},
+			attributes: {
+				type: 'text',
+				label: 'NIC',
+				id: 'nic',
+				classes: ['form-input rounded w-1/2 float-right']
+			},
+			rules: [],
+			messages: {}
+		},
+		{
+			type: 'input',
 			name: 'FirstName',
 			value: '',
 			prefix: {
@@ -292,10 +308,16 @@
 		console.log(isValidForm);
 		if (isValidForm) {
 			message = 'Saving Data....';
-			addPatient({ patientInput: values }).then((result) => {
-				console.log(result);
-				alert('Saved');
-				goto('/patients-recipient/view/' + result.data.addPatient.ID + '/history/new/history');
+			addPatient({ patientInput: values }).then((result,error) => {
+				console.log(result,result.error);
+				if (result.error !== undefined && result.error.message.includes("duplicate key")) {
+					alert("Duplicate NIC found. Search the patient in the search console.")
+				} else if (result.errors === undefined) {
+					alert('Saved');
+				} else {
+					alert("Failed to Save Record")
+				}
+				goto('/patients-recipient/view/' + result.data.addPatient.node.ID + '/history/new/history');
 			});
 		} else {
 			message =

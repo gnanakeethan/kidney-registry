@@ -109,6 +109,7 @@ fragment ProcedureFragment on DynamicFormInterface {
 
 fragment PersonFields on Person {
     ID
+    NIC
     FirstName
     LastName
     Address

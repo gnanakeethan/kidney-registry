@@ -292,6 +292,7 @@ func (PersonExaminationList) IsConnection() {}
 
 type PersonFilter struct {
 	ID                  *StringFilter `json:"ID"`
+	Nic                 *StringFilter `json:"NIC"`
 	FirstName           *StringFilter `json:"FirstName"`
 	LastName            *StringFilter `json:"LastName"`
 	Address             *StringFilter `json:"Address"`
@@ -376,6 +377,7 @@ type PersonFollowUpMedicineInput struct {
 
 type PersonInput struct {
 	ID                  string         `json:"ID"`
+	Nic                 string         `json:"NIC"`
 	Age                 *string        `json:"Age"`
 	FirstName           *string        `json:"FirstName"`
 	LastName            *string        `json:"LastName"`
