@@ -1,9 +1,6 @@
 import preprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-static';
 // import adapter from '@sveltejs/adapter-node';
-import Icons from 'unplugin-icons/vite';
-import { FileSystemIconLoader } from 'unplugin-icons/loaders';
-
 import getRepoInfo from 'git-repo-info';
 
 var info = getRepoInfo();
@@ -43,38 +40,6 @@ const config = {
 			name: info.lastTag + '-' + info.commitsSinceLastTag + '-' + info.abbreviatedSha,
 			pollInterval: 1000 * 60 * 60 * 24 * 30
 		},
-		floc: false,
-		vite: {
-			server: {},
-			ssr: {
-				// noExternal: [production && '@carbon/charts'].filter(Boolean),
-			},
-			optimizeDeps: {
-				include: ['@carbon/charts'],
-				exclude: ['@urql/svelte']
-			},
-			plugins: [
-				Icons({
-					compiler: 'svelte',
-					customCollections: {
-						sustain: FileSystemIconLoader('src/assets/icons')
-					}
-				})
-			],
-			resolve: {
-				alias: {
-					tslib: 'tslib/tslib.es6.js',
-					'./runtimeConfig': './runtimeConfig.browser'
-				}
-			},
-			build: {
-				rollupOptions: {
-					output: {
-						intro: 'if(exports === undefined){var exports ={}; var self = {}}'
-					}
-				}
-			}
-		}
 	}
 };
 
