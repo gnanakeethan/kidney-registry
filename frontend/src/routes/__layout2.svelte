@@ -1,4 +1,6 @@
 <script context='module' lang='ts'>
+	import client from '../client'
+
 	import { goto } from '$app/navigation';
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
@@ -51,6 +53,9 @@
 		bottomProps.activeUrl = loadInput.url.pathname;
 		return await authGuard(loadInput);
 	}
+
+	client.init()
+
 </script>
 
 <script lang='ts'>
