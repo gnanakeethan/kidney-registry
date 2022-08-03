@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import type { LoadEvent,LoadOutput } from "@sveltejs/kit";
 
-	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
+	export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
 		console.log(loadInput.url);
 		const { donorId } = loadInput.params;
 		return { props: { donorId } };

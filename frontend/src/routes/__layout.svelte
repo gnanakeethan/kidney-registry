@@ -5,7 +5,7 @@
 	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	import { authGuard } from '$lib/guards/auth';
 	import { minimized } from '$lib/state/SidebarStore';
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import type { LoadEvent,LoadOutput } from "@sveltejs/kit/types";
 	import PatientIcon from '~icons/bi/person';
 	import UserIcon from '~icons/bi/person';
 	import SearchIcon from '~icons/carbon/search-locate';
@@ -46,7 +46,7 @@
 		]
 	};
 
-	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
+	export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
 		console.log(loadInput.url);
 		// activeUrl.set(loadInput.url.pathname);
 		props.activeUrl = loadInput.url.pathname;

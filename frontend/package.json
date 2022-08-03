@@ -32,7 +32,7 @@
         "@graphql-typed-document-node/core": "^3.1.1",
         "@iconify/json": "^2.1.34",
         "@iconify/svelte": "^2.2.1",
-        "@macfja/svelte-persistent-store": "^1.3.0",
+        "@macfja/svelte-persistent-store": "~1.2.0",
         "@playwright/test": "^1.22.2",
         "@rollup/plugin-typescript": "^8.3.2",
         "@sveltejs/adapter-auto": "next",

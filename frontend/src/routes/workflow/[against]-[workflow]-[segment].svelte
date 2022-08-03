@@ -1,7 +1,7 @@
 <script context='module' lang='ts'>
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import type { LoadEvent,LoadOutput } from "@sveltejs/kit";
 
-	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
+	export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
 		const workflow_id = loadInput.params.workflow ?? '';
 		const segment = loadInput.params.segment ?? '';
 		const against = loadInput.params.against ?? '';

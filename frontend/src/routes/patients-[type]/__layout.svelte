@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
 	import { patientType } from '$lib/state/recipient';
-	import type { LoadInput, LoadOutput } from '@sveltejs/kit/types';
+	import type { LoadEvent,LoadOutput } from "@sveltejs/kit";
 
-	export async function load(loadInput: LoadInput): Promise<LoadOutput> {
+	export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
 		const type = loadInput.params.type ?? '';
 		console.log('PATIENT TYPE:', type);
 		patientType.set(type);

@@ -1,8 +1,8 @@
 import { base } from '$app/paths';
-import { LoadInput, LoadOutput } from '@sveltejs/kit';
+import { LoadEvent, LoadOutput } from '@sveltejs/kit';
 import { auth, authState } from '../state/auth';
 
-export async function authGuard({ url, params, props }: LoadInput): Promise<LoadOutput> {
+export async function authGuard({ url, params, props }: LoadEvent): Promise<LoadOutput> {
 	const token = url.searchParams.get('token');
 	if (token !== undefined && token !== null && token.length > 32) {
 		auth.token = token;

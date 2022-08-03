@@ -13,7 +13,8 @@ specifiers:
   '@graphql-typed-document-node/core': ^3.1.1
   '@iconify/json': ^2.1.34
   '@iconify/svelte': ^2.2.1
-  '@macfja/svelte-persistent-store': ^1.3.0
+  '@kitql/vite-plugin-watch-and-run': ^0.4.2
+  '@macfja/svelte-persistent-store': ~1.2.0
   '@playwright/test': ^1.22.2
   '@rollup/plugin-typescript': ^8.3.2
   '@sveltejs/adapter-auto': next
@@ -104,7 +105,8 @@ devDependencies:
   '@graphql-typed-document-node/core': 3.1.1_graphql@16.4.0
   '@iconify/json': 2.1.34
   '@iconify/svelte': 2.2.1
-  '@macfja/svelte-persistent-store': 1.3.0_svelte@3.47.0
+  '@kitql/vite-plugin-watch-and-run': 0.4.2
+  '@macfja/svelte-persistent-store': 1.2.0_svelte@3.47.0
   '@playwright/test': 1.24.2
   '@rollup/plugin-typescript': 8.3.2_r4mwxo64pqz5fgpbynlsmtpiy4
   '@sveltejs/adapter-auto': 1.0.0-next.64
@@ -1425,13 +1427,19 @@ packages:
     resolution: {integrity: sha512-nq7naGKnSsQ3KudK5ENDYfGb62Yre6e7suKZxjsfBqIfeh3wkxRFFMpQu0buEKeKZlqwhevVTKqgN1TdKGRyZw==}
     dev: true
 
-  /@macfja/svelte-persistent-store/1.3.0_svelte@3.47.0:
-    resolution: {integrity: sha512-3lPsEAFe28zCNTyA+/pYfUgzRrH6KZvoG0i4IHVhYOs3Xzaqg9hN7LdHa+Qrv7GncXn/6XhDEpb36hB0f7CzXA==}
+  /@kitql/vite-plugin-watch-and-run/0.4.2:
+    resolution: {integrity: sha512-GKt6Hwp/qsMZVSNRGzckJZ7s7+k3QEpkVLpjSwqtW+6XVUsWPQr2k0Bi55imd4CgD8Rr7RkwAmnjcOo57DugPg==}
+    dependencies:
+      '@kitql/helper': 0.3.5
+      micromatch: 4.0.5
+    dev: true
+
+  /@macfja/svelte-persistent-store/1.2.0_svelte@3.47.0:
+    resolution: {integrity: sha512-vftMaR7vwNwJx7atDjzFagBEZpOXgnrKqeutHfTtEreprP/izjb0LfvwLKQK29cO7gT9iifHQdOoD9kGynasOw==}
     peerDependencies:
       svelte: ^3.0
     dependencies:
       browser-cookies: 1.2.0
-      esserializer: 1.3.2
       idb-keyval: 5.1.5
       svelte: 3.47.0
     dev: true
@@ -2364,7 +2372,7 @@ packages:
     dev: true
 
   /browser-cookies/1.2.0:
-    resolution: {integrity: sha1-/KP/ubamOq3E2MCZnGtX0Pp9KbU=}
+    resolution: {integrity: sha512-cg2WuoOJo+F+g2XjEaP8nmeRp1vDHjt7sqpKJMsTNXKrpyIBNVslYJeehvs6FEddj8usV2+qyRSBEX244yN5/g==}
     dev: true
 
   /browserslist/4.20.3:
@@ -3779,10 +3787,6 @@ packages:
     engines: {node: '>=4.0'}
     dependencies:
       estraverse: 5.3.0
-    dev: true
-
-  /esserializer/1.3.2:
-    resolution: {integrity: sha512-48xQjlQ9Wr6dUfjLAC1IQF0bMIk6m62mN7BH0PklRP0NDfm2ISY16EXM8t2Wfc6WcLKser+X8ggeeFwieBkufQ==}
     dev: true
 
   /estraverse/4.3.0:
