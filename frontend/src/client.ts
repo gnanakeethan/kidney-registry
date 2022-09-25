@@ -8,7 +8,7 @@ async function fetchQuery({
 	session,
 	metadata
 }: RequestHandlerArgs) {
-	const url = import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:8080/v1/graphql/';
+	const url = import.meta.env.VITE_GRAPHQL_ENDPOINT || 'http://localhost:8080/v1/graphql';
 	const result = await fetch(url, {
 		method: 'POST',
 		headers: {

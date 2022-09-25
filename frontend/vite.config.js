@@ -3,7 +3,6 @@ import Icons from 'unplugin-icons/vite';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import path from 'path';
 import watchAndRun from '@kitql/vite-plugin-watch-and-run';
-import houdini from 'houdini/vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -20,12 +19,11 @@ const config = {
 		exclude: ['@urql/svelte']
 	},
 	plugins: [
-		houdini(),
 		sveltekit(),
 		watchAndRun([
 			{
 				name: 'Houdini',
-				watch: path.resolve('src/**/*.(gql|graphql|svelte)'),
+				watch: path.resolve('../**/*.(gql|graphql|svelte)'),
 				run: 'npm run generate',
 				delay: 100,
 				watchKind: ['ready', 'add', 'change', 'unlink'],

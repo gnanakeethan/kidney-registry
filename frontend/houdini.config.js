@@ -1,7 +1,6 @@
 /** @type {import('houdini').ConfigFile} */
 const config = {
-    "schemaPath": "./schema.graphql",
-    "sourceGlob": "src/**/*.{svelte,gql,graphql}",
+    client: "./src/lib/client.ts",
     "apiUrl": "http://localhost:8080/v1/graphql/"
 }
 
