@@ -1,5 +1,4 @@
 import preprocess from 'svelte-preprocess';
-import houdini from 'houdini/preprocess';
 import adapter from '@sveltejs/adapter-static';
 // import adapter from '@sveltejs/adapter-node';
 import getRepoInfo from 'git-repo-info';
@@ -13,7 +12,6 @@ const config = {
 		preprocess({
 			postcss: true
 		}),
-		houdini()
 	],
 	kit: {
 		adapter: adapter({
@@ -34,11 +32,10 @@ const config = {
 		files: {
 			assets: 'src/assets',
 			routes: 'src/routes',
-			template: 'src/app.html'
+			appTemplate: 'src/app.html'
 		},
 		prerender: {
 			enabled: true,
-			default: true
 		},
 		trailingSlash: 'always',
 		version: {
