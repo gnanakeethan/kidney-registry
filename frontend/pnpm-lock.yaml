@@ -1,82 +1,82 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@carbon/charts': ^0.57.0
-  '@carbon/charts-svelte': ^0.57.0
-  '@graphql-codegen/cli': ^2.6.2
-  '@graphql-codegen/typed-document-node': ^2.2.8
-  '@graphql-codegen/typescript': ^2.4.8
-  '@graphql-codegen/typescript-operations': ^2.3.5
-  '@graphql-codegen/typescript-urql': ^3.5.7
-  '@graphql-codegen/urql-introspection': ^2.1.1
-  '@graphql-codegen/urql-svelte-operations-store': ^1.1.15
+  '@carbon/charts': ^0.57.1
+  '@carbon/charts-svelte': ^0.57.1
+  '@graphql-codegen/cli': ^2.12.1
+  '@graphql-codegen/typed-document-node': ^2.3.3
+  '@graphql-codegen/typescript': ^2.7.3
+  '@graphql-codegen/typescript-operations': ^2.5.3
+  '@graphql-codegen/typescript-urql': ^3.7.0
+  '@graphql-codegen/urql-introspection': ^2.2.1
+  '@graphql-codegen/urql-svelte-operations-store': ^1.3.0
   '@graphql-typed-document-node/core': ^3.1.1
-  '@iconify/json': ^2.1.34
+  '@iconify/json': ^2.1.112
   '@iconify/svelte': ^2.2.1
   '@kitql/vite-plugin-watch-and-run': ^0.4.2
-  '@macfja/svelte-persistent-store': ~1.2.0
-  '@playwright/test': ^1.22.2
-  '@rollup/plugin-typescript': ^8.3.2
+  '@macfja/svelte-persistent-store': ^2.1.0
+  '@playwright/test': ^1.26.0
+  '@rollup/plugin-typescript': ^8.5.0
   '@sveltejs/adapter-auto': next
-  '@sveltejs/adapter-node': ^1.0.0-next.73
-  '@sveltejs/adapter-static': ^1.0.0-next.29
+  '@sveltejs/adapter-node': ^1.0.0-next.95
+  '@sveltejs/adapter-static': ^1.0.0-next.43
   '@sveltejs/kit': next
   '@tailwindcss/forms': ^0.4.1
-  '@tailwindcss/typography': ^0.5.2
-  '@thi.ng/ksuid': ^2.1.6
+  '@tailwindcss/typography': ^0.5.7
+  '@thi.ng/ksuid': ^2.1.18
   '@tsconfig/svelte': ^2.0.1
   '@types/cookie': ^0.5.1
-  '@typescript-eslint/eslint-plugin': ^5.27.0
-  '@typescript-eslint/parser': ^5.27.0
+  '@typescript-eslint/eslint-plugin': ^5.38.0
+  '@typescript-eslint/parser': ^5.38.0
   '@urql/svelte': ^1.3.3
-  autoprefixer: ^10.4.5
+  autoprefixer: ^10.4.12
   axios: ^0.24.0
-  brotli: ^1.3.2
-  carbon-components: ^10.56.0
-  clsx: ^1.1.1
-  cssnano: ^5.1.7
-  d3: ^7.4.4
+  brotli: ^1.3.3
+  carbon-components: ^10.58.1
+  clsx: ^1.2.1
+  cssnano: ^5.1.13
+  d3: ^7.6.1
   daisyui: ^1.25.4
   deep-diff: ^1.0.2
-  eslint: ^8.16.0
+  eslint: ^8.24.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
   fetch: ^1.1.0
   git-repo-info: ^2.1.1
-  graphql: ^16.4.0
+  graphql: ^16.6.0
   graphql-codegen-svelte-apollo: ^1.1.0
   graphql-tag: ^2.12.6
   gzipme: ^1.0.0
-  houdini: ^0.16.0
+  houdini: ^0.16.5
   ksuid: ^3.0.0
   lodash: ^4.17.21
-  miragejs: ^0.1.43
-  postcss: ^8.4.13
+  miragejs: ^0.1.45
+  postcss: ^8.4.16
   postcss-load-config: ^3.1.4
-  prettier: ^2.6.2
+  prettier: ^2.7.1
   prettier-plugin-svelte: ^2.7.0
-  prettier-plugin-tailwindcss: ^0.1.10
-  rollup: ^2.71.0
-  sass: ^1.51.0
-  svelte: ^3.47.0
-  svelte-check: ^2.7.1
-  svelte-formly: ^1.1.2
+  prettier-plugin-tailwindcss: ^0.1.13
+  rollup: ^2.79.1
+  sass: ^1.55.0
+  svelte: ^3.50.1
+  svelte-check: ^2.9.0
+  svelte-formly: ^1.1.3
   svelte-forms-lib: ^2.0.1
   svelte-formula: ^0.11.0
-  svelte-fsm: ^1.1.2
-  svelte-inline-svg: ^1.1.3
+  svelte-fsm: ^1.2.0
+  svelte-inline-svg: ^1.1.4
   svelte-local-storage-store: ^0.2.6
   svelte-multistep-form: ^0.0.6
-  svelte-preprocess: ^4.10.6
+  svelte-preprocess: ^4.10.7
   svelte-select: ^4.4.7
   svelte-watch-resize: ^1.0.3
-  tailwindcss: ^3.0.24
+  tailwindcss: ^3.1.8
   tslib: ^2.4.0
-  typescript: ^4.7.4
-  unplugin-icons: ^0.14.8
-  urql: ^2.2.0
+  typescript: ^4.8.3
+  unplugin-icons: ^0.14.10
+  urql: ^2.2.3
   uuid: ^8.3.2
-  vite: ^3.0.0
+  vite: ^3.1.3
   yup: ^0.32.11
 
 dependencies:
@@ -106,7 +106,7 @@ devDependencies:
   '@iconify/json': 2.1.112
   '@iconify/svelte': 2.2.1
   '@kitql/vite-plugin-watch-and-run': 0.4.2
-  '@macfja/svelte-persistent-store': 1.2.0_svelte@3.50.1
+  '@macfja/svelte-persistent-store': 2.1.0_svelte@3.50.1
   '@playwright/test': 1.26.0
   '@rollup/plugin-typescript': 8.5.0_jm3lfwhp2n3nxb4wwf6zz565he
   '@sveltejs/adapter-auto': 1.0.0-next.80
@@ -1490,12 +1490,18 @@ packages:
       micromatch: 4.0.5
     dev: true
 
-  /@macfja/svelte-persistent-store/1.2.0_svelte@3.50.1:
-    resolution: {integrity: sha512-vftMaR7vwNwJx7atDjzFagBEZpOXgnrKqeutHfTtEreprP/izjb0LfvwLKQK29cO7gT9iifHQdOoD9kGynasOw==}
+  /@macfja/serializer/1.1.1:
+    resolution: {integrity: sha512-kZ0fYQNpSfzpZIGZWcfd6KPXtLTjvYEGZux4etIJcg8N64CTYmDen+CJhqjQ2vUG3IAteOmIFystzKrtLjISbw==}
+    dev: true
+
+  /@macfja/svelte-persistent-store/2.1.0_svelte@3.50.1:
+    resolution: {integrity: sha512-v5JhMUCngYJQ0UCPtFARNX5vvhnrfB6/pTLXnPvDKkZJkyxGJ+61YmLalhb0i0gVYy+scxy+bA4cHyr/yt91rg==}
     peerDependencies:
       svelte: ^3.0
     dependencies:
+      '@macfja/serializer': 1.1.1
       browser-cookies: 1.2.0
+      cyrup: 0.8.1
       idb-keyval: 5.1.5
       svelte: 3.50.1
     dev: true
@@ -2388,7 +2394,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001411
+      caniuse-lite: 1.0.30001412
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -2532,7 +2538,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001411
+      caniuse-lite: 1.0.30001412
       electron-to-chromium: 1.4.261
       node-releases: 2.0.6
       update-browserslist-db: 1.0.9_browserslist@4.21.4
@@ -2615,13 +2621,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001411
+      caniuse-lite: 1.0.30001412
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
 
-  /caniuse-lite/1.0.30001411:
-    resolution: {integrity: sha512-HPnJKESKuhKpHvMY1/ux7J3nG7xG8jRuL4lbyCjDRm0doTNV91tcRk60xrP7Ym9DtJH/yuqntDWBJCqpXB4b7g==}
+  /caniuse-lite/1.0.30001412:
+    resolution: {integrity: sha512-+TeEIee1gS5bYOiuf+PS/kp2mrXic37Hl66VY6EAfxasIk5fELTktK2oOezYed12H8w7jt3s512PpulQidPjwA==}
 
   /capital-case/1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -3091,6 +3097,10 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       css-tree: 1.1.3
+    dev: true
+
+  /cyrup/0.8.1:
+    resolution: {integrity: sha512-nBtYqOSyaXLlUbr0KzDiHsvR6jqqrJmbyXBUur2dC1axZjlFm+v++2SYFXKMQC+Dj+0ywy+9WJjV8Eu+6vemYQ==}
     dev: true
 
   /d3-array/2.12.1:

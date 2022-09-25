@@ -18,7 +18,6 @@ const config = {
 			fallback: 'index.html'
 		}),
 		alias: {
-			$houdini: './$houdini',
 		},
 		paths: {
 			base: process.env.APP_PATH ?? ''

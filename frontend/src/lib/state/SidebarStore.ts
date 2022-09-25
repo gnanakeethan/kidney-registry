@@ -1,4 +1,4 @@
-import { localStorage, persist } from '@macfja/svelte-persistent-store';
+import { createSessionStorage, persist } from '@macfja/svelte-persistent-store';
 import { writable } from 'svelte/store';
 
 /*
@@ -6,13 +6,13 @@ import { writable } from 'svelte/store';
  * as prop to every `NavigationLinkGroup` & `NavigationLink`.
  */
 
+export const minimized = persist(writable(false), createSessionStorage(), 'sidebarState');
+
 export const activeUrl = writable('');
 
 export const activeGroup = writable(null);
 
 export const onLinkClick = writable(null);
-
-export const minimized = persist(writable(false), localStorage(), 'sidebarState');
 
 export let activePath = '';
 

@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import { localStorage, persist, PersistentStore } from '@macfja/svelte-persistent-store';
+import { createLocalStorage, persist } from '@macfja/svelte-persistent-store';
 import { writable } from 'svelte/store';
 
 export interface AuthState {
@@ -22,12 +22,12 @@ export interface AuthState {
 	};
 }
 
-export const userType: PersistentStore<string> = persist(
+export const userType = persist(
 	writable('consultant'),
-	localStorage(),
+	createLocalStorage(),
 	'userType'
 );
-export const authState: PersistentStore<AuthState> = persist(
+export const authState = persist(
 	writable({
 		loggedIn: false,
 		token: '',
@@ -39,7 +39,7 @@ export const authState: PersistentStore<AuthState> = persist(
 		},
 		redirectPage: '/'
 	} as AuthState),
-	localStorage(),
+	createLocalStorage(),
 	'authState'
 );
 

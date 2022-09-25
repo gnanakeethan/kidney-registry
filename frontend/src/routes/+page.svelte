@@ -4,9 +4,9 @@
 	import '@carbon/charts/styles.min.css';
 	import { operationStore, query } from '@urql/svelte';
 	// import 'carbon-components/css/carbon-components.min.css';
-	import Examinations from './examinations/index.svelte';
-	import FollowUps from './followups/index.svelte';
-	import Investigations from './investigations/index.svelte';
+	import Examinations from './examinations/+page.svelte';
+	import FollowUps from './followups/+page.svelte';
+	import Investigations from './investigations/+page.svelte';
 
 	$: patients = operationStore(PatientStatusChartDocument);
 	$: query<PatientStatusChartQuery>(patients);
