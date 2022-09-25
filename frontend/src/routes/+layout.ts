@@ -1,17 +1,8 @@
-import client from '../client'
-
-import { goto } from '$app/navigation';
-import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
-import { authGuard } from '$lib/guards/auth';
-import { minimized } from '$lib/state/SidebarStore';
-import type { LoadEvent,LoadOutput } from "@sveltejs/kit/types";
 import PatientIcon from '~icons/bi/person';
 import UserIcon from '~icons/bi/person';
 import SearchIcon from '~icons/carbon/search-locate';
-import CollapsibleIcon from '~icons/clarity/collapse-line';
 import RecurringIcon from '~icons/ic/round-event-repeat';
 import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
-import KidneyOutline from '~icons/whh/kidney';
 import '../assets/styles/app.scss';
 import { activePath } from '../lib/state/SidebarStore';
 
@@ -45,15 +36,15 @@ let bottomProps = {
 	]
 };
 
-throw new Error("@migration task: Check if you need to migrate the load function input (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292693)");
-export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
-	console.log(loadInput.url);
-	// activeUrl.set(loadInput.url.pathname);
-	props.activeUrl = loadInput.url.pathname;
-	bottomProps.activeUrl = loadInput.url.pathname;
-	throw new Error("@migration task: Migrate this return statement (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292693)");
-	return await authGuard(loadInput);
-}
+// throw new Error("@migration task: Check if you need to migrate the load function input (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292693)");
+// export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
+// 	console.log(loadInput.url);
+// 	activeUrl.set(loadInput.url.pathname);
+	// props.activeUrl = loadInput.url.pathname;
+	// bottomProps.activeUrl = loadInput.url.pathname;
+	// throw new Error("@migration task: Migrate this return statement (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292693)");
+	// return await authGuard(loadInput);
+// }
 
-client.init()
+// client.init()
 

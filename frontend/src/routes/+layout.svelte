@@ -1,22 +1,20 @@
 <script context='module' lang='ts'>
-	throw new Error("@migration task: Check code was safely removed (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292722)");
-
 	// import client from '../client'
 
-	// import { goto } from '$app/navigation';
-	// import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
+	import { goto } from '$app/navigation';
+	import Sidebar from '$lib/components/sidebar/Sidebar.svelte';
 	// import { authGuard } from '$lib/guards/auth';
-	// import { minimized } from '$lib/state/SidebarStore';
+	import { minimized } from '$lib/state/SidebarStore';
 	// import type { LoadEvent,LoadOutput } from "@sveltejs/kit/types";
-	// import PatientIcon from '~icons/bi/person';
-	// import UserIcon from '~icons/bi/person';
-	// import SearchIcon from '~icons/carbon/search-locate';
-	// import CollapsibleIcon from '~icons/clarity/collapse-line';
-	// import RecurringIcon from '~icons/ic/round-event-repeat';
-	// import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
-	// import KidneyOutline from '~icons/whh/kidney';
+	import PatientIcon from '~icons/bi/person';
+	import UserIcon from '~icons/bi/person';
+	import SearchIcon from '~icons/carbon/search-locate';
+	import CollapsibleIcon from '~icons/clarity/collapse-line';
+	import RecurringIcon from '~icons/ic/round-event-repeat';
+	import DashboardIcon from '~icons/ic/sharp-dashboard-customize';
+	import KidneyOutline from '~icons/whh/kidney';
 	// import '../assets/styles/app.scss';
-	// import { activePath } from '../lib/state/SidebarStore';
+	import { activePath } from '../lib/state/SidebarStore';
 
 	// // import makeServer from '../../mirage/mirage';
 	// //
@@ -24,30 +22,30 @@
 	// // 	makeServer(); // For people following the tutorial
 	// // }
 
-	// let props = {
-	// 	activeUrl: activePath,
-	// 	routes: [
-	// 		{ name: 'Dashboard', route: '/', icon: DashboardIcon },
-	// 		{ name: 'Search', route: '/search', icon: SearchIcon },
-	// 		{ name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
-	// 		{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
-	// 		{ name: 'Examinations', route: '/examinations', icon: SearchIcon },
-	// 		{ name: 'Patients', route: '/patients-recipient', icon: PatientIcon },
-	// 		{ name: 'New Patient', route: '/patients-recipient/new', icon: PatientIcon },
-	// 		// { name: 'Doctors', route: '/doctors', icon: DoctorIcon },
-	// 		// { name: 'Users', route: '/users', icon: UserIcon },
-	// 		{ name: 'Workflow', route: '/workflow/', icon: UserIcon }
-	// 		// { name: '', route: '/i', icon: DoctorIcon }
-	// 	]
-	// };
-	// let bottomProps = {
-	// 	activeUrl: activePath,
-	// 	routes: [
-	// 		// { name: 'System Settings', route: '/settings', icon: SettingsIcon },
-	// 		// { name: 'Preferences', route: '/preferences', icon: PreferencesIcon }
-	// 	]
-	// };
-
+	let props = {
+		activeUrl: activePath,
+		routes: [
+			{ name: 'Dashboard', route: '/', icon: DashboardIcon },
+			{ name: 'Search', route: '/search', icon: SearchIcon },
+			{ name: 'Follow Ups', route: '/followups', icon: RecurringIcon },
+			{ name: 'Investigations', route: '/investigations', icon: SearchIcon },
+			{ name: 'Examinations', route: '/examinations', icon: SearchIcon },
+			{ name: 'Patients', route: '/patients-recipient', icon: PatientIcon },
+			{ name: 'New Patient', route: '/patients-recipient/new', icon: PatientIcon },
+			// { name: 'Doctors', route: '/doctors', icon: DoctorIcon },
+			// { name: 'Users', route: '/users', icon: UserIcon },
+			{ name: 'Workflow', route: '/workflow/', icon: UserIcon }
+			// { name: '', route: '/i', icon: DoctorIcon }
+		]
+	};
+	let bottomProps = {
+		activeUrl: activePath,
+		routes: [
+			// { name: 'System Settings', route: '/settings', icon: SettingsIcon },
+			// { name: 'Preferences', route: '/preferences', icon: PreferencesIcon }
+		]
+	};
+	//
 	// export async function load(loadInput: LoadEvent): Promise<LoadOutput> {
 	// 	console.log(loadInput.url);
 	// 	// activeUrl.set(loadInput.url.pathname);

@@ -1,15 +1,8 @@
 <script context="module">
-	throw new Error("@migration task: Replace error load function (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3293209)");
-
-	// export function load({ error, status }) {
-	// 	return {
-	// 		props: { error, status }
-	// 	};
-	// }
 </script>
 
 <script>
-	import { dev } from '$app/env';
+	import { dev } from '$app/environment';
 
 	export let error, status;
 </script>
@@ -21,11 +14,8 @@
 <div class="flex h-full w-full flex-col items-center justify-between">
 	<h1>{status}</h1>
 
-	<p>{error.message}</p>
+	<p>{JSON.stringify(error)}</p>
 
-	{#if dev && error.stack}
-		<pre>{error.stack}</pre>
-	{/if}
 </div>
 
 <style>

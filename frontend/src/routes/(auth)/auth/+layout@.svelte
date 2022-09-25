@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { ENV } from '$lib/environment/environment';
-	import { authState, AuthState } from '../../lib/state/auth';
-	import { createClient, setClient } from '@urql/svelte';
 	import { goto } from '$app/navigation';
+	import { ENV } from '$lib/environment/environment';
+	import { createClient, setClient } from '@urql/svelte';
+	import { authState, AuthState } from '../../../lib/state/auth';
 
 	let auth: AuthState;
 	authState.subscribe((authStateS: AuthState) => {
