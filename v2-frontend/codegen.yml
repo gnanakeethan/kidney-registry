@@ -1,7 +1,0 @@
-overwrite: true
-schema: "http://localhost:8080/v1/graphql"
-generates:
-  src/generated/graphql.ts:
-    plugins:
-      - "typescript"
-      - "typescript-document-nodes"
