@@ -4,7 +4,7 @@
     "license": "MIT",
     "version": "0.0.1",
     "scripts": {
-        "generate": "houdini generate",
+        "generate": "graphql-codegen generate",
         "analysis": "windicss-analysis",
         "dev": "vite dev",
         "build": "vite build",

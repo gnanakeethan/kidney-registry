@@ -1,8 +1,14 @@
 <script lang='ts'>
 	import Field from '$lib/components/form-builder/Components/Field.svelte';
-	import { ComparisonType, ListPatientsDocument, ListPatientsQuery, PersonFilter } from '$lib/graphql/generated';
 	import { NotificationsStatus } from '$lib/state/notifications';
 	import { operationStore, query } from '@urql/svelte';
+	import {
+		ComparisonType,
+		ListPatientsDocument,
+		ListPatientsQuery,
+		OrderBy,
+		PersonFilter
+	} from './../../lib/graphql/generated';
 
 	let showFilter = false;
 	let showModal = false;
@@ -13,7 +19,7 @@
 	};
 	$: patients = operationStore(ListPatientsDocument, {
 		filter: filter,
-		orderBy: ['desc'],
+		orderBy: [OrderBy.Desc],
 		sortBy: ['CreatedAt']
 	});
 	$: query<ListPatientsQuery>(patients);
@@ -96,7 +102,10 @@
 			}
 		}
 	];
-	let values = {};
+	interface Values {
+		[key: string]: string;
+	}
+	let values: Values = {};
 	let isValidForm = true;
 	$: if (values != {}) {
 		console.log(values);

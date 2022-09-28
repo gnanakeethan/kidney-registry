@@ -1,21 +1,5 @@
-<script context="module">
-</script>
-
-<script>
-	import { dev } from '$app/environment';
-
-	export let error, status;
-</script>
-
-<svelte:head>
-	<title>{status}</title>
-</svelte:head>
-
 <div class="flex h-full w-full flex-col items-center justify-between">
-	<h1>{status}</h1>
-
-	<p>{JSON.stringify(error)}</p>
-
+	ERRORED
 </div>
 
 <style>
