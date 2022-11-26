@@ -33,10 +33,6 @@ const config = {
 			routes: 'src/routes',
 			appTemplate: 'src/app.html'
 		},
-		prerender: {
-			enabled: true,
-		},
-		trailingSlash: 'always',
 		version: {
 			name: info.lastTag + '-' + info.commitsSinceLastTag + '-' + info.abbreviatedSha,
 			pollInterval: 1000 * 60 * 60 * 24 * 30

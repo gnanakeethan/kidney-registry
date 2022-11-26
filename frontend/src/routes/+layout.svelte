@@ -65,8 +65,9 @@
 
 	auth.viewLoaded = true;
 	authState.set(auth);
+	console.log(import.meta.env.VITE_BASE_URL);
 	const client = createClient({
-		url: ENV.basePath,
+		url: 'https://localhost:3000/graphql',
 		fetchOptions: () => {
 			console.log(auth);
 			if (auth.token.length > 0) {

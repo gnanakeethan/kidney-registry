@@ -12,7 +12,8 @@ import { activePath } from '../lib/state/SidebarStore';
 // 	makeServer(); // For people following the tutorial
 // }
 
-let props = {
+export const trailingSlash = 'always';
+const props = {
 	activeUrl: activePath,
 	routes: [
 		{ name: 'Dashboard', route: '/', icon: DashboardIcon },
@@ -28,7 +29,7 @@ let props = {
 		// { name: '', route: '/i', icon: DoctorIcon }
 	]
 };
-let bottomProps = {
+const bottomProps = {
 	activeUrl: activePath,
 	routes: [
 		// { name: 'System Settings', route: '/settings', icon: SettingsIcon },

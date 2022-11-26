@@ -1,4 +1,4 @@
 export const ENV = {
-    basePath: import.meta.env.VITE_BASE_URL
+    basePath: '',
 };
 //# sourceMappingURL=environment.js.map
