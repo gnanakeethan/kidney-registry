@@ -6,7 +6,7 @@ async function fetchQuery({
 	variables = {},
 	metadata
 }: RequestHandlerArgs) {
-	const url = 'http://localhost:8081/api/graphql';
+	const url = 'http://localhost:8080/api/graphql';
 	const result = await fetch(url, {
 		method: 'POST',
 		headers: {

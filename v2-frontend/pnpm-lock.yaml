@@ -12,7 +12,9 @@ specifiers:
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte3: ^4.0.0
+  graphql: ^15.8.0
   houdini: ^0.18.2
+  houdini-svelte: ^0.18.2
   postcss: ^8.4.20
   prettier: ^2.8.0
   prettier-plugin-svelte: ^2.8.1
@@ -37,7 +39,9 @@ devDependencies:
   eslint: 8.29.0
   eslint-config-prettier: 8.5.0_eslint@8.29.0
   eslint-plugin-svelte3: 4.0.0_ffnabc34fed75fjymbd45uofx4
+  graphql: 15.8.0
   houdini: 0.18.2
+  houdini-svelte: 0.18.2_graphql@15.8.0+vite@4.0.1
   postcss: 8.4.20
   prettier: 2.8.1
   prettier-plugin-svelte: 2.9.0_ajxj753sv7dbwexjherrch25ta
@@ -1505,6 +1509,25 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+    dev: true
+
+  /houdini-svelte/0.18.2_graphql@15.8.0+vite@4.0.1:
+    resolution: {integrity: sha512-DKx58kvAPCghEzBfyB0nkCopYF7C/BTN7KUXjkvvQ+h//fvzyIpd9qn1UOjCNGXGI+qMNFxXSiXRgFUUcUNtBA==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0
+    dependencies:
+      '@kitql/helper': 0.5.0
+      '@sveltejs/kit': 1.0.0_svelte@3.55.0+vite@4.0.1
+      ast-types: 0.16.1
+      estree-walker: 3.0.1
+      graphql: 15.8.0
+      houdini: 0.18.2
+      minimatch: 5.1.1
+      recast: 0.23.1
+      svelte: 3.55.0
+    transitivePeerDependencies:
+      - supports-color
+      - vite
     dev: true
 
   /houdini/0.18.2:
