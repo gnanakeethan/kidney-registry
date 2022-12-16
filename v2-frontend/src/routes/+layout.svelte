@@ -4,13 +4,6 @@
 	import { fade, fly } from 'svelte/transition';
 
 	let visible = false;
-	let w;
-	let h;
-	$: if (w > 768) {
-		visible = false;
-	} else {
-		visible = true;
-	}
 	let openUserMenu = false;
 </script>
 
@@ -22,33 +15,13 @@
   <body class="h-full">
   ```
 -->
-<div bind:clientWidth={w} bind:clientHeight={h}>
+<div>
 	<!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
 	<div class='relative z-40 md:hidden' role='dialog' aria-modal='true'>
-		<!--
-			Off-canvas menu backdrop, show/hide based on off-canvas menu state.
-
-			Entering: "transition-opacity ease-linear duration-300"
-				From: "opacity-0"
-				To: "opacity-100"
-			Leaving: "transition-opacity ease-linear duration-300"
-				From: "opacity-100"
-				To: "opacity-0"
-		-->
 		{#if visible}
 			<div class='fixed inset-0 bg-gray-600 bg-opacity-100 transition-opacity ease-linear duration-1000'
 					 transition:fade></div>
 			<div class='fixed inset-0 z-40 flex '>
-				<!--
-					Off-canvas menu, show/hide based on off-canvas menu state.
-
-					Entering: "transition ease-in-out duration-300 transform"
-						From: "-translate-x-full"
-						To: "translate-x-0"
-					Leaving: "transition ease-in-out duration-300 transform"
-						From: "translate-x-0"
-						To: "-translate-x-full"
-				-->
 				<div
 					class='relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4'
 					transition:fly='{{delay: 0, duration: 1000, x: -500, y: 0, opacity: 0 }}'>
@@ -343,7 +316,6 @@
 					<div class='px-4 sm:px-6 md:px-0'>
 						<!-- Replace with your content -->
 						<div class='py-4'>
-							<p>size: {w}px x {h}px</p>
 							<slot />
 						</div>
 						<!-- /End replace -->
