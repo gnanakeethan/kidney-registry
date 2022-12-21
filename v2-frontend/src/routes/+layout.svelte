@@ -6,15 +6,6 @@
 	let visible = false;
 	let openUserMenu = false;
 </script>
-
-
-<!--
-
-  ```
-  <html class="h-full">
-  <body class="h-full">
-  ```
--->
 <div>
 	<!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
 	<div class='relative z-40 md:hidden' role='dialog' aria-modal='true'>
@@ -143,11 +134,6 @@
 					<!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
 					<a href='#'
 						 class='bg-gray-100 text-gray-900 group rounded-md py-2 px-2 flex items-center text-sm font-medium'>
-						<!--
-							Heroicon name: outline/home
-
-							Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500"
-						-->
 						<svg class='text-gray-500 mr-3 flex-shrink-0 h-6 w-6' xmlns='http://www.w3.org/2000/svg' fill='none'
 								 viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' aria-hidden='true'>
 							<path stroke-linecap='round' stroke-linejoin='round'
@@ -278,19 +264,7 @@
 											 alt=''>
 								</button>
 							</div>
-
-							<!--
-								Dropdown menu, show/hide based on menu state.
-
-								Entering: "transition ease-out duration-100"
-									From: "transform opacity-0 scale-95"
-									To: "transform opacity-100 scale-100"
-								Leaving: "transition ease-in duration-75"
-									From: "transform opacity-100 scale-100"
-									To: "transform opacity-0 scale-95"
-							-->
 							<div
-
 								class='transition ease-in duration-75 {openUserMenu?"transform opacity-100 scale-100":"scale-90 opacity-0"} absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
 								role='menu' aria-orientation='vertical' aria-labelledby='user-menu-button' tabindex='-1'>
 								<!-- Active: "bg-gray-100", Not Active: "" -->
